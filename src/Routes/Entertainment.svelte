@@ -1,6 +1,7 @@
 <script>
   import Preview from "../Components/Preview.svelte";
   import ScrollList from "../Components/ScrollList.svelte";
+  import Footer from "../Components/Footer.svelte";
 
   let fetchedPosts = [];
   let activePosts = [];
@@ -57,3 +58,5 @@
     <Preview {post} on:active={counter} />
   {/each}
 </div>
+
+<Footer />

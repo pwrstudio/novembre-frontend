@@ -24,7 +24,7 @@
     fetch("http://3.221.158.133/search.json/query:" + query)
       .then(r => r.json())
       .then(arr => {
-        fetchedPosts = [...fetchedPosts, ...arr];
+        fetchedPosts = [...fetchedPosts, ...arr.posts];
       });
   }
 

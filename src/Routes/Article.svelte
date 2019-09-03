@@ -25,8 +25,7 @@
     const post = await res.json();
 
     console.log(post);
-
-    console.log("AWAITED");
+    window.scrollTo(0, 0);
 
     return post;
   }
@@ -93,7 +92,7 @@
 </style>
 
 {#await post then post}
-  <article class="article" transition:fade>
+  <article class="article" in:fade>
 
     <!-- {# HEADER MEDIA #} -->
     <div class="article__header">

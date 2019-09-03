@@ -61,7 +61,7 @@
       }
     }
 
-    transform: translateX(calc(-15ch - 56px));
+    transform: translateX(calc(-15ch - 59px));
     transition: transform 0.3s $transition;
 
     &--active {
@@ -74,10 +74,11 @@
       line-height: 1em;
 
       &:hover {
-        top: 0;
+        position: relative;
+        top: -2px;
         font-family: $serif-stack;
         font-style: italic;
-        background: green;
+        font-size: $large;
       }
     }
   }

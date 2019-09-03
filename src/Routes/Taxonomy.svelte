@@ -1,5 +1,6 @@
 <script>
   import Preview from "../Components/Preview.svelte";
+  import Footer from "../Components/Footer.svelte";
 
   export let tag;
 
@@ -23,7 +24,7 @@
     fetch("http://3.221.158.133/filter.json/tag:" + tag)
       .then(r => r.json())
       .then(arr => {
-        fetchedPosts = [...fetchedPosts, ...arr];
+        fetchedPosts = [...fetchedPosts, ...arr.posts];
       });
   }
 
@@ -50,3 +51,5 @@ TAXONOMY TAXONOMY TAXONOMY TAXONOMY TAXONOMY
     <Preview {post} on:active={counter} />
   {/each}
 </div>
+
+<Footer />

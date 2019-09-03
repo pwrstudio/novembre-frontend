@@ -1,5 +1,7 @@
 <script>
   import { onMount } from "svelte";
+  import { Router, links } from "svelte-routing";
+
   export let taxonomy;
 
   let tags = [];
@@ -38,11 +40,13 @@
   }
 </style>
 
-<div class="taxonomy">
+<Router>
+  <div class="taxonomy" use:links>
 
-  {#each tags as t}
-    <a href="/taxonomy/{t}" class="taxonomy__item">{t}</a>
-    &nbsp;
-  {/each}
+    {#each tags as t}
+      <a href="/taxonomy/{t}" class="taxonomy__item">{t}</a>
+      &nbsp;
+    {/each}
 
-</div>
+  </div>
+</Router>

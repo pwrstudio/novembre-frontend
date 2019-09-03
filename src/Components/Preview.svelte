@@ -141,7 +141,9 @@
   .preview {
     opacity: 0;
     transform: translateY(10%);
-    transition: opacity 1s ease-out, transform 0.5s ease-out;
+    transition: opacity 0.7s cubic-bezier(0.23, 1, 0.32, 1),
+      transform 0.7s cubic-bezier(0.23, 1, 0.32, 1);
+    transition: opacity 1s ease-out, transform 0.7s ease-out;
   }
 
   .active {

@@ -132,6 +132,8 @@
         font-size: $large;
         font-weight: 300;
         text-transform: uppercase;
+        padding-bottom: 20px;
+        padding-top: 20px;
       }
     }
   }

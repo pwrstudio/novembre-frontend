@@ -37,11 +37,8 @@
     paddedSlides = slides;
   }
 
-  // console.dir(paddedSlides);
-
   onMount(async () => {
     if (slideShowEl) {
-      // setTimeout(() => {
       let options = {
         wrapAround: true,
         prevNextButtons: false,
@@ -59,11 +56,7 @@
       // trigger redraw for transition
       slideShowEl.offsetHeight;
 
-      // init Flickity
       let flkty = new Flickity(slideShowEl, options);
-      // flkty.reposition();
-      // }, 2000);
-      // console.log("::::: SLIDESHOW INIT");
     }
   });
 </script>

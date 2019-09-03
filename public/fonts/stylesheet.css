@@ -1,0 +1,24 @@
+@font-face {
+    font-family: 'Haas Grot Disp 45';
+    src: url('HaasGrotDisp-45Light.woff2') format('woff2'),
+        url('HaasGrotDisp-45Light.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Adobe Caslon Pro';
+    src: url('ACaslonPro-Regular.woff2') format('woff2'),
+        url('ACaslonPro-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Adobe Caslon Pro';
+    src: url('ACaslonPro-Italic.woff2') format('woff2'),
+        url('ACaslonPro-Italic.woff') format('woff');
+    font-weight: normal;
+    font-style: italic;
+}
+

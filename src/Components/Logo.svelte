@@ -3,9 +3,18 @@
 </script>
 
 <style lang="scss">
+  @import "../variables.scss";
+
   .logo {
     pointer-events: none;
     height: 100%;
+
+    @include screen-size("small") {
+      width: 90%;
+      margin-left: auto;
+      margin-right: auto;
+      display: block;
+    }
 
     &--white {
       path {

@@ -1,6 +1,7 @@
 <script>
   import { onMount } from "svelte";
   import Flickity from "flickity-imagesloaded";
+  import { Router, links } from "svelte-routing";
 
   export let related;
   let paddedRelated = [];
@@ -163,24 +164,26 @@
   }
 </style>
 
-<div class="related">
+<Router>
+  <div class="related">
 
-  <div class="related__header">RELATED ARTICLES</div>
+    <div class="related__header">RELATED ARTICLES</div>
 
-  <div class="carousel slideshow" bind:this={slideShowEl}>
-    {#each paddedRelated as slide}
-      <div
-        class="carousel-cell slideshow__slide"
-        class:slideshow__slide--white={!slide.header.previewColor}>
-        <a href="/{slide.parent}/{slide.slug}">
-          <img
-            class="slideshow__slide-image"
-            alt={slide.title}
-            src={slide.previewImage} />
-          <div class="related__title">{slide.title}</div>
-        </a>
-      </div>
-    {/each}
+    <div class="carousel slideshow" bind:this={slideShowEl}>
+      {#each paddedRelated as slide}
+        <div
+          class="carousel-cell slideshow__slide"
+          class:slideshow__slide--white={!slide.header.previewColor}>
+          <a href="/{slide.parent}/{slide.slug}">
+            <img
+              class="slideshow__slide-image"
+              alt={slide.title}
+              src={slide.previewImage} />
+            <div class="related__title">{slide.title}</div>
+          </a>
+        </div>
+      {/each}
+    </div>
+
   </div>
-
-</div>
+</Router>

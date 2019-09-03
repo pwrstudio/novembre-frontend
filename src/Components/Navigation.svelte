@@ -128,30 +128,6 @@
     &__menu-item {
       display: block;
     }
-
-    &__link {
-      font-size: $large;
-      position: relative;
-      font-size: $large;
-      width: auto;
-      color: white;
-      text-decoration: none;
-      font-weight: 300;
-      line-height: 1em;
-
-      &:hover {
-        font-family: $serif-stack;
-        font-size: $large + 10px;
-        top: 6px;
-        left: -2px;
-        font-style: italic;
-      }
-
-      @include screen-size("small") {
-        font-size: $mobile_large;
-      }
-    }
-
     &--expanded {
       #{$block}__bar {
         background: black;
@@ -167,9 +143,9 @@
 
       #{$block}__menu {
         pointer-events: all;
-        // clip-path: inset(0 0 0% 0);
+        clip-path: inset(0 0 0% 0);
         transition: opacity 0.3s $transition;
-        // transition: clip-path 0.2s $transition, opacity 0.3s $transition;
+        transition: clip-path 0.2s $transition, opacity 0.3s $transition;
         opacity: 1;
         @include screen-size("small") {
           height: $full-height;
@@ -263,8 +239,7 @@
       opacity: 0;
       width: 100vw;
       pointer-events: none;
-
-      transition: opacity 0.3s $transition;
+      clip-path: inset(0 0 100% 0);
 
       span {
         display: inline;
@@ -295,24 +270,45 @@
 
     &__menu-item {
       display: block;
+      height: 63px;
     }
 
     &__link {
       font-size: $large;
       position: relative;
-      font-size: $large;
       width: auto;
       color: white;
       text-decoration: none;
-      font-weight: 300;
       line-height: 1em;
+      height: 100%;
+      display: inline-block;
 
-      &:hover {
-        font-family: $serif-stack;
-        font-size: $large + 10px;
+      &--normal {
+        font-family: $sans-stack;
+        font-size: $large;
+        opacity: 1;
+        font-weight: 300;
+      }
+
+      &--hover {
+        position: absolute;
         top: 6px;
         left: -2px;
+        font-family: $serif-stack;
+        font-size: $large + 10px;
         font-style: italic;
+        opacity: 0;
+        z-index: 1000;
+      }
+
+      &:hover {
+        .navigation__link--hover {
+          opacity: 1;
+        }
+
+        .navigation__link--normal {
+          opacity: 0;
+        }
       }
 
       @include screen-size("small") {
@@ -335,9 +331,9 @@
 
       #{$block}__menu {
         pointer-events: all;
-        // clip-path: inset(0 0 0% 0);
+        clip-path: inset(0 0 0% 0);
         transition: opacity 0.3s $transition;
-        // transition: clip-path 0.2s $transition, opacity 0.3s $transition;
+        transition: clip-path 0.4s $transition, opacity 0.4s $transition;
         opacity: 1;
         @include screen-size("small") {
           height: $full-height;
@@ -380,7 +376,8 @@
             href={item.target}
             class="navigation__link"
             on:click={() => (menuActive = !menuActive)}>
-            {item.title}
+            <div class="navigation__link--normal">{item.title}</div>
+            <div class="navigation__link--hover">{item.title}</div>
           </a>
         </menuitem>
       {/each}

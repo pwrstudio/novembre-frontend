@@ -15,10 +15,8 @@
 
   multiFiles.forEach(f => {
     f.url =
-      f.url.replace(
-        "http://3.221.158.133",
-        "https://novmag.imgix.net"
-      ) + "?w=600&auto=compress&auto=format";
+      f.url.replace("http://3.221.158.133", "https://novmag.imgix.net") +
+      "?w=600&auto=compress&auto=format";
   });
 </script>
 
@@ -28,7 +26,6 @@
   .image {
     width: 100%;
     height: auto;
-    // background: green;
 
     $block: &;
 
