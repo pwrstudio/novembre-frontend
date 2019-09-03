@@ -1,0 +1,59 @@
+$serif-stack: 'Adobe Caslon Pro', 'Caslon', 'Times new roman', Times, serif;
+$sans-stack: 'Haas Grot Disp 45', Helvetica, Arial, sans-serif;
+$height: 80px;
+
+$factor: 0.9;
+$mobile_factor: 0.7;
+
+$xlarge: #{120 * $factor}px;
+$large: #{70 * $factor}px;
+$intro: #{36 * $factor}px;
+$body: #{24 * 0.95}px;
+
+$mobile_xlarge: #{120 * $mobile_factor}px;
+$mobile_large: #{70 * $mobile_factor}px;
+$mobile_intro: #{36 * $mobile_factor}px;
+$mobile_body: #{24 * 0.95}px;
+
+$black: rgba(0,0,0,1);
+$white: rgba(255,255,255,1);
+$grey: #e5e5e5;
+
+$transition: cubic-bezier(0.23, 1, 0.32, 1);
+
+$full-height: calc(100vh - 80px);  
+
+$small-margin: 5px; 
+
+$breakpoints: (
+  'small': (
+    max-width: 900px
+  ),
+  'medium': (
+    max-width: 1000px
+  ),
+  'large': (
+    max-width: 1600px
+  ),
+  'short': (
+    max-height: 700px
+  )
+);
+
+
+/// Responsive manager.
+/// @access public
+/// @param {String} $breakpoint - Breakpoint
+/// @requires $breakpoints
+@mixin screen-size($breakpoint) {
+    $raw-query: map-get($breakpoints, $breakpoint);
+    @if $raw-query {
+        $query: if(type-of($raw-query) == 'string', unquote($raw-query), inspect($raw-query));
+        @media #{$query} {
+        @content;
+        }
+    } @else {
+        @error 'No value found for `#{$breakpoint}`. ' + 'Please make sure it is defined in `$breakpoints` map.';
+    }
+}
+
