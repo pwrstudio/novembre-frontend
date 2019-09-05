@@ -40,6 +40,16 @@
       isQuery: true
     }
   }
+
+  const articleRouteParams = {
+    magazine: {
+      endpoint: baseURL + 'magazine/'
+    },
+    entertainment: {
+      endpoint: baseURL + 'entertainment/',
+      isEntertainment: true
+    },
+  }
 </script>
 
 <Navigation />
@@ -47,15 +57,15 @@
 <Router>
   <Route path="/" component={Listing} {...listingRouteParams.landing}/>
   <Route path="magazine" component={Listing} {...listingRouteParams.magazine}/>
-  <Route path="magazine/:category" component={Listing} {...listingRouteParams.magazine}/>
+  <Route path="magazine/category/:category" component={Listing} {...listingRouteParams.magazine}/>
   <Route path="entertainment" component={Listing} {...listingRouteParams.entertainment}/>
-  <Route path="entertainment/:category" component={Listing} {...listingRouteParams.entertainment}/>
-  <Route path="taxonomy/:tag" component={Taxonomy} {...listingRouteParams.taxonomy}/>
-  <Route path="taxonomy/" component={Taxonomy} {...listingRouteParams.taxonomy}/>
-  <Route path="search/:query" component={Search} {...listingRouteParams.search}/>
-  <Route path="search/" component={Search} {...listingRouteParams.search}/>
-  <Route path="magazine/:slug" component={Article} />
-  <Route path="entertainment/:slug" component={Article} />
+  <Route path="entertainment/category/:category" component={Listing} {...listingRouteParams.entertainment}/>
+  <Route path="taxonomy/:tag" component={Listing} {...listingRouteParams.taxonomy}/>
+  <Route path="taxonomy/" component={Listing} {...listingRouteParams.taxonomy}/>
+  <Route path="search/:query" component={Listing} {...listingRouteParams.search}/>
+  <Route path="search/" component={Listing} {...listingRouteParams.search}/>
+  <Route path="magazine/:slug" component={Article} {...articleRouteParams.magazine}/>
+  <Route path="entertainment/:slug" component={Article} {...articleRouteParams.entertainment}/>
   <Route path="about" component={Page} title='ABOUTTT'/>
   <Route path="contact" component={Page} title='CONTACT' />
   // TODO: add 404

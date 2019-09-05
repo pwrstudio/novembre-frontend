@@ -18,16 +18,36 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flickity/2.2.1/flickity.min.css"
 		integrity="sha256-IKIuKgYQ+ogofw+KAz4fjF+zq7fwoNUnEVts493jKKE=" crossorigin="anonymous" />
 	<link rel='stylesheet' href='/fonts/stylesheet.css'>
-	<link rel='stylesheet' href='/global.css'>
 	<link rel='stylesheet' href='/bundle.css'>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/noframework.waypoints.min.js"
-		integrity="sha256-XJuslujM3cGzRZGiSi/KNSdk58uORO/mmrEQNjVtb5k=" crossorigin="anonymous"></script>
+	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/noframework.waypoints.min.js"
+		integrity="sha256-XJuslujM3cGzRZGiSi/KNSdk58uORO/mmrEQNjVtb5k=" crossorigin="anonymous"></script> -->
 	<script defer src='/bundle.js'></script>
 
 	<style>
 		body {
 			width: 100vw;
 			overflow-x: hidden;
+		}
+
+		body,
+		html {
+			padding: 0;
+			margin: 0;
+			width: 100vw;
+		}
+
+		html {
+			background: white;
+		}
+
+		body {
+			background: white;
+			-webkit-font-smoothing: antialiased;
+			-moz-osx-font-smoothing: grayscale;
+		}
+
+		* {
+			box-sizing: border-box;
 		}
 
 		a {

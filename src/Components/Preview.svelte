@@ -17,19 +17,19 @@
 
   let previewContainer;
   let wp;
-  let active = false;
+  let active = true;
 
-  function activate() {
-    active = true;
-    dispatch("active");
-    wp.destroy();
-  }
+  // function activate() {
+  //   active = true;
+  //   dispatch("active");
+  //   wp.destroy();
+  // }
 
   onMount(async () => {
-    wp = new Waypoint({
-      element: previewContainer,
-      handler: activate
-    });
+    // wp = new Waypoint({
+    //   element: previewContainer,
+    //   handler: activate
+    // });
   });
 </script>
 

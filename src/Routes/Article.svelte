@@ -17,11 +17,13 @@
   import Portal from "../Components/Modules/Portal.svelte";
 
   export let slug;
+  export let endpoint;
+  export let isEntertainment = false;
 
   let post = loadData();
 
   async function loadData() {
-    const res = await fetch("http://3.221.158.133/magazine/" + slug + ".json");
+    const res = await fetch({endpoint}+ slug + ".json");
     const post = await res.json();
 
     console.log(post);
@@ -96,7 +98,7 @@
 
     <!-- {# HEADER MEDIA #} -->
     <div class="article__header">
-    
+
       {#if post.header.previewType === 'image' || post.header.previewType == 'slideshow'}
         <Image url={post.header.previewImage.url} caption={post.header.title} />
       {/if}
