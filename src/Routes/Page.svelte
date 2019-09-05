@@ -1,5 +1,7 @@
 <script>
   import Footer from "../Components/Footer.svelte";
+
+  export let title;
 </script>
 
 <style lang="scss">
@@ -17,6 +19,6 @@
   }
 </style>
 
-<div class="placeholder">CONTACT</div>
+<div class="placeholder">{title}</div>
 
 <Footer />

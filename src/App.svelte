@@ -4,30 +4,59 @@
   import Navigation from "./Components/Navigation.svelte";
 
   // ROUTES
-  import Landing from "./Routes/Landing.svelte";
+  import Listing from "./Routes/Listing.svelte";
   import Article from "./Routes/Article.svelte";
-  import Magazine from "./Routes/Magazine.svelte";
-  import Entertainment from "./Routes/Entertainment.svelte";
-  import About from "./Routes/About.svelte";
-  import Contact from "./Routes/Contact.svelte";
-  import Search from "./Routes/Search.svelte";
-  import Taxonomy from "./Routes/Taxonomy.svelte";
+  import Page from "./Routes/Page.svelte";
+  
+  const baseURL = 'http://3.221.158.133/'
+
+  const listingRouteParams = {
+    landing: {
+      title: 'Landing',
+      endpoint: baseURL + 'landing.json',
+      showTaxonomyScroller: false,
+      showFooter: false
+    },
+    magazine: {
+      title: 'Magazine',
+      endpoint: baseURL + 'magazine.json',
+      showTaxonomyScroller: true,
+    },
+    entertainment: {
+      title: 'Entertainment',
+      endpoint: baseURL + 'entertainment.json',
+      showTaxonomyScroller: true,
+    },
+    taxonomy: {
+      title: 'Taxonomy',
+      endpoint: baseURL + 'taxonomy.json/tag:',
+      showTaxonomyScroller: false,
+      isQuery: true
+    },
+    search: {
+      title: 'Search',
+      endpoint: baseURL + 'search.json/query:',
+      showTaxonomyScroller: false,
+      isQuery: true
+    }
+  }
 </script>
 
 <Navigation />
 
 <Router>
-  <Route path="/" fallback component={Landing} />
-  <Route path="magazine" component={Magazine} />
-  <Route path="magazine/category/:category" component={Magazine} />
-  <Route path="entertainment" component={Entertainment} />
-  <Route path="entertainment/category/:category" component={Magazine} />
+  <Route path="/" component={Listing} {...listingRouteParams.landing}/>
+  <Route path="magazine" component={Listing} {...listingRouteParams.magazine}/>
+  <Route path="magazine/:category" component={Listing} {...listingRouteParams.magazine}/>
+  <Route path="entertainment" component={Listing} {...listingRouteParams.entertainment}/>
+  <Route path="entertainment/:category" component={Listing} {...listingRouteParams.entertainment}/>
+  <Route path="taxonomy/:tag" component={Taxonomy} {...listingRouteParams.taxonomy}/>
+  <Route path="taxonomy/" component={Taxonomy} {...listingRouteParams.taxonomy}/>
+  <Route path="search/:query" component={Search} {...listingRouteParams.search}/>
+  <Route path="search/" component={Search} {...listingRouteParams.search}/>
   <Route path="magazine/:slug" component={Article} />
   <Route path="entertainment/:slug" component={Article} />
-  <Route path="about" component={About} />
-  <Route path="contact" component={Contact} />
-  <Route path="taxonomy/:tag" component={Taxonomy} />
-  <Route path="taxonomy/" component={Taxonomy} />
-  <Route path="search/:query" component={Search} />
-  <Route path="search/" component={Search} />
+  <Route path="about" component={Page} title='ABOUTTT'/>
+  <Route path="contact" component={Page} title='CONTACT' />
+  // TODO: add 404
 </Router>

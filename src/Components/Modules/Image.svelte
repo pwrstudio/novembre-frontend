@@ -18,6 +18,7 @@
       f.url.replace("http://3.221.158.133", "https://novmag.imgix.net") +
       "?w=600&auto=compress&auto=format";
   });
+
 </script>
 
 <style lang="scss">

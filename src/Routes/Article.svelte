@@ -96,6 +96,7 @@
 
     <!-- {# HEADER MEDIA #} -->
     <div class="article__header">
+    
       {#if post.header.previewType === 'image' || post.header.previewType == 'slideshow'}
         <Image url={post.header.previewImage.url} caption={post.header.title} />
       {/if}

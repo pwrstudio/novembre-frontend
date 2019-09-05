@@ -28,8 +28,7 @@
   onMount(async () => {
     wp = new Waypoint({
       element: previewContainer,
-      handler: activate,
-      offset: "80%"
+      handler: activate
     });
   });
 </script>

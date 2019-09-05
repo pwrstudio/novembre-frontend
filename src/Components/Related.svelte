@@ -1,10 +1,9 @@
 <script>
   import { onMount } from "svelte";
-  import Flickity from "flickity-imagesloaded";
   import { Router, links } from "svelte-routing";
+  import Slideshow from "./Modules/Slideshow.svelte";
 
   export let related;
-  let paddedRelated = [];
   let slideShowEl;
 
   console.log(related);
@@ -12,60 +11,6 @@
   console.log(typeof related);
 
   // TEMP SOLUTION
-
-  related.forEach(s => {
-    s.previewImage =
-      s.previewImage.replace(
-        "http://3.221.158.133",
-        "https://novmag.imgix.net"
-      ) + "?w=600&auto=compress&auto=format";
-  });
-
-  if (related.length < 8) {
-    const arrayLength = related.length - 1;
-    let arrayIndex = 0;
-    console.log("length", arrayLength);
-    for (let i = 0; i < 8; i++) {
-      console.log("i", i);
-      console.log("arrayLength", arrayLength);
-      console.log("arrayIndex", arrayIndex);
-      console.log(related[arrayIndex]);
-      paddedRelated.push(related[arrayIndex]);
-      if (arrayIndex == arrayLength) {
-        arrayIndex = 0;
-      } else {
-        arrayIndex++;
-      }
-    }
-  } else {
-    paddedRelated = related;
-  }
-
-  console.log(paddedRelated);
-
-  onMount(async () => {
-    if (slideShowEl) {
-      console.log("::::: RELATED INIT");
-
-      let options = {
-        wrapAround: true,
-        prevNextButtons: false,
-        pageDots: false,
-        autoPlay: 5000,
-        imagesLoaded: true,
-        groupCells: 2,
-        selectedAttraction: 0.028,
-        friction: 0.28,
-        fullscreen: true
-      };
-
-      // trigger redraw for transition
-      slideShowEl.offsetHeight;
-
-      // init Flickity
-      new Flickity(slideShowEl, options);
-    }
-  });
 </script>
 
 <style lang="scss">
@@ -169,6 +114,9 @@
 
     <div class="related__header">RELATED ARTICLES</div>
 
+      <Slideshow slides={related} />
+
+<!-- 
     <div class="carousel slideshow" bind:this={slideShowEl}>
       {#each paddedRelated as slide}
         <div
@@ -183,7 +131,7 @@
           </a>
         </div>
       {/each}
-    </div>
+    </div> -->
 
   </div>
 </Router>
