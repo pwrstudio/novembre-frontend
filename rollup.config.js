@@ -3,14 +3,15 @@ import resolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
 import livereload from 'rollup-plugin-livereload';
 import { terser } from 'rollup-plugin-terser';
-import { scss } from 'svelte-preprocess';
+// import { scss, globalStyle } from 'svelte-preprocess';
+import sveltePreprocess from 'svelte-preprocess'
 
 const production = !process.env.ROLLUP_WATCH;
 
 export default {
 	input: 'src/main.js',
 	output: {
-		sourcemap: true,
+		sourcemap: false,
 		format: 'iife',
 		name: 'app',
 		file: 'public/bundle.js'
@@ -24,9 +25,7 @@ export default {
 			css: css => {
 				css.write('public/bundle.css');
 			},
-			preprocess: [
-				scss(),
-			]
+			preprocess: sveltePreprocess()
 		}),
 
 		// If you have external dependencies installed from

@@ -1,10 +1,10 @@
 <script>
   import { fade } from "svelte/transition";
+  import { onMount } from "svelte";
 
   // COMPONENTS
   import TaxList from "../Components/TaxList.svelte";
   import Footer from "../Components/Footer.svelte";
-  import Related from "../Components/Related.svelte";
 
   // MODULES
   import BodyText from "../Components/Modules/BodyText.svelte";
@@ -20,17 +20,28 @@
   export let endpoint;
   export let isEntertainment = false;
 
+  // console.log("in articel");
+
   let post = loadData();
 
+  // console.log(endpoint);
+  // console.log(slug);
+
   async function loadData() {
-    const res = await fetch({endpoint}+ slug + ".json");
+    // console.log(endpoint + slug + ".json");
+    const res = await fetch(endpoint + slug + ".json");
     const post = await res.json();
 
-    console.log(post);
-    window.scrollTo(0, 0);
+    // console.log("post");
+    // console.log(post);
+    // window.scrollTo(0, 0);
 
     return post;
   }
+
+  onMount(async () => {
+    window.scrollTo(0, 0);
+  });
 </script>
 
 <style lang="scss">
@@ -41,6 +52,10 @@
     background: white;
     min-height: 100vw;
 
+    &.entertainment {
+      background: $grey;
+    }
+
     &__header {
       img,
       video {
@@ -48,6 +63,11 @@
         width: 100%;
         object-fit: cover;
       }
+    }
+
+    em {
+      font-family: $serif-stack;
+      font-style: italic;
     }
 
     &__title {
@@ -62,11 +82,6 @@
       font-family: $sans-stack;
       margin-left: $small-margin;
       overflow: hidden;
-
-      em {
-        font-family: $serif-stack;
-        font-style: italic;
-      }
 
       @include screen-size("small") {
         font-size: $mobile_xlarge;
@@ -86,49 +101,68 @@
         font-size: $mobile_body;
       }
     }
+  }
 
-    &--entertainment {
-      background: $grey;
+  .related-header {
+    font-family: $sans-stack;
+    font-size: $large;
+    font-weight: 300;
+    line-height: 1em;
+    text-transform: uppercase;
+    margin-bottom: 0px;
+    line-height: 0.9em;
+    margin-bottom: 20px;
+
+    @include screen-size("small") {
+      font-size: $mobile_xlarge;
     }
   }
 </style>
 
 {#await post then post}
-  <article class="article" in:fade>
+  <article
+    class="article"
+    class:entertainment={isEntertainment}
+    transition:fade>
 
-    <!-- {# HEADER MEDIA #} -->
+    <!-- HEADER MEDIA -->
     <div class="article__header">
+      {#if !isEntertainment}
+        {#if post.header.previewType === 'image' || post.header.previewType == 'slideshow'}
+          <Image
+            url={post.header.previewImage.url}
+            caption={post.header.title} />
+        {/if}
 
-      {#if post.header.previewType === 'image' || post.header.previewType == 'slideshow'}
-        <Image url={post.header.previewImage.url} caption={post.header.title} />
-      {/if}
-
-      {#if post.header.previewType === 'video'}
-        <Video />
+        {#if post.header.previewType === 'video'}
+          <Video />
+        {/if}
       {/if}
 
     </div>
 
-    <!-- {# TAGS #} -->
+    <!-- TAGS -->
     {#if post.header.taxonomy}
       <div class="article__tags">
         <TaxList taxonomy={post.header.taxonomy} />
       </div>
     {/if}
 
+    <!-- TITLE -->
     <h1 class="article__title">
       {@html post.header.htmlTitle.fullTitle}
     </h1>
 
+    <!-- MAIN CONTENT -->
     {#each post.header.fieldSelection as { select, body, introduction, quote, image, video, audio, slideshow, portal }}
       {#if select == 'body'}
-        <BodyText {...body} />
+        <BodyText {...body} {isEntertainment} />
       {:else if select == 'introduction'}
         <IntroductionText {...introduction} />
       {:else if select == 'quote'}
         <QuoteText {...quote} />
       {:else if select == 'image'}
-        <Image {...image} inline={true} />
+        <Image {...image} />
       {:else if select == 'video'}
         <Video {...video} />
       {:else if select == 'audio'}
@@ -140,8 +174,11 @@
       {/if}
     {/each}
 
-    <!-- <Related {post} /> -->
-    <Related related={post.header.related} />
+    <!-- RELATED -->
+    {#if post.header.related}
+      <div class="related-header">RELATED ARTICLES</div>
+      <Slideshow slides={post.header.related} isRelated={true} />
+    {/if}
 
   </article>
 

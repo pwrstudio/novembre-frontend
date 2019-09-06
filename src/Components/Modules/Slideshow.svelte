@@ -1,20 +1,29 @@
 <script>
   import { onMount } from "svelte";
   import Flickity from "flickity-imagesloaded";
+  // import { Router, links } from "svelte-routing";
 
   export let slides;
+  export let isRelated = false;
+
   let paddedSlides = [];
   let slideShowEl;
 
   let hidden = false;
 
+  // console.log("is related: ", isRelated);
+  // console.log(slides);
+
   // TEMP SOLUTION
 
   slides.forEach(s => {
-    s.url =
-      s.url.replace("http://3.221.158.133", "https://novmag.imgix.net") +
-      "?w=600&auto=compress&auto=format";
-    // console.log(s.url);
+    if (s.url) {
+      s.url =
+        s.url.replace(
+          "http://localhost:8888/novembre",
+          "https://novmag.imgix.net"
+        ) + "?w=600&auto=compress&auto=format";
+    }
   });
 
   if (slides.length < 8) {
@@ -62,8 +71,7 @@
 </script>
 
 <style lang="scss">
-  @import "../variables.scss";
-  @import "../flickity.scss";
+  @import "../../variables.scss";
 
   .slideshow {
     width: 100%;
@@ -86,6 +94,32 @@
     &__slide-video {
       height: 100%;
     }
+
+    &__title {
+      font-family: $sans-stack;
+      font-size: $large;
+      font-weight: 300;
+      line-height: 1em;
+      text-transform: uppercase;
+      line-height: 0.9em;
+      position: absolute;
+      bottom: 15px;
+      left: $small-margin;
+      max-width: 95%;
+
+      em {
+        font-family: $serif-stack;
+        font-style: italic;
+      }
+
+      @include screen-size("small") {
+        font-size: $mobile_xlarge;
+      }
+
+      &--white {
+        color: white;
+      }
+    }
   }
 
   .hidden {
@@ -96,7 +130,26 @@
 <div class="carousel slideshow" bind:this={slideShowEl}>
   {#each paddedSlides as slide}
     <div class="carousel-cell slideshow__slide">
-      <img class="slideshow__slide-image" src={slide.url} alt={slide.caption} />
+
+      {#if isRelated}
+        <a href="/{slide.parent}/{slide.slug}">
+          <img
+            class="slideshow__slide-image"
+            src={slide.url}
+            alt={slide.caption} />
+          <div
+            class="slideshow__title"
+            class:slideshow__title--white={slide.header.previewColor}>
+            {slide.title}
+          </div>
+        </a>
+      {:else}
+        <img
+          class="slideshow__slide-image"
+          src={slide.url}
+          alt={slide.caption} />
+      {/if}
+
     </div>
   {/each}
 </div>

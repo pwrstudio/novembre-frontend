@@ -1,7 +1,12 @@
 <script>
   import Footer from "../Components/Footer.svelte";
+  import { onMount } from "svelte";
 
   export let title;
+
+  onMount(async () => {
+    window.scrollTo(0, 0);
+  });
 </script>
 
 <style lang="scss">

@@ -1,9 +1,10 @@
 <script>
   export let text;
+  export let isEntertainment;
 </script>
 
 <style lang="scss">
-  @import "../variables.scss";
+  @import "../../variables.scss";
 
   .body-text {
     height: auto;
@@ -35,16 +36,16 @@
         border-bottom: 1px solid transparent;
       }
     }
+  }
 
-    &--entertainment {
-      font-family: $sans-stack;
-
-      p {
-        min-height: 400px;
-        column-count: 2;
-        column-fill: auto;
-        // min-height: 300px;
-      }
+  .entertainment {
+    font-family: $sans-stack;
+    p {
+      min-height: 400px;
+      column-count: 2;
+      column-fill: auto;
+      background: red;
+      // min-height: 300px;
     }
   }
 
@@ -60,6 +61,6 @@
   }
 </style>
 
-<div class="body-text">
+<div class="body-text" class:entertainment={isEntertainment}>
   {@html text}
 </div>

@@ -3,7 +3,7 @@
 </script>
 
 <style lang="scss">
-  @import "../variables.scss";
+  @import "../../variables.scss";
 
   .quote-text {
     width: 100%;

@@ -2,27 +2,29 @@
   export let file = "";
   export let url = "";
   export let multiFiles = [];
-  export let inline = false;
   export let caption = "Novembre";
   export let size = true;
+  export let isListing = false;
 
-  console.log(inline);
+  // console.log("inline:", inline);
+  // console.log("size:", size);
 
   // TEMP SOLUTION
   url =
-    url.replace("http://3.221.158.133", "https://novmag.imgix.net") +
-    "?w=1200&auto=compress";
+    url.replace("http://localhost:8888/novembre", "https://novmag.imgix.net") +
+    "?w=1600&auto=compress";
 
   multiFiles.forEach(f => {
     f.url =
-      f.url.replace("http://3.221.158.133", "https://novmag.imgix.net") +
-      "?w=600&auto=compress&auto=format";
+      f.url.replace(
+        "http://localhost:8888/novembre",
+        "https://novmag.imgix.net"
+      ) + "?w=600&auto=compress&auto=format";
   });
-
 </script>
 
 <style lang="scss">
-  @import "../variables.scss";
+  @import "../../variables.scss";
 
   .image {
     width: 100%;
@@ -30,23 +32,8 @@
 
     $block: &;
 
-    &--inline {
-      margin-top: 20px;
-      margin-bottom: 20px;
-    }
-
-    &--proportional {
-      width: 800px;
-      margin-left: auto;
-      margin-right: auto;
-      max-width: 95vw;
-      margin-bottom: 5rem;
-
-      img,
-      video {
-        width: 100%;
-      }
-    }
+    // margin-top: 20px;
+    // margin-bottom: 20px;
 
     &--full {
       height: $full-height;
@@ -57,6 +44,20 @@
         height: 100%;
         width: 100%;
         object-fit: cover;
+      }
+    }
+
+    &--inline {
+      height: auto;
+      width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+      max-width: 95vw;
+      margin-bottom: 5rem;
+
+      img,
+      video {
+        width: 100%;
       }
     }
 
@@ -131,9 +132,9 @@
 
 <div
   class="image"
-  class:image--full={size}
-  class:image--free={!size}
-  class:image--inline={inline}
+  class:image--full={size == true || size == 'fullWidth'}
+  class:image--inline={size == 'proportional'}
+  class:image--free={!size && multiFiles && multiFiles.length > 0}
   class:image--free-1={!size && multiFiles && multiFiles.length === 1}
   class:image--free-2={!size && multiFiles && multiFiles.length === 2}
   class:image--free-3={!size && multiFiles && multiFiles.length === 3}
@@ -141,6 +142,9 @@
 
   {#if size || multiFiles.length === 0}
     <img class="image__image" src={url} alt={caption} />
+    {#if !isListing}
+      <figcaption>{caption}</figcaption>
+    {/if}
   {:else}
     {#each multiFiles as slide}
       <img

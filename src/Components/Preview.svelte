@@ -1,8 +1,6 @@
 <script>
-  import { fade } from "svelte/transition";
-  import { onMount, onDestroy } from "svelte";
+  import { onMount } from "svelte";
   import Flickity from "flickity";
-  import { createEventDispatcher } from "svelte/internal";
   import { Router, links } from "svelte-routing";
 
   // COMPONENTS
@@ -13,23 +11,26 @@
 
   export let post;
 
-  const dispatch = createEventDispatcher();
-
   let previewContainer;
-  let wp;
-  let active = true;
+  let active = false;
 
-  // function activate() {
-  //   active = true;
-  //   dispatch("active");
-  //   wp.destroy();
-  // }
+  const observer = new IntersectionObserver(
+    entries => {
+      // console.log("xxx");
+      entries.forEach(entry => {
+        if (entry.intersectionRatio > 0) {
+          // console.log("case 1");
+          // console.log(entry.intersectionRatio);
+          active = true;
+          observer.disconnect();
+        }
+      });
+    },
+    { treshhold: 0.5 }
+  );
 
   onMount(async () => {
-    // wp = new Waypoint({
-    //   element: previewContainer,
-    //   handler: activate
-    // });
+    observer.observe(previewContainer);
   });
 </script>
 
@@ -42,12 +43,13 @@
     position: relative;
     user-select: none;
     color: black;
+    overflow: hidden;
 
     &__tags {
       position: absolute;
       top: 0;
       left: 0;
-      margin-left: 10px;
+      margin-left: $small-margin;
       margin-top: $small-margin;
       z-index: 10;
       max-width: 90vw;
@@ -59,8 +61,6 @@
       line-height: 0.85em;
       text-transform: uppercase;
       max-width: 95%;
-      padding-bottom: $small-margin;
-      margin-left: $small-margin;
       position: absolute;
       bottom: $small-margin;
       left: $small-margin;
@@ -164,6 +164,7 @@
     bind:this={previewContainer}
     use:links>
 
+    <!-- TAGS -->
     {#if post.header.taxonomy}
       <div class="preview__tags">
         <TaxList taxonomy={post.header.taxonomy} />
@@ -179,7 +180,8 @@
           file={post.header.previewImage.file}
           url={post.header.previewImage.url}
           multiFiles={post.header.previewSlideshow}
-          caption={post.header.htmlTitle.fullTitle} />
+          caption={post.header.htmlTitle.fullTitle}
+          isListing={true} />
       {/if}
 
       <!-- VIDEO -->
@@ -187,7 +189,8 @@
         <Video
           file={post.header.previewVideo.file}
           url={post.header.previewVideo.url}
-          caption={post.header.title} />
+          caption={post.header.title}
+          isListing={true} />
       {/if}
 
       <!-- SLIDESHOW -->

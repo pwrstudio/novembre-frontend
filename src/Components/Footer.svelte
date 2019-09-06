@@ -1,9 +1,36 @@
 <script>
   import Logo from "./Logo.svelte";
   import SmoothScroll from "smooth-scroll";
-  import { fade, fly } from "svelte/transition";
+  import { onMount } from "svelte";
 
-  var scroll = new SmoothScroll('a[href*="#"]');
+  var scroll = new SmoothScroll('a[href*="#"]', {
+    speed: 100
+  });
+
+  let footerEl;
+  let active = false;
+
+  const observer = new IntersectionObserver(
+    entries => {
+      // console.log("FOOTEr");
+      entries.forEach(entry => {
+        if (entry.intersectionRatio > 0) {
+          // console.log("case 1");
+          // console.log(entry.intersectionRatio);
+          active = true;
+          observer.disconnect();
+        } else {
+          // console.log(entry.intersectionRatio);
+          // console.log("case 2");
+        }
+      });
+    },
+    { treshhold: 0.5 }
+  );
+
+  onMount(async () => {
+    observer.observe(footerEl);
+  });
 </script>
 
 <style lang="scss">
@@ -15,6 +42,14 @@
     z-index: 10;
     background: white;
     font-family: $sans-stack;
+    padding-top: 20px;
+
+    opacity: 0;
+    transition: opacity 1s ease-out;
+
+    &.active {
+      opacity: 1;
+    }
 
     &__logo {
       display: block;
@@ -63,7 +98,7 @@
   }
 </style>
 
-<footer class="footer" transition:fly>
+<footer class="footer" class:active bind:this={footerEl}>
 
   <a
     class="footer__link footer__link--left"

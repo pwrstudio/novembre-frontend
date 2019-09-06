@@ -1,6 +1,7 @@
 <script>
   import Flickity from "flickity";
   import { onMount } from "svelte";
+  import { fade } from "svelte/transition";
 
   export let taxlist;
   export let taxname;
@@ -8,10 +9,10 @@
 
   let scrollListEl;
 
-  console.log(taxname);
+  // console.log(taxname);
 
   const startTicker = function() {
-    console.log("starting ticker");
+    // console.log("starting ticker");
 
     // Play with this value to change the speed
     let tickerSpeed = 0.7;
@@ -139,21 +140,19 @@
   }
 </style>
 
-<div class="taxonomy-scroller">
-  <div class="top-block">
-    <div
-      class="main-carousel taxonomy-scroller__slideshow
-      taxonomy-scroller__slideshow--large"
-      bind:this={scrollListEl}>
-      {#each taxArray as t}
-        <div class="carousel-cell taxonomy-scroller__slide">
-          <a
-            href={'/magazine/category/' + t.toLowerCase()}
-            class="taxonomy__item taxonomy-scroller__link js-ajax-link">
-            {t}
-          </a>
-        </div>
-      {/each}
-    </div>
+<div class="taxonomy-scroller" transition:fade>
+  <div
+    class="main-carousel taxonomy-scroller__slideshow
+    taxonomy-scroller__slideshow--large"
+    bind:this={scrollListEl}>
+    {#each taxArray as t}
+      <div class="carousel-cell taxonomy-scroller__slide">
+        <a
+          href={'/magazine/category/' + t.toLowerCase()}
+          class="taxonomy__item taxonomy-scroller__link js-ajax-link">
+          {t}
+        </a>
+      </div>
+    {/each}
   </div>
 </div>

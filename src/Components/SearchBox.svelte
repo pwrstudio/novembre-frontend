@@ -5,7 +5,7 @@
 
   export let menuActive = false;
 
-  console.log(searchField);
+  // console.log(searchField);
 
   const showSearchBox = () => {
     searchActive = !searchActive;
