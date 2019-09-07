@@ -12,7 +12,7 @@
 
   let menuItems = [
     { title: "MAGAZINE", target: "/magazine" },
-    { title: "ENTER&shy;TAINMENT", target: "/entertainment" },
+    { title: "ENTERTAINMENT", target: "/entertainment" },
     { title: "ABOUT", target: "/about" },
     { title: "CONTACT", target: "/contact" }
   ];
@@ -128,7 +128,7 @@
 
         @include screen-size("small") {
           font-size: $mobile_large;
-          hyphens: manual;
+          // hyphens: manual;
           // font-size: 46px;
         }
       }

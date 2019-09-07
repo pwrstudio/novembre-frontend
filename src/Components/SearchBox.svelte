@@ -12,7 +12,7 @@
     searchField.focus().select();
   };
 
-  console.log(menuActive);
+  // console.log(menuActive);
 
   $: {
     if (!menuActive) {

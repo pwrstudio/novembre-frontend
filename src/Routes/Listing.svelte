@@ -25,7 +25,23 @@
   export let isQuery = false;
   export let query = false;
 
+  console.log("query", query);
+
   let currentQuery = query;
+  let activeCategory = window.location.hash.substr(1);
+
+  // if (activeCategory) {
+  //   isQuery = true;
+  //   endpoint = entertainment.json;
+  // }
+
+  function changeCategory(e) {
+    console.dir(e.detail.newCategory);
+    activeCategory = e.detail.newCategory;
+    history.replaceState(null, null, "#" + activeCategory);
+    items = [];
+    loadData(0, activeCategory);
+  }
 
   const observer = new IntersectionObserver(
     entries => {
@@ -49,6 +65,10 @@
     { treshhold: 0.5 }
   );
 
+  // window.onpopstate = function(event) {
+  //   console.dir(event);
+  // };
+
   // Listen for changes to query
   $: {
     if (query !== currentQuery) {
@@ -56,16 +76,17 @@
       items = [];
       firstLoad = false;
       currentQuery = query;
-      loadData(1);
+      loadData(0);
     }
   }
 
-  function loadData(index) {
-    if (isQuery) {
-      url = endpoint + query;
-    } else {
-      url = endpoint + "/index:" + index;
-    }
+  // window.addEventListener("hashchange", e => {
+  //   console.dir(e);
+  // });
+
+  function loadData(index, query) {
+    url = endpoint + "/index:" + index + (query ? "/query:" + query : "");
+    console.dir(url);
     fetch(url)
       .then(r => r.json())
       .then(arr => {
@@ -76,7 +97,7 @@
       });
   }
 
-  loadData(index);
+  loadData(index, query);
 
   onMount(async () => {
     window.scrollTo(0, 0);
@@ -103,8 +124,6 @@
     font-size: $large;
     font-weight: 300;
     text-transform: uppercase;
-    padding-bottom: 20px;
-    padding-top: 20px;
     background: black;
     color: white;
 
@@ -140,14 +159,22 @@
 </style>
 
 <svelte:head>
-  <title>NOVEMBRE | {title}</title>
+  {#if title === 'Landing'}
+    <title>NOVEMBRE</title>
+  {:else}
+    <title>NOVEMBRE | {title}</title>
+  {/if}
 </svelte:head>
 
 <div class="listing">
 
   {#if showTaxonomyScroller && firstLoad}
     <div class="top-block" in:fade>
-      <ScrollList taxname={title.toLowerCase()} {taxlist} />
+      <ScrollList
+        taxname={title.toLowerCase()}
+        {taxlist}
+        {activeCategory}
+        on:changeCategory={changeCategory} />
     </div>
   {/if}
 
@@ -160,7 +187,7 @@
       </div>
     {/if}
   {/if}
-
+  <!-- {currentHash} -->
   {#each items as post}
     <Preview {post} />
   {/each}

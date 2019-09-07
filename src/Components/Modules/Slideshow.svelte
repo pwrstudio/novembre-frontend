@@ -8,20 +8,24 @@
 
   let paddedSlides = [];
   let slideShowEl;
+  let imgixParams = "&auto=format";
 
   let hidden = false;
 
-  console.log("is related: ", isRelated);
-  console.log(slides);
+  // console.log("is related: ", isRelated);
+  // console.log(slides);
 
   // TEMP SOLUTION
 
   slides.forEach(s => {
-    if (s.url) {
-      s.url =
-        s.url.replace("http://3.221.158.133", "https://novmag.imgix.net") +
-        "?w=600&auto=compress&auto=format";
-    }
+    s.url = s.url.replace("http://3.221.158.133", "https://novmag.imgix.net");
+    s.src = s.url + "?w=800" + imgixParams;
+    s.srcset = ["", 200, 400, 600, 800, 1000, 1200, 1400].reduce(
+      (result, size) => {
+        return result + s.url + "?w=" + size + imgixParams + " " + size + "w, ";
+      }
+    );
+    s.sizes = "(max-width: 500px) 100vw, (max-width: 800px) 50vw, 33vw";
   });
 
   if (slides.length < 8) {
@@ -91,7 +95,7 @@
         width: 33.333%;
 
         @include screen-size("small") {
-          width: 66.666%;
+          width: 80%;
         }
       }
     }
@@ -148,7 +152,9 @@
         <a href="/{slide.parent}/{slide.slug}">
           <img
             class="slideshow__slide-image slideshow__slide-image--related"
-            src={slide.url}
+            srcset={slide.srcset}
+            sizes={slide.sizes}
+            src={slide.src}
             alt={slide.caption} />
           <div
             class="slideshow__title"
@@ -161,7 +167,9 @@
       <div class="carousel-cell slideshow__slide">
         <img
           class="slideshow__slide-image"
-          src={slide.url}
+          srcset={slide.srcset}
+          sizes={slide.sizes}
+          src={slide.src}
           alt={slide.caption} />
       </div>
     {/if}

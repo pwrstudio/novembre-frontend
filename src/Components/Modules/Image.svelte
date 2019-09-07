@@ -1,23 +1,72 @@
 <script>
   export let file = "";
   export let url = "";
-  export let multiFiles = [];
+  export let multiFiles = false;
   export let caption = "Novembre";
   export let size = true;
   export let isListing = false;
 
+  let srcset;
+  let sizes;
+  let src;
+  let imgixParams = "&auto=format";
+
   // console.log("inline:", inline);
+  // console.log("file:", file);
   // console.log("size:", size);
 
   // TEMP SOLUTION
-  url =
-    url.replace("http://3.221.158.133", "https://novmag.imgix.net") + "?w=1400";
 
-  multiFiles.forEach(f => {
-    f.url =
-      f.url.replace("http://3.221.158.133", "https://novmag.imgix.net") +
-      "?w=600&auto=compress&auto=format";
-  });
+  if (multiFiles) {
+    // Size depending on layout
+    if (multiFiles.length === 1) {
+      // FULL WIDTH
+      sizes = "80vw";
+    } else if (multiFiles.length === 2) {
+      // PROPORTIONAL or inline
+      sizes = "45vw";
+    } else if (multiFiles.length === 3) {
+      sizes = "30vw";
+    } else if (multiFiles.length === 4) {
+      sizes = "25vw";
+    }
+
+    multiFiles.forEach(f => {
+      f.url = f.url.replace("http://3.221.158.133", "https://novmag.imgix.net");
+      f.src = f.url + "?w=800" + imgixParams;
+      f.srcset = ["", 200, 400, 600, 800, 1000, 1200, 1400].reduce(
+        (result, size) => {
+          return (
+            result + f.url + "?w=" + size + imgixParams + " " + size + "w, "
+          );
+        }
+      );
+      f.sizes = sizes;
+    });
+  } else {
+    // Set base image size
+    src =
+      url.replace("http://3.221.158.133", "https://novmag.imgix.net") +
+      "?w=1200" +
+      imgixParams;
+
+    // Generate srcset
+    srcset = ["", 600, 800, 1000, 1200, 1400, 1600, 2000].reduce(
+      (result, size) => {
+        return result + url + "?w=" + size + imgixParams + " " + size + "w, ";
+      }
+    );
+
+    if (size === true || size === "fullWidth") {
+      // FULL WIDTH
+      sizes = "100vw";
+    } else {
+      // PROPORTIONAL or inline
+      sizes = "80vw";
+    }
+
+    // console.dir(srcset);
+  }
 </script>
 
 <style lang="scss">
@@ -26,7 +75,7 @@
   .image {
     width: 100%;
     height: auto;
-    pointer-events: none;
+    // pointer-events: none;
 
     $block: &;
 
@@ -130,7 +179,7 @@
 
 <div
   class="image"
-  class:image--full={size == true || size == 'fullWidth'}
+  class:image--full={size == true || size == 'fullWidth' || multiFiles.length === 0}
   class:image--inline={size == 'proportional'}
   class:image--free={!size && multiFiles && multiFiles.length > 0}
   class:image--free-1={!size && multiFiles && multiFiles.length === 1}
@@ -139,7 +188,7 @@
   class:image--free-4={!size && multiFiles && multiFiles.length === 4}>
 
   {#if size || multiFiles.length === 0}
-    <img class="image__image" src={url} alt={caption} />
+    <img class="image__image" {srcset} {sizes} {src} alt={caption} />
     {#if !isListing}
       <figcaption>{caption}</figcaption>
     {/if}
@@ -148,7 +197,9 @@
       <img
         class="image__image image__image--multi"
         alt="Novembre"
-        src={slide.url} />
+        srcset={slide.srcset}
+        sizes={slide.sizes}
+        src={slide.src} />
     {/each}
   {/if}
 

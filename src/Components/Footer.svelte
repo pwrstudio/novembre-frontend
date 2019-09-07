@@ -25,8 +25,8 @@
     transition: opacity 1s ease-out;
 
     @include screen-size("small") {
-      padding-top: 40px;
-      padding-bottom: 40px;
+      // padding-top: 40px;
+      padding-bottom: 30px;
     }
 
     &.active {

@@ -24,32 +24,20 @@
       endpoint: baseURL + "magazine.json",
       showTaxonomyScroller: true
     },
-    magazineCategory: {
-      title: "Magazine",
-      endpoint: baseURL + "category-magazine.json/category:",
-      showTaxonomyScroller: true,
-      isQuery: true
-    },
     entertainment: {
       title: "Entertainment",
       endpoint: baseURL + "entertainment.json",
       showTaxonomyScroller: true
     },
-    entertainmentCategory: {
-      title: "Entertainment",
-      endpoint: baseURL + "category-entertainment.json/category:",
-      showTaxonomyScroller: true,
-      isQuery: true
-    },
     taxonomy: {
       title: "Tag",
-      endpoint: baseURL + "filter.json/tag:",
+      endpoint: baseURL + "filter.json",
       showTaxonomyScroller: false,
       isQuery: true
     },
     search: {
       title: "Search",
-      endpoint: baseURL + "search.json/query:",
+      endpoint: baseURL + "search.json",
       showTaxonomyScroller: false,
       isQuery: true
     }
@@ -206,11 +194,15 @@
 <Navigation />
 <Router>
   <Route path="/" component={Listing} {...listingRouteParams.landing} />
-  <Route path="magazine" component={Listing} {...listingRouteParams.magazine} />
   <Route
+    path="magazine/"
+    component={Listing}
+    {...listingRouteParams.magazine} />
+  <Route
+    <Route
     path="magazine/category/:query"
     component={Listing}
-    {...listingRouteParams.magazineCategory} />
+    {...listingRouteParams.magazine} />
   <Route
     path="entertainment"
     component={Listing}
@@ -218,7 +210,7 @@
   <Route
     path="entertainment/category/:query"
     component={Listing}
-    {...listingRouteParams.entertainmentCategory} />
+    {...listingRouteParams.entertainment} />
   <Route
     path="taxonomy/:query"
     component={Listing}

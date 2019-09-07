@@ -3,12 +3,35 @@
   import { onMount } from "svelte";
   import { fade } from "svelte/transition";
   import { Router, links } from "svelte-routing";
+  import { createEventDispatcher } from "svelte";
+
+  const dispatch = createEventDispatcher();
 
   export let taxlist;
   export let taxname;
   export let size = "large";
+  export let activeCategory = "";
 
   let scrollListEl;
+
+  function slugify(string) {
+    const a =
+      "àáäâãåăæąçćčđďèéěėëêęğǵḧìíïîįłḿǹńňñòóöôœøṕŕřßşśšșťțùúüûǘůűūųẃẍÿýźžż·/_,:;";
+    const b =
+      "aaaaaaaaacccddeeeeeeegghiiiiilmnnnnooooooprrsssssttuuuuuuuuuwxyyzzz------";
+    const p = new RegExp(a.split("").join("|"), "g");
+
+    return string
+      .toString()
+      .toLowerCase()
+      .replace(/\s+/g, "-") // Replace spaces with -
+      .replace(p, c => b.charAt(a.indexOf(c))) // Replace special characters
+      .replace(/&/g, "-and-") // Replace & with 'and'
+      .replace(/[^\w\-]+/g, "") // Remove all non-word characters
+      .replace(/\-\-+/g, "-") // Replace multiple - with single -
+      .replace(/^-+/, "") // Trim - from start of text
+      .replace(/-+$/, ""); // Trim - from end of text
+  }
 
   // TODO: change speed for mobile
   const startTicker = function() {
@@ -74,8 +97,6 @@
     taxArray = [...taxArray, ...taxArray, ...taxArray, ...taxArray];
   }
 
-  // console.log(taxArray);
-
   onMount(async () => {
     let options = {
       wrapAround: true,
@@ -110,13 +131,25 @@
       display: inline-block;
       margin-right: 30px;
       white-space: nowrap;
+      background: yellow;
+      height: auto;
+      padding-bottom: 20px;
+      padding-top: 20px;
 
-      a:hover,
-      a:active,
-      a.active {
+      span {
+        height: 100%;
+        cursor: pointer;
+      }
+
+      span:hover,
+      span:active,
+      span.active {
         border-bottom: 1px solid white;
       }
 
+      span.active {
+        background: pink;
+      }
       @include screen-size("small") {
         margin-right: 20px;
       }
@@ -136,8 +169,7 @@
         font-size: $large;
         font-weight: 300;
         text-transform: uppercase;
-        padding-bottom: 20px;
-        padding-top: 20px;
+        background: red;
 
         @include screen-size("small") {
           font-size: $mobile_large;
@@ -149,18 +181,21 @@
   }
 </style>
 
-<div class="taxonomy-scroller" use:links>
+<div class="taxonomy-scroller">
   <div
     class="main-carousel taxonomy-scroller__slideshow
     taxonomy-scroller__slideshow--large"
     bind:this={scrollListEl}>
     {#each taxArray as t}
       <div class="carousel-cell taxonomy-scroller__slide">
-        <a
-          href={'/' + taxname + '/category/' + t}
+        <span
+          class:active={activeCategory === slugify(t)}
+          on:click={e => {
+            dispatch('changeCategory', { newCategory: slugify(t) });
+          }}
           class="taxonomy__item taxonomy-scroller__link js-ajax-link">
           {t}
-        </a>
+        </span>
       </div>
     {/each}
   </div>

@@ -23,15 +23,18 @@
     font-style: italic;
     font-size: $body;
     line-height: 1.2em;
+    width: 100%;
 
     @include screen-size("small") {
       font-size: $mobile_body;
     }
 
     &__item {
+      display: inline-block;
       text-decoration: none;
       border-bottom: 1px solid transparent;
       color: currentColor;
+      margin-right: 5px;
 
       &:hover {
         border-bottom: 1px solid currentColor;
@@ -45,7 +48,6 @@
 
     {#each tags as t}
       <a href="/taxonomy/{t}" class="taxonomy__item">{t}</a>
-      &nbsp;
     {/each}
 
   </div>
