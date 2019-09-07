@@ -40,13 +40,6 @@
 
   .entertainment {
     font-family: $sans-stack;
-    p {
-      min-height: 400px;
-      column-count: 2;
-      column-fill: auto;
-      background: red;
-      // min-height: 300px;
-    }
   }
 
   a {

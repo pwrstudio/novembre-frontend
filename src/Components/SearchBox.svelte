@@ -12,8 +12,21 @@
     searchField.focus().select();
   };
 
+  console.log(menuActive);
+
+  $: {
+    if (!menuActive) {
+      searchActive = false;
+      searchQuery = "";
+    }
+  }
+
   const submitSearch = () => {
-    window.location = "/search/" + searchQuery;
+    if (searchQuery.length > 0) {
+      window.location = "/search/" + searchQuery;
+    } else {
+      searchActive = false;
+    }
   };
 </script>
 
@@ -29,8 +42,9 @@
     font-weight: 300;
 
     position: relative;
+    margin-bottom: 10px;
 
-    top: -4px;
+    // top: -4px;
 
     &__input {
       display: inline-block;
@@ -44,7 +58,7 @@
       outline: none;
       color: white;
       font-size: $large;
-      width: 15ch;
+      width: 500px;
       height: 1em;
       margin-right: $small-margin;
       border-bottom: 3px solid transparent;
@@ -61,7 +75,7 @@
       }
     }
 
-    transform: translateX(calc(-15ch - 59px));
+    transform: translateX(-512px);
     transition: transform 0.3s $transition;
 
     &--active {

@@ -29,22 +29,20 @@
 
   const observer = new IntersectionObserver(
     entries => {
-      console.log("LOAD TRIGGERD");
+      // console.log("LOAD TRIGGERD");
       entries.forEach(entry => {
         if (entry.intersectionRatio > 0 && firstLoad) {
-          // dispatch("active");
-          console.log(entry.intersectionRatio);
-          console.log(meta.nextindex);
-          console.log(meta.lastindex);
+          // console.log(entry.intersectionRatio);
+          // console.log(meta.nextindex);
+          // console.log(meta.lastindex);
           if (meta.nextindex < meta.lastindex) {
             loadData(meta.nextindex);
           } else {
             observer.disconnect();
             finishedLoading = true;
-            console.log("FFFinished");
           }
         } else {
-          console.log("case 2");
+          // console.log("case 2");
         }
       });
     },
@@ -54,6 +52,7 @@
   // Listen for changes to query
   $: {
     if (query !== currentQuery) {
+      window.alert = "query change";
       items = [];
       firstLoad = false;
       currentQuery = query;
@@ -70,12 +69,10 @@
     fetch(url)
       .then(r => r.json())
       .then(arr => {
-        // console.dir(arr);
         items = [...items, ...arr.posts];
         meta = arr.meta;
         taxlist = arr.taxlist;
         firstLoad = true;
-        // console.log(items);
       });
   }
 
@@ -83,7 +80,6 @@
 
   onMount(async () => {
     window.scrollTo(0, 0);
-    console.log("list mount");
     observer.observe(loadTrigger);
   });
 </script>
@@ -99,9 +95,7 @@
 
   .listing {
     width: 100%;
-    min-height: 200vh;
     margin-top: 80px;
-    // background: red;
   }
 
   .top-block {
@@ -113,6 +107,12 @@
     padding-top: 20px;
     background: black;
     color: white;
+
+    @include screen-size("small") {
+      font-size: $mobile_large;
+      padding-bottom: 5px;
+      padding-top: 5px;
+    }
   }
 
   .message {
@@ -125,6 +125,13 @@
     color: black;
     margin-left: $small-margin;
     min-height: 100vh;
+
+    @include screen-size("small") {
+      font-size: $mobile_large;
+      // background: red;
+      // padding-bottom: 5px;
+      // padding-top: 5px;
+    }
   }
 
   .query-bar {
@@ -133,30 +140,23 @@
 </style>
 
 <svelte:head>
-  <!-- <title>{start}-{end} of {items.length}</title> -->
   <title>NOVEMBRE | {title}</title>
 </svelte:head>
-
-<!-- <div class="landing">
-  <VirtualList {items} bind:start bind:end let:item>
-    <Preview post={item} on:active={counter} />
-  </VirtualList>
-</div> -->
 
 <div class="listing">
 
   {#if showTaxonomyScroller && firstLoad}
-    <div class="top-block" transition:fade>
-      <ScrollList taxname="entertainment" {taxlist} />
+    <div class="top-block" in:fade>
+      <ScrollList taxname={title.toLowerCase()} {taxlist} />
     </div>
   {/if}
 
   {#if isQuery && firstLoad}
     {#if items.length == 0}
-      <div class="message">No results for “{query}”</div>
+      <div class="message" in:fade>No results for “{query}”</div>
     {:else}
       <div class="top-block">
-        <span class="query-bar">{title}: {query}</span>
+        <span class="query-bar" in:fade>{title}: {query}</span>
       </div>
     {/if}
   {/if}
@@ -171,6 +171,4 @@
 
 </div>
 
-<!-- {#if showFooter} -->
-<Footer />
-<!-- {/if} -->
+<Footer active={finishedLoading} />

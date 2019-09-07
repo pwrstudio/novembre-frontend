@@ -2,6 +2,7 @@
   import Flickity from "flickity";
   import { onMount } from "svelte";
   import { fade } from "svelte/transition";
+  import { Router, links } from "svelte-routing";
 
   export let taxlist;
   export let taxname;
@@ -9,8 +10,7 @@
 
   let scrollListEl;
 
-  // console.log(taxname);
-
+  // TODO: change speed for mobile
   const startTicker = function() {
     // console.log("starting ticker");
 
@@ -68,9 +68,8 @@
   };
 
   let taxArray = Array.from(Object.keys(taxlist[taxname]));
-  // console.log(taxArray);
-  // console.log(typeof taxArray);
 
+  // TODO: improve padding algo...
   if (taxArray.length < 20) {
     taxArray = [...taxArray, ...taxArray, ...taxArray, ...taxArray];
   }
@@ -78,8 +77,6 @@
   // console.log(taxArray);
 
   onMount(async () => {
-    console.log("::::: SCROLL INIT");
-
     let options = {
       wrapAround: true,
       prevNextButtons: false,
@@ -111,11 +108,17 @@
 
     &__slide {
       display: inline-block;
-      margin-right: 1ch;
+      margin-right: 30px;
       white-space: nowrap;
 
-      a:hover {
+      a:hover,
+      a:active,
+      a.active {
         border-bottom: 1px solid white;
+      }
+
+      @include screen-size("small") {
+        margin-right: 20px;
       }
     }
 
@@ -135,12 +138,18 @@
         text-transform: uppercase;
         padding-bottom: 20px;
         padding-top: 20px;
+
+        @include screen-size("small") {
+          font-size: $mobile_large;
+          padding-bottom: 10px;
+          padding-top: 10px;
+        }
       }
     }
   }
 </style>
 
-<div class="taxonomy-scroller" transition:fade>
+<div class="taxonomy-scroller" use:links>
   <div
     class="main-carousel taxonomy-scroller__slideshow
     taxonomy-scroller__slideshow--large"
@@ -148,7 +157,7 @@
     {#each taxArray as t}
       <div class="carousel-cell taxonomy-scroller__slide">
         <a
-          href={'/magazine/category/' + t.toLowerCase()}
+          href={'/' + taxname + '/category/' + t}
           class="taxonomy__item taxonomy-scroller__link js-ajax-link">
           {t}
         </a>

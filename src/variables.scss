@@ -11,7 +11,7 @@ $intro: #{36 * $factor}px;
 $body: #{24 * 0.95}px;
 $small: #{16 * 0.95}px;
 
-$mobile_xlarge: #{120 * $mobile_factor}px;
+$mobile_xlarge: #{120 * 0.5}px;
 $mobile_large: #{70 * $mobile_factor}px;
 $mobile_intro: #{36 * $mobile_factor}px;
 $mobile_body: #{24 * 0.95}px;
@@ -28,7 +28,7 @@ $small-margin: 5px;
 
 $breakpoints: (
   'small': (
-    max-width: 900px
+    max-width: 800px
   ),
   'medium': (
     max-width: 1000px

@@ -1,7 +1,7 @@
 <script>
   import { onMount } from "svelte";
   import Flickity from "flickity-imagesloaded";
-  // import { Router, links } from "svelte-routing";
+  import { Router, links } from "svelte-routing";
 
   export let slides;
   export let isRelated = false;
@@ -11,31 +11,24 @@
 
   let hidden = false;
 
-  // console.log("is related: ", isRelated);
-  // console.log(slides);
+  console.log("is related: ", isRelated);
+  console.log(slides);
 
   // TEMP SOLUTION
 
   slides.forEach(s => {
     if (s.url) {
       s.url =
-        s.url.replace(
-          "http://localhost:8888/novembre",
-          "https://novmag.imgix.net"
-        ) + "?w=600&auto=compress&auto=format";
+        s.url.replace("http://3.221.158.133", "https://novmag.imgix.net") +
+        "?w=600&auto=compress&auto=format";
     }
   });
 
   if (slides.length < 8) {
     const arrayLength = slides.length - 1;
     let arrayIndex = 0;
-    // console.log("length", arrayLength);
     for (let i = 0; i < 8; i++) {
-      // console.log("i", i);
-      // console.log("arrayIndex", arrayIndex);
-      // console.log(slides[arrayIndex]);
       paddedSlides.push(slides[arrayIndex]);
-      // console.log(slides);
       if (arrayIndex == arrayLength) {
         arrayIndex = 0;
       } else {
@@ -53,12 +46,16 @@
         prevNextButtons: false,
         pageDots: false,
         autoPlay: 5000,
-        groupCells: 2,
+        groupCells: 1,
         imagesLoaded: true,
         selectedAttraction: 0.028,
         friction: 0.28,
         fullscreen: true
       };
+      // if (window.matchMedia("(max-width: 800px)").matches) {
+      //   console.log("mopbile");
+      //   options.groupCells = 1;
+      // }
 
       hidden = false;
 
@@ -78,6 +75,10 @@
     height: $full-height;
     max-height: 600px;
 
+    @include screen-size("small") {
+      max-height: 500px;
+    }
+
     &__slideshow {
       cursor: ew-resize;
       height: 100%;
@@ -85,10 +86,23 @@
 
     &__slide {
       height: 100%;
+
+      &--related {
+        width: 33.333%;
+
+        @include screen-size("small") {
+          width: 66.666%;
+        }
+      }
     }
 
     &__slide-image {
-      height: 600px;
+      height: 100%;
+
+      &--related {
+        width: 100%;
+        object-fit: cover;
+      }
     }
 
     &__slide-video {
@@ -113,7 +127,7 @@
       }
 
       @include screen-size("small") {
-        font-size: $mobile_xlarge;
+        font-size: $mobile_large;
       }
 
       &--white {
@@ -127,29 +141,29 @@
   }
 </style>
 
-<div class="carousel slideshow" bind:this={slideShowEl}>
+<div class="carousel slideshow" bind:this={slideShowEl} use:links>
   {#each paddedSlides as slide}
-    <div class="carousel-cell slideshow__slide">
-
-      {#if isRelated}
+    {#if isRelated}
+      <div class="carousel-cell slideshow__slide slideshow__slide--related">
         <a href="/{slide.parent}/{slide.slug}">
           <img
-            class="slideshow__slide-image"
+            class="slideshow__slide-image slideshow__slide-image--related"
             src={slide.url}
             alt={slide.caption} />
           <div
             class="slideshow__title"
             class:slideshow__title--white={slide.header.previewColor}>
-            {slide.title}
+            {#if slide}{slide.title}{/if}
           </div>
         </a>
-      {:else}
+      </div>
+    {:else}
+      <div class="carousel-cell slideshow__slide">
         <img
           class="slideshow__slide-image"
           src={slide.url}
           alt={slide.caption} />
-      {/if}
-
-    </div>
+      </div>
+    {/if}
   {/each}
 </div>

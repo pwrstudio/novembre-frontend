@@ -28,6 +28,10 @@
   }
 </style>
 
-<div class="placeholder">{title}</div>
+<div class="placeholder">
+  404
+  <br />
+  Page not found
+</div>
 
 <Footer active={true} />

@@ -2473,6 +2473,11 @@ supports-color@^6.1.0:
   dependencies:
     has-flag "^3.0.0"
 
+svelte-media-query@^0.0.4:
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/svelte-media-query/-/svelte-media-query-0.0.4.tgz#3f3c6b858b280d007be814fe2ea6baaa7e317efb"
+  integrity sha512-vRooDe/2dSSA3HCwzELtOpAv/OPw35SA/pPxkKCuYToIBi5/Hg1Zq6T3vjL6GyjfPxZIazWTXThBbR59H5yY3w==
+
 svelte-preprocess@^3.0.2:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/svelte-preprocess/-/svelte-preprocess-3.0.2.tgz#606ab0ab72d967657ee18947c0a32dbfdb9b8eb0"
@@ -2485,11 +2490,6 @@ svelte-routing@^1.3.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/svelte-routing/-/svelte-routing-1.3.0.tgz#40bdd421ba18c5b842318e33f15510620642026c"
   integrity sha512-8R3YCF9XukIfzI0ayQP04mDVWoZjx8q6gZyltaI7yxMLjc6W/jUQNLU/XGVMx3+HUZQ7lHx+7ZMS7/tk/ducdA==
-
-svelte-waypoint@^0.1.3:
-  version "0.1.3"
-  resolved "https://registry.yarnpkg.com/svelte-waypoint/-/svelte-waypoint-0.1.3.tgz#4095ac4ebf2f675fde4f72f3a63b5da7c014bed4"
-  integrity sha512-YwPFy6iekwKy5DzF/2586Domq1IAZPEH3VSkNzGjWK9VpwzeVj7FxA7WSlRNPsEhnVoQ93w0QJFyy0QaMY8ANQ==
 
 svelte@^3.0.0:
   version "3.9.1"

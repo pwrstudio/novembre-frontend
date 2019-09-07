@@ -1,36 +1,13 @@
 <script>
   import Logo from "./Logo.svelte";
   import SmoothScroll from "smooth-scroll";
-  import { onMount } from "svelte";
+  import MediaQuery from "svelte-media-query";
 
   var scroll = new SmoothScroll('a[href*="#"]', {
-    speed: 100
+    speed: 150
   });
 
-  let footerEl;
-  let active = false;
-
-  const observer = new IntersectionObserver(
-    entries => {
-      // console.log("FOOTEr");
-      entries.forEach(entry => {
-        if (entry.intersectionRatio > 0) {
-          // console.log("case 1");
-          // console.log(entry.intersectionRatio);
-          active = true;
-          observer.disconnect();
-        } else {
-          // console.log(entry.intersectionRatio);
-          // console.log("case 2");
-        }
-      });
-    },
-    { treshhold: 0.5 }
-  );
-
-  onMount(async () => {
-    observer.observe(footerEl);
-  });
+  export let active = false;
 </script>
 
 <style lang="scss">
@@ -47,12 +24,22 @@
     opacity: 0;
     transition: opacity 1s ease-out;
 
+    @include screen-size("small") {
+      padding-top: 40px;
+      padding-bottom: 40px;
+    }
+
     &.active {
       opacity: 1;
     }
 
     &__logo {
       display: block;
+      // background: red;
+      @include screen-size("small") {
+        position: relative;
+        left: -1%;
+      }
     }
 
     &__link {
@@ -98,24 +85,30 @@
   }
 </style>
 
-<footer class="footer" class:active bind:this={footerEl}>
+<footer class="footer" class:active>
 
-  <a
-    class="footer__link footer__link--left"
-    href="https://www.instagram.com/novembremagazine/"
-    target="_blank">
-    INSTAGRAM
-  </a>
+  <MediaQuery query="(min-width: 800px)" let:matches>
+    {#if matches}
+      <a
+        class="footer__link footer__link--left"
+        href="https://www.instagram.com/novembremagazine/"
+        target="_blank">
+        INSTAGRAM
+      </a>
 
-  <a
-    data-scroll
-    href="#top"
-    class="footer__link footer__link--right js-back-to-top">
-    BACK TO TOP
-  </a>
+      <a
+        data-scroll
+        href="#top"
+        class="footer__link footer__link--right js-back-to-top">
+        BACK TO TOP
+      </a>
 
-  <a data-scroll href="#top" class="footer__logo">
-    <Logo />
-  </a>
+      <Logo />
+    {:else}
+      <a data-scroll href="#top" class="footer__logo">
+        <Logo />
+      </a>
+    {/if}
+  </MediaQuery>
 
 </footer>

@@ -2,6 +2,7 @@
   import { onMount } from "svelte";
   import Flickity from "flickity";
   import { Router, links } from "svelte-routing";
+  import MediaQuery from "svelte-media-query";
 
   // COMPONENTS
   import TaxList from "./TaxList.svelte";
@@ -140,9 +141,9 @@
   .preview {
     opacity: 0;
     transform: translateY(10%);
-    transition: opacity 0.7s cubic-bezier(0.23, 1, 0.32, 1),
-      transform 0.7s cubic-bezier(0.23, 1, 0.32, 1);
-    transition: opacity 1s ease-out, transform 0.7s ease-out;
+    transition: opacity 1s cubic-bezier(0.23, 1, 0.32, 1),
+      transform 1s cubic-bezier(0.23, 1, 0.32, 1);
+    // transition: opacity 0.7s ease-out, transform 0.7s ease-out;
   }
 
   .active {
@@ -166,9 +167,13 @@
 
     <!-- TAGS -->
     {#if post.header.taxonomy}
-      <div class="preview__tags">
-        <TaxList taxonomy={post.header.taxonomy} />
-      </div>
+      <MediaQuery query="(min-width: 800px)" let:matches>
+        {#if matches}
+          <div class="preview__tags">
+            <TaxList taxonomy={post.header.taxonomy} />
+          </div>
+        {/if}
+      </MediaQuery>
     {/if}
 
     <a href="/{post.header.parent}/{post.header.slug}">

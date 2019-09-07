@@ -1,5 +1,6 @@
 <script>
   import { fade } from "svelte/transition";
+  import { quintOut } from "svelte/easing";
   import { onMount } from "svelte";
 
   // COMPONENTS
@@ -20,20 +21,30 @@
   export let endpoint;
   export let isEntertainment = false;
 
-  // console.log("in articel");
+  let currentSlug = slug;
 
   let post = loadData();
 
-  // console.log(endpoint);
-  // console.log(slug);
+  $: {
+    if (slug !== currentSlug) {
+      window.alert = "slug change";
+      post = loadData();
+      currentSlug = slug;
+    }
+  }
+
+  console.log("in articel");
+
+  console.log(endpoint);
+  console.log(slug);
 
   async function loadData() {
-    // console.log(endpoint + slug + ".json");
+    console.log(endpoint + slug + ".json");
     const res = await fetch(endpoint + slug + ".json");
     const post = await res.json();
 
     // console.log("post");
-    // console.log(post);
+    console.log(post);
     // window.scrollTo(0, 0);
 
     return post;
@@ -50,7 +61,6 @@
   .article {
     margin-top: 80px;
     background: white;
-    min-height: 100vw;
 
     &.entertainment {
       background: $grey;
@@ -62,6 +72,10 @@
         height: $full-height;
         width: 100%;
         object-fit: cover;
+      }
+
+      @include screen-size("small") {
+        // height: 70vh;
       }
     }
 
@@ -91,15 +105,6 @@
     &__tags {
       margin-left: $small-margin;
       margin-top: $small-margin;
-      font-family: $serif-stack;
-      font-style: italic;
-      font-size: $body;
-      line-height: 1.2em;
-      color: black;
-
-      @include screen-size("small") {
-        font-size: $mobile_body;
-      }
     }
   }
 
@@ -114,7 +119,8 @@
     margin-bottom: 20px;
 
     @include screen-size("small") {
-      font-size: $mobile_xlarge;
+      font-size: $mobile_large;
+      margin-bottom: 0px;
     }
   }
 </style>
@@ -123,7 +129,7 @@
   <article
     class="article"
     class:entertainment={isEntertainment}
-    transition:fade>
+    in:fade={{ duration: 300, easing: quintOut }}>
 
     <!-- HEADER MEDIA -->
     <div class="article__header">
@@ -131,7 +137,8 @@
         {#if post.header.previewType === 'image' || post.header.previewType == 'slideshow'}
           <Image
             url={post.header.previewImage.url}
-            caption={post.header.title} />
+            caption={post.header.title}
+            isListing={true} />
         {/if}
 
         {#if post.header.previewType === 'video'}
@@ -175,12 +182,12 @@
     {/each}
 
     <!-- RELATED -->
-    {#if post.header.related}
+    {#if post.header.related.length > 0}
       <div class="related-header">RELATED ARTICLES</div>
       <Slideshow slides={post.header.related} isRelated={true} />
     {/if}
 
   </article>
 
-  <Footer />
+  <Footer active={true} />
 {/await}

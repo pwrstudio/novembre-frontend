@@ -7,9 +7,10 @@
   import Listing from "./Routes/Listing.svelte";
   import Article from "./Routes/Article.svelte";
   import Page from "./Routes/Page.svelte";
+  import Error404 from "./Routes/Error404.svelte";
 
   // const baseURL = "http://3.221.158.13/3/";
-  const baseURL = "http://localhost:8888/novembre/";
+  const baseURL = "http://3.221.158.133/";
 
   const listingRouteParams = {
     landing: {
@@ -23,10 +24,22 @@
       endpoint: baseURL + "magazine.json",
       showTaxonomyScroller: true
     },
+    magazineCategory: {
+      title: "Magazine",
+      endpoint: baseURL + "category-magazine.json/category:",
+      showTaxonomyScroller: true,
+      isQuery: true
+    },
     entertainment: {
       title: "Entertainment",
       endpoint: baseURL + "entertainment.json",
       showTaxonomyScroller: true
+    },
+    entertainmentCategory: {
+      title: "Entertainment",
+      endpoint: baseURL + "category-entertainment.json/category:",
+      showTaxonomyScroller: true,
+      isQuery: true
     },
     taxonomy: {
       title: "Tag",
@@ -56,34 +69,6 @@
 <style lang="scss" global>
   @import "./variables.scss";
 
-  /*! Fonts ------------------- */
-
-  @font-face {
-    font-family: "Haas Grot Disp 45";
-    src: url("/fonts/HaasGrotDisp-45Light.woff2") format("woff2"),
-      url("/fonts/HaasGrotDisp-45Light.woff") format("woff");
-    font-weight: 300;
-    font-style: normal;
-  }
-
-  @font-face {
-    font-family: "Adobe Caslon Pro";
-    src: url("/fonts/ACaslonPro-Regular.woff2") format("woff2"),
-      url("/fonts/ACaslonPro-Regular.woff") format("woff");
-    font-weight: normal;
-    font-style: normal;
-  }
-
-  @font-face {
-    font-family: "Adobe Caslon Pro";
-    src: url("/fonts/ACaslonPro-Italic.woff2") format("woff2"),
-      url("/fonts/ACaslonPro-Italic.woff") format("woff");
-    font-weight: normal;
-    font-style: italic;
-  }
-
-  /*! Fonts ------------------- */
-
   body,
   html {
     padding: 0;
@@ -97,6 +82,7 @@
 
   * {
     box-sizing: border-box;
+    -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
   }
 
   ::selection {
@@ -158,6 +144,19 @@
     cursor: pointer;
   }
 
+  .entertainment {
+    p {
+      // min-height: 400px;
+      column-count: 2;
+      column-fill: auto;
+      // min-height: 300px;
+
+      @include screen-size("small") {
+        column-count: unset;
+      }
+    }
+  }
+
   /*! Flickity v2.2.1 ------------------- */
 
   .flickity-enabled {
@@ -209,17 +208,17 @@
   <Route path="/" component={Listing} {...listingRouteParams.landing} />
   <Route path="magazine" component={Listing} {...listingRouteParams.magazine} />
   <Route
-    path="magazine/category/:category"
+    path="magazine/category/:query"
     component={Listing}
-    {...listingRouteParams.magazine} />
+    {...listingRouteParams.magazineCategory} />
   <Route
     path="entertainment"
     component={Listing}
     {...listingRouteParams.entertainment} />
   <Route
-    path="entertainment/category/:category"
+    path="entertainment/category/:query"
     component={Listing}
-    {...listingRouteParams.entertainment} />
+    {...listingRouteParams.entertainmentCategory} />
   <Route
     path="taxonomy/:query"
     component={Listing}
@@ -243,5 +242,5 @@
     {...articleRouteParams.entertainment} />
   <Route path="about" component={Page} title="ABOUTTT" />
   <Route path="contact" component={Page} title="CONTACT" />
-  <!-- TODO: add 404 -->
+  <Route component={Error404} title="404" />
 </Router>

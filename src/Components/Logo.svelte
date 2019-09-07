@@ -10,7 +10,7 @@
     height: 100%;
 
     @include screen-size("small") {
-      width: 90%;
+      // width: 90%;
       margin-left: auto;
       margin-right: auto;
       display: block;

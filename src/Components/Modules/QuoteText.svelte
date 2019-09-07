@@ -10,7 +10,7 @@
     height: auto;
     font-family: $sans-stack;
 
-    color: white;
+    color: black;
 
     &__blockquote {
       font-size: $xlarge;
