@@ -66,12 +66,21 @@
       margin-right: $small-margin;
       top: -4px;
 
-      &--active {
-        border-bottom: 3px solid white;
+      @include screen-size("small") {
+        width: 90%;
+        font-size: $mobile_large;
+        display: none;
+        border-bottom: 0;
+        background: transparent;
+        margin-top: 20px;
+        margin-bottom: 0;
       }
 
-      @include screen-size("small") {
-        font-size: $mobile_large;
+      &--active {
+        border-bottom: 3px solid white;
+        @include screen-size("small") {
+          display: block;
+        }
       }
     }
 
@@ -80,6 +89,13 @@
 
     &--active {
       transform: translateX(4px);
+      @include screen-size("small") {
+        transform: none;
+      }
+    }
+
+    @include screen-size("small") {
+      transform: none;
     }
 
     &__submit {
@@ -87,12 +103,23 @@
       position: relative;
       line-height: 1em;
 
+      @include screen-size("small") {
+        font-size: $mobile_large;
+      }
+
       &:hover {
         position: relative;
         top: -2px;
         font-family: $serif-stack;
         font-style: italic;
         font-size: $large;
+
+        @include screen-size("small") {
+          font-size: $mobile_large;
+          font-family: $sans-stack;
+          top: unset;
+          font-style: normal;
+        }
       }
     }
   }

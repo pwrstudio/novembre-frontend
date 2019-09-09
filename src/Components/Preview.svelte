@@ -74,6 +74,7 @@
         position: static;
         left: unset;
         bottom: unset;
+        margin-left: $small-margin;
         // background: yellow;
       }
 
@@ -85,6 +86,7 @@
         // background: purple;
         margin-top: 80px;
         margin-bottom: 80px;
+        margin-left: $small-margin;
       }
 
       p {
@@ -104,12 +106,13 @@
 
       @include screen-size("small") {
         font-size: $mobile_large;
+        hyphens: auto;
       }
     }
 
     &--text {
       // background: yellow;
-      display: inline-block;
+      // display: inline-block;
     }
 
     &__quote {
@@ -140,10 +143,9 @@
 
   .preview {
     opacity: 0;
-    transform: translateY(10%);
-    transition: opacity 1s cubic-bezier(0.23, 1, 0.32, 1),
-      transform 1s cubic-bezier(0.23, 1, 0.32, 1);
-    // transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+    transform: translateY(100px);
+    transition: opacity 0.7s ease-out,
+      transform 0.7s cubic-bezier(0.23, 1, 0.32, 1);
   }
 
   .active {
@@ -205,11 +207,11 @@
 
       <!-- TEXT -->
       {#if post.header.previewType == 'text'}
-        <div class="preview__text">
-          <!-- <blockquote class="preview__quote">
+        <!-- <div class="preview__text"> -->
+        <!-- <blockquote class="preview__quote">
             {post.header.previewText}
           </blockquote> -->
-        </div>
+        <!-- </div> -->
       {/if}
 
       <div

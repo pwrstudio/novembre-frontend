@@ -17,10 +17,7 @@
   let showControls = true;
   let showControlsTimeout;
   let controlsTimeoutDuration = 2500;
-
-  // $: if (duration > 0) {
-  //   window.alert(duration);
-  // }
+  let unPlayed = true;
 
   // From => https://svelte.dev/tutorial/media-elements
   function handleMousemove(e) {
@@ -45,8 +42,12 @@
     // after a drag — we have to listen for clicks ourselves
 
     function handleMouseup() {
-      if (paused) e.target.play();
-      else e.target.pause();
+      if (paused) {
+        e.target.play();
+        unPlayed = false;
+      } else {
+        e.target.pause();
+      }
       cancel();
     }
 
@@ -84,7 +85,6 @@
     font-family: $sans-stack;
     font-size: $small;
 
-    margin-top: 20px;
     margin-bottom: 20px;
     position: relative;
 
@@ -179,6 +179,16 @@
       background-color: rgba(0, 0, 0, 1);
     }
   }
+
+  .poster-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+  }
 </style>
 
 <div
@@ -200,6 +210,9 @@
     bind:currentTime={time}
     bind:duration
     bind:paused />
+  {#if posterImage && unPlayed}
+    <img src={posterImage} class="poster-image" />
+  {/if}
 
   {#if controls && !autoplay}
     <div class="controls" style="opacity: {duration && showControls ? 1 : 0}">

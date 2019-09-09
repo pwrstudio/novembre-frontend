@@ -81,7 +81,6 @@
     font-family: $sans-stack;
     font-size: $small;
 
-    margin-top: 20px;
     margin-bottom: 20px;
     position: relative;
 

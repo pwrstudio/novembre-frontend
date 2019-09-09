@@ -10,6 +10,8 @@
   let sizes;
   let src;
   let imgixParams = "&auto=format";
+  let fullWidthParams = "&ar=16:9&fit=crop&crop=faces&auto=format";
+  let portraitParams = "&ar=9:16&fit=crop&crop=faces&auto=format";
 
   // console.log("inline:", inline);
   // console.log("file:", file);
@@ -21,18 +23,21 @@
     // Size depending on layout
     if (multiFiles.length === 1) {
       // FULL WIDTH
-      sizes = "80vw";
+      sizes = "60vw";
     } else if (multiFiles.length === 2) {
       // PROPORTIONAL or inline
-      sizes = "45vw";
+      sizes = "35vw";
     } else if (multiFiles.length === 3) {
       sizes = "30vw";
     } else if (multiFiles.length === 4) {
-      sizes = "25vw";
+      sizes = "20vw";
     }
 
     multiFiles.forEach(f => {
-      f.url = f.url.replace("http://3.221.158.133", "https://novmag.imgix.net");
+      f.url = f.url.replace(
+        "https://testing.novembre.global",
+        "https://novmag.imgix.net"
+      );
       f.src = f.url + "?w=800" + imgixParams;
       f.srcset = ["", 200, 400, 600, 800, 1000, 1200, 1400].reduce(
         (result, size) => {
@@ -45,15 +50,19 @@
     });
   } else {
     // Set base image size
-    src =
-      url.replace("http://3.221.158.133", "https://novmag.imgix.net") +
-      "?w=1200" +
-      imgixParams;
+    url = url.replace(
+      "https://testing.novembre.global",
+      "https://novmag.imgix.net"
+    );
+
+    src = url + "?w=1200" + fullWidthParams;
 
     // Generate srcset
     srcset = ["", 600, 800, 1000, 1200, 1400, 1600, 2000].reduce(
       (result, size) => {
-        return result + url + "?w=" + size + imgixParams + " " + size + "w, ";
+        return (
+          result + url + "?w=" + size + fullWidthParams + " " + size + "w, "
+        );
       }
     );
 
@@ -64,6 +73,19 @@
       // PROPORTIONAL or inline
       sizes = "80vw";
     }
+
+    // let srcPortrait = url + "?w=1200" + portraitParams;
+
+    // // Generate srcset
+    // let srcsetPortrait = ["", 600, 800, 1000, 1200, 1400, 1600, 2000].reduce(
+    //   (result, size) => {
+    //     return (
+    //       result + url + "?w=" + size + portraitParams + " " + size + "w, "
+    //     );
+    //   }
+    // );
+
+    // TODO: picture element
 
     // console.dir(srcset);
   }
@@ -80,7 +102,12 @@
     $block: &;
 
     // margin-top: 20px;
-    // margin-bottom: 20px;
+    margin-bottom: 20px;
+
+    &.listing {
+      margin-top: 0px;
+      margin-bottom: 0px;
+    }
 
     &--full {
       height: $full-height;
@@ -100,7 +127,7 @@
       margin-left: auto;
       margin-right: auto;
       max-width: 95vw;
-      margin-bottom: 5rem;
+      margin-bottom: 40px;
 
       img,
       video {
@@ -175,13 +202,21 @@
       }
     }
   }
+
+  figcaption {
+    margin-left: $small-margin;
+    font-family: $sans-stack;
+    font-size: $small;
+    font-weight: 300;
+  }
 </style>
 
 <div
   class="image"
   class:image--full={size == true || size == 'fullWidth' || multiFiles.length === 0}
-  class:image--inline={size == 'proportional'}
+  class:image--inline={size == 'proportional' || size == 'inline'}
   class:image--free={!size && multiFiles && multiFiles.length > 0}
+  class:listing={isListing}
   class:image--free-1={!size && multiFiles && multiFiles.length === 1}
   class:image--free-2={!size && multiFiles && multiFiles.length === 2}
   class:image--free-3={!size && multiFiles && multiFiles.length === 3}

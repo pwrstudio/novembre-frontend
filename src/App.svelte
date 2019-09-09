@@ -9,8 +9,10 @@
   import Page from "./Routes/Page.svelte";
   import Error404 from "./Routes/Error404.svelte";
 
+  console.dir(Router);
+
   // const baseURL = "http://3.221.158.13/3/";
-  const baseURL = "http://3.221.158.133/";
+  const baseURL = "https://testing.novembre.global/";
 
   const listingRouteParams = {
     landing: {

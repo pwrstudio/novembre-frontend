@@ -6,7 +6,11 @@
   import Logo from "./Logo.svelte";
   import SearchBox from "./SearchBox.svelte";
 
+  console.dir(Router);
+
   let menuActive = false;
+  export let isTransparent = false;
+  export let location;
 
   $: toggleText = menuActive ? "CLOSE" : "MENU";
 
@@ -43,6 +47,12 @@
       height: $height;
       background: white;
       z-index: 100;
+    }
+
+    &--transparent {
+      #{$block}__bar {
+        background: transparent;
+      }
     }
 
     &__logo {
@@ -195,7 +205,11 @@
   }
 </style>
 
-<nav class="navigation" class:navigation--expanded={menuActive} use:links>
+<nav
+  class="navigation"
+  class:navigation--transparent={isTransparent}
+  class:navigation--expanded={menuActive}
+  use:links>
 
   <Router>
     <div class="navigation__bar">

@@ -18,7 +18,7 @@
   // TEMP SOLUTION
 
   slides.forEach(s => {
-    s.url = s.url.replace("http://3.221.158.133", "https://novmag.imgix.net");
+    s.url = s.url.replace("https://testing.novembre.global", "https://novmag.imgix.net");
     s.src = s.url + "?w=800" + imgixParams;
     s.srcset = ["", 200, 400, 600, 800, 1000, 1200, 1400].reduce(
       (result, size) => {

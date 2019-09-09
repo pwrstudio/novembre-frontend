@@ -22,7 +22,7 @@
     padding-top: 20px;
 
     opacity: 0;
-    transition: opacity 1s ease-out;
+    transition: none;
 
     @include screen-size("small") {
       // padding-top: 40px;
@@ -31,6 +31,7 @@
 
     &.active {
       opacity: 1;
+      transition: opacity 0.5s ease-out;
     }
 
     &__logo {

@@ -33,18 +33,18 @@
     }
   }
 
-  console.log("in articel");
+  // console.log("in articel");
 
-  console.log(endpoint);
-  console.log(slug);
+  // console.log(endpoint);
+  // console.log(slug);
 
   async function loadData() {
-    console.log(endpoint + slug + ".json");
+    // console.log(endpoint + slug + ".json");
     const res = await fetch(endpoint + slug + ".json");
     const post = await res.json();
 
     // console.log("post");
-    console.log(post);
+    // console.log(post);
     // window.scrollTo(0, 0);
 
     return post;
@@ -59,7 +59,7 @@
   @import "../variables.scss";
 
   .article {
-    margin-top: 80px;
+    padding-top: 80px;
     background: white;
 
     &.entertainment {
@@ -99,6 +99,7 @@
 
       @include screen-size("small") {
         font-size: $mobile_xlarge;
+        hyphens: auto;
       }
     }
 

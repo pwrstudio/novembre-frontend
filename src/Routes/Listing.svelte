@@ -27,6 +27,8 @@
 
   console.log("query", query);
 
+  console.dir(title);
+
   let currentQuery = query;
   let activeCategory = window.location.hash.substr(1);
 
@@ -37,15 +39,21 @@
 
   function changeCategory(e) {
     console.dir(e.detail.newCategory);
+    console.dir(e.detail.newCategoryName);
     activeCategory = e.detail.newCategory;
     history.replaceState(null, null, "#" + activeCategory);
+    observer.disconnect();
     items = [];
-    loadData(0, activeCategory);
+    finishedLoading = false;
+    loadData(0, e.detail.newCategoryName, title.toLowerCase());
+    setTimeout(() => {
+      finishedLoading = true;
+    }, 1000);
   }
 
   const observer = new IntersectionObserver(
     entries => {
-      // console.log("LOAD TRIGGERD");
+      console.log("LOAD TRIGGERD");
       entries.forEach(entry => {
         if (entry.intersectionRatio > 0 && firstLoad) {
           // console.log(entry.intersectionRatio);
@@ -76,7 +84,7 @@
       items = [];
       firstLoad = false;
       currentQuery = query;
-      loadData(0);
+      loadData(0, currentQuery);
     }
   }
 
@@ -84,12 +92,25 @@
   //   console.dir(e);
   // });
 
-  function loadData(index, query) {
-    url = endpoint + "/index:" + index + (query ? "/query:" + query : "");
+  function loadData(i, q, tax) {
+    console.log("q", q);
+    if (tax) {
+      url =
+        "https://testing.novembre.global/filter.json" +
+        "/index:" +
+        i +
+        "/query:" +
+        q +
+        "/tax:" +
+        tax;
+    } else {
+      url = endpoint + "/index:" + i + (q ? "/query:" + q : "");
+    }
     console.dir(url);
     fetch(url)
       .then(r => r.json())
       .then(arr => {
+        console.dir(arr);
         items = [...items, ...arr.posts];
         meta = arr.meta;
         taxlist = arr.taxlist;

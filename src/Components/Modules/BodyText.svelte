@@ -12,7 +12,7 @@
     margin-left: auto;
     margin-right: auto;
     max-width: 95vw;
-    margin-bottom: 5rem;
+    margin-bottom: 40px;
     font-family: $serif-stack;
     font-size: $body;
     line-height: 1.2em;

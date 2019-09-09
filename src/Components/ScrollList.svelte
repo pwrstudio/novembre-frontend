@@ -131,10 +131,10 @@
       display: inline-block;
       margin-right: 30px;
       white-space: nowrap;
-      background: yellow;
+      // background: yellow;
       height: auto;
-      padding-bottom: 20px;
-      padding-top: 20px;
+      padding-bottom: 5px;
+      padding-top: 5px;
 
       span {
         height: 100%;
@@ -148,8 +148,9 @@
       }
 
       span.active {
-        background: pink;
+        // background: pink;
       }
+
       @include screen-size("small") {
         margin-right: 20px;
       }
@@ -169,12 +170,12 @@
         font-size: $large;
         font-weight: 300;
         text-transform: uppercase;
-        background: red;
+        // background: red;
 
         @include screen-size("small") {
           font-size: $mobile_large;
-          padding-bottom: 10px;
-          padding-top: 10px;
+          // padding-bottom: 10px;
+          // padding-top: 10px;
         }
       }
     }
@@ -191,7 +192,10 @@
         <span
           class:active={activeCategory === slugify(t)}
           on:click={e => {
-            dispatch('changeCategory', { newCategory: slugify(t) });
+            dispatch('changeCategory', {
+              newCategory: slugify(t),
+              newCategoryName: t
+            });
           }}
           class="taxonomy__item taxonomy-scroller__link js-ajax-link">
           {t}
