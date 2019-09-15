@@ -1,6 +1,5 @@
 <script>
   import { onMount } from "svelte";
-  import Flickity from "flickity";
   import { Router, links } from "svelte-routing";
   import MediaQuery from "svelte-media-query";
 
@@ -14,6 +13,8 @@
 
   let previewContainer;
   let active = false;
+
+  console.dir(post);
 
   const observer = new IntersectionObserver(
     entries => {
@@ -69,6 +70,7 @@
       z-index: 1;
       font-family: $sans-stack;
       overflow: hidden;
+      pointer-events: none;
 
       &--free {
         position: static;
@@ -172,7 +174,9 @@
       <MediaQuery query="(min-width: 800px)" let:matches>
         {#if matches}
           <div class="preview__tags">
-            <TaxList taxonomy={post.header.taxonomy} />
+            <TaxList
+              taxonomy={post.header.taxonomy}
+              white={!post.header.previewColor} />
           </div>
         {/if}
       </MediaQuery>

@@ -1,15 +1,13 @@
 <script>
   import { Router, Link, Route } from "svelte-routing";
-
   import Navigation from "./Components/Navigation.svelte";
+  import intersectionObserver from "intersection-observer";
 
   // ROUTES
   import Listing from "./Routes/Listing.svelte";
   import Article from "./Routes/Article.svelte";
   import Page from "./Routes/Page.svelte";
   import Error404 from "./Routes/Error404.svelte";
-
-  console.dir(Router);
 
   // const baseURL = "http://3.221.158.13/3/";
   const baseURL = "https://testing.novembre.global/";
@@ -52,6 +50,18 @@
     entertainment: {
       endpoint: baseURL + "entertainment/",
       isEntertainment: true
+    }
+  };
+
+  const pageRouteParams = {
+    about: {
+      endpoint: baseURL + "about.json"
+    },
+    contact: {
+      endpoint: baseURL + "contact.json"
+    },
+    stockists: {
+      endpoint: baseURL + "stockists.json"
     }
   };
 </script>
@@ -234,7 +244,9 @@
     path="entertainment/:slug"
     component={Article}
     {...articleRouteParams.entertainment} />
-  <Route path="about" component={Page} title="ABOUTTT" />
-  <Route path="contact" component={Page} title="CONTACT" />
+  <Route path="about" component={Page} {...pageRouteParams.about} />
+  <Route path="contact" component={Page} {...pageRouteParams.contact} />
+  <Route path="stockists" component={Page} {...pageRouteParams.stockists} />
+  />
   <Route component={Error404} title="404" />
 </Router>

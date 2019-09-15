@@ -18,7 +18,10 @@
   // TEMP SOLUTION
 
   slides.forEach(s => {
-    s.url = s.url.replace("https://testing.novembre.global", "https://novmag.imgix.net");
+    s.url = s.url.replace(
+      "https://testing.novembre.global",
+      "https://novmag.imgix.net"
+    );
     s.src = s.url + "?w=800" + imgixParams;
     s.srcset = ["", 200, 400, 600, 800, 1000, 1200, 1400].reduce(
       (result, size) => {
@@ -79,6 +82,10 @@
     height: $full-height;
     max-height: 600px;
 
+    &--related {
+      height: 500px;
+    }
+
     @include screen-size("small") {
       max-height: 500px;
     }
@@ -93,6 +100,7 @@
 
       &--related {
         width: 33.333%;
+        height: 500px;
 
         @include screen-size("small") {
           width: 80%;
@@ -145,7 +153,11 @@
   }
 </style>
 
-<div class="carousel slideshow" bind:this={slideShowEl} use:links>
+<div
+  class="carousel slideshow"
+  bind:this={slideShowEl}
+  class:slideshow--related={isRelated}
+  use:links>
   {#each paddedSlides as slide}
     {#if isRelated}
       <div class="carousel-cell slideshow__slide slideshow__slide--related">

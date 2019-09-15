@@ -1,16 +1,29 @@
 <script>
   import { Router, links } from "svelte-routing";
   import MediaQuery from "svelte-media-query";
+  import SmoothScroll from "smooth-scroll";
+
+  var scroll = new SmoothScroll('a[href*="#"]', {
+    speed: 150
+  });
+
+  function logoClick() {
+    if (!menuActive) {
+      scroll();
+    } else {
+      menuActive = false;
+    }
+  }
 
   // COMPONENTS
   import Logo from "./Logo.svelte";
   import SearchBox from "./SearchBox.svelte";
 
-  console.dir(Router);
+  // console.dir(Router);
 
   let menuActive = false;
   export let isTransparent = false;
-  export let location;
+  export let location = {};
 
   $: toggleText = menuActive ? "CLOSE" : "MENU";
 
@@ -18,7 +31,8 @@
     { title: "MAGAZINE", target: "/magazine" },
     { title: "ENTERTAINMENT", target: "/entertainment" },
     { title: "ABOUT", target: "/about" },
-    { title: "CONTACT", target: "/contact" }
+    { title: "CONTACT", target: "/contact" },
+    { title: "STOCKISTS", target: "/stockists" }
   ];
 </script>
 
@@ -216,10 +230,7 @@
 
       <MediaQuery query="(min-width: 800px)" let:matches>
         {#if matches}
-          <a
-            href="/"
-            class="navigation__logo"
-            on:click={() => (menuActive = false)}>
+          <a href="/" class="navigation__logo" on:click={scroll}>
             <Logo white={menuActive} />
           </a>
           <div

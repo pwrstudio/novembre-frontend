@@ -25,9 +25,8 @@
   export let isQuery = false;
   export let query = false;
 
-  console.log("query", query);
-
-  console.dir(title);
+  // console.log("query", query);
+  // console.dir(title);
 
   let currentQuery = query;
   let activeCategory = window.location.hash.substr(1);
@@ -38,8 +37,8 @@
   // }
 
   function changeCategory(e) {
-    console.dir(e.detail.newCategory);
-    console.dir(e.detail.newCategoryName);
+    // console.dir(e.detail.newCategory);
+    // console.dir(e.detail.newCategoryName);
     activeCategory = e.detail.newCategory;
     history.replaceState(null, null, "#" + activeCategory);
     observer.disconnect();
@@ -53,7 +52,7 @@
 
   const observer = new IntersectionObserver(
     entries => {
-      console.log("LOAD TRIGGERD");
+      // console.log("LOAD TRIGGERD");
       entries.forEach(entry => {
         if (entry.intersectionRatio > 0 && firstLoad) {
           // console.log(entry.intersectionRatio);

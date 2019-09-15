@@ -5,6 +5,7 @@ import livereload from 'rollup-plugin-livereload';
 import { terser } from 'rollup-plugin-terser';
 // import { scss, globalStyle } from 'svelte-preprocess';
 import sveltePreprocess from 'svelte-preprocess'
+import babel from 'rollup-plugin-babel';
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -26,6 +27,13 @@ export default {
 				css.write('public/bundle.css');
 			},
 			preprocess: sveltePreprocess()
+		}),
+
+		babel({
+			exclude: 'node_modules/**',
+			presets: [
+				"@babel/preset-env"
+			]
 		}),
 
 		// If you have external dependencies installed from

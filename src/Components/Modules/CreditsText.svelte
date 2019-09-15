@@ -1,6 +1,7 @@
 <script>
   export let text;
-  export let isEntertainment = false;
+
+  console.log(text);
 </script>
 
 <style lang="scss">
@@ -13,8 +14,8 @@
     margin-right: auto;
     max-width: 95vw;
     margin-bottom: 40px;
-    font-family: $serif-stack;
-    font-size: $body;
+    font-family: $sans-stack;
+    font-size: $small;
     line-height: 1.2em;
     overflow: hidden;
 
@@ -54,6 +55,6 @@
   }
 </style>
 
-<div class="body-text" class:entertainment={isEntertainment}>
+<div class="body-text">
   {@html text}
 </div>

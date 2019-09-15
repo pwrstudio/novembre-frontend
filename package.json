@@ -15,8 +15,13 @@
     "svelte-preprocess": "^3.0.2"
   },
   "dependencies": {
+    "@babel/core": "^7.6.0",
+    "@babel/preset-env": "^7.6.0",
+    "@babel/preset-es2015": "^7.0.0-beta.53",
     "flickity-imagesloaded": "^2.0.0",
+    "intersection-observer": "^0.7.0",
     "postcss": "^7.0.18",
+    "rollup-plugin-babel": "^4.3.3",
     "smooth-scroll": "^16.1.0",
     "svelte-media-query": "^0.0.4",
     "svelte-routing": "^1.3.0"

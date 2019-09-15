@@ -59,7 +59,7 @@
   @import "../variables.scss";
 
   .article {
-    padding-top: 80px;
+    padding-top: 100px;
     background: white;
 
     &.entertainment {
@@ -106,6 +106,17 @@
     &__tags {
       margin-left: $small-margin;
       margin-top: $small-margin;
+    }
+
+    &__date {
+      margin-left: $small-margin;
+      margin-top: $small-margin;
+      font-family: $sans-stack;
+      background: black;
+      color: white;
+      display: inline-block;
+      padding: $small-margin;
+      // font-size: $body;
     }
   }
 
@@ -154,6 +165,11 @@
       <div class="article__tags">
         <TaxList taxonomy={post.header.taxonomy} />
       </div>
+    {/if}
+
+    <!-- DATE -->
+    {#if post.header.date}
+      <div class="article__date">{post.header.date}</div>
     {/if}
 
     <!-- TITLE -->
