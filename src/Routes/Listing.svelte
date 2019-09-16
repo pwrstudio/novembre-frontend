@@ -92,7 +92,7 @@
   // });
 
   function loadData(i, q, tax) {
-    console.log("q", q);
+    // console.log("q", q);
     if (tax) {
       url =
         "https://testing.novembre.global/filter.json" +

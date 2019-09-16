@@ -151,7 +151,7 @@
         font-weight: 300;
 
         @include screen-size("small") {
-          font-size: $mobile_large;
+          font-size: 45px;
           // hyphens: manual;
           // font-size: 46px;
         }
