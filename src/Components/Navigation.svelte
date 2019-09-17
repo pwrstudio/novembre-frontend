@@ -1,32 +1,27 @@
 <script>
+  // # # # # # # # # # # # # #
+  //
+  //  Navigation bar and menu
+  //
+  // # # # # # # # # # # # # #
+
+  // *** IMPORTS
   import { Router, links } from "svelte-routing";
   import MediaQuery from "svelte-media-query";
-  import SmoothScroll from "smooth-scroll";
+  import { fade } from "svelte/transition";
 
-  var scroll = new SmoothScroll('a[href*="#"]', {
-    speed: 150
-  });
-
-  function logoClick() {
-    if (!menuActive) {
-      scroll();
-    } else {
-      menuActive = false;
-    }
-  }
-
-  // COMPONENTS
+  // *** COMPONENTS
   import Logo from "./Logo.svelte";
   import SearchBox from "./SearchBox.svelte";
 
-  // console.dir(Router);
+  // *** STORES
+  import { pageLocation, navigationStyle } from "../stores.js";
 
-  let menuActive = false;
+  // *** PROPS
   export let isTransparent = false;
-  export let location = {};
 
-  $: toggleText = menuActive ? "CLOSE" : "MENU";
-
+  // *** VARIABLES
+  let menuActive = false;
   let menuItems = [
     { title: "MAGAZINE", target: "/magazine" },
     { title: "ENTERTAINMENT", target: "/entertainment" },
@@ -34,6 +29,17 @@
     { title: "CONTACT", target: "/contact" },
     { title: "STOCKISTS", target: "/stockists" }
   ];
+
+  // *** REACTIVE
+  $: toggleText = menuActive ? "CLOSE" : "MENU";
+
+  // *** FUNCTIONS
+  var scroll = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+  };
 </script>
 
 <style lang="scss">
@@ -54,12 +60,20 @@
 
     width: 100vw;
     z-index: 100;
-    transition: background 0.3s $transition;
+    // transition: background 0.5s $transition;
+
+    color: white;
+
+    // transition: color 0.3s $transition;
+
+    &--black {
+      color: black;
+      // background: red;
+    }
 
     &__bar {
       width: 100vw;
       height: $height;
-      background: white;
       z-index: 100;
     }
 
@@ -76,6 +90,7 @@
       height: 100px;
       margin-top: -2px;
       z-index: 101;
+      cursor: pointer;
 
       svg {
         height: 100px;
@@ -105,7 +120,7 @@
 
     &__menu {
       position: fixed;
-      background: black;
+      // background: black;
       display: block;
       margin: 0;
       padding: 10px;
@@ -118,7 +133,6 @@
       span {
         display: inline;
         position: relative;
-        color: white;
         line-height: 1em;
         cursor: pointer;
 
@@ -140,7 +154,6 @@
     &__link {
       position: relative;
       width: auto;
-      color: white;
       line-height: 1em;
       height: 100%;
       display: inline-block;
@@ -195,9 +208,8 @@
 
     &--expanded {
       #{$block}__bar {
-        background: black;
-        color: white;
-        transition: background 0.3s $transition;
+        // background: black;
+        // transition: background 0.3s $transition;
       }
 
       #{$block}__logo {
@@ -217,36 +229,65 @@
       }
     }
   }
+
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 99;
+    background: black;
+    opacity: 0.9;
+
+    &.black {
+      background: white;
+    }
+  }
 </style>
 
 <nav
   class="navigation"
   class:navigation--transparent={isTransparent}
+  class:navigation--black={!$navigationStyle}
   class:navigation--expanded={menuActive}
   use:links>
 
   <Router>
     <div class="navigation__bar">
-
       <MediaQuery query="(min-width: 800px)" let:matches>
         {#if matches}
-          <a href="/" class="navigation__logo" on:click={scroll}>
-            <Logo white={menuActive} />
-          </a>
-          <div
-            class="navigation__toggle"
-            on:click={() => (menuActive = !menuActive)}>
-            {toggleText}
-          </div>
+          <!-- We are on desktop -->
+          {#if menuActive}
+            <!-- The menu is open: close it -->
+            <div class="navigation__logo" on:click={() => (menuActive = false)}>
+              <Logo white={$navigationStyle} />
+            </div>
+          {:else if $pageLocation === 'Landing'}
+            <!-- Menu is closed and we are on landing: scroll to top -->
+            <span class="navigation__logo" on:click={scroll}>
+              <Logo white={$navigationStyle} />
+            </span>
+          {:else}
+            <!-- Menu is closed and we are anywhere else than landing -->
+            <a href="/" class="navigation__logo">
+              <Logo white={$navigationStyle} />
+            </a>
+          {/if}
         {:else}
+          <!-- We are on phone -->
           <div
             class="navigation__logo"
             on:click={() => (menuActive = !menuActive)}>
-            <Logo white={menuActive} />
+            <Logo white={$navigationStyle} />
           </div>
         {/if}
+        <div
+          class="navigation__toggle"
+          on:click={() => (menuActive = !menuActive)}>
+          {toggleText}
+        </div>
       </MediaQuery>
-
     </div>
 
     <menu class="navigation__menu">
@@ -274,3 +315,7 @@
   </Router>
 
 </nav>
+
+<!-- {#if menuActive}
+  <div class="overlay" class:black={!$navigationStyle} />
+{/if} -->

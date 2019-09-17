@@ -20,7 +20,7 @@
     line-height: 0.9em;
     font-family: $sans-stack;
     margin-left: $small-margin;
-    min-height: 90vh;
+    min-height: 80vh;
 
     @include screen-size("small") {
       font-size: $mobile_xlarge;

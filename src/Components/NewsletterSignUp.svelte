@@ -10,12 +10,12 @@
   let success = false;
 
   function submit() {
-    console.log(emailAddress);
+    // console.log(emailAddress);
     fetch(
       "https://testing.novembre.global/user/themes/novembre/dist/php/subscribe.php?email=" +
         emailAddress
     ).then(function(response) {
-      console.log(response);
+      // console.log(response);
       success = true;
     });
   }

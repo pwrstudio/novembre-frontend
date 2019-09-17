@@ -1,38 +1,76 @@
 <script>
-  import { onMount } from "svelte";
+  // # # # # # # # # # # # # #
+  //
+  //  Preview element
+  //
+  // # # # # # # # # # # # # #
+
+  // *** IMPORTS
+  import { onMount, onDestroy } from "svelte";
   import { Router, links } from "svelte-routing";
   import MediaQuery from "svelte-media-query";
+  import { throttle } from "throttle-debounce";
 
-  // COMPONENTS
+  // *** COMPONENTS
   import TaxList from "./TaxList.svelte";
-  import Slideshow from "./Modules/Slideshow.svelte";
+
+  // *** MODULES
   import Video from "./Modules/Video.svelte";
   import Image from "./Modules/Image.svelte";
+  import Slideshow from "./Modules/Slideshow.svelte";
 
+  // *** STORES
+  import { navigationStyle } from "../stores.js";
+
+  // *** PROPS
   export let post;
 
-  let previewContainer;
+  // *** VARIABLES
+  let previewEl;
   let active = false;
 
-  console.dir(post);
+  // *** FUNCTIONS
+  function checkTopOffset() {
+    console.log(
+      post.header.htmlTitle.fullTitle,
+      previewEl.getBoundingClientRect().top
+    );
+    if (previewEl.getBoundingClientRect().top < 40) {
+      console.log("CHANNANAN");
+      navigationStyle.set(!post.header.previewColor);
+    }
+  }
+
+  const throttledCheck = throttle(100, checkTopOffset);
 
   const observer = new IntersectionObserver(
     entries => {
-      // console.log("xxx");
       entries.forEach(entry => {
+        // Element is in view
         if (entry.intersectionRatio > 0) {
-          // console.log("case 1");
-          // console.log(entry.intersectionRatio);
-          active = true;
-          observer.disconnect();
+          // console.log("IN VIEW: create:", post.header.htmlTitle.fullTitle);
+          window.addEventListener("scroll", throttledCheck);
+        }
+        // Element is out of view
+        if (entry.intersectionRatio <= 0) {
+          // console.log("OUT OF VIEW: destroy:", post.header.htmlTitle.fullTitle);
+          window.removeEventListener("scroll", throttledCheck);
         }
       });
     },
-    { treshhold: 0.5 }
+    { threshold: [0, 1] }
   );
 
+  // *** ON MOUNT
   onMount(async () => {
-    observer.observe(previewContainer);
+    // console.log(post);
+    observer.observe(previewEl);
+  });
+
+  // *** ON DESTROY
+  onDestroy(() => {
+    // console.log("DESTROYYYY");
+    window.removeEventListener("scroll", throttledCheck);
   });
 </script>
 
@@ -45,6 +83,7 @@
     position: relative;
     user-select: none;
     color: black;
+    // opacity: 0;
     overflow: hidden;
 
     &__tags {
@@ -55,6 +94,7 @@
       margin-top: $small-margin;
       z-index: 10;
       max-width: 90vw;
+      overflow: hidden;
     }
 
     &__title {
@@ -143,20 +183,13 @@
     }
   }
 
-  .preview {
-    opacity: 0;
-    transform: translateY(100px);
-    transition: opacity 0.7s ease-out,
-      transform 0.7s cubic-bezier(0.23, 1, 0.32, 1);
-  }
-
   .active {
-    transform: translateY(0);
     opacity: 1;
   }
 
   .preview__slide {
     height: calc(100vh - 80px);
+    overflow: hidden;
   }
 </style>
 
@@ -166,21 +199,21 @@
     class:active
     class:preview--white={!post.header.previewColor}
     style="background-color: {post.header.backgroundColor}"
-    bind:this={previewContainer}
+    bind:this={previewEl}
     use:links>
 
-    <!-- TAGS -->
-    {#if post.header.taxonomy}
+    <!-- TAGS: ON TOP
+    {#if post.header.taxonomy && post.header.previewType != 'text'}
       <MediaQuery query="(min-width: 800px)" let:matches>
         {#if matches}
           <div class="preview__tags">
             <TaxList
               taxonomy={post.header.taxonomy}
-              white={!post.header.previewColor} />
+              white={post.header.previewColor} />
           </div>
         {/if}
       </MediaQuery>
-    {/if}
+    {/if} -->
 
     <a href="/{post.header.parent}/{post.header.slug}">
 
@@ -206,7 +239,7 @@
 
       <!-- SLIDESHOW -->
       {#if post.header.previewType == 'slideshow'}
-        <Slideshow slides={post.header.previewSlideshow} />
+        <Slideshow slides={post.header.previewSlideshow} isPreview={true} />
       {/if}
 
       <!-- TEXT -->
@@ -216,6 +249,19 @@
             {post.header.previewText}
           </blockquote> -->
         <!-- </div> -->
+      {/if}
+
+      <!-- TAGS -->
+      {#if post.header.taxonomy}
+        <MediaQuery query="(min-width: 800px)" let:matches>
+          {#if matches}
+            <div class="preview__tags">
+              <TaxList
+                taxonomy={post.header.taxonomy}
+                white={post.header.previewColor} />
+            </div>
+          {/if}
+        </MediaQuery>
       {/if}
 
       <div

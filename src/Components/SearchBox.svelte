@@ -1,14 +1,20 @@
 <script>
+  import { onMount } from "svelte";
+
   let searchActive = false;
   let searchQuery = "";
   let searchField = {};
 
   export let menuActive = false;
 
+  let openEl;
+  let submitWidth;
+  let inputWidth;
+
   // console.log(searchField);
 
   const showSearchBox = () => {
-    searchActive = !searchActive;
+    searchActive = true;
     searchField.focus().select();
   };
 
@@ -21,13 +27,27 @@
     }
   }
 
+  function resizeInput() {
+    submitWidth = openEl.offsetWidth;
+    // console.log(submitWidth);
+    inputWidth = window.innerWidth - submitWidth - 40; // Subtract margins
+    // console.log(inputWidth);
+    // console.log(window.innerWidth);
+  }
+
   const submitSearch = () => {
     if (searchQuery.length > 0) {
       window.location = "/search/" + searchQuery;
     } else {
       searchActive = false;
     }
+
+    window.onresize = resizeInput;
   };
+
+  onMount(async () => {
+    resizeInput();
+  });
 </script>
 
 <style lang="scss">
@@ -38,33 +58,32 @@
 
     font-size: $large;
     font-family: $sans-stack;
-    color: white;
+    color: currentColor;
     font-weight: 300;
 
     position: relative;
-    margin-bottom: 10px;
+    margin-bottom: $small-margin;
 
     // top: -4px;
 
     &__input {
       display: inline-block;
       position: relative;
-      background: black;
+      background: transparent;
       border: 0;
       line-height: 1em;
       padding: 0px;
       font-weight: 300;
       text-transform: uppercase;
       outline: none;
-      color: white;
+      color: currentColor;
       font-size: $large;
-      width: 500px;
+      width: 80vw;
       height: 1em;
-      margin-right: $small-margin;
       border-bottom: 3px solid transparent;
       transition: border 1s $transition;
-      margin-right: $small-margin;
-      top: -4px;
+      margin-right: 0;
+      top: -5px;
 
       @include screen-size("small") {
         width: 90%;
@@ -77,22 +96,15 @@
       }
 
       &--active {
-        border-bottom: 3px solid white;
+        border-bottom: 3px solid currentColor;
         @include screen-size("small") {
           display: block;
         }
       }
     }
 
-    transform: translateX(-512px);
+    // transform: translateX(-81vw);
     transition: transform 0.3s $transition;
-
-    &--active {
-      transform: translateX(4px);
-      @include screen-size("small") {
-        transform: none;
-      }
-    }
 
     @include screen-size("small") {
       transform: none;
@@ -122,21 +134,58 @@
         }
       }
     }
+
+    &__open {
+      display: inline;
+      position: relative;
+      line-height: 1em;
+
+      @include screen-size("small") {
+        font-size: $mobile_large;
+      }
+
+      &:hover {
+        position: relative;
+        top: -2px;
+        font-family: $serif-stack;
+        font-style: italic;
+        font-size: $large;
+
+        @include screen-size("small") {
+          font-size: $mobile_large;
+          font-family: $sans-stack;
+          top: unset;
+          font-style: normal;
+        }
+      }
+    }
+
+    // &--active {
+    //   transform: translateX(4px);
+    //   @include screen-size("small") {
+    //     transform: none;
+    //   }
+    // }
   }
 </style>
 
 <div class="search" class:search--active={searchActive}>
+  {#if !searchActive}
+    <span class="search__open" on:click={showSearchBox} bind:this={openEl}>
+      SEARCH
+    </span>
+  {/if}
   <input
     ref="search"
     type="text"
     class="search__input"
+    style="width:{inputWidth}px"
     class:search__input--active={searchActive}
     bind:value={searchQuery}
     bind:this={searchField}
     on:keypress={e => (e.keyCode === 13 ? submitSearch() : false)} />
-  <span
-    class="search__submit"
-    on:click={e => (searchActive ? submitSearch() : showSearchBox())}>
-    SEARCH
-  </span>
+
+  {#if searchActive}
+    <span class="search__submit" on:click={submitSearch}>SEARCH</span>
+  {/if}
 </div>

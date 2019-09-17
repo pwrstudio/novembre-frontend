@@ -1,8 +1,17 @@
 <script>
+  // # # # # # # # # # # # # #
+  //
+  //  List of taxonomy entries
+  //
+  // # # # # # # # # # # # # #
+
+  // *** IMPORTS
   import { Router, Link, links } from "svelte-routing";
 
+  // *** PROPS
   export let taxonomy;
   export let white = false;
+  export let date = false;
 </script>
 
 <style lang="scss">
@@ -16,52 +25,63 @@
     letter-spacing: 1px;
 
     @include screen-size("small") {
-      font-size: $mobile_body;
+      font-size: $mobile_small;
     }
 
     &__item {
       display: inline-block;
       text-decoration: none;
-      color: currentColor;
-      border: 1px solid black;
-      // border: 1px solid transparent;
       margin-right: $small-margin;
-      background: white;
-      color: black;
-      padding: $small-margin;
+      color: white;
       transition: border 0.3s $transition;
+      border-bottom: 1px solid transparent;
 
       &:hover {
-        border: 1px solid white;
+        border-bottom: 1px solid white;
+      }
+
+      &.date {
+        font-style: normal;
+
+        &:hover {
+          cursor: auto;
+          border-bottom: 1px solid transparent;
+        }
       }
     }
 
-    // &.white {
-    //   .taxonomy__item {
-    //     border: 1px solid white;
+    &.white {
+      .taxonomy__item {
+        color: black;
 
-    //     color: white;
-    //     background: black;
-
-    //     &:hover {
-    //       border: 1px solid black;
-    //     }
-    //   }
-    // }
+        &:hover {
+          border-bottom: 1px solid black;
+        }
+      }
+    }
   }
 </style>
 
 <div class="taxonomy" class:white>
 
+  <!-- DATE -->
+  {#if date}
+    <span class="taxonomy__item date">{date}</span>
+  {/if}
+
   {#if taxonomy.magazine}
     {#each taxonomy.magazine as m}
-      <a href="/magazine#{m}" class="taxonomy__item">{m}</a>
+      <span class="taxonomy__item">
+        <a href="/magazine#{m}">{m}</a>
+      </span>
     {/each}
   {/if}
 
   {#if taxonomy.entertainment}
     {#each taxonomy.entertainment as e}
-      <a href="/entertainment/#{e}" class="taxonomy__item">{e}</a>
+      <span class="taxonomy__item">
+        <a href="/entertainment/#{e}">{e}</a>
+      </span>
     {/each}
   {/if}
 
@@ -69,7 +89,7 @@
     {#if taxonomy.tag}
       {#each taxonomy.tag as t}
         <span class="taxonomy__item">
-          <Link to="/taxonomy/{t}" class="taxonomy__item">{t}</Link>
+          <Link to="/taxonomy/{t}">{t}</Link>
         </span>
       {/each}
     {/if}

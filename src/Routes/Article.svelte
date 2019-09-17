@@ -1,13 +1,19 @@
 <script>
+  // # # # # # # # # # # # # #
+  //
+  //  Single article page
+  //
+  // # # # # # # # # # # # # #
+
+  // *** IMPORTS
   import { fade } from "svelte/transition";
-  import { quintOut } from "svelte/easing";
   import { onMount } from "svelte";
 
-  // COMPONENTS
+  // *** COMPONENTS
   import TaxList from "../Components/TaxList.svelte";
   import Footer from "../Components/Footer.svelte";
 
-  // MODULES
+  // *** MODULES
   import BodyText from "../Components/Modules/BodyText.svelte";
   import IntroductionText from "../Components/Modules/IntroductionText.svelte";
   import QuoteText from "../Components/Modules/QuoteText.svelte";
@@ -17,40 +23,45 @@
   import Slideshow from "../Components/Modules/Slideshow.svelte";
   import Portal from "../Components/Modules/Portal.svelte";
 
+  // *** STORES
+  import { navigationStyle } from "../stores.js";
+
+  // *** PROPS
   export let slug;
   export let endpoint;
   export let isEntertainment = false;
 
+  // *** VARIABLES
   let currentSlug = slug;
-
   let post = loadData();
 
+  // *** REACTIVE
   $: {
     if (slug !== currentSlug) {
-      window.alert = "slug change";
+      // window.alert = "slug change";
       post = loadData();
       currentSlug = slug;
     }
   }
 
-  // console.log("in articel");
-
-  // console.log(endpoint);
-  // console.log(slug);
-
+  // *** FUNCTIONS
   async function loadData() {
-    // console.log(endpoint + slug + ".json");
     const res = await fetch(endpoint + slug + ".json");
     const post = await res.json();
 
     // console.log("post");
     // console.log(post);
-    // window.scrollTo(0, 0);
 
     return post;
   }
 
+  navigationStyle.set(false);
+
+  // *** ON MOUNT
   onMount(async () => {
+    // console.log("in articel");
+    // console.log(endpoint);
+    // console.log(slug);
     window.scrollTo(0, 0);
   });
 </script>
@@ -59,10 +70,11 @@
   @import "../variables.scss";
 
   .article {
-    padding-top: 100px;
     background: white;
+    min-height: 80vh;
 
     &.entertainment {
+      padding-top: 100px;
       background: $grey;
     }
 
@@ -107,17 +119,6 @@
       margin-left: $small-margin;
       margin-top: $small-margin;
     }
-
-    &__date {
-      margin-left: $small-margin;
-      margin-top: $small-margin;
-      font-family: $sans-stack;
-      background: black;
-      color: white;
-      display: inline-block;
-      padding: $small-margin;
-      // font-size: $body;
-    }
   }
 
   .related-header {
@@ -128,7 +129,7 @@
     text-transform: uppercase;
     margin-bottom: 0px;
     line-height: 0.9em;
-    margin-bottom: 20px;
+    margin-bottom: $small-margin;
 
     @include screen-size("small") {
       font-size: $mobile_large;
@@ -138,10 +139,7 @@
 </style>
 
 {#await post then post}
-  <article
-    class="article"
-    class:entertainment={isEntertainment}
-    in:fade={{ duration: 300, easing: quintOut }}>
+  <article class="article" class:entertainment={isEntertainment} in:fade>
 
     <!-- HEADER MEDIA -->
     <div class="article__header">
@@ -160,16 +158,14 @@
 
     </div>
 
-    <!-- TAGS -->
+    <!-- DATE & TAGS -->
     {#if post.header.taxonomy}
       <div class="article__tags">
-        <TaxList taxonomy={post.header.taxonomy} />
+        <TaxList
+          taxonomy={post.header.taxonomy}
+          white={true}
+          date={post.header.date} />
       </div>
-    {/if}
-
-    <!-- DATE -->
-    {#if post.header.date}
-      <div class="article__date">{post.header.date}</div>
     {/if}
 
     <!-- TITLE -->

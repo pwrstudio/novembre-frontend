@@ -19,14 +19,15 @@
     z-index: 10;
     background: white;
     font-family: $sans-stack;
-    padding-top: 20px;
+    padding-top: $small-margin;
+    margin-bottom: -$small-margin;
 
     opacity: 0;
     transition: none;
 
     @include screen-size("small") {
       // padding-top: 40px;
-      padding-bottom: 30px;
+      padding-bottom: $small-margin;
     }
 
     &.active {
@@ -44,45 +45,119 @@
     }
 
     &__link {
-      display: block;
-      font-size: $large;
+      position: relative;
+      width: auto;
       color: black;
-      text-decoration: none;
-      font-weight: 300;
       line-height: 1em;
+      height: 100%;
+      display: inline-block;
+      font-size: $large;
 
       &--left {
         float: left;
         margin-left: $small-margin;
-        &:hover {
-          font-family: $serif-stack;
-          font-size: $large + 10px;
-          // left: -2px;
-          font-style: italic;
-          top: 8px;
-          position: relative;
-          left: 3px;
-        }
       }
 
       &--right {
         float: right;
         margin-right: $small-margin;
-        &:hover {
-          font-family: $serif-stack;
-          font-size: $large + 10px;
-          // left: -2px;
-          font-style: italic;
-          top: 8px;
-          position: relative;
-          right: 3px;
+      }
+
+      &--normal {
+        opacity: 1;
+        font-weight: 300;
+
+        @include screen-size("small") {
+          font-size: 45px;
+          // hyphens: manual;
+          // font-size: 46px;
         }
       }
 
-      @include screen-size("small") {
-        font-size: $mobile_large;
+      &--hover {
+        position: absolute;
+        top: 6px;
+        font-family: $serif-stack;
+        font-size: $large + 10px;
+        font-weight: 500;
+        font-style: italic;
+        opacity: 0;
+        z-index: 1000;
+        hyphens: none;
+        white-space: nowrap;
+
+        &.left {
+          left: -2px;
+        }
+
+        &.right {
+          left: -25px;
+        }
+
+        @include screen-size("small") {
+          font-size: 46px;
+          font-size: $mobile_large;
+          font-family: $sans-stack;
+          font-style: normal;
+          font-weight: 300;
+          position: absolute;
+          top: 0px;
+          left: 0px;
+        }
+      }
+
+      &:hover,
+      &:active {
+        .footer__link--hover {
+          opacity: 1;
+        }
+
+        .footer__link--normal {
+          opacity: 0;
+        }
       }
     }
+
+    // &__link {
+    //   display: block;
+    //   font-size: $large;
+    //   color: black;
+    //   text-decoration: none;
+    //   font-weight: 300;
+    //   line-height: 1em;
+
+    //   &--left {
+    //     float: left;
+    //     margin-left: $small-margin;
+    //     &:hover {
+    //       font-family: $serif-stack;
+    //       font-size: $large + 10px;
+    //       // left: -2px;
+    //       font-style: italic;
+    //       top: 8px;
+    //       position: relative;
+    //       left: 3px;
+    //     }
+    //   }
+
+    //   &--right {
+    //     float: right;
+    //     margin-right: $small-margin;
+    //     &:hover {
+    //       font-family: $serif-stack;
+    //       font-size: $large + 10px;
+    //       // left: -2px;
+    //       font-style: italic;
+    //       top: 8px;
+    //       position: relative;
+    //       right: 3px;
+    //     }
+    //   }
+
+    //   @include screen-size("small") {
+    //     font-size: $mobile_large;
+    //   }
+    // }
   }
 </style>
 
@@ -91,17 +166,16 @@
   <MediaQuery query="(min-width: 800px)" let:matches>
     {#if matches}
       <a
-        class="footer__link footer__link--left"
         href="https://www.instagram.com/novembremagazine/"
+        class="footer__link footer__link--left"
         target="_blank">
-        INSTAGRAM
+        <div class="footer__link--normal">INSTAGRAM</div>
+        <div class="footer__link--hover left">INSTAGRAM</div>
       </a>
 
-      <a
-        data-scroll
-        href="#top"
-        class="footer__link footer__link--right js-back-to-top">
-        BACK TO TOP
+      <a data-scroll href="#top" class="footer__link footer__link--right">
+        <div class="footer__link--normal">BACK TO TOP</div>
+        <div class="footer__link--hover right">BACK TO TOP</div>
       </a>
 
       <Logo />

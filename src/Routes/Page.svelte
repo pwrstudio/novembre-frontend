@@ -3,6 +3,8 @@
   import { quintOut } from "svelte/easing";
   import { onMount } from "svelte";
 
+    import { navigationStyle } from "../stores.js";
+
   // COMPONENTS
   import TaxList from "../Components/TaxList.svelte";
   import Footer from "../Components/Footer.svelte";
@@ -28,6 +30,8 @@
 
   console.log(endpoint);
 
+  navigationStyle.set(true);
+
   // $: {
   //   if (slug !== currentSlug) {
   //     window.alert = "slug change";
@@ -46,8 +50,8 @@
     const res = await fetch(endpoint);
     const post = await res.json();
 
-    console.log("post");
-    console.log(post);
+    // console.log("post");
+    // console.log(post);
     // window.scrollTo(0, 0);
 
     return post;
@@ -89,8 +93,10 @@
   }
   
   .page {
-    padding-top: 80px;
     background: white;
+    min-height: 80vh;
+    margin-top: 100px;
+
 
     &.entertainment {
       background: $grey;
@@ -164,12 +170,11 @@
   <article class="page" in:fade={{ duration: 300, easing: quintOut }}>
 
     <!-- HEADER MEDIA -->
-    <div class="page__header page__header--black">
+    <!-- <div class="page__header page__header--black">
       {#if post.header.htmlTitle.title == 'About'}
         <Logo white={true} />
       {/if}
-
-    </div>
+    </div> -->
 
     <!-- MAIN CONTENT -->
     {#each post.header.fieldSelection as { select, body, introduction, quote, credits, image, video, audio, slideshow, portal }}

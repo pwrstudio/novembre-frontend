@@ -1,4 +1,6 @@
 <script>
+  // import { draw } from "svelte/transition";
+
   export let white = false;
 </script>
 
@@ -16,9 +18,17 @@
       display: block;
     }
 
+    path {
+      // transition: fill 0.3s $transition;
+      // stroke: black;
+      // stroke-width: 0.2;
+      // fill: transparent;
+    }
+
     &--white {
       path {
         fill: white;
+        // stroke: black;
       }
     }
   }

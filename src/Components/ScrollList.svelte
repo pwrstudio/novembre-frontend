@@ -1,19 +1,40 @@
 <script>
-  import Flickity from "flickity";
+  // # # # # # # # # # # # # #
+  //
+  //  Scroll list / ticker
+  //
+  // # # # # # # # # # # # # #
+
+  // *** IMPORTS
   import { onMount } from "svelte";
   import { fade } from "svelte/transition";
   import { Router, links } from "svelte-routing";
+  import Flickity from "flickity";
+
+  // *** COMPONENTS
   import { createEventDispatcher } from "svelte";
 
-  const dispatch = createEventDispatcher();
-
+  // *** PROPS
   export let taxlist;
   export let taxname;
   export let size = "large";
   export let activeCategory = "";
 
+  // *** VARIABLES
   let scrollListEl;
+  const dispatch = createEventDispatcher();
+  let taxArray = Array.from(Object.keys(taxlist[taxname]));
+  let options = {
+    wrapAround: true,
+    prevNextButtons: false,
+    pageDots: false,
+    draggable: true,
+    autoPlay: false,
+    selectedAttraction: 0.028,
+    friction: 0.28
+  };
 
+  // *** FUNCTIONS
   function slugify(string) {
     const a =
       "àáäâãåăæąçćčđďèéěėëêęğǵḧìíïîįłḿǹńňñòóöôœøṕŕřßşśšșťțùúüûǘůűūųẃẍÿýźžż·/_,:;";
@@ -90,27 +111,13 @@
     update();
   };
 
-  let taxArray = Array.from(Object.keys(taxlist[taxname]));
-
   // TODO: improve padding algo...
   if (taxArray.length < 20) {
     taxArray = [...taxArray, ...taxArray, ...taxArray, ...taxArray];
   }
 
+  // *** ON MOUNT
   onMount(async () => {
-    let options = {
-      wrapAround: true,
-      prevNextButtons: false,
-      pageDots: false,
-      draggable: true,
-      autoPlay: false,
-      selectedAttraction: 0.028,
-      friction: 0.28
-    };
-
-    // trigger redraw for transition
-    scrollListEl.offsetHeight;
-
     startTicker();
   });
 </script>
@@ -131,13 +138,10 @@
       display: inline-block;
       margin-right: 30px;
       white-space: nowrap;
-      // background: yellow;
       height: auto;
-      padding-bottom: 5px;
-      padding-top: 5px;
 
       span {
-        height: 100%;
+        // height: 1em;
         cursor: pointer;
       }
 
@@ -158,19 +162,20 @@
 
     &__slideshow {
       &--small {
-        // font-family: $serif-stack;
         font-style: italic;
         font-size: $body;
-        line-height: 65px;
-        height: 60px;
+        line-height: 45px;
+        height: 45px;
       }
 
       &--large {
+        position: relative;
+        top: 2px;
         font-family: $sans-stack;
         font-size: $large;
         font-weight: 300;
         text-transform: uppercase;
-        // background: red;
+        line-height: 0.8em;
 
         @include screen-size("small") {
           font-size: $mobile_large;
@@ -197,7 +202,7 @@
               newCategoryName: t
             });
           }}
-          class="taxonomy__item taxonomy-scroller__link js-ajax-link">
+          class="taxonomy__item taxonomy-scroller__link">
           {t}
         </span>
       </div>

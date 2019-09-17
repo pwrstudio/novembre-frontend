@@ -1,22 +1,44 @@
 <script>
-  import { onMount } from "svelte";
-  import Flickity from "flickity-imagesloaded";
-  import { Router, links } from "svelte-routing";
+  // # # # # # # # # # # # # #
+  //
+  //  Slideshow module
+  //
+  // # # # # # # # # # # # # #
 
+  // *** IMPORTS
+  import { onMount } from "svelte";
+  import { Router, links } from "svelte-routing";
+  import Flickity from "flickity-imagesloaded";
+  import "flickity-fullscreen";
+
+  // *** PROPS
   export let slides;
   export let isRelated = false;
+  export let isPreview = false;
 
-  let paddedSlides = [];
-  let slideShowEl;
-  let imgixParams = "&auto=format";
-
+  // *** VARIABLES
   let hidden = false;
+  let paddedSlides = [];
+  let imgixParams = "&auto=format";
+  let options = {
+    wrapAround: true,
+    prevNextButtons: false,
+    pageDots: false,
+    freeScroll: true,
+    // autoPlay: 5000,
+    // groupCells: 1,
+    imagesLoaded: true,
+    // selectedAttraction: 0.028,
+    // friction: 0.28,
+    fullscreen: false,
+    freeScrollFriction: 0.05,
+    lazyLoad: 3
+  };
 
-  // console.log("is related: ", isRelated);
-  // console.log(slides);
+  // *** DOM REFERENCES
+  let slideShowEl;
 
-  // TEMP SOLUTION
-
+  // *** FUNCTIONS
   slides.forEach(s => {
     s.url = s.url.replace(
       "https://testing.novembre.global",
@@ -46,28 +68,16 @@
     paddedSlides = slides;
   }
 
+  // *** ON MOUNT
   onMount(async () => {
     if (slideShowEl) {
-      let options = {
-        wrapAround: true,
-        prevNextButtons: false,
-        pageDots: false,
-        autoPlay: 5000,
-        groupCells: 1,
-        imagesLoaded: true,
-        selectedAttraction: 0.028,
-        friction: 0.28,
-        fullscreen: true
-      };
+      if (!isPreview && !isRelated) {
+        options.fullscreen = true;
+      }
       // if (window.matchMedia("(max-width: 800px)").matches) {
       //   console.log("mopbile");
       //   options.groupCells = 1;
       // }
-
-      hidden = false;
-
-      // trigger redraw for transition
-      slideShowEl.offsetHeight;
 
       let flkty = new Flickity(slideShowEl, options);
     }
@@ -82,12 +92,12 @@
     height: $full-height;
     max-height: 600px;
 
-    &--related {
-      height: 500px;
-    }
+    // &--related {
+    //   height: 500px;
+    // }
 
     @include screen-size("small") {
-      max-height: 500px;
+      height: 100vh;
     }
 
     &__slideshow {
@@ -99,13 +109,18 @@
       height: 100%;
 
       &--related {
-        width: 33.333%;
-        height: 500px;
+        width: 50%;
+        height: 600px;
 
         @include screen-size("small") {
           width: 80%;
+          height: 400px;
         }
       }
+
+      // @include screen-size("small") {
+      //   width: 50%;
+      // }
     }
 
     &__slide-image {
@@ -129,7 +144,7 @@
       text-transform: uppercase;
       line-height: 0.9em;
       position: absolute;
-      bottom: 15px;
+      bottom: $small-margin;
       left: $small-margin;
       max-width: 95%;
 
@@ -151,6 +166,30 @@
   .hidden {
     opacity: 0;
   }
+
+  .flickity-enabled.is-fullscreen {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: hsla(0, 0%, 0%, 0.9);
+    padding-bottom: 35px;
+    z-index: 1;
+  }
+
+  .flickity-enabled.is-fullscreen .flickity-page-dots {
+    bottom: 10px;
+  }
+
+  .flickity-enabled.is-fullscreen .flickity-page-dots .dot {
+    background: white;
+  }
+
+  /* prevent page scrolling when flickity is fullscreen */
+  html.is-flickity-fullscreen {
+    overflow: hidden;
+  }
 </style>
 
 <div
@@ -164,9 +203,9 @@
         <a href="/{slide.parent}/{slide.slug}">
           <img
             class="slideshow__slide-image slideshow__slide-image--related"
-            srcset={slide.srcset}
+            data-flickity-lazyload-srcset={slide.srcset}
             sizes={slide.sizes}
-            src={slide.src}
+            data-flickity-lazyload-src={slide.src}
             alt={slide.caption} />
           <div
             class="slideshow__title"
@@ -179,9 +218,9 @@
       <div class="carousel-cell slideshow__slide">
         <img
           class="slideshow__slide-image"
-          srcset={slide.srcset}
+          data-flickity-lazyload-srcset={slide.srcset}
           sizes={slide.sizes}
-          src={slide.src}
+          data-flickity-lazyload-src={slide.src}
           alt={slide.caption} />
       </div>
     {/if}

@@ -1758,6 +1758,13 @@ fizzy-ui-utils@^2.0.7:
   dependencies:
     desandro-matches-selector "^2.0.0"
 
+flickity-fullscreen@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/flickity-fullscreen/-/flickity-fullscreen-1.1.1.tgz#76d8c621ff45f086d5f4eab841f788e1fc48169b"
+  integrity sha512-r9hxDXizjvXgBSwCwbqfaXDZRy02uH8UM73VvnxCml0ogKexpqZSlsit5hmGcJUKrtEx3svklJbGX0XUO8Z6DA==
+  dependencies:
+    flickity "^2.1.0"
+
 flickity-imagesloaded@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/flickity-imagesloaded/-/flickity-imagesloaded-2.0.0.tgz#a2d1d6aae6c26369ef2fa44f3eb948ea474e976b"
@@ -1766,7 +1773,7 @@ flickity-imagesloaded@^2.0.0:
     flickity "^2.0.0"
     imagesloaded "^4.1.0"
 
-flickity@^2.0.0:
+flickity@^2.0.0, flickity@^2.1.0:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/flickity/-/flickity-2.2.1.tgz#81126e3d656cb54577358a5f959ffdbda088e670"
   integrity sha512-fCZJGNqabgDrIhaUBqt2ydE8c5V6iiB3KQAf6dH3Z45MoDUm7g6+uZmteN0aLV9pzVItNqCbfOJQjsJM/rHuSA==
@@ -3742,6 +3749,11 @@ terser@^3.14.1:
     commander "^2.19.0"
     source-map "~0.6.1"
     source-map-support "~0.5.10"
+
+throttle-debounce@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/throttle-debounce/-/throttle-debounce-2.1.0.tgz#257e648f0a56bd9e54fe0f132c4ab8611df4e1d5"
+  integrity sha512-AOvyNahXQuU7NN+VVvOOX+uW6FPaWdAOdRP5HfwYxAfCzXTFKRMoIMk+n+po318+ktcChx+F1Dd91G3YHeMKyg==
 
 tinydate@^1.0.0:
   version "1.2.0"

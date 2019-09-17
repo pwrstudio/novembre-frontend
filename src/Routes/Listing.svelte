@@ -1,23 +1,23 @@
 <script>
-  import Preview from "../Components/Preview.svelte";
-  import ScrollList from "../Components/ScrollList.svelte";
-  import Footer from "../Components/Footer.svelte";
+  // # # # # # # # # # # # # #
+  //
+  //  Listing
+  //
+  // # # # # # # # # # # # # #
+
+  // *** IMPORTS
   import { onMount } from "svelte";
   import { fade } from "svelte/transition";
 
-  let fetchedPosts = [];
+  // *** COMPONENTS
+  import Preview from "../Components/Preview.svelte";
+  import ScrollList from "../Components/ScrollList.svelte";
+  import Footer from "../Components/Footer.svelte";
 
-  let count = 0;
-  let index = 0;
-  let items = [];
-  let taxlist = [];
-  let loadedTax = false;
-  let firstLoad = false;
-  let url = "";
-  let loadTrigger;
-  let meta = {};
-  let finishedLoading = false;
+  // *** STORES
+  import { pageLocation } from "../stores.js";
 
+  // *** PROPS
   export let title = "";
   export let endpoint = "";
   export let showTaxonomyScroller = false;
@@ -25,17 +25,36 @@
   export let isQuery = false;
   export let query = false;
 
-  // console.log("query", query);
-  // console.dir(title);
+  // *** DOM REFERENCES
+  let sentinel;
+  let postsContainerEl;
 
+  // *** VARIABLES
+  let fetchedPosts = [];
+  let count = 0;
+  let index = 0;
+  let items = [];
+  let taxlist = [];
+  let loadedTax = false;
+  let firstLoad = false;
+  let url = "";
+  let meta = {};
+  let finishedLoading = false;
   let currentQuery = query;
   let activeCategory = window.location.hash.substr(1);
 
-  // if (activeCategory) {
-  //   isQuery = true;
-  //   endpoint = entertainment.json;
-  // }
+  // *** REACTIVE
+  $: {
+    // Listen for changes to query
+    if (query !== currentQuery) {
+      items = [];
+      firstLoad = false;
+      currentQuery = query;
+      loadData(0, currentQuery);
+    }
+  }
 
+  // *** FUNCTIONS
   function changeCategory(e) {
     // console.dir(e.detail.newCategory);
     // console.dir(e.detail.newCategoryName);
@@ -69,23 +88,27 @@
         }
       });
     },
-    { treshhold: 0.5 }
+    { threshold: 0.5 }
   );
+
+  function repositionSentinel() {
+    // console.log("moving sentinel....");
+    // console.dir(postsContainerEl);
+    // console.dir(sentinel);
+    if (postsContainerEl && sentinel) {
+      let fourthElementFromEnd = postsContainerEl.querySelector(
+        ".preview:nth-last-child(4)"
+      );
+      // console.dir(fourthElementFromEnd);
+      if (fourthElementFromEnd) {
+        postsContainerEl.insertBefore(sentinel, fourthElementFromEnd);
+      }
+    }
+  }
 
   // window.onpopstate = function(event) {
   //   console.dir(event);
   // };
-
-  // Listen for changes to query
-  $: {
-    if (query !== currentQuery) {
-      window.alert = "query change";
-      items = [];
-      firstLoad = false;
-      currentQuery = query;
-      loadData(0, currentQuery);
-    }
-  }
 
   // window.addEventListener("hashchange", e => {
   //   console.dir(e);
@@ -105,30 +128,34 @@
     } else {
       url = endpoint + "/index:" + i + (q ? "/query:" + q : "");
     }
-    console.dir(url);
+    // console.dir(url);
     fetch(url)
       .then(r => r.json())
       .then(arr => {
-        console.dir(arr);
+        // console.dir(arr);
         items = [...items, ...arr.posts];
         meta = arr.meta;
         taxlist = arr.taxlist;
         firstLoad = true;
+        setTimeout(repositionSentinel, 500);
       });
   }
 
   loadData(index, query);
 
+  // *** ON MOUNT
   onMount(async () => {
+    console.log("mounted");
+    pageLocation.set(title);
     window.scrollTo(0, 0);
-    observer.observe(loadTrigger);
+    observer.observe(sentinel);
   });
 </script>
 
 <style lang="scss">
   @import "../variables.scss";
 
-  .load-trigger {
+  .sentinel {
     width: 100%;
     height: 10px;
     background: transparent;
@@ -136,7 +163,13 @@
 
   .listing {
     width: 100%;
-    margin-top: 80px;
+    padding-top: 80px;
+    min-height: 80vh;
+    overflow: hidden;
+  }
+
+  .landing {
+    padding-top: 0;
   }
 
   .top-block {
@@ -146,11 +179,14 @@
     text-transform: uppercase;
     background: black;
     color: white;
+    line-height: 0.8em;
+    padding-bottom: $small-margin;
+    padding-top: $small-margin;
 
     @include screen-size("small") {
       font-size: $mobile_large;
-      padding-bottom: 5px;
-      padding-top: 5px;
+      padding-bottom: $small-margin;
+      padding-top: $small-margin;
     }
   }
 
@@ -167,14 +203,13 @@
 
     @include screen-size("small") {
       font-size: $mobile_large;
-      // background: red;
-      // padding-bottom: 5px;
-      // padding-top: 5px;
     }
   }
 
   .query-bar {
     padding-left: $small-margin;
+    position: relative;
+    top: 2px;
   }
 </style>
 
@@ -182,11 +217,11 @@
   {#if title === 'Landing'}
     <title>NOVEMBRE</title>
   {:else}
-    <title>NOVEMBRE | {title}</title>
+    <title>{title} / NOVEMBRE</title>
   {/if}
 </svelte:head>
 
-<div class="listing">
+<div class="listing" class:landing={title === 'Landing'}>
 
   {#if showTaxonomyScroller && firstLoad}
     <div class="top-block" in:fade>
@@ -200,20 +235,25 @@
 
   {#if isQuery && firstLoad}
     {#if items.length == 0}
-      <div class="message" in:fade>No results for “{query}”</div>
+      <div class="top-block">
+        <div class="query-bar" in:fade>No results for “{query}”</div>
+      </div>
     {:else}
       <div class="top-block">
         <span class="query-bar" in:fade>{title}: {query}</span>
       </div>
     {/if}
   {/if}
+
   <!-- {currentHash} -->
-  {#each items as post}
-    <Preview {post} />
-  {/each}
+  <div class="listing__posts" bind:this={postsContainerEl}>
+    {#each items as post}
+      <Preview {post} />
+    {/each}
+  </div>
 
   {#if !finishedLoading}
-    <div class="load-trigger" bind:this={loadTrigger} />
+    <div class="sentinel" bind:this={sentinel} />
   {/if}
 
 </div>

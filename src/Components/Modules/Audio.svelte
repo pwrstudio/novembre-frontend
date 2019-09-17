@@ -227,7 +227,7 @@
   </div>
 
   {#if posterImage}
-    <img src={posterImage} class="poster-image" />
+    <img src={posterImage} class="poster-image" alt="Audio player" />
   {/if}
 
 </div>

@@ -211,7 +211,7 @@
     bind:duration
     bind:paused />
   {#if posterImage && unPlayed}
-    <img src={posterImage} class="poster-image" />
+    <img src={posterImage} class="poster-image" alt="Video player" />
   {/if}
 
   {#if controls && !autoplay}
