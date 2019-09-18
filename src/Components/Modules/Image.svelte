@@ -6,9 +6,10 @@
   // # # # # # # # # # # # # #
 
   // *** IMPORTS
-  import imagesLoaded from "imagesloaded";
+  // import imagesLoaded from "imagesloaded";
   import { onMount } from "svelte";
   import MediaQuery from "svelte-media-query";
+  import { fade } from "svelte/transition";
 
   // *** PROPS
   export let file = "";
@@ -17,6 +18,7 @@
   export let caption = "Novembre";
   export let size = true;
   export let isListing = false;
+  export let loaded;
 
   // *** VARIABLES
   let srcset;
@@ -25,22 +27,39 @@
   let src;
   let srcPortrait;
   let imageEl;
-  let loaded = false;
+  // let loaded = true;
   let imgixParams = "&auto=format";
   let fullWidthParams = "&ar=16:9&fit=crop&crop=faces&auto=format";
   let portraitParams = "&ar=9:16&fit=crop&crop=faces&auto=format";
 
+  $: {
+    if (loaded && multiFiles) {
+      console.log(multiFiles);
+      multiFiles.forEach((s, i) => {
+        setTimeout(() => {
+          s.loaded = true;
+        }, 300 * i);
+      });
+    }
+  }
+
   // *********
   if (multiFiles) {
+    if (multiFiles.length > 1) {
+      multiFiles.forEach(s => {
+        s.loaded = false;
+      });
+    }
+
     // Size depending on layout
     if (multiFiles.length === 1) {
       // FULL WIDTH
       sizes = "50vw";
     } else if (multiFiles.length === 2) {
       // PROPORTIONAL or inline
-      sizes = "30vw";
+      sizes = "35vw";
     } else if (multiFiles.length === 3) {
-      sizes = "25vw";
+      sizes = "30vw";
     } else if (multiFiles.length === 4) {
       sizes = "20vw";
     }
@@ -98,16 +117,9 @@
 
   // *** ON MOUNT
   onMount(async () => {
-    let images = imageEl.querySelectorAll(".image__image");
-    // console.log(images);
-    if (images) {
-      images.forEach(i => {
-        imagesLoaded(i, instance => {
-          // console.log(instance);
-          i.classList.add("loaded");
-        });
-      });
-    }
+    // console.log(multiFiles);
+    multiFiles = multiFiles;
+    console.log(multiFiles);
   });
 </script>
 
@@ -127,11 +139,15 @@
     &.listing {
       margin-top: 0px;
       margin-bottom: 0px;
+
+      .image--free {
+        margin-bottom: $small-margin;
+      }
     }
 
     &__image {
-      opacity: 0;
-      transition: opacity 2s $transition;
+      opacity: 1;
+      transition: opacity 0.5s $transition;
 
       &.loaded {
         opacity: 1;
@@ -168,6 +184,7 @@
       cursor: pointer;
 
       display: inline-block;
+      margin-bottom: $small-margin;
 
       #{ $block }__image {
         max-height: 500px;
@@ -267,11 +284,11 @@
       <!-- Phone -->
       <img
         class="image__image"
+        class:loaded
         srcset={matches ? srcset : srcsetPortrait}
         {sizes}
         src={matches ? src : srcPortrait}
-        alt={caption}
-        class:loaded />
+        alt={caption} />
       <!-- {/if} -->
     </MediaQuery>
     {#if !isListing}
@@ -279,13 +296,14 @@
     {/if}
   {:else}
     {#each multiFiles as slide}
+      {slide.loaded}
       <img
         class="image__image image__image--multi"
+        class:loaded={slide.loaded}
         alt="Novembre"
         srcset={slide.srcset}
         sizes={slide.sizes}
-        src={slide.src}
-        class:loaded />
+        src={slide.src} />
     {/each}
   {/if}
 

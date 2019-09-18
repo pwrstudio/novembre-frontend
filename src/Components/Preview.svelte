@@ -9,7 +9,7 @@
   import { onMount, onDestroy } from "svelte";
   import { Router, links } from "svelte-routing";
   import MediaQuery from "svelte-media-query";
-  import { throttle } from "throttle-debounce";
+  import imagesLoaded from "imagesloaded";
 
   // *** COMPONENTS
   import TaxList from "./TaxList.svelte";
@@ -20,7 +20,7 @@
   import Slideshow from "./Modules/Slideshow.svelte";
 
   // *** STORES
-  import { navigationStyle } from "../stores.js";
+  import { navigationStyle, menuActiveGlobal } from "../stores.js";
 
   // *** PROPS
   export let post;
@@ -28,49 +28,114 @@
   // *** VARIABLES
   let previewEl;
   let active = false;
+  let topOffset;
+  let elementHeight;
+  let isInView = false;
+  let lastScrollY = 0;
+  let loaded = false;
 
   // *** FUNCTIONS
-  function checkTopOffset() {
-    console.log(
-      post.header.htmlTitle.fullTitle,
-      previewEl.getBoundingClientRect().top
-    );
-    if (previewEl.getBoundingClientRect().top < 40) {
-      console.log("CHANNANAN");
-      navigationStyle.set(!post.header.previewColor);
-    }
-  }
-
-  const throttledCheck = throttle(100, checkTopOffset);
 
   const observer = new IntersectionObserver(
     entries => {
       entries.forEach(entry => {
-        // Element is in view
-        if (entry.intersectionRatio > 0) {
-          // console.log("IN VIEW: create:", post.header.htmlTitle.fullTitle);
-          window.addEventListener("scroll", throttledCheck);
+        topOffset = previewEl.getBoundingClientRect().top;
+
+        console.log(
+          post.header.htmlTitle.title.substring(0, 6),
+          topOffset,
+          entry.intersectionRatio
+        );
+
+        if (entry.intersectionRatio > 0.9) {
+          // console.log(
+          //   "+++++",
+          //   "TITLE:",
+          //   post.header.htmlTitle.title.substring(0, 6),
+          //   "RATIO:",
+          //   entry.intersectionRatio,
+          //   "TOP OFFSET:",
+          //   previewEl.getBoundingClientRect().top,
+          //   "WINDOW HEIGHT:",
+          //   window.innerHeight,
+          //   "ELEMENT HEIGHT:",
+          //   previewEl.offsetHeight,
+          //   "SCROLL Y:",
+          //   window.scrollY,
+          //   "LAST SCROLL:",
+          //   lastScrollY,
+          //   "PAGE OFFSET:",
+          //   window.pageYOffset
+          //   // Math.round(previewEl.getBoundingClientRect().top) <
+          //   //   previewEl.offsetHeight / 2
+          // );
+
+          // HIT TOP GOING DOWN
+          if (topOffset < 0) {
+            console.warn(
+              post.header.htmlTitle.title.substring(0, 6),
+              "HIT TOP GOING DOWN",
+              isInView
+            );
+            navigationStyle.set(!post.header.previewColor);
+          }
         }
-        // Element is out of view
-        if (entry.intersectionRatio <= 0) {
-          // console.log("OUT OF VIEW: destroy:", post.header.htmlTitle.fullTitle);
-          window.removeEventListener("scroll", throttledCheck);
+
+        if (entry.intersectionRatio < 0.1 && topOffset < window.innerHeight) {
+          // console.log(
+          //   "-------",
+          //   "TITLE:",
+          //   post.header.htmlTitle.title.substring(0, 6),
+          //   "RATIO:",
+          //   entry.intersectionRatio,
+          //   "TOP OFFSET:",
+          //   Math.round(previewEl.getBoundingClientRect().top),
+          //   "WINDOW HEIGHT:",
+          //   window.innerHeight,
+          //   "ELEMENT HEIGHT:",
+          //   previewEl.offsetHeight,
+          //   "SCROLL Y:",
+          //   window.scrollY,
+          //   "LAST SCROLL:",
+          //   lastScrollY,
+          //   "PAGE OFFSET:",
+          //   window.pageYOffset
+          //   // Math.round(previewEl.getBoundingClientRect().top) <
+          //   //   previewEl.offsetHeight / 2
+          // );
+
+          if (window.scrollY < lastScrollY) {
+            console.warn(
+              post.header.htmlTitle.title.substring(0, 6),
+              "HIT BOTTOM GOING UP"
+            );
+            navigationStyle.set(!post.header.previewColor);
+          }
         }
+
+        lastScrollY = window.scrollY;
       });
     },
     { threshold: [0, 1] }
   );
 
+  // [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
   // *** ON MOUNT
   onMount(async () => {
+    // elementHeight = previewEl.offsetHeight;
+    // console.log(elementHeight);
     // console.log(post);
+    imagesLoaded(previewEl, instance => {
+      console.log(instance);
+      loaded = true;
+      // previewEl.classList.add("loaded");
+    });
     observer.observe(previewEl);
   });
 
   // *** ON DESTROY
   onDestroy(() => {
-    // console.log("DESTROYYYY");
-    window.removeEventListener("scroll", throttledCheck);
+    observer.disconnect();
   });
 </script>
 
@@ -83,8 +148,12 @@
     position: relative;
     user-select: none;
     color: black;
-    // opacity: 0;
+    opacity: 0;
     overflow: hidden;
+    // background: black;
+
+    max-height: $full-height;
+    // transition: opacity 0.5s $transition;
 
     &__tags {
       position: absolute;
@@ -95,6 +164,9 @@
       z-index: 10;
       max-width: 90vw;
       overflow: hidden;
+      opacity: 1;
+
+      transition: opacity 0.3 $transition;
     }
 
     &__title {
@@ -112,11 +184,15 @@
       overflow: hidden;
       pointer-events: none;
 
+      transition: opacity 0.3 $transition;
+
       &--free {
         position: static;
         left: unset;
         bottom: unset;
         margin-left: $small-margin;
+        margin-top: $small-margin;
+
         // background: yellow;
       }
 
@@ -152,11 +228,6 @@
       }
     }
 
-    &--text {
-      // background: yellow;
-      // display: inline-block;
-    }
-
     &__quote {
       font-size: $xlarge;
       font-weight: 300;
@@ -181,9 +252,20 @@
     &--white {
       color: white;
     }
+
+    &.hide-text {
+      mix-blend-mode: multiply;
+      .preview__title,
+      .preview__tags {
+        transition: opacity 0.3 $transition;
+        opacity: 0;
+      }
+
+      // transition: filter 0.3 $transition;
+    }
   }
 
-  .active {
+  .loaded {
     opacity: 1;
   }
 
@@ -196,8 +278,9 @@
 <Router>
   <div
     class="preview preview--{post.header.previewType}"
-    class:active
+    class:loaded
     class:preview--white={!post.header.previewColor}
+    class:hide-text={$menuActiveGlobal}
     style="background-color: {post.header.backgroundColor}"
     bind:this={previewEl}
     use:links>
@@ -225,6 +308,7 @@
           url={post.header.previewImage.url}
           multiFiles={post.header.previewSlideshow}
           caption={post.header.htmlTitle.fullTitle}
+          {loaded}
           isListing={true} />
       {/if}
 

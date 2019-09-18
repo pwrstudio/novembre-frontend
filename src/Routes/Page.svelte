@@ -30,7 +30,7 @@
 
   console.log(endpoint);
 
-  navigationStyle.set(true);
+  navigationStyle.set(false);
 
   // $: {
   //   if (slug !== currentSlug) {
@@ -95,7 +95,7 @@
   .page {
     background: white;
     min-height: 80vh;
-    margin-top: 100px;
+    padding-top: 100px;
 
 
     &.entertainment {

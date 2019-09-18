@@ -10,7 +10,7 @@
   import { throttle } from "throttle-debounce";
 
   // *** STORES
-  import { navigationStyle } from "../../stores.js";
+  import { navigationStyle, menuActiveGlobal } from "../../stores.js";
 
   // *** PROPS
   export let text;
@@ -101,6 +101,10 @@
         border-bottom: 1px solid transparent;
       }
     }
+
+    &.hide-text {
+      opacity: 0;
+    }
   }
 
   .entertainment {
@@ -119,6 +123,10 @@
   }
 </style>
 
-<div class="body-text" class:entertainment={isEntertainment} bind:this={textEl}>
+<div
+  class="body-text"
+  class:entertainment={isEntertainment}
+  class:hide-text={$menuActiveGlobal}
+  bind:this={textEl}>
   {@html text}
 </div>

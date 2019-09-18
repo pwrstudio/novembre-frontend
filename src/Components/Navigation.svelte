@@ -15,7 +15,11 @@
   import SearchBox from "./SearchBox.svelte";
 
   // *** STORES
-  import { pageLocation, navigationStyle } from "../stores.js";
+  import {
+    pageLocation,
+    navigationStyle,
+    menuActiveGlobal
+  } from "../stores.js";
 
   // *** PROPS
   export let isTransparent = false;
@@ -32,6 +36,7 @@
 
   // *** REACTIVE
   $: toggleText = menuActive ? "CLOSE" : "MENU";
+  $: menuActiveGlobal.set(menuActive);
 
   // *** FUNCTIONS
   var scroll = () => {
@@ -184,7 +189,7 @@
 
         @include screen-size("small") {
           font-size: 46px;
-          font-size: $mobile_large;
+          font-size: 45px;
           font-family: $sans-stack;
           font-style: normal;
           font-weight: 300;

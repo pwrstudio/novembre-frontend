@@ -101,6 +101,7 @@
       );
       // console.dir(fourthElementFromEnd);
       if (fourthElementFromEnd) {
+        // fourthElementFromEnd.classList.add("sentinel");
         postsContainerEl.insertBefore(sentinel, fourthElementFromEnd);
       }
     }
@@ -115,6 +116,7 @@
   // });
 
   function loadData(i, q, tax) {
+    console.warn("!!!! LOADING DATA");
     // console.log("q", q);
     if (tax) {
       url =
@@ -157,7 +159,7 @@
 
   .sentinel {
     width: 100%;
-    height: 10px;
+    height: 1px;
     background: transparent;
   }
 
