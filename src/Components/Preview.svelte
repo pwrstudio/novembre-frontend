@@ -23,29 +23,28 @@
   import { navigationStyle, menuActiveGlobal } from "../stores.js";
 
   // *** PROPS
-  export let post;
+  export let post = {};
+  export let isHeader = false;
 
   // *** VARIABLES
-  let previewEl;
+  let previewEl = {};
   let active = false;
-  let topOffset;
-  let elementHeight;
-  let isInView = false;
+  let topOffset = 0;
+  let elementHeight = 0;
   let lastScrollY = 0;
   let loaded = false;
 
   // *** FUNCTIONS
-
   const observer = new IntersectionObserver(
     entries => {
       entries.forEach(entry => {
         topOffset = previewEl.getBoundingClientRect().top;
 
-        console.log(
-          post.header.htmlTitle.title.substring(0, 6),
-          topOffset,
-          entry.intersectionRatio
-        );
+        // console.log(
+        //   post.header.htmlTitle.title.substring(0, 6),
+        //   topOffset,
+        //   entry.intersectionRatio
+        // );
 
         if (entry.intersectionRatio > 0.9) {
           // console.log(
@@ -72,11 +71,11 @@
 
           // HIT TOP GOING DOWN
           if (topOffset < 0) {
-            console.warn(
-              post.header.htmlTitle.title.substring(0, 6),
-              "HIT TOP GOING DOWN",
-              isInView
-            );
+            // console.warn(
+            //   post.header.htmlTitle.title.substring(0, 6),
+            //   "HIT TOP GOING DOWN",
+            //   isInView
+            // );
             navigationStyle.set(!post.header.previewColor);
           }
         }
@@ -105,10 +104,10 @@
           // );
 
           if (window.scrollY < lastScrollY) {
-            console.warn(
-              post.header.htmlTitle.title.substring(0, 6),
-              "HIT BOTTOM GOING UP"
-            );
+            // console.warn(
+            //   post.header.htmlTitle.title.substring(0, 6),
+            //   "HIT BOTTOM GOING UP"
+            // );
             navigationStyle.set(!post.header.previewColor);
           }
         }
@@ -119,14 +118,13 @@
     { threshold: [0, 1] }
   );
 
-  // [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
   // *** ON MOUNT
   onMount(async () => {
     // elementHeight = previewEl.offsetHeight;
     // console.log(elementHeight);
-    // console.log(post);
+    console.log(post);
     imagesLoaded(previewEl, instance => {
-      console.log(instance);
+      // console.log(instance);
       loaded = true;
       // previewEl.classList.add("loaded");
     });
@@ -150,7 +148,6 @@
     color: black;
     opacity: 0;
     overflow: hidden;
-    // background: black;
 
     max-height: $full-height;
     // transition: opacity 0.5s $transition;
@@ -304,7 +301,6 @@
       {#if post.header.previewType == 'image'}
         <Image
           size={post.header.previewSize}
-          file={post.header.previewImage.file}
           url={post.header.previewImage.url}
           multiFiles={post.header.previewSlideshow}
           caption={post.header.htmlTitle.fullTitle}
@@ -318,7 +314,9 @@
           file={post.header.previewVideo.file}
           url={post.header.previewVideo.url}
           caption={post.header.title}
-          isListing={true} />
+          autoplay={true}
+          loop={true}
+          muted={true} />
       {/if}
 
       <!-- SLIDESHOW -->
@@ -327,7 +325,7 @@
       {/if}
 
       <!-- TEXT -->
-      {#if post.header.previewType == 'text'}
+      {#if post.header.previewType == 'text' && !isHeader}
         <!-- <div class="preview__text"> -->
         <!-- <blockquote class="preview__quote">
             {post.header.previewText}
@@ -336,7 +334,7 @@
       {/if}
 
       <!-- TAGS -->
-      {#if post.header.taxonomy}
+      {#if post.header.taxonomy && !isHeader}
         <MediaQuery query="(min-width: 800px)" let:matches>
           {#if matches}
             <div class="preview__tags">
@@ -348,12 +346,14 @@
         </MediaQuery>
       {/if}
 
-      <div
-        class="preview__title preview__title--free"
-        class:preview__title--free={post.header.previewType == 'image' && !post.header.previewSize}
-        class:preview__title--large-text={post.header.previewType == 'text'}>
-        {@html post.header.htmlTitle.fullTitle}
-      </div>
+      {#if !isHeader}
+        <div
+          class="preview__title preview__title--free"
+          class:preview__title--free={post.header.previewType == 'image' && !post.header.previewSize}
+          class:preview__title--large-text={post.header.previewType == 'text'}>
+          {@html post.header.htmlTitle.fullTitle}
+        </div>
+      {/if}
 
     </a>
 

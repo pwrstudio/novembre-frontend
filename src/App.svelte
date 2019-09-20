@@ -71,19 +71,12 @@
 
   body,
   html {
+    background: white;
     padding: 0;
     margin: 0;
     width: 100vw;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-  }
-
-  html {
-    background: black;
-  }
-
-  body {
-    background: white;
   }
 
   * {

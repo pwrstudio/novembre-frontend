@@ -12,7 +12,7 @@
   import "flickity-fullscreen";
 
   // *** PROPS
-  export let slides;
+  export let slides = [];
   export let isRelated = false;
   export let isPreview = false;
 
@@ -36,13 +36,13 @@
   };
 
   // *** DOM REFERENCES
-  let slideShowEl;
+  let slideShowEl = {};
 
   // *** FUNCTIONS
   slides.forEach(s => {
     s.url = s.url.replace(
       "https://testing.novembre.global",
-      "https://novmag.imgix.net"
+      "https://novtest.imgix.net"
     );
     s.src = s.url + "?w=800" + imgixParams;
     s.srcset = ["", 200, 400, 600, 800, 1000, 1200, 1400].reduce(
@@ -74,11 +74,6 @@
       if (!isPreview && !isRelated) {
         options.fullscreen = true;
       }
-      // if (window.matchMedia("(max-width: 800px)").matches) {
-      //   console.log("mopbile");
-      //   options.groupCells = 1;
-      // }
-
       let flkty = new Flickity(slideShowEl, options);
     }
   });

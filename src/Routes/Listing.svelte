@@ -24,10 +24,11 @@
   export let showFooter = true;
   export let isQuery = false;
   export let query = false;
+  export let location = {};
 
   // *** DOM REFERENCES
-  let sentinel;
-  let postsContainerEl;
+  let sentinel = {};
+  let postsContainerEl = {};
 
   // *** VARIABLES
   let fetchedPosts = [];
@@ -116,7 +117,6 @@
   // });
 
   function loadData(i, q, tax) {
-    console.warn("!!!! LOADING DATA");
     // console.log("q", q);
     if (tax) {
       url =
@@ -147,7 +147,7 @@
 
   // *** ON MOUNT
   onMount(async () => {
-    console.log("mounted");
+    // console.log("mounted");
     pageLocation.set(title);
     window.scrollTo(0, 0);
     observer.observe(sentinel);

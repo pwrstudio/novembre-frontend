@@ -7,34 +7,31 @@
 
   // *** IMPORTS
   // import imagesLoaded from "imagesloaded";
-  import { onMount } from "svelte";
+  // import { onMount } from "svelte";
   import MediaQuery from "svelte-media-query";
   import { fade } from "svelte/transition";
 
   // *** PROPS
-  export let file = "";
   export let url = "";
   export let multiFiles = false;
-  export let caption = "Novembre";
+  export let caption = "";
   export let size = true;
   export let isListing = false;
-  export let loaded;
+  export let loaded = false;
 
   // *** VARIABLES
-  let srcset;
-  let srcsetPortrait;
-  let sizes;
-  let src;
-  let srcPortrait;
-  let imageEl;
-  // let loaded = true;
+  let srcset = "";
+  let srcsetPortrait = "";
+  let sizes = "";
+  let src = "";
+  let srcPortrait = "";
+  let imageEl = {};
   let imgixParams = "&auto=format";
   let fullWidthParams = "&ar=16:9&fit=crop&crop=faces&auto=format";
   let portraitParams = "&ar=9:16&fit=crop&crop=faces&auto=format";
 
   $: {
     if (loaded && multiFiles) {
-      console.log(multiFiles);
       multiFiles.forEach((s, i) => {
         setTimeout(() => {
           s.loaded = true;
@@ -67,7 +64,7 @@
     multiFiles.forEach(f => {
       f.url = f.url.replace(
         "https://testing.novembre.global",
-        "https://novmag.imgix.net"
+        "https://novtest.imgix.net"
       );
       f.src = f.url + "?w=800" + imgixParams;
       f.srcset = ["", 200, 400, 600, 800, 1000, 1200, 1400].reduce(
@@ -83,7 +80,7 @@
     // Set base image size
     url = url.replace(
       "https://testing.novembre.global",
-      "https://novmag.imgix.net"
+      "https://novtest.imgix.net"
     );
 
     src = url + "?w=1200" + fullWidthParams;
@@ -116,11 +113,11 @@
   }
 
   // *** ON MOUNT
-  onMount(async () => {
-    // console.log(multiFiles);
-    multiFiles = multiFiles;
-    console.log(multiFiles);
-  });
+  // onMount(async () => {
+  //   console.log("before", multiFiles);
+  //   multiFiles = multiFiles;
+  //   console.log("after", multiFiles);
+  // });
 </script>
 
 <style lang="scss">
@@ -259,7 +256,7 @@
 
 <div
   class="image"
-  class:image--full={size == true || size == 'fullWidth' || multiFiles.length === 0}
+  class:image--full={size == true || size == 'fullWidth' || !multiFiles}
   class:image--inline={size == 'proportional' || size == 'inline'}
   class:image--free={!size && multiFiles && multiFiles.length > 0}
   class:listing={isListing}
@@ -269,19 +266,8 @@
   class:image--free-4={!size && multiFiles && multiFiles.length === 4}
   bind:this={imageEl}>
 
-  {#if size || multiFiles.length === 0}
+  {#if size || !multiFiles}
     <MediaQuery query="(min-width: 800px)" let:matches>
-      <!-- {#if matches} -->
-      <!-- Desktop -->
-      <!-- <img
-          class="image__image"
-          {srcset}
-          {sizes}
-          {src}
-          alt={caption}
-          class:loaded />
-      {:else} -->
-      <!-- Phone -->
       <img
         class="image__image"
         class:loaded
@@ -296,7 +282,6 @@
     {/if}
   {:else}
     {#each multiFiles as slide}
-      {slide.loaded}
       <img
         class="image__image image__image--multi"
         class:loaded={slide.loaded}

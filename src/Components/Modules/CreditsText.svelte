@@ -16,7 +16,7 @@
     margin-bottom: 40px;
     font-family: $sans-stack;
     font-size: $small;
-    line-height: 1.2em;
+    line-height: 1.4em;
     overflow: hidden;
 
     p {

@@ -22,9 +22,11 @@
   import Slideshow from "../Components/Modules/Slideshow.svelte";
   import Portal from "../Components/Modules/Portal.svelte";
 
-  export let endpoint;
+  export let endpoint = '';
+  export let slug = '';
+  export let location = {};
 
-  let currentSlug = slug;
+  // let currentSlug = slug;
 
   let post = loadData();
 
@@ -46,13 +48,9 @@
   // console.log(slug);
 
   async function loadData() {
-    // console.log(endpoint + slug + ".json");
+    console.log(endpoint);
     const res = await fetch(endpoint);
     const post = await res.json();
-
-    // console.log("post");
-    // console.log(post);
-    // window.scrollTo(0, 0);
 
     return post;
   }

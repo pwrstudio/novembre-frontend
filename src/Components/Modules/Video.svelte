@@ -1,7 +1,8 @@
 <script>
   export let file = "";
-  export let url = "";
-  export let autoplay = false;
+  export let url = false;
+  export let embed = "";
+  export let autoplay = true;
   export let controls = true;
   export let loop = false;
   export let muted = false;
@@ -12,12 +13,19 @@
 
   // let time = 0;
   let time = 0;
-  let duration;
+  let duration = 0;
   let paused = true;
   let showControls = true;
   let showControlsTimeout;
   let controlsTimeoutDuration = 2500;
   let unPlayed = true;
+  let post = false;
+
+  // url = file;
+
+  console.log("asfdasd");
+  console.log(url);
+  console.log(embed);
 
   // From => https://svelte.dev/tutorial/media-elements
   function handleMousemove(e) {
@@ -69,6 +77,23 @@
 
     return `${minutes}:${seconds}`;
   }
+
+  // *** FUNCTIONS
+  async function loadData(endpoint) {
+    const res = await fetch(endpoint);
+    const post = await res.json();
+    console.log(post);
+    return post;
+  }
+
+  if (embed) {
+    let endpoint =
+      "http://iframe.ly/api/iframely?url=" +
+      embed +
+      "&api_key=c64ca8b7ee9ebe2bc48ff5";
+
+    post = loadData(endpoint);
+  }
 </script>
 
 <style lang="scss">
@@ -103,11 +128,20 @@
 
     &--inline {
       height: auto;
-      width: 800px;
-      margin-left: auto;
-      margin-right: auto;
-      max-width: 95vw;
+      width: 100%;
+      height: $full-height;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
       // margin-bottom: 5rem;
+
+      .inner {
+        width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 95vw;
+      }
 
       video {
         width: 100%;
@@ -197,59 +231,67 @@
   class:video--inline={size == 'proportional'}
   style="background-color: {backgroundColor}">
 
-  <video
-    class="video-player"
-    preload="metadata"
-    {autoplay}
-    {loop}
-    {muted}
-    poster={posterImage}
-    src={url + '#t=0.1'}
-    on:mousemove={handleMousemove}
-    on:mousedown={handleMousedown}
-    bind:currentTime={time}
-    bind:duration
-    bind:paused />
-  {#if posterImage && unPlayed}
-    <img src={posterImage} class="poster-image" alt="Video player" />
-  {/if}
+  {#if url}
+    <video
+      class="video-player"
+      preload="metadata"
+      {autoplay}
+      {loop}
+      {muted}
+      poster={posterImage}
+      src={url}
+      on:mousemove={handleMousemove}
+      on:mousedown={handleMousedown}
+      bind:currentTime={time}
+      bind:duration
+      bind:paused />
+    {#if posterImage && unPlayed}
+      <img src={posterImage} class="poster-image" alt="Video player" />
+    {/if}
 
-  {#if controls && !autoplay}
-    <div class="controls" style="opacity: {duration && showControls ? 1 : 0}">
+    {#if controls && !autoplay}
+      <div class="controls" style="opacity: {duration && showControls ? 1 : 0}">
 
-      <!-- <div class="time">{format(time)} / {format(duration)}</div> -->
-      <progress value={time / duration || 0} />
+        <!-- <div class="time">{format(time)} / {format(duration)}</div> -->
+        <progress value={time / duration || 0} />
 
-      <div class="buttons">
-        {#if paused}
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="0.5"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="feather feather-play play">
-            <polygon points="5 3 19 12 5 21 5 3" />
-          </svg>
-        {:else}
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="0.5"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="feather feather-pause pause">
-            <rect x="6" y="4" width="4" height="16" />
-            <rect x="14" y="4" width="4" height="16" />
-          </svg>
-        {/if}
+        <div class="buttons">
+          {#if paused}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="0.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="feather feather-play play">
+              <polygon points="5 3 19 12 5 21 5 3" />
+            </svg>
+          {:else}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="0.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="feather feather-pause pause">
+              <rect x="6" y="4" width="4" height="16" />
+              <rect x="14" y="4" width="4" height="16" />
+            </svg>
+          {/if}
+        </div>
+
       </div>
-
-    </div>
+    {/if}
+  {:else if embed}
+    {#await post then post}
+      <div class="inner">
+        {@html post.html}
+      </div>
+    {/await}
   {/if}
 
 </div>

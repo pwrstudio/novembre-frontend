@@ -3,6 +3,7 @@
   import { onMount } from "svelte";
 
   export let title;
+  export let location = {};
 
   onMount(async () => {
     window.scrollTo(0, 0);

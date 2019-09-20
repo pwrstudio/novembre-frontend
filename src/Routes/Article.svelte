@@ -12,11 +12,13 @@
   // *** COMPONENTS
   import TaxList from "../Components/TaxList.svelte";
   import Footer from "../Components/Footer.svelte";
+  import Preview from "../Components/Preview.svelte";
 
   // *** MODULES
   import BodyText from "../Components/Modules/BodyText.svelte";
   import IntroductionText from "../Components/Modules/IntroductionText.svelte";
   import QuoteText from "../Components/Modules/QuoteText.svelte";
+  import CreditsText from "../Components/Modules/CreditsText.svelte";
   import Image from "../Components/Modules/Image.svelte";
   import Video from "../Components/Modules/Video.svelte";
   import Audio from "../Components/Modules/Audio.svelte";
@@ -27,9 +29,10 @@
   import { navigationStyle } from "../stores.js";
 
   // *** PROPS
-  export let slug;
-  export let endpoint;
+  export let slug = "";
+  export let endpoint = "";
   export let isEntertainment = false;
+  export let location = {};
 
   // *** VARIABLES
   let currentSlug = slug;
@@ -38,7 +41,6 @@
   // *** REACTIVE
   $: {
     if (slug !== currentSlug) {
-      // window.alert = "slug change";
       post = loadData();
       currentSlug = slug;
     }
@@ -48,10 +50,8 @@
   async function loadData() {
     const res = await fetch(endpoint + slug + ".json");
     const post = await res.json();
-
-    // console.log("post");
-    // console.log(post);
-
+    console.log(post.header.fieldSelection);
+    window.scrollTo(10, 0);
     return post;
   }
 
@@ -59,9 +59,6 @@
 
   // *** ON MOUNT
   onMount(async () => {
-    // console.log("in articel");
-    // console.log(endpoint);
-    // console.log(slug);
     window.scrollTo(0, 0);
   });
 </script>
@@ -127,9 +124,9 @@
     font-weight: 300;
     line-height: 1em;
     text-transform: uppercase;
-    margin-bottom: 0px;
     line-height: 0.9em;
     margin-bottom: $small-margin;
+    margin-top: 20px;
 
     @include screen-size("small") {
       font-size: $mobile_large;
@@ -144,18 +141,8 @@
     <!-- HEADER MEDIA -->
     <div class="article__header">
       {#if !isEntertainment}
-        {#if post.header.previewType === 'image' || post.header.previewType == 'slideshow'}
-          <Image
-            url={post.header.previewImage.url}
-            caption={post.header.title}
-            isListing={true} />
-        {/if}
-
-        {#if post.header.previewType === 'video'}
-          <Video />
-        {/if}
+        <Preview {post} isHeader={true} />
       {/if}
-
     </div>
 
     <!-- DATE & TAGS -->
@@ -174,13 +161,15 @@
     </h1>
 
     <!-- MAIN CONTENT -->
-    {#each post.header.fieldSelection as { select, body, introduction, quote, image, video, audio, slideshow, portal }}
+    {#each post.header.fieldSelection as { select, body, introduction, quote, credits, image, video, audio, slideshow, portal }}
       {#if select == 'body'}
         <BodyText {...body} {isEntertainment} />
       {:else if select == 'introduction'}
         <IntroductionText {...introduction} />
       {:else if select == 'quote'}
         <QuoteText {...quote} />
+      {:else if select == 'credits'}
+        <CreditsText {...credits} />
       {:else if select == 'image'}
         <Image {...image} />
       {:else if select == 'video'}
