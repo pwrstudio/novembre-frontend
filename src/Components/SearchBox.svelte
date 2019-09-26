@@ -1,5 +1,6 @@
 <script>
   import { onMount } from "svelte";
+  import MediaQuery from "svelte-media-query";
 
   let searchActive = false;
   let searchQuery = "";
@@ -86,7 +87,7 @@
       top: -5px;
 
       @include screen-size("small") {
-        width: 90%;
+        width: 90vw;
         font-size: $mobile_large;
         display: none;
         border-bottom: 0;
@@ -175,15 +176,17 @@
       SEARCH
     </span>
   {/if}
-  <input
-    ref="search"
-    type="text"
-    class="search__input"
-    style="width:{inputWidth}px"
-    class:search__input--active={searchActive}
-    bind:value={searchQuery}
-    bind:this={searchField}
-    on:keypress={e => (e.keyCode === 13 ? submitSearch() : false)} />
+  <MediaQuery query="(min-width: 800px)" let:matches>
+    <input
+      ref="search"
+      type="text"
+      class="search__input"
+      style={!matches ? 'width:{inputWidth}px' : ''}
+      class:search__input--active={searchActive}
+      bind:value={searchQuery}
+      bind:this={searchField}
+      on:keypress={e => (e.keyCode === 13 ? submitSearch() : false)} />
+  </MediaQuery>
 
   {#if searchActive}
     <span class="search__submit" on:click={submitSearch}>SEARCH</span>

@@ -26,7 +26,7 @@
     //   textEl.getBoundingClientRect().top
     // );
     if (textEl.getBoundingClientRect().top < 40) {
-      console.log("swtich");
+      // console.log("switch");
       navigationStyle.set(false);
     }
   }
@@ -38,12 +38,12 @@
       entries.forEach(entry => {
         // Element is in view
         if (entry.intersectionRatio > 0) {
-          console.log("TEXT IN VIEW");
+          // console.log("TEXT IN VIEW");
           window.addEventListener("scroll", throttledCheck);
         }
         // Element is out of view
         if (entry.intersectionRatio <= 0) {
-          console.log("OUT OF VIEW: destroy:");
+          // console.log("OUT OF VIEW: destroy:");
           window.removeEventListener("scroll", throttledCheck);
         }
       });
@@ -53,13 +53,11 @@
 
   // *** ON MOUNT
   onMount(async () => {
-    // console.log(post);
     observer.observe(textEl);
   });
 
   // *** ON DESTROY
   onDestroy(() => {
-    // console.log("DESTROYYYY");
     window.removeEventListener("scroll", throttledCheck);
   });
 </script>
@@ -89,6 +87,7 @@
 
     @include screen-size("small") {
       font-size: $mobile_body;
+      margin-bottom: 0px;
     }
 
     a {

@@ -8,7 +8,6 @@
   // *** IMPORTS
   import { onMount } from "svelte";
   import { fade } from "svelte/transition";
-  import { Router, links } from "svelte-routing";
   import Flickity from "flickity";
 
   // *** COMPONENTS
@@ -24,15 +23,6 @@
   let scrollListEl;
   const dispatch = createEventDispatcher();
   let taxArray = Array.from(Object.keys(taxlist[taxname]));
-  let options = {
-    wrapAround: true,
-    prevNextButtons: false,
-    pageDots: false,
-    draggable: true,
-    autoPlay: false,
-    selectedAttraction: 0.028,
-    friction: 0.28
-  };
 
   // *** FUNCTIONS
   function slugify(string) {
@@ -56,8 +46,6 @@
 
   // TODO: change speed for mobile
   const startTicker = function() {
-    // console.log("starting ticker");
-
     // Play with this value to change the speed
     let tickerSpeed = 0.7;
 
@@ -92,11 +80,16 @@
       draggable: true,
       prevNextButtons: false,
       pageDots: false,
-      selectedAttraction: 0.015,
-      friction: 0.25
+      // selectedAttraction: 0.025,
+      freeScrollFriction: 0.03
+      // friction: 0.85
     };
 
-    flickity = new Flickity(scrollListEl, options);
+    try {
+      flickity = new Flickity(scrollListEl, options);
+    } catch (err) {
+      Sentry.captureException(err);
+    }
     flickity.x = 0;
 
     scrollListEl.addEventListener("mouseenter", pause, false);
@@ -108,12 +101,24 @@
       isPaused = true;
     });
 
+    flickity.on("staticClick", function(
+      event,
+      pointer,
+      cellElement,
+      cellIndex
+    ) {
+      dispatch("changeCategory", {
+        newCategory: slugify(cellElement.dataset.tag),
+        newCategoryName: cellElement.dataset.tag
+      });
+    });
+
     update();
   };
 
   // TODO: improve padding algo...
   if (taxArray.length < 20) {
-    taxArray = [...taxArray, ...taxArray, ...taxArray, ...taxArray];
+    taxArray = [...taxArray, ...taxArray];
   }
 
   // *** ON MOUNT
@@ -133,6 +138,11 @@
 
     background: black;
     color: white;
+    opacity: 1;
+
+    &.hide {
+      opacity: 0;
+    }
 
     &__slide {
       display: inline-block;
@@ -148,7 +158,7 @@
       span:hover,
       span:active,
       span.active {
-        border-bottom: 1px solid white;
+        text-decoration: underline;
       }
 
       span.active {
@@ -165,7 +175,7 @@
         font-style: italic;
         font-size: $body;
         line-height: 45px;
-        height: 45px;
+        height: 50px;
       }
 
       &--large {
@@ -193,15 +203,9 @@
     taxonomy-scroller__slideshow--large"
     bind:this={scrollListEl}>
     {#each taxArray as t}
-      <div class="carousel-cell taxonomy-scroller__slide">
+      <div data-tag={t} class="carousel-cell taxonomy-scroller__slide">
         <span
           class:active={activeCategory === slugify(t)}
-          on:click={e => {
-            dispatch('changeCategory', {
-              newCategory: slugify(t),
-              newCategoryName: t
-            });
-          }}
           class="taxonomy__item taxonomy-scroller__link">
           {t}
         </span>

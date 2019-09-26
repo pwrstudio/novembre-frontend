@@ -1,13 +1,21 @@
 <script>
+  // # # # # # # # # # # # # #
+  //
+  //  Text: Credits
+  //
+  // # # # # # # # # # # # # #
+
+  // *** IMPORT
   export let text;
 
-  console.log(text);
+  // *** STORES
+  import { navigationStyle, menuActiveGlobal } from "../../stores.js";
 </script>
 
 <style lang="scss">
   @import "../../variables.scss";
 
-  .body-text {
+  .credits-text {
     height: auto;
     width: 800px;
     margin-left: auto;
@@ -37,24 +45,15 @@
         border-bottom: 1px solid transparent;
       }
     }
-  }
 
-  .entertainment {
-    font-family: $sans-stack;
-  }
+    transition: opacity $transition;
 
-  a {
-    color: currentColor;
-    text-decoration: none;
-    border-bottom: 1px solid $black;
-    transition: border 0.3s $transition;
-
-    &:hover {
-      border-bottom: 1px solid transparent;
+    &.hide-text {
+      opacity: 0;
     }
   }
 </style>
 
-<div class="body-text">
+<div class="credits-text" class:hide-text={$menuActiveGlobal}>
   {@html text}
 </div>

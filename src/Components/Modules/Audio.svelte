@@ -1,4 +1,10 @@
 <script>
+  // # # # # # # # # # # # # #
+  //
+  //  Audio module
+  //
+  // # # # # # # # # # # # # #
+
   export let file = "";
   export let url = "";
   export let caption = "Novembre";

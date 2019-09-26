@@ -14,10 +14,14 @@
     fetch(
       "https://testing.novembre.global/user/themes/novembre/dist/php/subscribe.php?email=" +
         emailAddress
-    ).then(function(response) {
-      // console.log(response);
-      success = true;
-    });
+    )
+      .then(function(response) {
+        // console.log(response);
+        success = true;
+      })
+      .catch(err => {
+        Sentry.captureException(err);
+      });
   }
 
   onMount(async () => {

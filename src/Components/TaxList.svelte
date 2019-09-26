@@ -6,7 +6,7 @@
   // # # # # # # # # # # # # #
 
   // *** IMPORTS
-  import { Router, Link, links } from "svelte-routing";
+  import { Router, links, Link } from "svelte-routing";
 
   // *** PROPS
   export let taxonomy;
@@ -45,8 +45,13 @@
 
         &:hover {
           cursor: auto;
-          border-bottom: 1px solid transparent;
+          border-bottom: 1px solid transparent !important;
         }
+      }
+
+      @include screen-size("small") {
+        margin-bottom: $small-margin;
+        margin-right: 10px;
       }
     }
 

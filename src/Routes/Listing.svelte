@@ -15,7 +15,7 @@
   import Footer from "../Components/Footer.svelte";
 
   // *** STORES
-  import { pageLocation } from "../stores.js";
+  import { pageLocation, menuActiveGlobal } from "../stores.js";
 
   // *** PROPS
   export let title = "";
@@ -56,28 +56,19 @@
   }
 
   // *** FUNCTIONS
-  function changeCategory(e) {
-    // console.dir(e.detail.newCategory);
-    // console.dir(e.detail.newCategoryName);
-    activeCategory = e.detail.newCategory;
+  function changeCategory(newCategory) {
+    activeCategory = newCategory;
     history.replaceState(null, null, "#" + activeCategory);
     observer.disconnect();
     items = [];
     finishedLoading = false;
-    loadData(0, e.detail.newCategoryName, title.toLowerCase());
-    setTimeout(() => {
-      finishedLoading = true;
-    }, 1000);
+    loadData(0, newCategory, title.toLowerCase());
   }
-
   const observer = new IntersectionObserver(
     entries => {
       // console.log("LOAD TRIGGERD");
       entries.forEach(entry => {
         if (entry.intersectionRatio > 0 && firstLoad) {
-          // console.log(entry.intersectionRatio);
-          // console.log(meta.nextindex);
-          // console.log(meta.lastindex);
           if (meta.nextindex < meta.lastindex) {
             loadData(meta.nextindex);
           } else {
@@ -93,28 +84,22 @@
   );
 
   function repositionSentinel() {
-    // console.log("moving sentinel....");
-    // console.dir(postsContainerEl);
-    // console.dir(sentinel);
     if (postsContainerEl && sentinel) {
       let fourthElementFromEnd = postsContainerEl.querySelector(
         ".preview:nth-last-child(4)"
       );
-      // console.dir(fourthElementFromEnd);
       if (fourthElementFromEnd) {
-        // fourthElementFromEnd.classList.add("sentinel");
         postsContainerEl.insertBefore(sentinel, fourthElementFromEnd);
       }
     }
   }
 
-  // window.onpopstate = function(event) {
-  //   console.dir(event);
-  // };
+  if (location.hash) {
+    console.dir(location.hash);
+    loadData(0, location.hash.substr(1), title.toLowerCase());
+  }
 
-  // window.addEventListener("hashchange", e => {
-  //   console.dir(e);
-  // });
+  loadData(index, query);
 
   function loadData(i, q, tax) {
     // console.log("q", q);
@@ -140,17 +125,21 @@
         taxlist = arr.taxlist;
         firstLoad = true;
         setTimeout(repositionSentinel, 500);
+      })
+      .catch(err => {
+        Sentry.captureException(err);
       });
   }
 
-  loadData(index, query);
-
   // *** ON MOUNT
   onMount(async () => {
-    // console.log("mounted");
     pageLocation.set(title);
     window.scrollTo(0, 0);
-    observer.observe(sentinel);
+    try {
+      observer.observe(sentinel);
+    } catch (err) {
+      Sentry.captureException(err);
+    }
   });
 </script>
 
@@ -160,12 +149,12 @@
   .sentinel {
     width: 100%;
     height: 1px;
-    background: transparent;
+    background: black;
   }
 
   .listing {
     width: 100%;
-    padding-top: 80px;
+    // padding-top: 80px;
     min-height: 80vh;
     overflow: hidden;
   }
@@ -184,6 +173,11 @@
     line-height: 0.8em;
     padding-bottom: $small-margin;
     padding-top: $small-margin;
+    position: absolute;
+    top: 80px;
+    width: 100%;
+    left: 0;
+    z-index: 99;
 
     @include screen-size("small") {
       font-size: $mobile_large;
@@ -225,13 +219,15 @@
 
 <div class="listing" class:landing={title === 'Landing'}>
 
-  {#if showTaxonomyScroller && firstLoad}
+  {#if showTaxonomyScroller && firstLoad && !$menuActiveGlobal}
     <div class="top-block" in:fade>
       <ScrollList
         taxname={title.toLowerCase()}
         {taxlist}
         {activeCategory}
-        on:changeCategory={changeCategory} />
+        on:changeCategory={e => {
+          changeCategory(e.detail.newCategory, e.detail.newCategoryName);
+        }} />
     </div>
   {/if}
 
@@ -249,8 +245,8 @@
 
   <!-- {currentHash} -->
   <div class="listing__posts" bind:this={postsContainerEl}>
-    {#each items as post}
-      <Preview {post} />
+    {#each items as post, i}
+      <Preview {post} first={i == 0 ? true : false} />
     {/each}
   </div>
 

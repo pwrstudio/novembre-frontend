@@ -1,33 +1,46 @@
 <script>
-  export let file = "";
-  export let url = false;
-  export let embed = "";
+  // # # # # # # # # # # # # #
+  //
+  //  Video module
+  //
+  // # # # # # # # # # # # # #
+
+  // *** IMPORT
+  import { onMount } from "svelte";
+
+  // *** PROPS
+  export let url = "";
   export let autoplay = true;
-  export let controls = true;
-  export let loop = false;
-  export let muted = false;
-  export let caption = "Novembre";
+  export let posterImage = "";
+  export let loop = true;
+  export let muted = true;
+  export let controls = false;
+  export let caption = "";
   export let size = true;
   export let backgroundColor = false;
-  export let posterImage = false;
 
-  // let time = 0;
+  // *** DOM REFERENCES
+  let videoEl = {};
+
+  // *** CONSTANTS
+  const VIDEO_ROOT = "https://res.cloudinary.com/pwr/video/upload/";
+  const REMOTE_FOLDER = "novembre";
+
+  // *** VARIABLES
   let time = 0;
   let duration = 0;
   let paused = true;
   let showControls = true;
   let showControlsTimeout;
   let controlsTimeoutDuration = 2500;
-  let unPlayed = true;
-  let post = false;
+  let post = {};
+  let videoUrl = "";
+  let videoSrc = "";
+  let posterImageSrc = "";
 
-  // url = file;
+  // *** FUNCTIONS
 
-  console.log("asfdasd");
-  console.log(url);
-  console.log(embed);
-
-  // From => https://svelte.dev/tutorial/media-elements
+  // --- Video controls
   function handleMousemove(e) {
     // Make the controls visible, but fade out after
     // 2.5 seconds of inactivity
@@ -46,13 +59,9 @@
   }
 
   function handleMousedown(e) {
-    // we can't rely on the built-in click event, because it fires
-    // after a drag — we have to listen for clicks ourselves
-
     function handleMouseup() {
       if (paused) {
         e.target.play();
-        unPlayed = false;
       } else {
         e.target.pause();
       }
@@ -78,22 +87,20 @@
     return `${minutes}:${seconds}`;
   }
 
-  // *** FUNCTIONS
-  async function loadData(endpoint) {
-    const res = await fetch(endpoint);
-    const post = await res.json();
-    console.log(post);
-    return post;
-  }
+  // --- Build urls
+  videoUrl = url.replace("https://testing.novembre.global", "");
+  videoSrc = VIDEO_ROOT + REMOTE_FOLDER + encodeURI(videoUrl);
+  posterImageSrc = videoSrc.substring(0, videoSrc.length - 4) + ".jpg";
 
-  if (embed) {
-    let endpoint =
-      "http://iframe.ly/api/iframely?url=" +
-      embed +
-      "&api_key=c64ca8b7ee9ebe2bc48ff5";
-
-    post = loadData(endpoint);
-  }
+  // *** ON MOUNT
+  onMount(async () => {
+    let promise = videoEl.play();
+    if (promise !== undefined) {
+      promise.catch(err => {
+        Sentry.captureException(err);
+      });
+    }
+  });
 </script>
 
 <style lang="scss">
@@ -110,14 +117,13 @@
     font-family: $sans-stack;
     font-size: $small;
 
-    margin-bottom: 20px;
+    // margin-bottom: 20px;
     position: relative;
-
-    // background: green;
 
     &--full {
       height: $full-height;
       width: 100vw;
+      pointer-events: none;
 
       video {
         height: 100%;
@@ -133,8 +139,6 @@
       display: flex;
       justify-content: center;
       align-items: center;
-
-      // margin-bottom: 5rem;
 
       .inner {
         width: 800px;
@@ -213,16 +217,6 @@
       background-color: rgba(0, 0, 0, 1);
     }
   }
-
-  .poster-image {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    pointer-events: none;
-  }
 </style>
 
 <div
@@ -231,67 +225,55 @@
   class:video--inline={size == 'proportional'}
   style="background-color: {backgroundColor}">
 
-  {#if url}
-    <video
-      class="video-player"
-      preload="metadata"
-      {autoplay}
-      {loop}
-      {muted}
-      poster={posterImage}
-      src={url}
-      on:mousemove={handleMousemove}
-      on:mousedown={handleMousedown}
-      bind:currentTime={time}
-      bind:duration
-      bind:paused />
-    {#if posterImage && unPlayed}
-      <img src={posterImage} class="poster-image" alt="Video player" />
-    {/if}
+  <video
+    class="video-player"
+    preload="metadata"
+    {loop}
+    {muted}
+    poster={posterImageSrc}
+    src={videoSrc}
+    on:mousemove={handleMousemove}
+    on:mousedown={handleMousedown}
+    bind:currentTime={time}
+    bind:duration
+    bind:paused
+    bind:this={videoEl} />
+  {#if !autoplay}
+    <div class="controls" style="opacity: {duration && showControls ? 1 : 0}">
 
-    {#if controls && !autoplay}
-      <div class="controls" style="opacity: {duration && showControls ? 1 : 0}">
+      <!-- <div class="time">{format(time)} / {format(duration)}</div> -->
+      <progress value={time / duration || 0} />
 
-        <!-- <div class="time">{format(time)} / {format(duration)}</div> -->
-        <progress value={time / duration || 0} />
-
-        <div class="buttons">
-          {#if paused}
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="0.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="feather feather-play play">
-              <polygon points="5 3 19 12 5 21 5 3" />
-            </svg>
-          {:else}
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="0.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="feather feather-pause pause">
-              <rect x="6" y="4" width="4" height="16" />
-              <rect x="14" y="4" width="4" height="16" />
-            </svg>
-          {/if}
-        </div>
-
+      <div class="buttons">
+        {#if paused}
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="0.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="feather feather-play play">
+            <polygon points="5 3 19 12 5 21 5 3" />
+          </svg>
+        {:else}
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="0.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="feather feather-pause pause">
+            <rect x="6" y="4" width="4" height="16" />
+            <rect x="14" y="4" width="4" height="16" />
+          </svg>
+        {/if}
       </div>
-    {/if}
-  {:else if embed}
-    {#await post then post}
-      <div class="inner">
-        {@html post.html}
-      </div>
-    {/await}
+
+    </div>
   {/if}
 
 </div>

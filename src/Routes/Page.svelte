@@ -1,9 +1,17 @@
 <script>
+  // # # # # # # # # # # # # #
+  //
+  //  Page
+  //
+  // # # # # # # # # # # # # #
+
+  // *** IMPORTS
   import { fade } from "svelte/transition";
   import { quintOut } from "svelte/easing";
   import { onMount } from "svelte";
 
-    import { navigationStyle } from "../stores.js";
+  // STORES
+  import { navigationStyle } from "../stores.js";
 
   // COMPONENTS
   import TaxList from "../Components/TaxList.svelte";
@@ -22,15 +30,14 @@
   import Slideshow from "../Components/Modules/Slideshow.svelte";
   import Portal from "../Components/Modules/Portal.svelte";
 
+  // PROPS
   export let endpoint = '';
   export let slug = '';
   export let location = {};
 
+  // VARIABLES
   // let currentSlug = slug;
-
   let post = loadData();
-
-  console.log(endpoint);
 
   navigationStyle.set(false);
 
@@ -42,17 +49,14 @@
   //   }
   // }
 
-  // console.log("in articel");
-
-  // console.log(endpoint);
-  // console.log(slug);
-
   async function loadData() {
-    console.log(endpoint);
-    const res = await fetch(endpoint);
-    const post = await res.json();
-
-    return post;
+    try {
+      const res = await fetch(endpoint);
+      const post = await res.json();
+      return post;
+    } catch(err) {
+      Sentry.captureException(err);
+    }
   }
 
   onMount(async () => {
@@ -62,7 +66,6 @@
 
 <style lang="scss">
   @import "../variables.scss";
-
 
   .stockists {
     column-count: 3;

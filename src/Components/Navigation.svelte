@@ -268,11 +268,11 @@
             <div class="navigation__logo" on:click={() => (menuActive = false)}>
               <Logo white={$navigationStyle} />
             </div>
-          {:else if $pageLocation === 'Landing'}
-            <!-- Menu is closed and we are on landing: scroll to top -->
-            <span class="navigation__logo" on:click={scroll}>
+            <!-- {:else if $pageLocation === 'Landing'}
+Menu is closed and we are on landing: scroll to top
+<span class="navigation__logo" on:click={scroll}>
               <Logo white={$navigationStyle} />
-            </span>
+            </span> -->
           {:else}
             <!-- Menu is closed and we are anywhere else than landing -->
             <a href="/" class="navigation__logo">

@@ -1,7 +1,14 @@
 <script>
+  // # # # # # # # # # # # # #
+  //
+  //  NOVEMBRE.GLOBAL
+  //
+  // # # # # # # # # # # # # #
+
+  // IMPORTS
+  import "intersection-observer";
   import { Router, Link, Route } from "svelte-routing";
   import Navigation from "./Components/Navigation.svelte";
-  import intersectionObserver from "intersection-observer";
 
   // ROUTES
   import Listing from "./Routes/Listing.svelte";
@@ -69,9 +76,18 @@
 <style lang="scss" global>
   @import "./variables.scss";
 
-  body,
   html {
     background: white;
+    padding: 0;
+    margin: 0;
+
+    &.entertainment {
+      // background: $grey;
+      background-color: $grey;
+    }
+  }
+
+  body {
     padding: 0;
     margin: 0;
     width: 100vw;
@@ -117,6 +133,19 @@
   em {
     font-family: $serif-stack;
     font-style: italic;
+  }
+
+  .credits-text {
+    a {
+      color: currentColor;
+      text-decoration: none;
+      border-bottom: 1px solid $black;
+      transition: border 0.3s $transition;
+
+      &:hover {
+        border-bottom: 1px solid transparent;
+      }
+    }
   }
 
   .carousel {
@@ -189,80 +218,6 @@
   }
 
   /*! Flickity v2.2.1 ------------------- */
-
-  /* Flickity fullscreen v1.0.1
-------------------------- */
-
-  .flickity-enabled.is-fullscreen {
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 100vw !important;
-    height: 100vh !important;
-    max-height: unset !important;
-    background: hsla(0, 0%, 0%, 1);
-    padding-bottom: 45px;
-    padding-top: 45px;
-    z-index: 10000;
-  }
-
-  .flickity-enabled.is-fullscreen .flickity-page-dots {
-    bottom: 10px;
-  }
-
-  .flickity-enabled.is-fullscreen .flickity-page-dots .dot {
-    background: white;
-  }
-
-  /* prevent page scrolling when flickity is fullscreen */
-  html.is-flickity-fullscreen {
-    overflow: hidden;
-  }
-
-  /* ---- flickity-fullscreen-button ---- */
-
-  .flickity-fullscreen-button {
-    position: absolute;
-    display: block;
-    right: $small-margin;
-    top: $small-margin;
-    width: 40px;
-    height: 40px;
-    color: white;
-    border: none;
-    outline: 0;
-    // background: url("data:image/svg+xml;utf8,<svg width='24' height='24' viewBox='002424' fill='none' stroke='white' stroke-width='2' class='featherfeather-maximize'><path d='M83h5a22000-22v3m180v5a22000-2-2h-3m018h3a220002-2v-3m316v3a2200022h3'></path></svg>");
-  }
-
-  // .flickity-button-icon {
-  //   display: none;
-  // }
-  /* right-to-left */
-  .flickity-rtl .flickity-fullscreen-button {
-    right: auto;
-    left: 10px;
-  }
-
-  .flickity-fullscreen-button-exit {
-    display: none;
-    // background: url("data:image/svg+xml;utf8,<svg width='24' height='24' viewBox='002424' fill='none' stroke='white' stroke-width='2' class='featherfeather-minimize'><path d='M83v3a22001-22h3m180h-3a22001-2-2v3m018v-3a220012-2h3m316h3a2200122v3'></path></svg>");
-  }
-
-  .flickity-enabled.is-fullscreen .flickity-fullscreen-button-exit {
-    display: block;
-  }
-
-  .flickity-enabled.is-fullscreen .flickity-fullscreen-button-view {
-    display: none;
-  }
-
-  .flickity-fullscreen-button .flickity-button-icon {
-    position: absolute;
-    width: 16px;
-    height: 16px;
-    left: 4px;
-    top: 4px;
-  }
 </style>
 
 <Navigation />

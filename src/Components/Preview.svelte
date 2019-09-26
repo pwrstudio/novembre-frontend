@@ -16,6 +16,8 @@
 
   // *** MODULES
   import Video from "./Modules/Video.svelte";
+  import Embed from "./Modules/Embed.svelte";
+  import Multi from "./Modules/Multi.svelte";
   import Image from "./Modules/Image.svelte";
   import Slideshow from "./Modules/Slideshow.svelte";
 
@@ -25,115 +27,53 @@
   // *** PROPS
   export let post = {};
   export let isHeader = false;
+  export let first = false;
+
+  // *** DOM REFERENCE
+  let previewEl = {};
+
+  // *** CONSTANTS
+  let VIDEO_ROOT = "https://res.cloudinary.com/pwr/video/upload/";
+  let REMOTE_FOLDER = "novembre";
 
   // *** VARIABLES
-  let previewEl = {};
   let active = false;
-  let topOffset = 0;
   let elementHeight = 0;
   let lastScrollY = 0;
   let loaded = false;
-
-  // *** FUNCTIONS
-  const observer = new IntersectionObserver(
-    entries => {
-      entries.forEach(entry => {
-        topOffset = previewEl.getBoundingClientRect().top;
-
-        // console.log(
-        //   post.header.htmlTitle.title.substring(0, 6),
-        //   topOffset,
-        //   entry.intersectionRatio
-        // );
-
-        if (entry.intersectionRatio > 0.9) {
-          // console.log(
-          //   "+++++",
-          //   "TITLE:",
-          //   post.header.htmlTitle.title.substring(0, 6),
-          //   "RATIO:",
-          //   entry.intersectionRatio,
-          //   "TOP OFFSET:",
-          //   previewEl.getBoundingClientRect().top,
-          //   "WINDOW HEIGHT:",
-          //   window.innerHeight,
-          //   "ELEMENT HEIGHT:",
-          //   previewEl.offsetHeight,
-          //   "SCROLL Y:",
-          //   window.scrollY,
-          //   "LAST SCROLL:",
-          //   lastScrollY,
-          //   "PAGE OFFSET:",
-          //   window.pageYOffset
-          //   // Math.round(previewEl.getBoundingClientRect().top) <
-          //   //   previewEl.offsetHeight / 2
-          // );
-
-          // HIT TOP GOING DOWN
-          if (topOffset < 0) {
-            // console.warn(
-            //   post.header.htmlTitle.title.substring(0, 6),
-            //   "HIT TOP GOING DOWN",
-            //   isInView
-            // );
-            navigationStyle.set(!post.header.previewColor);
-          }
-        }
-
-        if (entry.intersectionRatio < 0.1 && topOffset < window.innerHeight) {
-          // console.log(
-          //   "-------",
-          //   "TITLE:",
-          //   post.header.htmlTitle.title.substring(0, 6),
-          //   "RATIO:",
-          //   entry.intersectionRatio,
-          //   "TOP OFFSET:",
-          //   Math.round(previewEl.getBoundingClientRect().top),
-          //   "WINDOW HEIGHT:",
-          //   window.innerHeight,
-          //   "ELEMENT HEIGHT:",
-          //   previewEl.offsetHeight,
-          //   "SCROLL Y:",
-          //   window.scrollY,
-          //   "LAST SCROLL:",
-          //   lastScrollY,
-          //   "PAGE OFFSET:",
-          //   window.pageYOffset
-          //   // Math.round(previewEl.getBoundingClientRect().top) <
-          //   //   previewEl.offsetHeight / 2
-          // );
-
-          if (window.scrollY < lastScrollY) {
-            // console.warn(
-            //   post.header.htmlTitle.title.substring(0, 6),
-            //   "HIT BOTTOM GOING UP"
-            // );
-            navigationStyle.set(!post.header.previewColor);
-          }
-        }
-
-        lastScrollY = window.scrollY;
-      });
-    },
-    { threshold: [0, 1] }
-  );
+  let videoUrl = "";
+  let videoSrc = "";
+  let elementStyles =
+    (post.header.backgroundColor
+      ? "background-color:" + post.header.backgroundColor
+      : "") +
+    (post.header.customTextColor ? "color:" + post.header.customTextColor : "");
 
   // *** ON MOUNT
   onMount(async () => {
-    // elementHeight = previewEl.offsetHeight;
-    // console.log(elementHeight);
-    console.log(post);
     imagesLoaded(previewEl, instance => {
-      // console.log(instance);
       loaded = true;
-      // previewEl.classList.add("loaded");
     });
-    observer.observe(previewEl);
-  });
 
-  // *** ON DESTROY
-  onDestroy(() => {
-    observer.disconnect();
+    var inview = new Waypoint.Inview({
+      element: previewEl,
+      enter: function(direction) {
+        navigationStyle.set(!post.header.previewColor);
+        console.log(
+          "ENTER",
+          post.header.htmlTitle.title.substring(0, 12),
+          direction
+        );
+      },
+      exit: function(direction) {
+        console.log(
+          "EXIT",
+          post.header.htmlTitle.title.substring(0, 12),
+          direction
+        );
+        navigationStyle.set(!post.header.previewColor);
+      }
+    });
   });
 </script>
 
@@ -149,9 +89,6 @@
     opacity: 0;
     overflow: hidden;
 
-    max-height: $full-height;
-    // transition: opacity 0.5s $transition;
-
     &__tags {
       position: absolute;
       top: 0;
@@ -164,6 +101,10 @@
       opacity: 1;
 
       transition: opacity 0.3 $transition;
+
+      &.bottom-tags {
+        position: static;
+      }
     }
 
     &__title {
@@ -199,8 +140,8 @@
         left: unset;
         bottom: unset;
         // background: purple;
-        margin-top: 80px;
-        margin-bottom: 80px;
+        // margin-top: 80px;
+        // margin-bottom: 80px;
         margin-left: $small-margin;
       }
 
@@ -251,14 +192,25 @@
     }
 
     &.hide-text {
-      mix-blend-mode: multiply;
       .preview__title,
       .preview__tags {
         transition: opacity 0.3 $transition;
         opacity: 0;
       }
+    }
 
-      // transition: filter 0.3 $transition;
+    &--multi {
+      &.first {
+        padding-top: 80px;
+      }
+      &.header {
+        height: 100vh;
+      }
+    }
+    &--text {
+      &.first {
+        padding-top: 80px;
+      }
     }
   }
 
@@ -266,10 +218,10 @@
     opacity: 1;
   }
 
-  .preview__slide {
-    height: calc(100vh - 80px);
-    overflow: hidden;
-  }
+  // .preview__slide {
+  //   height: $
+  //   overflow: hidden;
+  // }
 </style>
 
 <Router>
@@ -278,78 +230,69 @@
     class:loaded
     class:preview--white={!post.header.previewColor}
     class:hide-text={$menuActiveGlobal}
-    style="background-color: {post.header.backgroundColor}"
+    class:first
+    class:header={isHeader}
+    style={elementStyles}
     bind:this={previewEl}
     use:links>
 
-    <!-- TAGS: ON TOP
-    {#if post.header.taxonomy && post.header.previewType != 'text'}
-      <MediaQuery query="(min-width: 800px)" let:matches>
-        {#if matches}
-          <div class="preview__tags">
-            <TaxList
-              taxonomy={post.header.taxonomy}
-              white={post.header.previewColor} />
-          </div>
-        {/if}
-      </MediaQuery>
-    {/if} -->
+    <!-- TAGS -->
+    {#if post.header.taxonomy && !isHeader && !first}
+      <!-- <MediaQuery query="(min-width: 800px)" let:matches> -->
+      <!-- {#if matches} -->
+      <div
+        class="preview__tags"
+        class:bottom-tags={post.header.previewType == 'multi' || post.header.previewType == 'text'}>
+        <TaxList
+          taxonomy={post.header.taxonomy}
+          white={post.header.previewColor} />
+      </div>
+      <!-- {/if} -->
+      <!-- </MediaQuery> -->
+    {/if}
 
     <a href="/{post.header.parent}/{post.header.slug}">
 
       <!-- IMAGE -->
-      {#if post.header.previewType == 'image'}
+      {#if post.header.previewType == 'image' && post.header.previewImage && post.header.previewImage.url}
         <Image
           size={post.header.previewSize}
           url={post.header.previewImage.url}
-          multiFiles={post.header.previewSlideshow}
           caption={post.header.htmlTitle.fullTitle}
           {loaded}
           isListing={true} />
-      {/if}
 
-      <!-- VIDEO -->
-      {#if post.header.previewType == 'video'}
+        <!-- MULTI IMAGE -->
+      {:else if post.header.previewType == 'multi'}
+        <Multi files={post.header.previewMulti} {loaded} />
+
+        <!-- VIDEO -->
+      {:else if post.header.previewType == 'video'}
         <Video
-          file={post.header.previewVideo.file}
           url={post.header.previewVideo.url}
           caption={post.header.title}
           autoplay={true}
           loop={true}
           muted={true} />
-      {/if}
 
-      <!-- SLIDESHOW -->
-      {#if post.header.previewType == 'slideshow'}
-        <Slideshow slides={post.header.previewSlideshow} isPreview={true} />
-      {/if}
+        <!-- VIDEO -->
+      {:else if post.header.previewType == 'embed'}
+        <Embed url={post.header.previewEmbed.url} caption={post.header.title} />
 
-      <!-- TEXT -->
-      {#if post.header.previewType == 'text' && !isHeader}
-        <!-- <div class="preview__text"> -->
-        <!-- <blockquote class="preview__quote">
-            {post.header.previewText}
-          </blockquote> -->
-        <!-- </div> -->
-      {/if}
+        <!-- SLIDESHOW -->
+      {:else if post.header.previewType == 'slideshow'}
+        <Slideshow
+          slides={post.header.previewSlideshow}
+          isPreview={true}
+          {first} />
 
-      <!-- TAGS -->
-      {#if post.header.taxonomy && !isHeader}
-        <MediaQuery query="(min-width: 800px)" let:matches>
-          {#if matches}
-            <div class="preview__tags">
-              <TaxList
-                taxonomy={post.header.taxonomy}
-                white={post.header.previewColor} />
-            </div>
-          {/if}
-        </MediaQuery>
-      {/if}
+        <!-- TEXT -->
+      {:else if post.header.previewType == 'text' && !isHeader}{/if}
 
       {#if !isHeader}
         <div
           class="preview__title preview__title--free"
-          class:preview__title--free={post.header.previewType == 'image' && !post.header.previewSize}
+          class:preview__title--free={post.header.previewType == 'multi'}
           class:preview__title--large-text={post.header.previewType == 'text'}>
           {@html post.header.htmlTitle.fullTitle}
         </div>

@@ -1,4 +1,11 @@
 <script>
+  // # # # # # # # # # # # # #
+  //
+  //  Text: Quote
+  //
+  // # # # # # # # # # # # # #
+
+  // *** IMPORT
   export let text;
 </script>
 
@@ -8,22 +15,28 @@
   .quote-text {
     width: 100%;
     height: auto;
-    font-family: $sans-stack;
-
     color: black;
+    height: auto;
+    min-height: 60vh;
+    width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 95vw;
+    margin-bottom: 5rem;
+    font-family: $serif-stack;
+    font-style: italic;
+    font-size: $large;
+    margin-bottom: 3rem;
+    line-height: 1em;
 
-    &__blockquote {
-      font-size: $xlarge;
-      line-height: 1em;
-      max-width: 80%;
-      text-transform: uppercase;
-      padding-top: 100px;
-      padding-bottom: 100px;
-      margin: 0;
+    @include screen-size("small") {
+      font-size: $mobile_large;
     }
   }
 </style>
 
-<div class="quote-text">
-  {@html text}
-</div>
+<blockquote class="quote-text">
+  <span>
+    {@html text}
+  </span>
+</blockquote>

@@ -17,7 +17,7 @@
     user-select: none;
     width: 100vw;
     z-index: 10;
-    background: white;
+    background: transparent;
     font-family: $sans-stack;
     padding-top: $small-margin;
     margin-bottom: -$small-margin;
@@ -26,7 +26,6 @@
     transition: none;
 
     @include screen-size("small") {
-      // padding-top: 40px;
       padding-bottom: $small-margin;
     }
 
@@ -37,7 +36,6 @@
 
     &__logo {
       display: block;
-      // background: red;
       @include screen-size("small") {
         position: relative;
         left: -1%;
@@ -117,47 +115,6 @@
         }
       }
     }
-
-    // &__link {
-    //   display: block;
-    //   font-size: $large;
-    //   color: black;
-    //   text-decoration: none;
-    //   font-weight: 300;
-    //   line-height: 1em;
-
-    //   &--left {
-    //     float: left;
-    //     margin-left: $small-margin;
-    //     &:hover {
-    //       font-family: $serif-stack;
-    //       font-size: $large + 10px;
-    //       // left: -2px;
-    //       font-style: italic;
-    //       top: 8px;
-    //       position: relative;
-    //       left: 3px;
-    //     }
-    //   }
-
-    //   &--right {
-    //     float: right;
-    //     margin-right: $small-margin;
-    //     &:hover {
-    //       font-family: $serif-stack;
-    //       font-size: $large + 10px;
-    //       // left: -2px;
-    //       font-style: italic;
-    //       top: 8px;
-    //       position: relative;
-    //       right: 3px;
-    //     }
-    //   }
-
-    //   @include screen-size("small") {
-    //     font-size: $mobile_large;
-    //   }
-    // }
   }
 </style>
 
@@ -167,6 +124,7 @@
     {#if matches}
       <a
         href="https://www.instagram.com/novembremagazine/"
+        rel="noreferrer"
         class="footer__link footer__link--left"
         target="_blank">
         <div class="footer__link--normal">INSTAGRAM</div>
