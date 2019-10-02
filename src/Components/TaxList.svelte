@@ -31,7 +31,7 @@
     &__item {
       display: inline-block;
       text-decoration: none;
-      margin-right: $small-margin;
+      margin-right: 10px;
       color: white;
       transition: border 0.3s $transition;
       border-bottom: 1px solid transparent;

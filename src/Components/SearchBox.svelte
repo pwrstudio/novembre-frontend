@@ -16,10 +16,8 @@
 
   const showSearchBox = () => {
     searchActive = true;
-    searchField.focus().select();
+    searchField.focus();
   };
-
-  // console.log(menuActive);
 
   $: {
     if (!menuActive) {
@@ -30,10 +28,7 @@
 
   function resizeInput() {
     submitWidth = openEl.offsetWidth;
-    // console.log(submitWidth);
-    inputWidth = window.innerWidth - submitWidth - 40; // Subtract margins
-    // console.log(inputWidth);
-    // console.log(window.innerWidth);
+    inputWidth = window.innerWidth - submitWidth - 60; // Subtract margins
   }
 
   const submitSearch = () => {
@@ -42,7 +37,6 @@
     } else {
       searchActive = false;
     }
-
     window.onresize = resizeInput;
   };
 
@@ -181,7 +175,7 @@
       ref="search"
       type="text"
       class="search__input"
-      style={!matches ? 'width:{inputWidth}px' : ''}
+      style={matches ? 'width:' + inputWidth + 'px' : ''}
       class:search__input--active={searchActive}
       bind:value={searchQuery}
       bind:this={searchField}

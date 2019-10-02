@@ -7,8 +7,8 @@
 
   // *** IMPORTS
   import { Router, links } from "svelte-routing";
+  // import { fade } from "svelte/transition";
   import MediaQuery from "svelte-media-query";
-  import { fade } from "svelte/transition";
 
   // *** COMPONENTS
   import Logo from "./Logo.svelte";
@@ -268,11 +268,10 @@
             <div class="navigation__logo" on:click={() => (menuActive = false)}>
               <Logo white={$navigationStyle} />
             </div>
-            <!-- {:else if $pageLocation === 'Landing'}
-Menu is closed and we are on landing: scroll to top
-<span class="navigation__logo" on:click={scroll}>
+          {:else if $pageLocation === 'Landing'}
+            <span class="navigation__logo" on:click={scroll}>
               <Logo white={$navigationStyle} />
-            </span> -->
+            </span>
           {:else}
             <!-- Menu is closed and we are anywhere else than landing -->
             <a href="/" class="navigation__logo">
@@ -296,13 +295,28 @@ Menu is closed and we are on landing: scroll to top
     </div>
 
     <menu class="navigation__menu">
+      <MediaQuery query="(max-width: 800px)" let:matches>
+        {#if matches}
+          <menuitem class="navigation__menu-item">
+
+            <a
+              href="/"
+              class="navigation__link"
+              on:click={() => (menuActive = !menuActive)}>
+              <div class="navigation__link--normal">FEED</div>
+              <div class="navigation__link--hover">FEED</div>
+            </a>
+          </menuitem>
+        {/if}
+      </MediaQuery>
 
       {#each menuItems as item}
         <menuitem class="navigation__menu-item">
           <a
             href={item.target}
             class="navigation__link"
-            on:click={() => (menuActive = !menuActive)}>
+            on:click={() => (menuActive = !menuActive)}
+            in:fade>
             <div class="navigation__link--normal">
               {@html item.title}
             </div>

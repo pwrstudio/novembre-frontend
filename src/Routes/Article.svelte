@@ -37,7 +37,6 @@
 
   // *** VARIABLES
   let currentSlug = slug;
-  let post = loadData();
 
   // *** REACTIVE
   $: {
@@ -53,7 +52,7 @@
       const res = await fetch(endpoint + slug + ".json");
       const post = await res.json();
       // console.log(post.header.fieldSelection);
-      window.scrollTo(10, 0);
+      window.scrollTo(0, 0);
       return post;
     } catch (err) {
       Sentry.captureException(err);
@@ -61,17 +60,18 @@
   }
 
   const scrollDown = () => {
-    if (post.header.previewType != "slideshow") {
-      try {
-        window.scrollTo({
-          top: 500,
-          behavior: "smooth"
-        });
-      } catch (err) {
-        Sentry.captureException(err);
-      }
+    try {
+      // console.log(post);
+      window.scrollTo({
+        top: 500,
+        behavior: "smooth"
+      });
+    } catch (err) {
+      Sentry.captureException(err);
     }
   };
+
+  let post = loadData();
 
   navigationStyle.set(false);
 
@@ -107,6 +107,14 @@
     background: white;
     // min-height: 160vh;
 
+    // &.dark-background {
+    //   background: black;
+    // }
+
+    // &.light-background {
+    //   background: white;
+    // }
+
     &.entertainment {
       padding-top: 100px;
       background: $grey;
@@ -141,7 +149,6 @@
       max-width: 90%;
       font-family: $sans-stack;
       margin-left: $small-margin;
-      overflow: hidden;
       opacity: 1;
 
       @include screen-size("small") {
@@ -188,10 +195,15 @@
 <svelte:body class:entertainment={isEntertainment} />
 
 {#await post then post}
-  <article class="article" class:entertainment={isEntertainment} in:fade>
+  <article
+    class="article"
+    class:entertainment={isEntertainment}
+    class:dark-background={$menuActiveGlobal && $navigationStyle}
+    class:light-background={$menuActiveGlobal && !$navigationStyle}
+    in:fade>
 
     <!-- HEADER MEDIA -->
-    <div class="article__header" on:click={scrollDown}>
+    <div class="article__header">
       <!-- {#if !isEntertainment} -->
       <Preview {post} isHeader={true} />
       <!-- {/if} -->
@@ -232,7 +244,7 @@
         {:else if select == 'audio'}
           <Audio {...audio} autoplay={false} controls={true} />
         {:else if select == 'slideshow'}
-          <Slideshow {...slideshow} />
+          <Slideshow {...slideshow} isRelated={false} isPreview={false} />
         {:else if select == 'portal'}
           <Portal {...portal} />
         {/if}
@@ -242,7 +254,10 @@
     <!-- RELATED -->
     {#if post.header && post.header.related && post.header.related.length > 0}
       <div class="related-header">RELATED ARTICLES</div>
-      <Slideshow slides={post.header.related} isRelated={true} />
+      <Slideshow
+        slides={post.header.related}
+        isRelated={true}
+        isPreview={false} />
     {/if}
 
   </article>

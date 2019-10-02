@@ -13,7 +13,9 @@
   // ROUTES
   import Listing from "./Routes/Listing.svelte";
   import Article from "./Routes/Article.svelte";
-  import Page from "./Routes/Page.svelte";
+  import About from "./Routes/About.svelte";
+  import Contact from "./Routes/Contact.svelte";
+  import Stockists from "./Routes/Stockists.svelte";
   import Error404 from "./Routes/Error404.svelte";
 
   // const baseURL = "http://3.221.158.13/3/";
@@ -113,6 +115,12 @@
   a {
     color: currentColor;
     text-decoration: none;
+  }
+
+  strong {
+    font-weight: normal;
+    text-transform: uppercase;
+    font-family: $sans-stack;
   }
 
   .body-text {
@@ -261,8 +269,11 @@
     path="entertainment/:slug"
     component={Article}
     {...articleRouteParams.entertainment} />
-  <Route path="about" component={Page} {...pageRouteParams.about} />
-  <Route path="contact" component={Page} {...pageRouteParams.contact} />
-  <Route path="stockists" component={Page} {...pageRouteParams.stockists} />
+  <Route path="about" component={About} {...pageRouteParams.about} />
+  <Route path="contact" component={Contact} {...pageRouteParams.contact} />
+  <Route
+    path="stockists"
+    component={Stockists}
+    {...pageRouteParams.stockists} />
   <Route component={Error404} title="404" />
 </Router>

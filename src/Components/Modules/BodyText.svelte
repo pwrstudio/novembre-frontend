@@ -6,7 +6,6 @@
   // # # # # # # # # # # # # #
 
   // *** IMPORTS
-  import { onMount, onDestroy } from "svelte";
   import { throttle } from "throttle-debounce";
 
   // *** STORES
@@ -15,51 +14,6 @@
   // *** PROPS
   export let text;
   export let isEntertainment = false;
-
-  // *** DOM REFERENCES
-  let textEl;
-
-  // *** FUNCTIONS
-  function checkTopOffset() {
-    // console.log(
-    //   post.header.htmlTitle.fullTitle,
-    //   textEl.getBoundingClientRect().top
-    // );
-    if (textEl.getBoundingClientRect().top < 40) {
-      // console.log("switch");
-      navigationStyle.set(false);
-    }
-  }
-
-  const throttledCheck = throttle(100, checkTopOffset);
-
-  const observer = new IntersectionObserver(
-    entries => {
-      entries.forEach(entry => {
-        // Element is in view
-        if (entry.intersectionRatio > 0) {
-          // console.log("TEXT IN VIEW");
-          window.addEventListener("scroll", throttledCheck);
-        }
-        // Element is out of view
-        if (entry.intersectionRatio <= 0) {
-          // console.log("OUT OF VIEW: destroy:");
-          window.removeEventListener("scroll", throttledCheck);
-        }
-      });
-    },
-    { threshold: [0, 1] }
-  );
-
-  // *** ON MOUNT
-  onMount(async () => {
-    observer.observe(textEl);
-  });
-
-  // *** ON DESTROY
-  onDestroy(() => {
-    window.removeEventListener("scroll", throttledCheck);
-  });
 </script>
 
 <style lang="scss">
@@ -125,7 +79,6 @@
 <div
   class="body-text"
   class:entertainment={isEntertainment}
-  class:hide-text={$menuActiveGlobal}
-  bind:this={textEl}>
+  class:hide-text={$menuActiveGlobal}>
   {@html text}
 </div>

@@ -6,7 +6,7 @@
   // # # # # # # # # # # # # #
 
   // *** IMPORTS
-  import { onMount } from "svelte";
+  import { onMount, onDestroy } from "svelte";
   import { fade } from "svelte/transition";
 
   // *** COMPONENTS
@@ -125,6 +125,7 @@
         taxlist = arr.taxlist;
         firstLoad = true;
         setTimeout(repositionSentinel, 500);
+        // setTimeout(Waypoint.refreshAll, 500);
       })
       .catch(err => {
         Sentry.captureException(err);
@@ -140,6 +141,11 @@
     } catch (err) {
       Sentry.captureException(err);
     }
+  });
+
+  // *** ON DESTROY
+  onDestroy(async () => {
+    pageLocation.set("");
   });
 </script>
 

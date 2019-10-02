@@ -1,11 +1,16 @@
 <script>
   import Logo from "./Logo.svelte";
-  import SmoothScroll from "smooth-scroll";
   import MediaQuery from "svelte-media-query";
 
-  var scroll = new SmoothScroll('a[href*="#"]', {
-    speed: 150
-  });
+  // *** STORES
+  import { menuActiveGlobal } from "../stores.js";
+
+  const scroll = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+  };
 
   export let active = false;
 </script>
@@ -31,7 +36,7 @@
 
     &.active {
       opacity: 1;
-      transition: opacity 0.5s ease-out;
+      // transition: opacity 0.5s ease-out;
     }
 
     &__logo {
@@ -115,10 +120,14 @@
         }
       }
     }
+
+    &.hide {
+      opacity: 0;
+    }
   }
 </style>
 
-<footer class="footer" class:active>
+<footer class="footer" class:active class:hide={$menuActiveGlobal}>
 
   <MediaQuery query="(min-width: 800px)" let:matches>
     {#if matches}
@@ -138,9 +147,9 @@
 
       <Logo />
     {:else}
-      <a data-scroll href="#top" class="footer__logo">
+      <div on:click={scroll} class="footer__logo">
         <Logo />
-      </a>
+      </div>
     {/if}
   </MediaQuery>
 

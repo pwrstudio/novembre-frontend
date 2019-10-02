@@ -8,6 +8,8 @@
   // *** IMPORTS
   import { onMount, onDestroy } from "svelte";
   import { Router, links } from "svelte-routing";
+  import { tick } from "svelte";
+
   import MediaQuery from "svelte-media-query";
   import imagesLoaded from "imagesloaded";
 
@@ -55,23 +57,38 @@
       loaded = true;
     });
 
-    var inview = new Waypoint.Inview({
+    await tick();
+
+    var waypointTop = new Waypoint({
       element: previewEl,
-      enter: function(direction) {
-        navigationStyle.set(!post.header.previewColor);
-        console.log(
-          "ENTER",
-          post.header.htmlTitle.title.substring(0, 12),
-          direction
-        );
+      handler: function(direction) {
+        if (direction === "down") {
+          // console.log(
+          //   "1111 - Top",
+          //   post.header.htmlTitle.title.substring(0, 12),
+          //   direction
+          // );
+          // console.error("CHANGE TOP");
+          navigationStyle.set(!post.header.previewColor);
+        }
+      }
+    });
+
+    var waypointBottom = new Waypoint({
+      element: previewEl,
+      handler: function(direction) {
+        if (direction === "up") {
+          // console.log(
+          //   "2222 - BOTTOM",
+          //   post.header.htmlTitle.title.substring(0, 12),
+          //   direction
+          // );
+          // console.warn("CHANGE BOTTOM");
+          navigationStyle.set(!post.header.previewColor);
+        }
       },
-      exit: function(direction) {
-        console.log(
-          "EXIT",
-          post.header.htmlTitle.title.substring(0, 12),
-          direction
-        );
-        navigationStyle.set(!post.header.previewColor);
+      offset: function() {
+        return -this.element.clientHeight;
       }
     });
   });
@@ -93,8 +110,8 @@
       position: absolute;
       top: 0;
       left: 0;
-      margin-left: $small-margin;
-      margin-top: $small-margin;
+      margin-left: 8px;
+      margin-top: 8px;
       z-index: 10;
       max-width: 90vw;
       overflow: hidden;
@@ -119,7 +136,6 @@
       text-decoration: none;
       z-index: 1;
       font-family: $sans-stack;
-      overflow: hidden;
       pointer-events: none;
 
       transition: opacity 0.3 $transition;
@@ -251,54 +267,60 @@
       <!-- </MediaQuery> -->
     {/if}
 
-    <a href="/{post.header.parent}/{post.header.slug}">
-
-      <!-- IMAGE -->
-      {#if post.header.previewType == 'image' && post.header.previewImage && post.header.previewImage.url}
+    <!-- IMAGE -->
+    {#if post.header.previewType == 'image' && post.header.previewImage && post.header.previewImage.url}
+      <a href="/{post.header.parent}/{post.header.slug}">
         <Image
           size={post.header.previewSize}
           url={post.header.previewImage.url}
           caption={post.header.htmlTitle.fullTitle}
           {loaded}
           isListing={true} />
-
-        <!-- MULTI IMAGE -->
-      {:else if post.header.previewType == 'multi'}
+      </a>
+      <!-- MULTI IMAGE -->
+    {:else if post.header.previewType == 'multi'}
+      <a href="/{post.header.parent}/{post.header.slug}">
         <Multi files={post.header.previewMulti} {loaded} />
-
-        <!-- VIDEO -->
-      {:else if post.header.previewType == 'video'}
+      </a>
+      <!-- VIDEO -->
+    {:else if post.header.previewType == 'video'}
+      <a href="/{post.header.parent}/{post.header.slug}">
         <Video
           url={post.header.previewVideo.url}
           caption={post.header.title}
           autoplay={true}
           loop={true}
           muted={true} />
-
-        <!-- VIDEO -->
-      {:else if post.header.previewType == 'embed'}
+      </a>
+      <!-- Embed -->
+    {:else if post.header.previewType == 'embed'}
+      <a href="/{post.header.parent}/{post.header.slug}">
         <Embed url={post.header.previewEmbed.url} caption={post.header.title} />
-
-        <!-- SLIDESHOW -->
-      {:else if post.header.previewType == 'slideshow'}
+      </a>
+      <!-- SLIDESHOW -->
+    {:else if post.header.previewType == 'slideshow'}
+      <a href="/{post.header.parent}/{post.header.slug}">
+        <!-- {post.header.previewSlideshowAutoplay}
+        {post.header.previewSlideshowAutoplay || post.header.previewSlideshowAutoplay == 1} -->
         <Slideshow
+          autoplay={post.header.previewSlideshowAutoplay || post.header.previewSlideshowAutoplay == 1 ? true : false}
           slides={post.header.previewSlideshow}
           isPreview={true}
           {first} />
+      </a>
 
-        <!-- TEXT -->
-      {:else if post.header.previewType == 'text' && !isHeader}{/if}
+      <!-- TEXT -->
+    {:else if post.header.previewType == 'text' && !isHeader}{/if}
 
-      {#if !isHeader}
+    {#if !isHeader}
+      <a href="/{post.header.parent}/{post.header.slug}">
         <div
           class="preview__title preview__title--free"
           class:preview__title--free={post.header.previewType == 'multi'}
           class:preview__title--large-text={post.header.previewType == 'text'}>
           {@html post.header.htmlTitle.fullTitle}
         </div>
-      {/if}
-
-    </a>
-
+      </a>
+    {/if}
   </div>
 </Router>

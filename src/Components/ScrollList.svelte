@@ -116,11 +116,6 @@
     update();
   };
 
-  // TODO: improve padding algo...
-  if (taxArray.length < 20) {
-    taxArray = [...taxArray, ...taxArray];
-  }
-
   // *** ON MOUNT
   onMount(async () => {
     startTicker();
