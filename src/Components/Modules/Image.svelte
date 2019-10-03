@@ -31,7 +31,8 @@
   let srcPortrait = "";
   let srcsetPortrait = "";
   let sizes = "";
-  // --
+
+  // *** CONSTANTS
   let IMGIX_PARAMS = "&auto=format";
   let FULLWIDTH_PARAMS = "&ar=16:9&fit=crop&crop=faces&auto=format";
   let PORTRAIT_PARAMS = "&ar=9:16&fit=crop&crop=faces&auto=format";

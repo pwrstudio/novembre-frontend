@@ -9,6 +9,7 @@
   import { onMount, onDestroy } from "svelte";
   import { Router, links } from "svelte-routing";
   import { tick } from "svelte";
+  import { fade } from "svelte/transition";
 
   import MediaQuery from "svelte-media-query";
   import imagesLoaded from "imagesloaded";
@@ -91,6 +92,10 @@
         return -this.element.clientHeight;
       }
     });
+
+    if (first) {
+      navigationStyle.set(!post.header.previewColor);
+    }
   });
 </script>
 
@@ -146,8 +151,11 @@
         bottom: unset;
         margin-left: $small-margin;
         margin-top: $small-margin;
+      }
 
-        // background: yellow;
+      @include screen-size("small") {
+        font-size: $mobile_large;
+        hyphens: auto;
       }
 
       &--large-text {
@@ -155,10 +163,14 @@
         position: static;
         left: unset;
         bottom: unset;
-        // background: purple;
-        // margin-top: 80px;
-        // margin-bottom: 80px;
         margin-left: $small-margin;
+        margin-top: $small-margin;
+
+        @include screen-size("small") {
+          font-size: $large;
+          hyphens: auto;
+          padding-bottom: 20px;
+        }
       }
 
       p {
@@ -173,12 +185,6 @@
       em {
         font-family: $serif-stack;
         font-style: italic;
-        // background: pink;
-      }
-
-      @include screen-size("small") {
-        font-size: $mobile_large;
-        hyphens: auto;
       }
     }
 
@@ -217,7 +223,7 @@
 
     &--multi {
       &.first {
-        padding-top: 80px;
+        padding-top: 145px;
       }
       &.header {
         height: 100vh;
@@ -225,7 +231,7 @@
     }
     &--text {
       &.first {
-        padding-top: 80px;
+        padding-top: 155px;
       }
     }
   }
@@ -240,32 +246,33 @@
   // }
 </style>
 
-<Router>
-  <div
-    class="preview preview--{post.header.previewType}"
-    class:loaded
-    class:preview--white={!post.header.previewColor}
-    class:hide-text={$menuActiveGlobal}
-    class:first
-    class:header={isHeader}
-    style={elementStyles}
-    bind:this={previewEl}
-    use:links>
+<div
+  class="preview preview--{post.header.previewType}"
+  class:loaded
+  class:preview--white={!post.header.previewColor}
+  class:hide-text={$menuActiveGlobal}
+  class:first
+  class:header={isHeader}
+  style={elementStyles}
+  bind:this={previewEl}
+  use:links>
 
-    <!-- TAGS -->
-    {#if post.header.taxonomy && !isHeader && !first}
-      <!-- <MediaQuery query="(min-width: 800px)" let:matches> -->
-      <!-- {#if matches} -->
-      <div
-        class="preview__tags"
-        class:bottom-tags={post.header.previewType == 'multi' || post.header.previewType == 'text'}>
-        <TaxList
-          taxonomy={post.header.taxonomy}
-          white={post.header.previewColor} />
-      </div>
-      <!-- {/if} -->
-      <!-- </MediaQuery> -->
-    {/if}
+  <!-- TAGS -->
+  {#if post.header.taxonomy && !isHeader && !first}
+    <!-- <MediaQuery query="(min-width: 800px)" let:matches> -->
+    <!-- {#if matches} -->
+    <div
+      class="preview__tags"
+      class:bottom-tags={post.header.previewType == 'multi' || post.header.previewType == 'text'}>
+      <TaxList
+        taxonomy={post.header.taxonomy}
+        white={post.header.previewColor} />
+    </div>
+    <!-- {/if} -->
+    <!-- </MediaQuery> -->
+  {/if}
+
+  <Router>
 
     <!-- IMAGE -->
     {#if post.header.previewType == 'image' && post.header.previewImage && post.header.previewImage.url}
@@ -322,5 +329,6 @@
         </div>
       </a>
     {/if}
-  </div>
-</Router>
+  </Router>
+
+</div>

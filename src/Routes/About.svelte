@@ -34,7 +34,6 @@
       const post = await res.json();
       return post;
     } catch (err) {
-      console.error(err);
       Sentry.captureException(err);
     }
   }
@@ -117,7 +116,7 @@
   .about {
     background: white;
     min-height: 80vh;
-    padding-top: 150px;
+    padding-top: 120px;
     height: auto;
     width: 800px;
     margin-left: auto;
@@ -126,6 +125,10 @@
     margin-bottom: 100px;
     line-height: 1.2em;
     overflow: hidden;
+
+    @include screen-size("small") {
+      padding-top: 100px;
+    }
 
     &.hide-text {
       opacity: 0;
@@ -156,19 +159,16 @@
 </style>
 
 {#await post then post}
-  <article
-    class="about"
-    in:fade={{ duration: 300, easing: quintOut }}
-    class:hide-text={$menuActiveGlobal}>
+  <article class="about" class:hide-text={$menuActiveGlobal}>
 
     <div class="body-text">
       {@html post.content}
     </div>
 
-    <div class="credits">
-      {@html post.header.credits}
-    </div>
     <!-- <div class="credits">
+      {@html post.header.credits}
+    </div> -->
+    <div class="credits">
       <div class="stockists__item">
         <strong>Creative directors</strong>
         <br />
@@ -226,7 +226,7 @@
         Pineapple Media
       </div>
       <div class="stockists__item">All rights reserved ©2015/16</div>
-    </div> -->
+    </div>
   </article>
 
   <Footer active={true} />

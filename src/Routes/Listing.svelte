@@ -7,7 +7,8 @@
 
   // *** IMPORTS
   import { onMount, onDestroy } from "svelte";
-  import { fade } from "svelte/transition";
+  import { fade, slide } from "svelte/transition";
+  import { quintOut } from "svelte/easing";
 
   // *** COMPONENTS
   import Preview from "../Components/Preview.svelte";
@@ -95,7 +96,6 @@
   }
 
   if (location.hash) {
-    console.dir(location.hash);
     loadData(0, location.hash.substr(1), title.toLowerCase());
   }
 
@@ -119,13 +119,11 @@
     fetch(url)
       .then(r => r.json())
       .then(arr => {
-        // console.dir(arr);
         items = [...items, ...arr.posts];
         meta = arr.meta;
         taxlist = arr.taxlist;
         firstLoad = true;
-        setTimeout(repositionSentinel, 500);
-        // setTimeout(Waypoint.refreshAll, 500);
+        setTimeout(repositionSentinel, 300);
       })
       .catch(err => {
         Sentry.captureException(err);
@@ -225,27 +223,29 @@
 
 <div class="listing" class:landing={title === 'Landing'}>
 
-  {#if showTaxonomyScroller && firstLoad && !$menuActiveGlobal}
-    <div class="top-block" in:fade>
-      <ScrollList
-        taxname={title.toLowerCase()}
-        {taxlist}
-        {activeCategory}
-        on:changeCategory={e => {
-          changeCategory(e.detail.newCategory, e.detail.newCategoryName);
-        }} />
-    </div>
-  {/if}
+  {#if !$menuActiveGlobal}
+    {#if showTaxonomyScroller && firstLoad}
+      <div class="top-block">
+        <ScrollList
+          taxname={title.toLowerCase()}
+          {taxlist}
+          {activeCategory}
+          on:changeCategory={e => {
+            changeCategory(e.detail.newCategory, e.detail.newCategoryName);
+          }} />
+      </div>
+    {/if}
 
-  {#if isQuery && firstLoad}
-    {#if items.length == 0}
-      <div class="top-block">
-        <div class="query-bar" in:fade>No results for “{query}”</div>
-      </div>
-    {:else}
-      <div class="top-block">
-        <span class="query-bar" in:fade>{title}: {query}</span>
-      </div>
+    {#if isQuery && firstLoad}
+      {#if items.length == 0}
+        <div class="top-block">
+          <div class="query-bar">No results for “{query}”</div>
+        </div>
+      {:else}
+        <div class="top-block">
+          <span class="query-bar">{title}: {query}</span>
+        </div>
+      {/if}
     {/if}
   {/if}
 

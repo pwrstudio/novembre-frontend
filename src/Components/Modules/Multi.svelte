@@ -8,8 +8,6 @@
   // *** IMPORTS
   // import imagesLoaded from "imagesloaded";
   // import { onMount } from "svelte";
-  import MediaQuery from "svelte-media-query";
-  import { fade } from "svelte/transition";
 
   // *** PROPS
   export let files = [];
@@ -33,10 +31,6 @@
       });
     }
   }
-
-  //   console.log("MULTI");
-  //   console.log(files);
-  //   console.log(files.length);
 
   if (files.length > 1) {
     files.forEach(s => {

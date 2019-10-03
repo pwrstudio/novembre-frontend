@@ -125,6 +125,10 @@
       width: 100vw;
       pointer-events: none;
 
+      @include screen-size("small") {
+        height: 70vh;
+      }
+
       video {
         height: 100%;
         width: 100%;

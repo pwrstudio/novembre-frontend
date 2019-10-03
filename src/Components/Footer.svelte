@@ -6,10 +6,16 @@
   import { menuActiveGlobal } from "../stores.js";
 
   const scroll = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth"
-    });
+    if (document.body.clientHeight > 6000) {
+      window.scrollTo({
+        top: 0
+      });
+    } else {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    }
   };
 
   export let active = false;
@@ -55,6 +61,7 @@
       height: 100%;
       display: inline-block;
       font-size: $large;
+      cursor: pointer;
 
       &--left {
         float: left;
@@ -140,10 +147,10 @@
         <div class="footer__link--hover left">INSTAGRAM</div>
       </a>
 
-      <a data-scroll href="#top" class="footer__link footer__link--right">
+      <div on:click={scroll} class="footer__link footer__link--right">
         <div class="footer__link--normal">BACK TO TOP</div>
         <div class="footer__link--hover right">BACK TO TOP</div>
-      </a>
+      </div>
 
       <Logo />
     {:else}

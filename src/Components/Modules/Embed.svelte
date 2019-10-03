@@ -52,6 +52,10 @@
     &--full {
       height: $full-height;
       width: 100vw;
+
+      @include screen-size("small") {
+        height: 70vh;
+      }
     }
 
     &--inline {
@@ -63,6 +67,10 @@
       align-items: center;
 
       // margin-bottom: 5rem;
+
+      @include screen-size("small") {
+        height: 70vh;
+      }
 
       .inner {
         width: 800px;

@@ -14,7 +14,9 @@
 
   // console.log(searchField);
 
-  const showSearchBox = () => {
+  const showSearchBox = e => {
+    e.preventDefault();
+    e.stopPropagation();
     searchActive = true;
     searchField.focus();
   };
@@ -31,7 +33,9 @@
     inputWidth = window.innerWidth - submitWidth - 60; // Subtract margins
   }
 
-  const submitSearch = () => {
+  const submitSearch = e => {
+    e.preventDefault();
+    e.stopPropagation();
     if (searchQuery.length > 0) {
       window.location = "/search/" + searchQuery;
     } else {
@@ -88,11 +92,13 @@
         background: transparent;
         margin-top: 20px;
         margin-bottom: 0;
+        border-bottom: 2px solid transparent;
       }
 
       &--active {
         border-bottom: 3px solid currentColor;
         @include screen-size("small") {
+          border-bottom: 2px solid currentColor;
           display: block;
         }
       }
@@ -179,6 +185,10 @@
       class:search__input--active={searchActive}
       bind:value={searchQuery}
       bind:this={searchField}
+      on:click={e => {
+        e.preventDefault();
+        e.stopPropagation();
+      }}
       on:keypress={e => (e.keyCode === 13 ? submitSearch() : false)} />
   </MediaQuery>
 

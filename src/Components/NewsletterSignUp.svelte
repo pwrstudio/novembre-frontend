@@ -47,11 +47,6 @@
     line-height: 1.2em;
     overflow: hidden;
     font-family: $sans-stack;
-
-    @include screen-size("small") {
-      column-count: 2;
-    }
-
     &__item {
       margin-bottom: 1em;
       break-inside: avoid;
@@ -75,16 +70,17 @@
     .form-section {
       margin-bottom: $small-margin;
       margin-bottom: 15px;
+      width: 100%;
 
       &.submit-button {
+        display: inline-block;
         border-bottom: 1px solid black;
         height: auto;
-        width: 90px;
+        width: auto;
       }
     }
 
     .submit {
-      width: 100%;
       display: inline-block;
       position: relative;
       line-height: 1em;

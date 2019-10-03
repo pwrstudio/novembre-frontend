@@ -1,15 +1,17 @@
 <script>
   // # # # # # # # # # # # # #
   //
-  //  Navigation Slideshow module
+  //  Navigation Slideshow
   //
   // # # # # # # # # # # # # #
 
   // *** IMPORTS
   import { onMount } from "svelte";
-  import { Router, links } from "svelte-routing";
   import Flickity from "flickity-as-nav-for";
   import imagesLoaded from "imagesloaded";
+
+  // *** COMPONENTS
+  import Ellipse from "../Ellipse.svelte";
 
   // *** PROPS
   export let slides = [];
@@ -28,12 +30,7 @@
   let flkty = {};
   let loaded = false;
 
-  //   console.log(slides);
-  //   console.log(slides.length);
-  //   console.log(slides.length == 1);
-
   // *** LOGIC
-
   slides.forEach(s => {
     s.url =
       s.url && s.url.length > 0
@@ -47,7 +44,6 @@
 
   // *** ON MOUNT
   onMount(async () => {
-    console.log("target", navTarget);
     let options = {
       prevNextButtons: false,
       pageDots: false,
@@ -60,15 +56,10 @@
     try {
       flkty = new Flickity(slideShowEl, options);
     } catch (err) {
-      console.log(err);
       Sentry.captureException(err);
     }
 
-    console.log("NAV", flkty);
-
     imagesLoaded(slideShowEl, instance => {
-      console.dir(instance);
-      console.log("NAV images-loaded");
       flkty.resize();
       loaded = true;
     });
@@ -78,11 +69,59 @@
 <style lang="scss">
   @import "../../variables.scss";
 
+  .container {
+    position: relative;
+    height: 140px;
+
+    @include screen-size("small") {
+      height: 120px;
+    }
+  }
+
+  .loading {
+    text-align: center;
+    line-height: 140px;
+    font-size: $body;
+    font-family: $sans-stack;
+    display: block;
+    background: $grey;
+
+    @include screen-size("small") {
+      line-height: 120px;
+      font-size: $mobile_body;
+      height: 120px;
+    }
+  }
+
+  .loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 140px;
+    text-align: center;
+    line-height: 140px;
+    font-size: $body;
+    font-family: $sans-stack;
+    display: block;
+    background: $grey;
+
+    @include screen-size("small") {
+      line-height: 120px;
+      font-size: $mobile_body;
+      height: 120px;
+    }
+  }
+
   .slideshow {
     width: 100%;
     height: 140px;
-    margin-top: 10px;
-    margin-bottom: 60px;
+
+    opacity: 0;
+
+    @include screen-size("small") {
+      height: 120px;
+    }
 
     &__slideshow {
       height: 100%;
@@ -94,6 +133,9 @@
       margin-right: $small-margin;
       cursor: pointer !important;
 
+      @include screen-size("small") {
+        height: 120px;
+      }
       &:hover {
         opacity: 0.8;
       }
@@ -103,16 +145,13 @@
       height: 100%;
     }
 
-    opacity: 0;
-
     &.loaded {
       opacity: 1;
     }
   }
 </style>
 
-<Router>
-
+<div class="container">
   <div class="carousel slideshow" class:loaded bind:this={slideShowEl}>
     {#each slides as slide}
       <div class="carousel-cell slideshow__slide">
@@ -124,4 +163,10 @@
     {/each}
   </div>
 
-</Router>
+  {#if !loaded}
+    <div class="loading">
+      LOADING
+      <Ellipse />
+    </div>
+  {/if}
+</div>

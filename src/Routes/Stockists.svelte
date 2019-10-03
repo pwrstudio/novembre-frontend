@@ -36,7 +36,6 @@
       const post = await res.json();
       return post;
     } catch (err) {
-      console.error(err);
       Sentry.captureException(err);
     }
   }
@@ -70,7 +69,7 @@
     }
 
     &__item {
-      margin-bottom: 1em;
+      margin-bottom: 2em;
       break-inside: avoid;
     }
   }
@@ -103,7 +102,6 @@
 {#await post then post}
   <article
     class="stockist-page"
-    in:fade={{ duration: 300, easing: quintOut }}
     class:hide-text={$menuActiveGlobal}>
 
       <div class="stockists">
@@ -133,6 +131,7 @@
               <span class="locality">Bondi</span>
             </span>
           </div>
+
           <div class="stockists__item">
             <strong>Globe Newsagency</strong>
             <br />

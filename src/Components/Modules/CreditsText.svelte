@@ -9,7 +9,7 @@
   export let text;
 
   // *** STORES
-  import { navigationStyle, menuActiveGlobal } from "../../stores.js";
+  import { menuActiveGlobal } from "../../stores.js";
 </script>
 
 <style lang="scss">
@@ -32,7 +32,7 @@
     }
 
     @include screen-size("small") {
-      font-size: $mobile_body;
+      font-size: $mobile_small;
     }
 
     a {

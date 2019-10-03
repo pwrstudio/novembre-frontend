@@ -7,7 +7,6 @@
 
   // *** IMPORTS
   import { onMount } from "svelte";
-  import { fade } from "svelte/transition";
   import Flickity from "flickity";
 
   // *** COMPONENTS
@@ -18,6 +17,11 @@
   export let taxname;
   export let size = "large";
   export let activeCategory = "";
+
+  let loaded = false;
+
+  // *** STORES
+  import { menuActiveGlobal } from "../stores.js";
 
   // *** VARIABLES
   let scrollListEl;
@@ -113,7 +117,10 @@
       });
     });
 
-    update();
+    setTimeout(() => {
+      update();
+      loaded = true;
+    }, 500);
   };
 
   // *** ON MOUNT
@@ -133,10 +140,15 @@
 
     background: black;
     color: white;
-    opacity: 1;
+    opacity: 0;
+    transition: opacity 0.5s ease-out;
+
+    &.loaded {
+      opacity: 1;
+    }
 
     &.hide {
-      opacity: 0;
+      visibility: hidden;
     }
 
     &__slide {
@@ -144,6 +156,9 @@
       margin-right: 30px;
       white-space: nowrap;
       height: auto;
+      // background: red;
+      overflow: visible;
+      padding-top: 3px;
 
       span {
         // height: 1em;
@@ -184,15 +199,15 @@
 
         @include screen-size("small") {
           font-size: $mobile_large;
-          // padding-bottom: 10px;
-          // padding-top: 10px;
+          // top: 0;
+          padding-bottom: 3px;
         }
       }
     }
   }
 </style>
 
-<div class="taxonomy-scroller">
+<div class="taxonomy-scroller" class:hide={$menuActiveGlobal} class:loaded>
   <div
     class="main-carousel taxonomy-scroller__slideshow
     taxonomy-scroller__slideshow--large"

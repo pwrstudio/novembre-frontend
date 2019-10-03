@@ -6,7 +6,7 @@
   // # # # # # # # # # # # # #
 
   // *** IMPORTS
-  import { Router, links, Link } from "svelte-routing";
+  // import { Router, links, Link } from "svelte-routing";
 
   // *** PROPS
   export let taxonomy;
@@ -77,7 +77,15 @@
   {#if taxonomy.magazine}
     {#each taxonomy.magazine as m}
       <span class="taxonomy__item">
-        <a href="/magazine#{m}">{m}</a>
+        <a
+          href="https://testing.novembre.global/magazine#{m.toLowerCase()}"
+          on:click={e => {
+            e.preventDefault();
+            e.stopPropagation();
+            window.location = 'https://testing.novembre.global/magazine#' + m.toLowerCase();
+          }}>
+          {m}
+        </a>
       </span>
     {/each}
   {/if}
@@ -85,19 +93,27 @@
   {#if taxonomy.entertainment}
     {#each taxonomy.entertainment as e}
       <span class="taxonomy__item">
-        <a href="/entertainment/#{e}">{e}</a>
+        <a
+          href="https://testing.novembre.global/entertainment/#{e}"
+          on:click={event => {
+            event.preventDefault();
+            event.stopPropagation();
+            window.location = 'https://testing.novembre.global/entertainment#' + e.toLowerCase();
+          }}>
+          {e}
+        </a>
       </span>
     {/each}
   {/if}
 
-  <Router>
-    {#if taxonomy.tag}
-      {#each taxonomy.tag as t}
-        <span class="taxonomy__item">
-          <Link to="/taxonomy/{t}">{t}</Link>
-        </span>
-      {/each}
-    {/if}
-  </Router>
+  <!-- <Router> -->
+  {#if taxonomy.tag}
+    {#each taxonomy.tag as t}
+      <span class="taxonomy__item">
+        <a href="/taxonomy/{t}">{t}</a>
+      </span>
+    {/each}
+  {/if}
+  <!-- </Router> -->
 
 </div>

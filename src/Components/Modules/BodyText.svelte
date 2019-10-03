@@ -6,10 +6,9 @@
   // # # # # # # # # # # # # #
 
   // *** IMPORTS
-  import { throttle } from "throttle-debounce";
 
   // *** STORES
-  import { navigationStyle, menuActiveGlobal } from "../../stores.js";
+  import { menuActiveGlobal } from "../../stores.js";
 
   // *** PROPS
   export let text;

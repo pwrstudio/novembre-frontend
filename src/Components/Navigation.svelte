@@ -7,7 +7,6 @@
 
   // *** IMPORTS
   import { Router, links } from "svelte-routing";
-  // import { fade } from "svelte/transition";
   import MediaQuery from "svelte-media-query";
 
   // *** COMPONENTS
@@ -40,10 +39,17 @@
 
   // *** FUNCTIONS
   var scroll = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth"
-    });
+    menuActive = false;
+    if (window.scrollY > 8000) {
+      window.scrollTo({
+        top: 0
+      });
+    } else {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    }
   };
 </script>
 
@@ -125,12 +131,12 @@
 
     &__menu {
       position: fixed;
-      // background: black;
       display: block;
       margin: 0;
       padding: 10px;
       opacity: 0;
       width: 100vw;
+      height: 100%;
       pointer-events: none;
       clip-path: inset(0 0 100% 0);
       padding-bottom: 20px;
@@ -226,7 +232,7 @@
       #{$block}__menu {
         pointer-events: all;
         clip-path: inset(0 0 0% 0);
-        transition: clip-path 0.4s $transition, opacity 0.4s $transition;
+        transition: clip-path 0.6s $transition, opacity 0.4s $transition;
         opacity: 1;
         @include screen-size("small") {
           height: $full-height;
@@ -262,19 +268,16 @@
     <div class="navigation__bar">
       <MediaQuery query="(min-width: 800px)" let:matches>
         {#if matches}
-          <!-- We are on desktop -->
-          {#if menuActive}
-            <!-- The menu is open: close it -->
-            <div class="navigation__logo" on:click={() => (menuActive = false)}>
-              <Logo white={$navigationStyle} />
-            </div>
-          {:else if $pageLocation === 'Landing'}
+          {#if $pageLocation === 'Landing'}
             <span class="navigation__logo" on:click={scroll}>
               <Logo white={$navigationStyle} />
             </span>
           {:else}
             <!-- Menu is closed and we are anywhere else than landing -->
-            <a href="/" class="navigation__logo">
+            <a
+              href="/"
+              class="navigation__logo"
+              on:click={() => (menuActive = false)}>
               <Logo white={$navigationStyle} />
             </a>
           {/if}
@@ -294,15 +297,11 @@
       </MediaQuery>
     </div>
 
-    <menu class="navigation__menu">
+    <menu class="navigation__menu" on:click={() => (menuActive = !menuActive)}>
       <MediaQuery query="(max-width: 800px)" let:matches>
         {#if matches}
           <menuitem class="navigation__menu-item">
-
-            <a
-              href="/"
-              class="navigation__link"
-              on:click={() => (menuActive = !menuActive)}>
+            <a href="/" class="navigation__link">
               <div class="navigation__link--normal">FEED</div>
               <div class="navigation__link--hover">FEED</div>
             </a>
@@ -312,11 +311,7 @@
 
       {#each menuItems as item}
         <menuitem class="navigation__menu-item">
-          <a
-            href={item.target}
-            class="navigation__link"
-            on:click={() => (menuActive = !menuActive)}
-            in:fade>
+          <a href={item.target} class="navigation__link">
             <div class="navigation__link--normal">
               {@html item.title}
             </div>

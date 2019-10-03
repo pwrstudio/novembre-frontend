@@ -6,8 +6,9 @@
   // # # # # # # # # # # # # #
 
   // *** IMPORTS
-  import { fade } from "svelte/transition";
   import { onMount, onDestroy } from "svelte";
+  import { fade, slide } from "svelte/transition";
+  import { quintOut } from "svelte/easing";
 
   // *** COMPONENTS
   import TaxList from "../Components/TaxList.svelte";
@@ -115,8 +116,13 @@
     //   background: white;
     // }
 
-    &.entertainment {
+    &.top-padded {
       padding-top: 100px;
+      // background: $grey;
+    }
+
+    &.entertainment {
+      // padding-top: 100px;
       background: $grey;
     }
 
@@ -154,6 +160,7 @@
       @include screen-size("small") {
         font-size: $mobile_xlarge;
         hyphens: auto;
+        margin-bottom: 20px;
       }
 
       transition: opacity $transition;
@@ -184,30 +191,29 @@
     line-height: 0.9em;
     margin-bottom: $small-margin;
     margin-top: 20px;
+    margin-left: $small-margin;
 
     @include screen-size("small") {
       font-size: $mobile_large;
-      margin-bottom: 0px;
+      // margin-bottom: 0px;
     }
   }
 </style>
 
-<svelte:body class:entertainment={isEntertainment} />
-
 {#await post then post}
   <article
     class="article"
+    class:top-padded={post.header.previewType == 'text'}
     class:entertainment={isEntertainment}
     class:dark-background={$menuActiveGlobal && $navigationStyle}
-    class:light-background={$menuActiveGlobal && !$navigationStyle}
-    in:fade>
+    class:light-background={$menuActiveGlobal && !$navigationStyle}>
 
     <!-- HEADER MEDIA -->
-    <div class="article__header">
-      <!-- {#if !isEntertainment} -->
-      <Preview {post} isHeader={true} />
-      <!-- {/if} -->
-    </div>
+    {#if post.header.previewType != 'text'}
+      <div class="article__header">
+        <Preview {post} isHeader={true} />
+      </div>
+    {/if}
 
     <!-- DATE & TAGS -->
     {#if post.header.taxonomy}
