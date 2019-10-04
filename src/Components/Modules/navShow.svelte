@@ -60,7 +60,13 @@
     }
 
     imagesLoaded(slideShowEl, instance => {
-      flkty.resize();
+      try {
+        if (flkty && "resize" in flkty) {
+          flkty.resize();
+        }
+      } catch (err) {
+        Sentry.captureException(err);
+      }
       loaded = true;
     });
   });

@@ -12,6 +12,7 @@
   export let taxonomy;
   export let white = false;
   export let date = false;
+  export let isPreview = false;
 </script>
 
 <style lang="scss">
@@ -107,7 +108,7 @@
   {/if}
 
   <!-- <Router> -->
-  {#if taxonomy.tag}
+  {#if taxonomy.tag && !isPreview}
     {#each taxonomy.tag as t}
       <span class="taxonomy__item">
         <a href="/taxonomy/{t}">{t}</a>

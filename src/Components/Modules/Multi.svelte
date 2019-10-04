@@ -6,8 +6,8 @@
   // # # # # # # # # # # # # #
 
   // *** IMPORTS
-  // import imagesLoaded from "imagesloaded";
-  // import { onMount } from "svelte";
+  import imagesLoaded from "imagesloaded";
+  import { onMount } from "svelte";
 
   // *** PROPS
   export let files = [];
@@ -21,22 +21,6 @@
   let sizes = "";
   let imageEl = {};
   let imgixParams = "&auto=format";
-
-  $: {
-    if (loaded && files) {
-      files.forEach((s, i) => {
-        setTimeout(() => {
-          s.loaded = true;
-        }, 300 * i);
-      });
-    }
-  }
-
-  if (files.length > 1) {
-    files.forEach(s => {
-      s.loaded = false;
-    });
-  }
 
   // Size depending on layout
   if (files.length === 1) {
@@ -65,12 +49,14 @@
     f.sizes = sizes;
   });
 
+  // console.log(srcset);
+
   // *** ON MOUNT
-  // onMount(async () => {
-  //   console.log("before", files);
-  //   files = files;
-  //   console.log("after", files);
-  // });
+  onMount(async () => {
+    imagesLoaded(imageEl, instance => {
+      loaded = true;
+    });
+  });
 </script>
 
 <style lang="scss">
@@ -80,6 +66,9 @@
     width: 100%;
     height: auto;
     // pointer-events: none;
+    &.loaded {
+      opacity: 1;
+    }
 
     $block: &;
 
@@ -98,10 +87,6 @@
     &__image {
       opacity: 1;
       transition: opacity 0.5s $transition;
-
-      &.loaded {
-        opacity: 1;
-      }
     }
 
     &--full {
@@ -136,12 +121,20 @@
       display: inline-block;
       margin-bottom: $small-margin;
 
+      @include screen-size("small") {
+        width: 10000px;
+      }
+
       #{ $block }__image {
-        max-height: 500px;
+        max-height: 440px;
         float: left;
         margin-left: $small-margin;
         margin-top: $small-margin;
         height: auto;
+        @include screen-size("small") {
+          float: unset;
+          max-height: unset;
+        }
       }
 
       &--free-1 {
@@ -174,12 +167,20 @@
       #{ $block }__image {
         max-width: 45vw;
         // background: red;
+        @include screen-size("small") {
+          max-width: unset;
+          width: 75vw;
+        }
       }
     }
 
     &--free-2 {
       #{ $block }__image {
         max-width: 40vw;
+        @include screen-size("small") {
+          max-width: unset;
+          width: 46vw;
+        }
         // background: red;
       }
     }
@@ -188,12 +189,20 @@
       #{ $block }__image {
         max-width: 30vw;
         // background: red;
+        @include screen-size("small") {
+          max-width: unset;
+          width: 42vw;
+        }
       }
     }
 
     &--free-4 {
       #{ $block }__image {
         max-width: 23vw;
+        @include screen-size("small") {
+          max-width: unset;
+          width: 38vw;
+        }
         // background: red;
       }
     }
@@ -213,12 +222,12 @@
   class:image--free-2={files && files.length === 2}
   class:image--free-3={files && files.length === 3}
   class:image--free-4={files && files.length === 4}
+  class:loaded
   bind:this={imageEl}>
 
   {#each files as slide}
     <img
       class="image__image image__image--multi"
-      class:loaded={slide.loaded}
       alt="Novembre"
       srcset={slide.srcset}
       sizes={slide.sizes}

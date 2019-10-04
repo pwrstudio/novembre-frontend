@@ -38,6 +38,7 @@
 
   // *** VARIABLES
   let currentSlug = slug;
+  let title = "";
 
   // *** REACTIVE
   $: {
@@ -52,8 +53,8 @@
     try {
       const res = await fetch(endpoint + slug + ".json");
       const post = await res.json();
-      // console.log(post.header.fieldSelection);
       window.scrollTo(0, 0);
+      title = post.header.htmlTitle.fullTitle + " /";
       return post;
     } catch (err) {
       Sentry.captureException(err);
@@ -159,7 +160,7 @@
 
       @include screen-size("small") {
         font-size: $mobile_xlarge;
-        hyphens: auto;
+        // hyphens: auto;
         margin-bottom: 20px;
       }
 
@@ -200,7 +201,12 @@
   }
 </style>
 
+<svelte:head>
+  <title>{title} NOVEMBRE</title>
+</svelte:head>
+
 {#await post then post}
+
   <article
     class="article"
     class:top-padded={post.header.previewType == 'text'}

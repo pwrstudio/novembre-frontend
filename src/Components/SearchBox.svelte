@@ -33,9 +33,7 @@
     inputWidth = window.innerWidth - submitWidth - 60; // Subtract margins
   }
 
-  const submitSearch = e => {
-    e.preventDefault();
-    e.stopPropagation();
+  const submitSearch = () => {
     if (searchQuery.length > 0) {
       window.location = "/search/" + searchQuery;
     } else {
@@ -115,6 +113,7 @@
       display: inline;
       position: relative;
       line-height: 1em;
+      cursor: pointer;
 
       @include screen-size("small") {
         font-size: $mobile_large;
@@ -189,7 +188,7 @@
         e.preventDefault();
         e.stopPropagation();
       }}
-      on:keypress={e => (e.keyCode === 13 ? submitSearch() : false)} />
+      on:keypress={e => (e.keyCode === 13 ? submitSearch : false)} />
   </MediaQuery>
 
   {#if searchActive}

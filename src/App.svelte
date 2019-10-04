@@ -79,7 +79,7 @@
   @import "./variables.scss";
 
   html {
-    background: white;
+    background: $grey;
     padding: 0;
     margin: 0;
 
@@ -90,6 +90,7 @@
   }
 
   body {
+    background: white;
     padding: 0;
     margin: 0;
     width: 100vw;

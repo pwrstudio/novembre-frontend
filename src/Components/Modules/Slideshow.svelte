@@ -88,9 +88,22 @@
     flkty.on("dragStart", () => {
       isPaused = true;
     });
+
+    imagesLoaded(slideShowEl, instance => {
+      try {
+        if (flkty && "resize" in flkty) {
+          flkty.resize();
+        }
+      } catch (err) {
+        Sentry.captureException(err);
+      }
+      loaded = true;
+    });
   };
 
   // *** LOGIC
+
+  slides = isPreview ? slides.slice(0, 10) : slides;
 
   // --- Build urls
   if (slides.length == 1) {
@@ -158,7 +171,13 @@
     }
 
     imagesLoaded(slideShowEl, instance => {
-      flkty.resize();
+      try {
+        if (flkty && "resize" in flkty) {
+          flkty.resize();
+        }
+      } catch (err) {
+        Sentry.captureException(err);
+      }
       loaded = true;
     });
   });
@@ -374,11 +393,6 @@
     height: 100px;
   }
 </style>
-
-<svelte:window
-  on:resize={throttle(e => {
-    flkty.reposition();
-  }, 500)} />
 
 <Router>
   {#if slides.length > 2}

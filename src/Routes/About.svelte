@@ -158,6 +158,10 @@
   }
 </style>
 
+<svelte:head>
+  <title>ABOUT / NOVEMBRE</title>
+</svelte:head>
+
 {#await post then post}
   <article class="about" class:hide-text={$menuActiveGlobal}>
 

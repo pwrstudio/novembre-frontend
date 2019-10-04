@@ -15,7 +15,7 @@
   // *** PROPS
   export let url = "";
   export let caption = "";
-  export let size = true;
+  export let size = false;
   export let isListing = false;
   export let loaded = false;
   export let height = false;
@@ -43,23 +43,41 @@
     "https://novtest.imgix.net"
   );
 
-  src = url + "?w=1200" + FULLWIDTH_PARAMS;
+  // console.log("size", size, size === "fullWidth");
+  src =
+    url + "?w=1200" + (size === "fullWidth" ? FULLWIDTH_PARAMS : IMGIX_PARAMS);
   srcPortrait = url + "?w=1000" + PORTRAIT_PARAMS;
 
   // Generate srcset
-  srcset = ["", 600, 800, 1000, 1200, 1400, 1600, 2000].reduce(
-    (result, size) => {
-      return (
-        result + url + "?w=" + size + FULLWIDTH_PARAMS + " " + size + "w, "
-      );
-    }
-  );
+  if (size === "fullWidth") {
+    srcset = ["", 600, 800, 1000, 1200, 1400, 1600, 2000].reduce(
+      (result, size) => {
+        return (
+          result + url + "?w=" + size + FULLWIDTH_PARAMS + " " + size + "w, "
+        );
+      }
+    );
 
-  srcsetPortrait = ["", 600, 800, 1000, 1200, 1400, 1600, 2000].reduce(
-    (result, size) => {
-      return result + url + "?w=" + size + PORTRAIT_PARAMS + " " + size + "w, ";
-    }
-  );
+    srcsetPortrait = ["", 600, 800, 1000, 1200, 1400, 1600, 2000].reduce(
+      (result, size) => {
+        return (
+          result + url + "?w=" + size + PORTRAIT_PARAMS + " " + size + "w, "
+        );
+      }
+    );
+  } else {
+    srcset = ["", 600, 800, 1000, 1200, 1400, 1600, 2000].reduce(
+      (result, size) => {
+        return result + url + "?w=" + size + IMGIX_PARAMS + " " + size + "w, ";
+      }
+    );
+
+    srcsetPortrait = ["", 600, 800, 1000, 1200, 1400, 1600, 2000].reduce(
+      (result, size) => {
+        return result + url + "?w=" + size + IMGIX_PARAMS + " " + size + "w, ";
+      }
+    );
+  }
 
   if (size === true || size === "fullWidth") {
     sizes = "80vw";
@@ -100,6 +118,7 @@
     &--full {
       height: $full-height;
       width: 100vw;
+      margin-bottom: 60px;
 
       img,
       video {

@@ -14,10 +14,7 @@
   import { navigationStyle, menuActiveGlobal } from "../stores.js";
 
   // COMPONENTS
-  import TaxList from "../Components/TaxList.svelte";
   import Footer from "../Components/Footer.svelte";
-  import Logo from "../Components/Logo.svelte";
-  import NewsletterSignUp from "../Components/NewsletterSignUp.svelte";
 
   // PROPS
   export let endpoint = "";
@@ -98,6 +95,10 @@
   }
 
 </style>
+
+<svelte:head>
+  <title>STOCKISTS/ NOVEMBRE</title>
+</svelte:head>
 
 {#await post then post}
   <article

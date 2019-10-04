@@ -130,6 +130,11 @@
   }
 </style>
 
+
+<svelte:head>
+  <title>CONTACT / NOVEMBRE</title>
+</svelte:head>
+
 {#await post then post}
   <article class="contact" class:hide-text={$menuActiveGlobal}>
 

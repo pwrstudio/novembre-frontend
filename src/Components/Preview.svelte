@@ -32,6 +32,8 @@
   export let isHeader = false;
   export let first = false;
 
+  // console.log(JSON.parse(JSON.stringify(post)));
+
   // *** DOM REFERENCE
   let previewEl = {};
 
@@ -155,7 +157,7 @@
 
       @include screen-size("small") {
         font-size: $mobile_large;
-        hyphens: auto;
+        // hyphens: auto;
       }
 
       &--large-text {
@@ -168,7 +170,7 @@
 
         @include screen-size("small") {
           font-size: $large;
-          hyphens: auto;
+          // hyphens: auto;
           padding-bottom: 20px;
         }
       }
@@ -223,10 +225,14 @@
 
     &--multi {
       &.first {
-        padding-top: 145px;
+        padding-top: 60px;
+        min-height: 100vh;
       }
       &.header {
-        height: 100vh;
+        padding-top: 70px;
+        padding-bottom: 40px;
+
+        // height: 100vh;
       }
     }
     &--text {
@@ -266,7 +272,8 @@
       class:bottom-tags={post.header.previewType == 'multi' || post.header.previewType == 'text'}>
       <TaxList
         taxonomy={post.header.taxonomy}
-        white={post.header.previewColor} />
+        white={post.header.previewColor}
+        isPreview={true} />
     </div>
     <!-- {/if} -->
     <!-- </MediaQuery> -->

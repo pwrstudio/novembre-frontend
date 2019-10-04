@@ -133,8 +133,8 @@
   // *** ON MOUNT
   onMount(async () => {
     pageLocation.set(title);
-    window.scrollTo(0, 0);
     try {
+      window.scrollTo(0, 0);
       observer.observe(sentinel);
     } catch (err) {
       Sentry.captureException(err);
