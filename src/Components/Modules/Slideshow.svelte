@@ -463,7 +463,7 @@
         on:click={e => {
           e.stopPropagation();
           e.preventDefault();
-          flkty.next(true);
+          flkty.previous(true);
         }}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -486,7 +486,7 @@
         on:click={e => {
           e.stopPropagation();
           e.preventDefault();
-          flkty.previous(true);
+          flkty.next(true);
         }}>
         <svg
           xmlns="http://www.w3.org/2000/svg"

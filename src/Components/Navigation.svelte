@@ -27,7 +27,7 @@
   let menuActive = false;
   let menuItems = [
     { title: "MAGAZINE", target: "/magazine" },
-    { title: "ENTERTAINMENT", target: "/entertainment" },
+    { title: "BUREAU", target: "/bureau" },
     { title: "ABOUT", target: "/about" },
     { title: "CONTACT", target: "/contact" },
     { title: "STOCKISTS", target: "/stockists" }

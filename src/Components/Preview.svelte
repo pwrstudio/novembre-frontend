@@ -226,7 +226,7 @@
     &--multi {
       &.first {
         padding-top: 60px;
-        min-height: 100vh;
+        // min-height: 100vh;
       }
       &.header {
         padding-top: 70px;
@@ -238,6 +238,12 @@
     &--text {
       &.first {
         padding-top: 155px;
+      }
+    }
+
+    &.header {
+      a {
+        cursor: default;
       }
     }
   }

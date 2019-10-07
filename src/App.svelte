@@ -33,8 +33,8 @@
       endpoint: baseURL + "magazine.json",
       showTaxonomyScroller: true
     },
-    entertainment: {
-      title: "Entertainment",
+    bureau: {
+      title: "Bureau",
       endpoint: baseURL + "entertainment.json",
       showTaxonomyScroller: true
     },
@@ -56,8 +56,8 @@
     magazine: {
       endpoint: baseURL + "magazine/"
     },
-    entertainment: {
-      endpoint: baseURL + "entertainment/",
+    bureau: {
+      endpoint: baseURL + "bureau/",
       isEntertainment: true
     }
   };
@@ -241,14 +241,11 @@
     path="magazine/category/:query"
     component={Listing}
     {...listingRouteParams.magazine} />
+  <Route path="bureau" component={Listing} {...listingRouteParams.bureau} />
   <Route
-    path="entertainment"
+    path="bureau/category/:query"
     component={Listing}
-    {...listingRouteParams.entertainment} />
-  <Route
-    path="entertainment/category/:query"
-    component={Listing}
-    {...listingRouteParams.entertainment} />
+    {...listingRouteParams.bureau} />
   <Route
     path="taxonomy/:query"
     component={Listing}
@@ -267,9 +264,9 @@
     component={Article}
     {...articleRouteParams.magazine} />
   <Route
-    path="entertainment/:slug"
+    path="bureau/:slug"
     component={Article}
-    {...articleRouteParams.entertainment} />
+    {...articleRouteParams.bureau} />
   <Route path="about" component={About} {...pageRouteParams.about} />
   <Route path="contact" component={Contact} {...pageRouteParams.contact} />
   <Route

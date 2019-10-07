@@ -116,8 +116,7 @@
     }
 
     &--free {
-      cursor: pointer;
-
+      // cursor: pointer;
       display: inline-block;
       margin-bottom: $small-margin;
 
