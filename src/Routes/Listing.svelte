@@ -67,7 +67,6 @@
   }
   const observer = new IntersectionObserver(
     entries => {
-      // console.log("LOAD TRIGGERD");
       entries.forEach(entry => {
         if (entry.intersectionRatio > 0 && firstLoad) {
           if (meta.nextindex < meta.lastindex) {
@@ -77,7 +76,6 @@
             finishedLoading = true;
           }
         } else {
-          // console.log("case 2");
         }
       });
     },
@@ -102,7 +100,6 @@
   loadData(index, query);
 
   function loadData(i, q, tax) {
-    // console.log("q", q);
     if (tax) {
       url =
         "https://testing.novembre.global/filter.json" +
@@ -115,7 +112,6 @@
     } else {
       url = endpoint + "/index:" + i + (q ? "/query:" + q : "");
     }
-    // console.dir(url);
     fetch(url)
       .then(r => r.json())
       .then(arr => {

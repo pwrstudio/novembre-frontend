@@ -21,14 +21,14 @@
     margin-left: auto;
     margin-right: auto;
     max-width: 95vw;
-    margin-bottom: 40px;
+    margin-bottom: $large-vertical-margin;
     font-family: $sans-stack;
     font-size: $small;
     line-height: 1.4em;
     overflow: hidden;
 
     p {
-      margin-bottom: 1rem;
+      margin-bottom: $small-vertical-margin;
     }
 
     @include screen-size("small") {

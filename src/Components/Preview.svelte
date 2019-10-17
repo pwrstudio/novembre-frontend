@@ -32,8 +32,6 @@
   export let isHeader = false;
   export let first = false;
 
-  // console.log(JSON.parse(JSON.stringify(post)));
-
   // *** DOM REFERENCE
   let previewEl = {};
 
@@ -66,12 +64,6 @@
       element: previewEl,
       handler: function(direction) {
         if (direction === "down") {
-          // console.log(
-          //   "1111 - Top",
-          //   post.header.htmlTitle.title.substring(0, 12),
-          //   direction
-          // );
-          // console.error("CHANGE TOP");
           navigationStyle.set(!post.header.previewColor);
         }
       }
@@ -81,12 +73,6 @@
       element: previewEl,
       handler: function(direction) {
         if (direction === "up") {
-          // console.log(
-          //   "2222 - BOTTOM",
-          //   post.header.htmlTitle.title.substring(0, 12),
-          //   direction
-          // );
-          // console.warn("CHANGE BOTTOM");
           navigationStyle.set(!post.header.previewColor);
         }
       },
@@ -251,11 +237,6 @@
   .loaded {
     opacity: 1;
   }
-
-  // .preview__slide {
-  //   height: $
-  //   overflow: hidden;
-  // }
 </style>
 
 <div

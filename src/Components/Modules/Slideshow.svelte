@@ -32,8 +32,6 @@
   let navSlideShowEl = {};
   let slideShowNavEl = {};
 
-  // console.log("autoplay", autoplay);
-
   // *** CONSTANTS
   const IMGIX_PARAMS = "&auto=format&q=90";
 
@@ -197,9 +195,8 @@
   .nav-container {
     height: 140px;
     width: 100%;
-    // background: $grey;
-    margin-top: 10px;
-    margin-bottom: 60px;
+    margin-top: $small-vertical-margin;
+    margin-bottom: $large-vertical-margin;
 
     @include screen-size("small") {
       height: 120px;

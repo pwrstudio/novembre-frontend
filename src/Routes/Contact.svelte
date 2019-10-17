@@ -57,7 +57,7 @@
     margin-left: auto;
     margin-right: auto;
     max-width: 95vw;
-    margin-bottom: 100px;
+    margin-bottom: $large-vertical-margin;
     line-height: 1.2em;
     overflow: hidden;
 
@@ -79,7 +79,7 @@
         margin-right: 0px;
       }
       .column-section {
-        margin-bottom: 20px;
+        margin-bottom: $small-vertical-margin;
         line-height: 1.5em;
 
         a {
@@ -97,7 +97,7 @@
       }
     }
 
-    &.entertainment {
+    &.bureau {
       background: $grey;
     }
 
@@ -129,7 +129,6 @@
     }
   }
 </style>
-
 
 <svelte:head>
   <title>CONTACT / NOVEMBRE</title>

@@ -21,12 +21,11 @@
     margin-left: auto;
     margin-right: auto;
     max-width: 95vw;
-    margin-bottom: 5rem;
     font-family: $serif-stack;
     font-style: italic;
     line-height: 1.2em;
     font-size: $intro;
-    margin-bottom: 3rem;
+    margin-bottom: $large-vertical-margin;
     line-height: 1.2em;
     transition: opacity $transition;
 

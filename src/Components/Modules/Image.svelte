@@ -21,6 +21,7 @@
   export let height = false;
   export let width = false;
   export let file = false;
+  export let alignment = "center";
 
   // *** DOM REFERENCES
   let imageEl = {};
@@ -43,7 +44,8 @@
     "https://novtest.imgix.net"
   );
 
-  // console.log("size", size, size === "fullWidth");
+  url = encodeURI(url);
+
   src =
     url + "?w=1200" + (size === "fullWidth" ? FULLWIDTH_PARAMS : IMGIX_PARAMS);
   srcPortrait = url + "?w=1000" + PORTRAIT_PARAMS;
@@ -87,6 +89,7 @@
 
   // *** ON MOUNT
   onMount(async () => {
+    console.dir(alignment);
     imagesLoaded(imageEl, instance => {
       loaded = true;
     });
@@ -99,12 +102,10 @@
   .image {
     width: 100%;
     height: auto;
-    // pointer-events: none;
 
     $block: &;
 
-    // margin-top: 20px;
-    margin-bottom: 20px;
+    margin-bottom: $large-vertical-margin;
 
     &.listing {
       margin-top: 0px;
@@ -118,7 +119,7 @@
     &--full {
       height: $full-height;
       width: 100vw;
-      margin-bottom: 60px;
+      margin-bottom: $large-vertical-margin;
 
       img,
       video {
@@ -133,7 +134,7 @@
         margin-left: auto;
         margin-right: auto;
         max-width: 95vw;
-        margin-bottom: 40px;
+        margin-bottom: $large-vertical-margin;
       }
     }
 
@@ -147,16 +148,32 @@
     }
 
     &--inline {
-      height: auto;
+      height: 900px;
       width: 800px;
-      margin-left: auto;
-      margin-right: auto;
       max-width: 95vw;
-      margin-bottom: 40px;
+      max-height: 100vh;
+      margin-bottom: $large-vertical-margin;
 
       img,
       video {
         width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+
+      &.center {
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      &.left {
+        margin-left: 0px;
+        margin-right: auto;
+      }
+
+      &.right {
+        margin-left: auto;
+        margin-right: 0px;
       }
     }
   }
@@ -165,11 +182,34 @@
     font-family: $sans-stack;
     font-size: $small;
     font-weight: 300;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    margin-bottom: $large-vertical-margin;
   }
+
+  // .center {
+  //   .caption {
+  //     text-align: center;
+  //   }
+  // }
+
+  // .left {
+  //   .caption {
+  //     text-align: left;
+  //   }
+  // }
+
+  // .right {
+  //   .caption {
+  //     text-align: right;
+  //   }
+  // }
 </style>
 
 <div
-  class="image"
+  class="image {alignment}"
   class:image--full={size == true || size == 'fullWidth'}
   class:image--inline={size == 'proportional' || size == 'inline'}
   class:listing={isListing}

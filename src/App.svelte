@@ -35,7 +35,7 @@
     },
     bureau: {
       title: "Bureau",
-      endpoint: baseURL + "entertainment.json",
+      endpoint: baseURL + "bureau.json",
       showTaxonomyScroller: true
     },
     taxonomy: {
@@ -58,7 +58,7 @@
     },
     bureau: {
       endpoint: baseURL + "bureau/",
-      isEntertainment: true
+      isBureau: true
     }
   };
 
@@ -83,7 +83,7 @@
     padding: 0;
     margin: 0;
 
-    &.entertainment {
+    &.bureau {
       // background: $grey;
       background-color: $grey;
     }
@@ -170,7 +170,7 @@
     opacity: 1;
   }
 
-  .entertainment {
+  .bureau {
     p {
       // min-height: 400px;
       column-count: 2;

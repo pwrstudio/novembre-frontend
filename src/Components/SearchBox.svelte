@@ -12,8 +12,6 @@
   let submitWidth;
   let inputWidth;
 
-  // console.log(searchField);
-
   const showSearchBox = e => {
     e.preventDefault();
     e.stopPropagation();
@@ -59,10 +57,9 @@
     font-weight: 300;
 
     position: relative;
-    margin-bottom: $small-margin;
+    margin-bottom: $small-vertical-margin;
 
     // top: -4px;
-
     &__input {
       display: inline-block;
       position: relative;

@@ -18,17 +18,9 @@
       display: block;
     }
 
-    path {
-      // transition: fill 0.3s $transition;
-      // stroke: black;
-      // stroke-width: 0.2;
-      // fill: transparent;
-    }
-
     &--white {
       path {
         fill: white;
-        // stroke: black;
       }
     }
   }

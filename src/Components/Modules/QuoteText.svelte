@@ -22,11 +22,10 @@
     margin-left: auto;
     margin-right: auto;
     max-width: 95vw;
-    margin-bottom: 5rem;
+    margin-bottom: $large-vertical-margin;
     font-family: $serif-stack;
     font-style: italic;
     font-size: $large;
-    margin-bottom: 3rem;
     line-height: 1em;
 
     @include screen-size("small") {

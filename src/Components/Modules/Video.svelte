@@ -117,7 +117,6 @@
     font-family: $sans-stack;
     font-size: $small;
 
-    // margin-bottom: 20px;
     position: relative;
 
     &--full {
@@ -175,14 +174,12 @@
 
     width: 100px;
     height: 100px;
-    // background: red;
 
     transform: translateX(-50%) translateY(-50%);
     pointer-events: none;
 
     svg {
       width: 100%;
-      // height: 100%;
     }
   }
 

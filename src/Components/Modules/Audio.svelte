@@ -21,10 +21,6 @@
   let showControlsTimeout;
   let controlsTimeoutDuration = 2500;
 
-  // $: if (duration > 0) {
-  //   window.alert(duration);
-  // }
-
   // From => https://svelte.dev/tutorial/media-elements
   function handleMousemove(e) {
     // Make the controls visible, but fade out after
@@ -87,7 +83,7 @@
     font-family: $sans-stack;
     font-size: $small;
 
-    margin-bottom: 20px;
+    margin-bottom: $large-vertical-margin;
     position: relative;
 
     height: 500px;
@@ -101,7 +97,6 @@
       margin-left: auto;
       margin-right: auto;
       max-width: 95vw;
-      // margin-bottom: 5rem;
 
       audio {
         width: 100%;
@@ -128,14 +123,12 @@
 
     width: 200px;
     height: 200px;
-    // background: red;
 
     transform: translateX(-50%) translateY(-50%);
     pointer-events: none;
 
     svg {
       width: 100%;
-      // height: 100%;
     }
   }
 

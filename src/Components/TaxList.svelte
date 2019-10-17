@@ -91,15 +91,15 @@
     {/each}
   {/if}
 
-  {#if taxonomy.entertainment}
-    {#each taxonomy.entertainment as e}
+  {#if taxonomy.bureau}
+    {#each taxonomy.bureau as e}
       <span class="taxonomy__item">
         <a
-          href="https://testing.novembre.global/entertainment/#{e}"
+          href="https://testing.novembre.global/bureau/#{e}"
           on:click={event => {
             event.preventDefault();
             event.stopPropagation();
-            window.location = 'https://testing.novembre.global/entertainment#' + e.toLowerCase();
+            window.location = 'https://testing.novembre.global/bureau#' + e.toLowerCase();
           }}>
           {e}
         </a>

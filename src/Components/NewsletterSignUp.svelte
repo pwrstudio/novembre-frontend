@@ -43,12 +43,12 @@
   .newsletter-signup {
     width: 100%;
     height: auto;
-    margin-bottom: 40px;
+    margin-bottom: $large-vertical-margin;
     line-height: 1.2em;
     overflow: hidden;
     font-family: $sans-stack;
     &__item {
-      margin-bottom: 1em;
+      margin-bottom: $small-vertical-margin;
       break-inside: avoid;
     }
 
@@ -68,8 +68,7 @@
     }
 
     .form-section {
-      margin-bottom: $small-margin;
-      margin-bottom: 15px;
+      margin-bottom: $large-vertical-margin;
       width: 100%;
 
       &.submit-button {

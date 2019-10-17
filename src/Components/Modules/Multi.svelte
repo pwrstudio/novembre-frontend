@@ -49,8 +49,6 @@
     f.sizes = sizes;
   });
 
-  // console.log(srcset);
-
   // *** ON MOUNT
   onMount(async () => {
     imagesLoaded(imageEl, instance => {
@@ -72,8 +70,7 @@
 
     $block: &;
 
-    // margin-top: 20px;
-    margin-bottom: 20px;
+    margin-bottom: $large-vertical-margin;
 
     &.listing {
       margin-top: 0px;
@@ -107,7 +104,7 @@
       margin-left: auto;
       margin-right: auto;
       max-width: 95vw;
-      margin-bottom: 40px;
+      margin-bottom: $large-vertical-margin;
 
       img,
       video {
@@ -139,7 +136,6 @@
       &--free-1 {
         #{ $block }__image {
           max-width: 100vw;
-          // background: red;
         }
       }
 
@@ -165,7 +161,7 @@
     &--free-1 {
       #{ $block }__image {
         max-width: 45vw;
-        // background: red;
+
         @include screen-size("small") {
           max-width: unset;
           width: 75vw;
@@ -180,14 +176,13 @@
           max-width: unset;
           width: 46vw;
         }
-        // background: red;
       }
     }
 
     &--free-3 {
       #{ $block }__image {
         max-width: 30vw;
-        // background: red;
+
         @include screen-size("small") {
           max-width: unset;
           width: 42vw;
@@ -202,7 +197,6 @@
           max-width: unset;
           width: 38vw;
         }
-        // background: red;
       }
     }
   }

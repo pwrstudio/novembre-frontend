@@ -33,7 +33,7 @@
   // *** PROPS
   export let slug = "";
   export let endpoint = "";
-  export let isEntertainment = false;
+  export let isBureau = false;
   export let location = {};
 
   // *** VARIABLES
@@ -63,7 +63,6 @@
 
   const scrollDown = () => {
     try {
-      // console.log(post);
       window.scrollTo({
         top: 500,
         behavior: "smooth"
@@ -80,9 +79,9 @@
   // *** ON MOUNT
   onMount(async () => {
     window.scrollTo(0, 0);
-    if (isEntertainment) {
+    if (isBureau) {
       try {
-        document.getElementsByTagName("html")[0].classList.add("entertainment");
+        document.getElementsByTagName("html")[0].classList.add("bureau");
       } catch (err) {
         Sentry.captureException(err);
       }
@@ -93,9 +92,7 @@
   onDestroy(async () => {
     window.scrollTo(0, 0);
     try {
-      document
-        .getElementsByTagName("html")[0]
-        .classList.remove("entertainment");
+      document.getElementsByTagName("html")[0].classList.remove("bureau");
     } catch (err) {
       Sentry.captureException(err);
     }
@@ -107,23 +104,12 @@
 
   .article {
     background: white;
-    // min-height: 160vh;
-
-    // &.dark-background {
-    //   background: black;
-    // }
-
-    // &.light-background {
-    //   background: white;
-    // }
 
     &.top-padded {
       padding-top: 100px;
-      // background: $grey;
     }
 
-    &.entertainment {
-      // padding-top: 100px;
+    &.bureau {
       background: $grey;
     }
 
@@ -150,8 +136,8 @@
       font-weight: 300;
       line-height: 1em;
       text-transform: uppercase;
-      margin-bottom: 3rem;
-      margin-top: 1rem;
+      margin-bottom: $large-vertical-margin;
+      margin-top: $small-vertical-margin;
       line-height: 0.9em;
       max-width: 90%;
       font-family: $sans-stack;
@@ -160,8 +146,7 @@
 
       @include screen-size("small") {
         font-size: $mobile_xlarge;
-        // hyphens: auto;
-        margin-bottom: 20px;
+        margin-bottom: $small-vertical-margin;
       }
 
       transition: opacity $transition;
@@ -191,7 +176,7 @@
     text-transform: uppercase;
     line-height: 0.9em;
     margin-bottom: $small-margin;
-    margin-top: 20px;
+    margin-top: $small-vertical-margin;
     margin-left: $small-margin;
 
     @include screen-size("small") {
@@ -210,7 +195,7 @@
   <article
     class="article"
     class:top-padded={post.header.previewType == 'text'}
-    class:entertainment={isEntertainment}
+    class:bureau={isBureau}
     class:dark-background={$menuActiveGlobal && $navigationStyle}
     class:light-background={$menuActiveGlobal && !$navigationStyle}>
 
@@ -240,7 +225,7 @@
     {#if post.header.fieldSelection}
       {#each post.header.fieldSelection as { select, body, introduction, quote, credits, image, video, embed, audio, slideshow, portal }}
         {#if select == 'body'}
-          <BodyText {...body} {isEntertainment} />
+          <BodyText {...body} {isBureau} />
         {:else if select == 'introduction'}
           <IntroductionText {...introduction} />
         {:else if select == 'quote'}

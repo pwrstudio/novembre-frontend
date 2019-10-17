@@ -12,7 +12,7 @@
 
   // *** PROPS
   export let text;
-  export let isEntertainment = false;
+  export let isBureau = false;
 </script>
 
 <style lang="scss">
@@ -24,7 +24,7 @@
     margin-left: auto;
     margin-right: auto;
     max-width: 95vw;
-    margin-bottom: 20px;
+    margin-bottom: $large-vertical-margin;
     font-family: $serif-stack;
     font-size: $body;
     line-height: 1.2em;
@@ -35,7 +35,7 @@
     }
 
     p {
-      margin-bottom: 1em;
+      margin-bottom: $small-vertical-margin;
     }
 
     @include screen-size("small") {
@@ -59,7 +59,7 @@
     }
   }
 
-  .entertainment {
+  .bureau {
     font-family: $sans-stack;
   }
 
@@ -77,7 +77,7 @@
 
 <div
   class="body-text"
-  class:entertainment={isEntertainment}
+  class:bureau={isBureau}
   class:hide-text={$menuActiveGlobal}>
   {@html text}
 </div>

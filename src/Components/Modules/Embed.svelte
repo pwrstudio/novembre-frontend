@@ -44,10 +44,9 @@
     font-family: $sans-stack;
     font-size: $small;
 
-    margin-bottom: 20px;
-    position: relative;
+    margin-bottom: $large-vertical-margin;
 
-    // background: green;
+    position: relative;
 
     &--full {
       height: $full-height;
@@ -65,8 +64,6 @@
       display: flex;
       justify-content: center;
       align-items: center;
-
-      // margin-bottom: 5rem;
 
       @include screen-size("small") {
         height: 70vh;

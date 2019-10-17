@@ -71,15 +71,11 @@
 
     width: 100vw;
     z-index: 100;
-    // transition: background 0.5s $transition;
 
     color: white;
 
-    // transition: color 0.3s $transition;
-
     &--black {
       color: black;
-      // background: red;
     }
 
     &__bar {
@@ -176,8 +172,6 @@
 
         @include screen-size("small") {
           font-size: 45px;
-          // hyphens: manual;
-          // font-size: 46px;
         }
       }
 

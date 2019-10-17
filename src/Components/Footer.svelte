@@ -42,7 +42,6 @@
 
     &.active {
       opacity: 1;
-      // transition: opacity 0.5s ease-out;
     }
 
     &__logo {
@@ -79,8 +78,6 @@
 
         @include screen-size("small") {
           font-size: 45px;
-          // hyphens: manual;
-          // font-size: 46px;
         }
       }
 

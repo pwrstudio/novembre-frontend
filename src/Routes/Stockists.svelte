@@ -56,7 +56,7 @@
     margin-left: auto;
     margin-right: auto;
     max-width: 95vw;
-    margin-bottom: 40px;
+    margin-bottom:  $large-vertical-margin;
     line-height: 1.2em;
     overflow: hidden;
     font-family: $sans-stack;
@@ -66,7 +66,7 @@
     }
 
     &__item {
-      margin-bottom: 2em;
+      margin-bottom:  $small-vertical-margin;
       break-inside: avoid;
     }
   }
@@ -80,7 +80,7 @@
     margin-left: auto;
     margin-right: auto;
     max-width: 95vw;
-    margin-bottom: 100px;
+    margin-bottom: $large-vertical-margin;
     line-height: 1.2em;
     overflow: hidden;
 

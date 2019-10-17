@@ -26,7 +26,13 @@
   // *** VARIABLES
   let scrollListEl;
   const dispatch = createEventDispatcher();
-  let taxArray = Array.from(Object.keys(taxlist[taxname]));
+  let taxArray = [];
+
+  try {
+    taxArray = Array.from(Object.keys(taxlist[taxname]));
+  } catch (err) {
+    Sentry.captureException(err);
+  }
 
   // *** FUNCTIONS
   function slugify(string) {
