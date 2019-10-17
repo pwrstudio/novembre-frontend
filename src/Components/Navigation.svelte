@@ -187,6 +187,10 @@
         height: 360px;
         width: 600px;
 
+        @include screen-size("small") {
+          display: none;
+        }
+
         img,
         video {
           height: 100%;
