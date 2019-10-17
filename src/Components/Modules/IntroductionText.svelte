@@ -29,9 +29,9 @@
     line-height: 1.2em;
     transition: opacity $transition;
 
-    &.hide-text {
-      opacity: 0;
-    }
+    // &.hide-text {
+    //   opacity: 0;
+    // }
 
     @include screen-size("small") {
       font-size: $mobile_intro;

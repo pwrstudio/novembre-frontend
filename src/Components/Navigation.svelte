@@ -8,10 +8,12 @@
   // *** IMPORTS
   import { Router, links } from "svelte-routing";
   import MediaQuery from "svelte-media-query";
+  import { fade } from "svelte/transition";
 
   // *** COMPONENTS
   import Logo from "./Logo.svelte";
   import SearchBox from "./SearchBox.svelte";
+  import debounce from "lodash/debounce";
 
   // *** STORES
   import {
@@ -32,13 +34,23 @@
     { title: "CONTACT", target: "/contact" },
     { title: "STOCKISTS", target: "/stockists" }
   ];
+  let scrolled = false;
 
   // *** REACTIVE
   $: toggleText = menuActive ? "CLOSE" : "MENU";
   $: menuActiveGlobal.set(menuActive);
+  $: {
+    if (menuActive) {
+      document.querySelector("body").classList.add("no-scroll");
+      navigationStyle.set(false);
+      scrolled = true;
+    } else {
+      document.querySelector("body").classList.remove("no-scroll");
+    }
+  }
 
   // *** FUNCTIONS
-  var scroll = () => {
+  const scroll = () => {
     menuActive = false;
     if (window.scrollY > 8000) {
       window.scrollTo({
@@ -49,6 +61,19 @@
         top: 0,
         behavior: "smooth"
       });
+    }
+  };
+
+  const handleScroll = e => {
+    console.log("height", Math.round(window.innerHeight / 1.5));
+    console.log("pos", window.scrollY);
+    if (window.scrollY > Math.round(window.innerHeight / 1.5)) {
+      navigationStyle.set(false);
+      scrolled = true;
+      console.log("scrolled down");
+    } else {
+      // navigationStyle.set(true);
+      // scrolled = false;
     }
   };
 </script>
@@ -82,6 +107,9 @@
       width: 100vw;
       height: $height;
       z-index: 100;
+      opacity: 1;
+      background: transparent;
+      transition: background 0.4s $transition;
     }
 
     &--transparent {
@@ -119,6 +147,8 @@
       line-height: 80px;
       padding-right: $small-margin;
       cursor: pointer;
+      position: relative;
+      z-index: 1000;
 
       @include screen-size("small") {
         display: none;
@@ -130,12 +160,13 @@
       display: block;
       margin: 0;
       padding: 10px;
-      opacity: 0;
+      opacity: 1;
       width: 100vw;
-      height: 100%;
+      height: auto;
       pointer-events: none;
       clip-path: inset(0 0 100% 0);
       padding-bottom: 20px;
+      background: white;
 
       span {
         display: inline;
@@ -145,6 +176,22 @@
 
         @include screen-size("small") {
           font-size: $mobile_large;
+        }
+      }
+
+      .banner {
+        position: fixed;
+        top: 110px;
+        right: 10px;
+        background: orangered;
+        height: 360px;
+        width: 600px;
+
+        img,
+        video {
+          height: 100%;
+          width: 100%;
+          object-fit: cover;
         }
       }
     }
@@ -226,11 +273,35 @@
       #{$block}__menu {
         pointer-events: all;
         clip-path: inset(0 0 0% 0);
-        transition: clip-path 0.6s $transition, opacity 0.4s $transition;
+        transition: clip-path 0.25s $transition, opacity 0.3s $transition;
         opacity: 1;
         @include screen-size("small") {
           height: $full-height;
         }
+      }
+    }
+
+    .bg-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: $height;
+      background: white;
+      // z-index: 10;
+      opacity: 0;
+      transition: opacity 0.1s $transition;
+    }
+
+    &.scrolled {
+      color: black;
+
+      .bg-bar {
+        transition: opacity 0.4s $transition;
+
+        // transition: none;
+
+        opacity: 1;
       }
     }
   }
@@ -256,6 +327,7 @@
   class:navigation--transparent={isTransparent}
   class:navigation--black={!$navigationStyle}
   class:navigation--expanded={menuActive}
+  class:scrolled
   use:links>
 
   <Router>
@@ -291,39 +363,56 @@
       </MediaQuery>
     </div>
 
+    <div class="bg-bar" />
+
     <menu class="navigation__menu" on:click={() => (menuActive = !menuActive)}>
-      <MediaQuery query="(max-width: 800px)" let:matches>
-        {#if matches}
-          <menuitem class="navigation__menu-item">
-            <a href="/" class="navigation__link">
-              <div class="navigation__link--normal">FEED</div>
-              <div class="navigation__link--hover">FEED</div>
+
+      {#if menuActive}
+        <MediaQuery query="(max-width: 800px)" let:matches>
+          {#if matches}
+            <menuitem class="navigation__menu-item" in:fade={{ duration: 200 }}>
+              <a href="/" class="navigation__link">
+                <div class="navigation__link--normal">FEED</div>
+                <div class="navigation__link--hover">FEED</div>
+              </a>
+            </menuitem>
+          {/if}
+        </MediaQuery>
+
+        {#each menuItems as item, menuIndex}
+          <menuitem in:fade={{ duration: 200 }} class="navigation__menu-item">
+            <a href={item.target} class="navigation__link">
+              <div class="navigation__link--normal">
+                {@html item.title}
+              </div>
+              <div class="navigation__link--hover">
+                {@html item.title}
+              </div>
             </a>
           </menuitem>
-        {/if}
-      </MediaQuery>
+        {/each}
 
-      {#each menuItems as item}
-        <menuitem class="navigation__menu-item">
-          <a href={item.target} class="navigation__link">
-            <div class="navigation__link--normal">
-              {@html item.title}
-            </div>
-            <div class="navigation__link--hover">
-              {@html item.title}
-            </div>
-          </a>
+        <menuitem class="navigation__menu-item" in:fade={{ duration: 200 }}>
+          <SearchBox {menuActive} />
+          {menuItems.length}
         </menuitem>
-      {/each}
+      {/if}
 
-      <menuitem class="navigation__menu-item">
-        <SearchBox {menuActive} />
-      </menuitem>
+      <div class="banner">
+        <a href="https://www.salondenormandy.global/" target="_blank">
+          Salon de Normandy >>>
+          <!-- <img src="/test2.png" /> -->
+        </a>
+      </div>
+
     </menu>
   </Router>
 
 </nav>
 
+<svelte:window on:scroll={handleScroll} />
+
 <!-- {#if menuActive}
   <div class="overlay" class:black={!$navigationStyle} />
 {/if} -->
+<!-- debounce(handleScroll, 50) -->

@@ -41,8 +41,8 @@
 
   // *** VARIABLES
   let active = false;
-  let elementHeight = 0;
-  let lastScrollY = 0;
+  // let elementHeight = 0;
+  // let lastScrollY = 0;
   let loaded = false;
   let videoUrl = "";
   let videoSrc = "";
@@ -58,28 +58,28 @@
       loaded = true;
     });
 
-    await tick();
+    // await tick();
 
-    var waypointTop = new Waypoint({
-      element: previewEl,
-      handler: function(direction) {
-        if (direction === "down") {
-          navigationStyle.set(!post.header.previewColor);
-        }
-      }
-    });
+    // var waypointTop = new Waypoint({
+    //   element: previewEl,
+    //   handler: function(direction) {
+    //     if (direction === "down") {
+    //       navigationStyle.set(!post.header.previewColor);
+    //     }
+    //   }
+    // });
 
-    var waypointBottom = new Waypoint({
-      element: previewEl,
-      handler: function(direction) {
-        if (direction === "up") {
-          navigationStyle.set(!post.header.previewColor);
-        }
-      },
-      offset: function() {
-        return -this.element.clientHeight;
-      }
-    });
+    // var waypointBottom = new Waypoint({
+    //   element: previewEl,
+    //   handler: function(direction) {
+    //     if (direction === "up") {
+    //       navigationStyle.set(!post.header.previewColor);
+    //     }
+    //   },
+    //   offset: function() {
+    //     return -this.element.clientHeight;
+    //   }
+    // });
 
     if (first) {
       navigationStyle.set(!post.header.previewColor);
@@ -201,13 +201,13 @@
       color: white;
     }
 
-    &.hide-text {
-      .preview__title,
-      .preview__tags {
-        transition: opacity 0.3 $transition;
-        opacity: 0;
-      }
-    }
+    // &.hide-text {
+    //   .preview__title,
+    //   .preview__tags {
+    //     transition: opacity 0.3 $transition;
+    //     opacity: 0;
+    //   }
+    // }
 
     &--multi {
       &.first {

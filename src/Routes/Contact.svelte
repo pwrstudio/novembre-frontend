@@ -61,9 +61,9 @@
     line-height: 1.2em;
     overflow: hidden;
 
-    &.hide-text {
-      opacity: 0;
-    }
+    // &.hide-text {
+    //   opacity: 0;
+    // }
 
     .column {
       width: calc(50% - 5px);

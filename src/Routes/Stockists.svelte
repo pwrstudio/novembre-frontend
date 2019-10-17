@@ -84,9 +84,9 @@
     line-height: 1.2em;
     overflow: hidden;
 
-    &.hide-text {
-      opacity: 0;
-    }
+    // &.hide-text {
+    //   opacity: 0;
+    // }
 
     em {
       font-family: $serif-stack;

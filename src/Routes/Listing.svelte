@@ -7,7 +7,7 @@
 
   // *** IMPORTS
   import { onMount, onDestroy } from "svelte";
-  import { fade, slide } from "svelte/transition";
+  import { fade, slide, fly } from "svelte/transition";
   import { quintOut } from "svelte/easing";
 
   // *** COMPONENTS
@@ -168,13 +168,13 @@
     font-size: $large;
     font-weight: 300;
     text-transform: uppercase;
-    background: black;
+    // background: black;
     color: white;
     line-height: 0.8em;
     padding-bottom: $small-margin;
     padding-top: $small-margin;
-    position: absolute;
-    top: 80px;
+    position: fixed;
+    top: 75px;
     width: 100%;
     left: 0;
     z-index: 99;
@@ -219,18 +219,18 @@
 
 <div class="listing" class:landing={title === 'Landing'}>
 
-  {#if !$menuActiveGlobal}
-    {#if showTaxonomyScroller && firstLoad}
-      <div class="top-block">
-        <ScrollList
-          taxname={title.toLowerCase()}
-          {taxlist}
-          {activeCategory}
-          on:changeCategory={e => {
-            changeCategory(e.detail.newCategory, e.detail.newCategoryName);
-          }} />
-      </div>
-    {/if}
+  <!-- {#if !$menuActiveGlobal} -->
+  {#if showTaxonomyScroller && firstLoad}
+    <div class="top-block">
+      <ScrollList
+        taxname={title.toLowerCase()}
+        {taxlist}
+        {activeCategory}
+        on:changeCategory={e => {
+          changeCategory(e.detail.newCategory, e.detail.newCategoryName);
+        }} />
+    </div>
+    <!-- {/if} -->
 
     {#if isQuery && firstLoad}
       {#if items.length == 0}

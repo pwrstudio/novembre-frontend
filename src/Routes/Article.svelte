@@ -151,9 +151,9 @@
 
       transition: opacity $transition;
 
-      &.hide-text {
-        opacity: 0;
-      }
+      // &.hide-text {
+      //   opacity: 0;
+      // }
     }
 
     &__tags {
@@ -162,9 +162,9 @@
 
       transition: opacity $transition;
 
-      &.hide-text {
-        opacity: 0;
-      }
+      // &.hide-text {
+      //   opacity: 0;
+      // }
     }
   }
 

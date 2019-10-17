@@ -82,9 +82,9 @@
       }
     }
 
-    &.hide-text {
-      opacity: 0;
-    }
+    // &.hide-text {
+    //   opacity: 0;
+    // }
   }
 
   .credits {
@@ -130,9 +130,9 @@
       padding-top: 100px;
     }
 
-    &.hide-text {
-      opacity: 0;
-    }
+    // &.hide-text {
+    //   opacity: 0;
+    // }
 
     &__header {
       img,

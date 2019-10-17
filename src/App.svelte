@@ -96,6 +96,10 @@
     width: 100vw;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+
+    &.no-scroll {
+      overflow: hidden;
+    }
   }
 
   * {
