@@ -30,6 +30,7 @@
 
   try {
     taxArray = Array.from(Object.keys(taxlist[taxname]));
+    taxArray = [...taxArray, ...taxArray];
   } catch (err) {
     Sentry.captureException(err);
   }

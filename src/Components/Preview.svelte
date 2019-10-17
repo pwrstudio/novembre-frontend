@@ -309,9 +309,7 @@
           isPreview={true}
           {first} />
       </a>
-
-      <!-- TEXT -->
-    {:else if post.header.previewType == 'text' && !isHeader}{/if}
+    {/if}
 
     {#if !isHeader}
       <a href="/{post.header.parent}/{post.header.slug}">
