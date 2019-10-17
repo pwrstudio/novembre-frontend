@@ -176,10 +176,8 @@
 
   .bureau {
     p {
-      // min-height: 400px;
       column-count: 2;
       column-fill: auto;
-      // min-height: 300px;
 
       @include screen-size("small") {
         column-count: unset;
