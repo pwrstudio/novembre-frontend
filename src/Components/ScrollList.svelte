@@ -8,6 +8,7 @@
   // *** IMPORTS
   import { onMount } from "svelte";
   import Flickity from "flickity";
+  import { fade, slide, fly } from "svelte/transition";
 
   // *** COMPONENTS
   import { createEventDispatcher } from "svelte";
@@ -19,9 +20,6 @@
   export let activeCategory = "";
 
   let loaded = false;
-
-  // *** STORES
-  import { menuActiveGlobal } from "../stores.js";
 
   // *** VARIABLES
   let scrollListEl;
@@ -141,16 +139,19 @@
 
   .taxonomy-scroller {
     $block: &;
+    height: 96px;
 
     width: 100%;
-    height: 100%;
+    // height: 100%;
 
     background: black;
     color: white;
     opacity: 0;
-    transition: opacity 0.5s ease-out;
+    // transform: translateY(10px);
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
 
     &.loaded {
+      transform: translateY(0px) translateX(0px);
       opacity: 1;
     }
 
@@ -170,12 +171,14 @@
       span {
         // height: 1em;
         cursor: pointer;
+        border-bottom: 2px solid transparent;
       }
 
       span:hover,
       span:active,
       span.active {
-        text-decoration: underline;
+        border-bottom: 2px solid white;
+        // text-decoration: underline;
       }
 
       span.active {
@@ -196,13 +199,16 @@
       }
 
       &--large {
-        position: relative;
+        height: 96px;
+        width: 100%;
+
+        position: fixed;
         top: 2px;
         font-family: $sans-stack;
         font-size: $large;
         font-weight: 300;
         text-transform: uppercase;
-        line-height: 0.8em;
+        line-height: 1.4em;
 
         @include screen-size("small") {
           font-size: $mobile_large;
@@ -214,7 +220,8 @@
   }
 </style>
 
-<div class="taxonomy-scroller" class:hide={$menuActiveGlobal} class:loaded>
+<!-- {#if loaded} -->
+<div class="taxonomy-scroller" class:loaded>
   <div
     class="main-carousel taxonomy-scroller__slideshow
     taxonomy-scroller__slideshow--large"
@@ -230,3 +237,4 @@
     {/each}
   </div>
 </div>
+<!-- {/if} -->

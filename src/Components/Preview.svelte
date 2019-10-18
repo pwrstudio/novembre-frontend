@@ -24,9 +24,6 @@
   import Image from "./Modules/Image.svelte";
   import Slideshow from "./Modules/Slideshow.svelte";
 
-  // *** STORES
-  import { navigationStyle, menuActiveGlobal } from "../stores.js";
-
   // *** PROPS
   export let post = {};
   export let isHeader = false;
@@ -41,8 +38,8 @@
 
   // *** VARIABLES
   let active = false;
-  let elementHeight = 0;
-  let lastScrollY = 0;
+  // let elementHeight = 0;
+  // let lastScrollY = 0;
   let loaded = false;
   let videoUrl = "";
   let videoSrc = "";
@@ -58,32 +55,32 @@
       loaded = true;
     });
 
-    await tick();
+    // await tick();
 
-    var waypointTop = new Waypoint({
-      element: previewEl,
-      handler: function(direction) {
-        if (direction === "down") {
-          navigationStyle.set(!post.header.previewColor);
-        }
-      }
-    });
+    // var waypointTop = new Waypoint({
+    //   element: previewEl,
+    //   handler: function(direction) {
+    //     if (direction === "down") {
+    //       navigationColor.set(!post.header.previewColor);
+    //     }
+    //   }
+    // });
 
-    var waypointBottom = new Waypoint({
-      element: previewEl,
-      handler: function(direction) {
-        if (direction === "up") {
-          navigationStyle.set(!post.header.previewColor);
-        }
-      },
-      offset: function() {
-        return -this.element.clientHeight;
-      }
-    });
+    // var waypointBottom = new Waypoint({
+    //   element: previewEl,
+    //   handler: function(direction) {
+    //     if (direction === "up") {
+    //       navigationColor.set(!post.header.previewColor);
+    //     }
+    //   },
+    //   offset: function() {
+    //     return -this.element.clientHeight;
+    //   }
+    // });
 
-    if (first) {
-      navigationStyle.set(!post.header.previewColor);
-    }
+    // if (first) {
+    //   navigationColor.set(!post.header.previewColor);
+    // }
   });
 </script>
 
@@ -201,13 +198,13 @@
       color: white;
     }
 
-    &.hide-text {
-      .preview__title,
-      .preview__tags {
-        transition: opacity 0.3 $transition;
-        opacity: 0;
-      }
-    }
+    // &.hide-text {
+    //   .preview__title,
+    //   .preview__tags {
+    //     transition: opacity 0.3 $transition;
+    //     opacity: 0;
+    //   }
+    // }
 
     &--multi {
       &.first {
@@ -243,7 +240,6 @@
   class="preview preview--{post.header.previewType}"
   class:loaded
   class:preview--white={!post.header.previewColor}
-  class:hide-text={$menuActiveGlobal}
   class:first
   class:header={isHeader}
   style={elementStyles}

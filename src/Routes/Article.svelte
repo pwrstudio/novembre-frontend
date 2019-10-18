@@ -28,7 +28,7 @@
   import Portal from "../Components/Modules/Portal.svelte";
 
   // *** STORES
-  import { navigationStyle, menuActiveGlobal } from "../stores.js";
+  import { navigationColor } from "../stores.js";
 
   // *** PROPS
   export let slug = "";
@@ -39,6 +39,8 @@
   // *** VARIABLES
   let currentSlug = slug;
   let title = "";
+
+  navigationColor.set("black");
 
   // *** REACTIVE
   $: {
@@ -73,8 +75,6 @@
   };
 
   let post = loadData();
-
-  navigationStyle.set(false);
 
   // *** ON MOUNT
   onMount(async () => {
@@ -151,9 +151,9 @@
 
       transition: opacity $transition;
 
-      &.hide-text {
-        opacity: 0;
-      }
+      // &.hide-text {
+      //   opacity: 0;
+      // }
     }
 
     &__tags {
@@ -162,9 +162,9 @@
 
       transition: opacity $transition;
 
-      &.hide-text {
-        opacity: 0;
-      }
+      // &.hide-text {
+      //   opacity: 0;
+      // }
     }
   }
 
@@ -195,9 +195,7 @@
   <article
     class="article"
     class:top-padded={post.header.previewType == 'text'}
-    class:bureau={isBureau}
-    class:dark-background={$menuActiveGlobal && $navigationStyle}
-    class:light-background={$menuActiveGlobal && !$navigationStyle}>
+    class:bureau={isBureau}>
 
     <!-- HEADER MEDIA -->
     {#if post.header.previewType != 'text'}
@@ -208,7 +206,7 @@
 
     <!-- DATE & TAGS -->
     {#if post.header.taxonomy}
-      <div class="article__tags" class:hide-text={$menuActiveGlobal}>
+      <div class="article__tags">
         <TaxList
           taxonomy={post.header.taxonomy}
           white={true}
@@ -217,7 +215,7 @@
     {/if}
 
     <!-- TITLE -->
-    <h1 class="article__title" class:hide-text={$menuActiveGlobal}>
+    <h1 class="article__title">
       {@html post.header.htmlTitle.fullTitle}
     </h1>
 

@@ -89,7 +89,6 @@
 
   // *** ON MOUNT
   onMount(async () => {
-    console.dir(alignment);
     imagesLoaded(imageEl, instance => {
       loaded = true;
     });

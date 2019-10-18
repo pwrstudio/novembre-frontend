@@ -54,9 +54,9 @@
       }
     }
 
-    &.hide-text {
-      opacity: 0;
-    }
+    // &.hide-text {
+    //   opacity: 0;
+    // }
   }
 
   .bureau {

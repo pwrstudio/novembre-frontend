@@ -2,9 +2,6 @@
   import Logo from "./Logo.svelte";
   import MediaQuery from "svelte-media-query";
 
-  // *** STORES
-  import { menuActiveGlobal } from "../stores.js";
-
   const scroll = () => {
     if (document.body.clientHeight > 6000) {
       window.scrollTo({
@@ -131,7 +128,7 @@
   }
 </style>
 
-<footer class="footer" class:active class:hide={$menuActiveGlobal}>
+<footer class="footer" class:active>
 
   <MediaQuery query="(min-width: 800px)" let:matches>
     {#if matches}
