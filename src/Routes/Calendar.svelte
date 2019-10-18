@@ -1,13 +1,12 @@
 <script>
   // # # # # # # # # # # # # #
   //
-  //  Page
+  //  Calendar
   //
   // # # # # # # # # # # # # #
 
   // *** IMPORTS
   import { fade } from "svelte/transition";
-  import { quintOut } from "svelte/easing";
   import { onMount } from "svelte";
 
   // STORES
@@ -15,28 +14,14 @@
 
   // COMPONENTS
   import Footer from "../Components/Footer.svelte";
-  import Logo from "../Components/Logo.svelte";
 
   // PROPS
   export let endpoint = "";
   export let slug = "";
   export let location = {};
 
-  // VARIABLES
-  let post = loadData();
-
-  // LOGIC
+  //   // LOGIC
   navigationColor.set("black");
-
-  async function loadData() {
-    try {
-      const res = await fetch(endpoint);
-      const post = await res.json();
-      return post;
-    } catch (err) {
-      Sentry.captureException(err);
-    }
-  }
 
   onMount(async () => {
     window.scrollTo(0, 0);
@@ -159,79 +144,22 @@
 </style>
 
 <svelte:head>
-  <title>ABOUT / NOVEMBRE</title>
+  <title>CALENDAR / NOVEMBRE</title>
 </svelte:head>
 
-{#await post then post}
-  <article class="about">
+<article class="about">
 
-    <div class="body-text">
-      {@html post.content}
-    </div>
+  <div class="body-text">
+    <iframe
+      src="https://calendar.google.com/calendar/embed?src=novembremagazine.com_riqnf01uh50b32n8purjgb86ek%40group.calendar.google.com&ctz=Europe%2FParis"
+      style="border: 0"
+      width="800"
+      title="Calendar"
+      height="600"
+      frameborder="0"
+      scrolling="no" />
+  </div>
 
-    <!-- <div class="credits">
-      {@html post.header.credits}
-    </div> -->
-    <div class="credits">
-      <div class="stockists__item">
-        <strong>Creative directors</strong>
-        <br />
-        Florence Tétier
-        <br />
-        Jeanne-Salomé Rochat
-      </div>
-      <div class="stockists__item">
-        <strong>Editor-in-chief</strong>
-        <br />
-        Florence Tétier
-      </div>
-      <div class="stockists__item">
-        <strong>Arts &amp; critic director</strong>
-        <br />
-        Jeanne-Salomé Rochat
-      </div>
-      <div class="stockists__item">
-        <strong>Editor &amp; luxury consultant</strong>
-        <br />
-        Florian Joye
-      </div>
-      <div class="stockists__item">
-        <strong>Fashion director</strong>
-        <br />
-        Georgia Pendlebury
-      </div>
-      <div class="stockists__item">
-        <strong>Editors-at-large</strong>
-        <br />
-        Nicolas Coulomb
-      </div>
-      <div class="stockists__item">
-        <strong>Legal advisors</strong>
-        <br />
-        Nancy Medina
-        <br />
-        Yannis Egloff
-      </div>
-      <div class="stockists__item">
-        <strong>Contributing editor</strong>
-        <br />
-        Marisa Makin
-      </div>
-      <div class="stockists__item">
-        <strong>Digital Editor</strong>
-        <br />
-        Morgane Nicolas
-      </div>
-      <div class="stockists__item">
-        <strong>Diffusion &amp; Circulation</strong>
-        <br />
-        K.D. Presse
-        <br />
-        Pineapple Media
-      </div>
-      <div class="stockists__item">All rights reserved ©2015/16</div>
-    </div>
-  </article>
+</article>
 
-  <Footer active={true} />
-{/await}
+<Footer active={true} />

@@ -81,7 +81,7 @@
 
       @include screen-size("small") {
         width: 90vw;
-        font-size: $mobile_large;
+        font-size: 45px;
         display: none;
         border-bottom: 0;
         background: transparent;
@@ -113,7 +113,7 @@
       cursor: pointer;
 
       @include screen-size("small") {
-        font-size: $mobile_large;
+        font-size: 45px;
       }
 
       &:hover {
@@ -124,7 +124,7 @@
         font-size: $large;
 
         @include screen-size("small") {
-          font-size: $mobile_large;
+          font-size: 45px;
           font-family: $sans-stack;
           top: unset;
           font-style: normal;
@@ -138,7 +138,7 @@
       line-height: 1em;
 
       @include screen-size("small") {
-        font-size: $mobile_large;
+        font-size: 45px;
       }
 
       &:hover {
@@ -149,7 +149,7 @@
         font-size: $large;
 
         @include screen-size("small") {
-          font-size: $mobile_large;
+          font-size: 45px;
           font-family: $sans-stack;
           top: unset;
           font-style: normal;

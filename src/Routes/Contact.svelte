@@ -12,7 +12,7 @@
   import MediaQuery from "svelte-media-query";
 
   // STORES
-  import { navigationStyle, menuActiveGlobal } from "../stores.js";
+  import { navigationColor } from "../stores.js";
 
   // COMPONENTS
   import Footer from "../Components/Footer.svelte";
@@ -28,7 +28,7 @@
   let post = loadData();
 
   // LOGIC
-  navigationStyle.set(false);
+  navigationColor.set("black");
 
   async function loadData() {
     try {
@@ -135,7 +135,7 @@
 </svelte:head>
 
 {#await post then post}
-  <article class="contact" class:hide-text={$menuActiveGlobal}>
+  <article class="contact">
 
     <div class="column">
       <div class="column-section">

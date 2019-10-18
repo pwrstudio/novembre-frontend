@@ -11,7 +11,7 @@
   import { onMount } from "svelte";
 
   // STORES
-  import { navigationStyle, menuActiveGlobal } from "../stores.js";
+  import { navigationColor } from "../stores.js";
 
   // COMPONENTS
   import Footer from "../Components/Footer.svelte";
@@ -25,7 +25,7 @@
   let post = loadData();
 
   // LOGIC
-  navigationStyle.set(false);
+  navigationColor.set('black');
 
   async function loadData() {
     try {
@@ -102,8 +102,7 @@
 
 {#await post then post}
   <article
-    class="stockist-page"
-    class:hide-text={$menuActiveGlobal}>
+    class="stockist-page">
 
       <div class="stockists">
         <div class="content_tab grid_12">

@@ -24,9 +24,6 @@
   import Image from "./Modules/Image.svelte";
   import Slideshow from "./Modules/Slideshow.svelte";
 
-  // *** STORES
-  import { navigationStyle, menuActiveGlobal } from "../stores.js";
-
   // *** PROPS
   export let post = {};
   export let isHeader = false;
@@ -64,7 +61,7 @@
     //   element: previewEl,
     //   handler: function(direction) {
     //     if (direction === "down") {
-    //       navigationStyle.set(!post.header.previewColor);
+    //       navigationColor.set(!post.header.previewColor);
     //     }
     //   }
     // });
@@ -73,7 +70,7 @@
     //   element: previewEl,
     //   handler: function(direction) {
     //     if (direction === "up") {
-    //       navigationStyle.set(!post.header.previewColor);
+    //       navigationColor.set(!post.header.previewColor);
     //     }
     //   },
     //   offset: function() {
@@ -81,9 +78,9 @@
     //   }
     // });
 
-    if (first) {
-      navigationStyle.set(!post.header.previewColor);
-    }
+    // if (first) {
+    //   navigationColor.set(!post.header.previewColor);
+    // }
   });
 </script>
 
@@ -243,7 +240,6 @@
   class="preview preview--{post.header.previewType}"
   class:loaded
   class:preview--white={!post.header.previewColor}
-  class:hide-text={$menuActiveGlobal}
   class:first
   class:header={isHeader}
   style={elementStyles}

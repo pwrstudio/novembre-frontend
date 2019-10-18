@@ -15,6 +15,7 @@
   import Article from "./Routes/Article.svelte";
   import About from "./Routes/About.svelte";
   import Contact from "./Routes/Contact.svelte";
+  import Calendar from "./Routes/Calendar.svelte";
   import Stockists from "./Routes/Stockists.svelte";
   import Error404 from "./Routes/Error404.svelte";
 
@@ -271,6 +272,7 @@
     {...articleRouteParams.bureau} />
   <Route path="about" component={About} {...pageRouteParams.about} />
   <Route path="contact" component={Contact} {...pageRouteParams.contact} />
+  <Route path="calendar" component={Calendar} {...pageRouteParams.calendar} />
   <Route
     path="stockists"
     component={Stockists}

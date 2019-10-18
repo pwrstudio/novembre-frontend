@@ -18,7 +18,7 @@
   // *** STORES
   import {
     pageLocation,
-    navigationStyle,
+    navigationColor,
     menuActiveGlobal
   } from "../stores.js";
 
@@ -31,6 +31,7 @@
     { title: "MAGAZINE", target: "/magazine" },
     { title: "BUREAU", target: "/bureau" },
     { title: "ABOUT", target: "/about" },
+    { title: "CALENDAR", target: "/calendar" },
     { title: "CONTACT", target: "/contact" },
     { title: "STOCKISTS", target: "/stockists" }
   ];
@@ -42,8 +43,6 @@
   $: {
     if (menuActive) {
       document.querySelector("body").classList.add("no-scroll");
-      navigationStyle.set(false);
-      scrolled = true;
     } else {
       document.querySelector("body").classList.remove("no-scroll");
     }
@@ -61,19 +60,6 @@
         top: 0,
         behavior: "smooth"
       });
-    }
-  };
-
-  const handleScroll = e => {
-    console.log("height", Math.round(window.innerHeight / 1.5));
-    console.log("pos", window.scrollY);
-    if (window.scrollY > Math.round(window.innerHeight / 1.5)) {
-      navigationStyle.set(false);
-      scrolled = true;
-      console.log("scrolled down");
-    } else {
-      // navigationStyle.set(true);
-      // scrolled = false;
     }
   };
 </script>
@@ -179,25 +165,25 @@
         }
       }
 
-      .banner {
-        position: fixed;
-        top: 110px;
-        right: 10px;
-        background: orangered;
-        height: 360px;
-        width: 600px;
+      // .banner {
+      //   position: fixed;
+      //   top: 110px;
+      //   right: 10px;
+      //   background: orangered;
+      //   height: 360px;
+      //   width: 600px;
 
-        @include screen-size("small") {
-          display: none;
-        }
+      //   @include screen-size("small") {
+      //     display: none;
+      //   }
 
-        img,
-        video {
-          height: 100%;
-          width: 100%;
-          object-fit: cover;
-        }
-      }
+      //   img,
+      //   video {
+      //     height: 100%;
+      //     width: 100%;
+      //     object-fit: cover;
+      //   }
+      // }
     }
 
     &__menu-item {
@@ -239,7 +225,6 @@
         hyphens: none;
 
         @include screen-size("small") {
-          font-size: 46px;
           font-size: 45px;
           font-family: $sans-stack;
           font-style: normal;
@@ -292,21 +277,7 @@
       width: 100vw;
       height: $height;
       background: white;
-      // z-index: 10;
-      opacity: 0;
       transition: opacity 0.1s $transition;
-    }
-
-    &.scrolled {
-      color: black;
-
-      .bg-bar {
-        transition: opacity 0.4s $transition;
-
-        // transition: none;
-
-        opacity: 1;
-      }
     }
   }
 
@@ -329,7 +300,7 @@
 <nav
   class="navigation"
   class:navigation--transparent={isTransparent}
-  class:navigation--black={!$navigationStyle}
+  class:navigation--black={$navigationColor === 'black' || menuActive}
   class:navigation--expanded={menuActive}
   class:scrolled
   use:links>
@@ -340,7 +311,7 @@
         {#if matches}
           {#if $pageLocation === 'Landing'}
             <span class="navigation__logo" on:click={scroll}>
-              <Logo white={$navigationStyle} />
+              <Logo white={!menuActive} />
             </span>
           {:else}
             <!-- Menu is closed and we are anywhere else than landing -->
@@ -348,7 +319,7 @@
               href="/"
               class="navigation__logo"
               on:click={() => (menuActive = false)}>
-              <Logo white={$navigationStyle} />
+              <Logo white={$navigationColor === 'white'} />
             </a>
           {/if}
         {:else}
@@ -356,7 +327,7 @@
           <div
             class="navigation__logo"
             on:click={() => (menuActive = !menuActive)}>
-            <Logo white={$navigationStyle} />
+            <Logo white={!menuActive} />
           </div>
         {/if}
         <div
@@ -367,7 +338,9 @@
       </MediaQuery>
     </div>
 
-    <div class="bg-bar" />
+    {#if menuActive}
+      <div class="bg-bar" />
+    {/if}
 
     <menu class="navigation__menu" on:click={() => (menuActive = !menuActive)}>
 
@@ -398,25 +371,10 @@
 
         <menuitem class="navigation__menu-item" in:fade={{ duration: 200 }}>
           <SearchBox {menuActive} />
-          {menuItems.length}
         </menuitem>
       {/if}
-
-      <div class="banner">
-        <a href="https://www.salondenormandy.global/" target="_blank">
-          Salon de Normandy >>>
-          <!-- <img src="/test2.png" /> -->
-        </a>
-      </div>
 
     </menu>
   </Router>
 
 </nav>
-
-<svelte:window on:scroll={handleScroll} />
-
-<!-- {#if menuActive}
-  <div class="overlay" class:black={!$navigationStyle} />
-{/if} -->
-<!-- debounce(handleScroll, 50) -->

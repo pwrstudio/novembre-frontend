@@ -21,9 +21,6 @@
 
   let loaded = false;
 
-  // *** STORES
-  import { menuActiveGlobal } from "../stores.js";
-
   // *** VARIABLES
   let scrollListEl;
   const dispatch = createEventDispatcher();
@@ -224,7 +221,7 @@
 </style>
 
 <!-- {#if loaded} -->
-<div class="taxonomy-scroller" class:hide={$menuActiveGlobal} class:loaded>
+<div class="taxonomy-scroller" class:loaded>
   <div
     class="main-carousel taxonomy-scroller__slideshow
     taxonomy-scroller__slideshow--large"

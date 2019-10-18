@@ -14,9 +14,10 @@
   import Preview from "../Components/Preview.svelte";
   import ScrollList from "../Components/ScrollList.svelte";
   import Footer from "../Components/Footer.svelte";
+  import IntroductionText from "../Components/IntroductionText.svelte";
 
   // *** STORES
-  import { pageLocation, menuActiveGlobal } from "../stores.js";
+  import { pageLocation, navigationColor } from "../stores.js";
 
   // *** PROPS
   export let title = "";
@@ -55,6 +56,8 @@
       loadData(0, currentQuery);
     }
   }
+
+  navigationColor.set("white");
 
   // *** FUNCTIONS
   function changeCategory(newCategory) {
@@ -248,6 +251,9 @@
   <!-- {currentHash} -->
   <div class="listing__posts" bind:this={postsContainerEl}>
     {#each items as post, i}
+      {#if i === 1}
+        <IntroductionText />
+      {/if}
       <Preview {post} first={i == 0 ? true : false} />
     {/each}
   </div>

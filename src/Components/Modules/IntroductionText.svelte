@@ -9,7 +9,7 @@
   export let text = "";
 
   // *** STORES
-  import { navigationStyle, menuActiveGlobal } from "../../stores.js";
+  import { navigationColor, menuActiveGlobal } from "../../stores.js";
 </script>
 
 <style lang="scss">
