@@ -63,17 +63,6 @@
     }
   }
 
-  const scrollDown = () => {
-    try {
-      window.scrollTo({
-        top: 500,
-        behavior: "smooth"
-      });
-    } catch (err) {
-      Sentry.captureException(err);
-    }
-  };
-
   let post = loadData();
 
   // *** ON MOUNT
@@ -150,10 +139,6 @@
       }
 
       transition: opacity $transition;
-
-      // &.hide-text {
-      //   opacity: 0;
-      // }
     }
 
     &__tags {
@@ -161,10 +146,6 @@
       margin-top: $small-margin;
 
       transition: opacity $transition;
-
-      // &.hide-text {
-      //   opacity: 0;
-      // }
     }
   }
 
@@ -237,7 +218,7 @@
         {:else if select == 'embed'}
           <Embed {...embed} />
         {:else if select == 'audio'}
-          <Audio {...audio} autoplay={false} controls={true} />
+          <Audio {...audio} />
         {:else if select == 'slideshow'}
           <Slideshow {...slideshow} isRelated={false} isPreview={false} />
         {:else if select == 'portal'}

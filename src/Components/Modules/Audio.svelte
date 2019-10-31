@@ -5,44 +5,31 @@
   //
   // # # # # # # # # # # # # #
 
+  // *** PROPS
   export let file = "";
   export let url = "";
-  export let caption = "Novembre";
+  export let caption = "";
   export let size = true;
-  export let poster = "";
   export let backgroundColor = false;
   export let posterImage = false;
 
-  let audioEl;
+  // *** VARIABLES
   let time = 0;
-  let duration;
+  let duration = 0;
   let paused = true;
-  let showControls = true;
-  let showControlsTimeout;
-  let controlsTimeoutDuration = 2500;
+  const controlsTimeoutDuration = 2500;
 
-  // From => https://svelte.dev/tutorial/media-elements
+  // *** DOM REFERENCES
+  let audioEl;
+
   function handleMousemove(e) {
-    // Make the controls visible, but fade out after
-    // 2.5 seconds of inactivity
-    clearTimeout(showControlsTimeout);
-    showControlsTimeout = setTimeout(
-      () => (showControls = false),
-      controlsTimeoutDuration
-    );
-    showControls = true;
-
     if (e.which !== 1) return; // mouse not down
     if (!duration) return; // audio not loaded yet
-
     const { left, right } = this.getBoundingClientRect();
     time = (duration * (e.clientX - left)) / (right - left);
   }
 
   function handleMousedown(e) {
-    // we can't rely on the built-in click event, because it fires
-    // after a drag — we have to listen for clicks ourselves
-
     function handleMouseup() {
       if (paused) audioEl.play();
       else audioEl.pause();
@@ -58,120 +45,112 @@
     setTimeout(cancel, 200);
   }
 
-  function format(seconds) {
+  const format = seconds => {
     if (isNaN(seconds)) return "...";
-
     const minutes = Math.floor(seconds / 60);
     seconds = Math.floor(seconds % 60);
     if (seconds < 10) seconds = "0" + seconds;
-
     return `${minutes}:${seconds}`;
-  }
+  };
 </script>
 
 <style lang="scss">
   @import "../../variables.scss";
 
   .audio {
-    $block: &;
-
-    width: 100%;
-    height: auto;
-
-    color: white;
-
-    font-family: $sans-stack;
-    font-size: $small;
-
-    margin-bottom: $large-vertical-margin;
     position: relative;
-
     height: 500px;
-    width: 500px;
+    width: 100%;
+    color: $black;
+    font-family: $sans-stack;
+    font-size: $large;
+    line-height: 1em;
+    margin-bottom: $large-vertical-margin;
 
-    margin-left: auto;
-    margin-right: auto;
-    max-width: 95vw;
-
-    &--inline {
-      margin-left: auto;
-      margin-right: auto;
-      max-width: 95vw;
-
-      audio {
-        width: 100%;
-      }
+    @include screen-size("small") {
+      font-size: $mobile_large;
+      height: 400px;
     }
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(200, 200, 200, 1);
 
     cursor: pointer;
 
-    &--playing {
+    &:active {
       cursor: grab;
     }
   }
 
-  .controls {
-    transition: opacity 1s;
-  }
-
-  .buttons {
-    position: absolute;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    z-index: 1000;
-
-    width: 200px;
-    height: 200px;
-
-    transform: translateX(-50%) translateY(-50%);
+  .poster-image {
+    position: relative;
+    width: auto;
+    height: 440px;
     pointer-events: none;
+    z-index: 90;
+    mix-blend-mode: multiply;
 
-    svg {
-      width: 100%;
+    @include screen-size("small") {
+      height: 360px;
     }
   }
 
-  .poster-image {
+  .current-time {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    pointer-events: none;
+    top: 0px;
+    left: 10px;
+    z-index: 100;
   }
 
-  .play {
-    position: relative;
-    left: 4px;
-  }
-
-  .time {
+  .total-time {
     position: absolute;
-    bottom: 10px;
+    top: 0px;
     right: 10px;
+    z-index: 100;
+  }
+
+  .audio-toggle {
+    text-align: center;
+    position: absolute;
+    top: 0px;
+    left: 50%;
+    z-index: 100;
+    transform: translateX(-50%);
+  }
+
+  .audio-title {
+    position: absolute;
+    bottom: $small-margin;
+    left: 10px;
+    z-index: 100;
+    font-size: $large;
+    line-height: 1em;
+    max-width: 16ch;
+
+    @include screen-size("small") {
+      font-size: $mobile_large;
+    }
   }
 
   progress {
     position: absolute;
-    bottom: 0px;
+    top: 0px;
     left: 0px;
     display: block;
     width: 100%;
-    height: 40px;
-    z-index: 1000;
+    height: 100%;
+    z-index: 80;
     -webkit-appearance: none;
     appearance: none;
 
-    pointer-events: none;
-
     &::-webkit-progress-value {
-      background-color: rgba(255, 255, 255, 1);
+      background-color: rgba(0, 255, 0, 1);
     }
 
     &::-webkit-progress-bar {
-      background-color: rgba(0, 0, 0, 1);
+      background-color: rgba(200, 200, 200, 0);
     }
   }
 </style>
@@ -193,40 +172,22 @@
     bind:paused
     bind:this={audioEl} />
 
-  <div class="controls" style="opacity: {duration && showControls ? 1 : 0}">
+  <div class="controls">
 
-    <!-- <div class="time">{format(time)} / {format(duration)}</div> -->
+    {#if posterImage}
+      <img src={posterImage} class="poster-image" alt={caption} />
+    {/if}
+
+    <div class="audio-toggle">{paused ? 'PLAY' : 'PAUSE'}</div>
+
+    <div class="current-time">{format(time)}</div>
+
+    <div class="total-time">{format(duration)}</div>
+
+    <div class="audio-title">{caption}</div>
+
     <progress value={time / duration || 0} />
 
-    <div class="buttons">
-      {#if paused}
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="0.5"
-          class="feather feather-play play">
-          <polygon points="5 3 19 12 5 21 5 3" />
-        </svg>
-      {:else}
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="0.5"
-          class="feather feather-pause pause">
-          <rect x="6" y="4" width="4" height="16" />
-          <rect x="14" y="4" width="4" height="16" />
-        </svg>
-      {/if}
-    </div>
-
   </div>
-
-  {#if posterImage}
-    <img src={posterImage} class="poster-image" alt="Audio player" />
-  {/if}
 
 </div>
