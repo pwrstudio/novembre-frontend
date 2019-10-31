@@ -6,7 +6,6 @@
   // # # # # # # # # # # # # #
 
   // *** IMPORTS
-  import { onMount } from "svelte";
   import { fade } from "svelte/transition";
 
   // VARIABLES
@@ -15,7 +14,7 @@
   let success = false;
 
   // LOGIC
-  function submit() {
+  const submit = () => {
     console.log(emailAddress);
     console.log(emailName);
 
@@ -30,11 +29,7 @@
       .catch(err => {
         Sentry.captureException(err);
       });
-  }
-
-  onMount(async () => {
-    window.scrollTo(0, 0);
-  });
+  };
 </script>
 
 <style lang="scss">
@@ -42,49 +37,53 @@
 
   .newsletter-signup {
     width: 100%;
-    height: auto;
     margin-bottom: $large-vertical-margin;
-    line-height: 1.2em;
-    overflow: hidden;
+    line-height: 1em;
     font-family: $sans-stack;
-    &__item {
+    font-size: $large;
+
+    @include screen-size("small") {
+      font-size: $mobile-large;
       margin-bottom: $small-vertical-margin;
-      break-inside: avoid;
     }
 
     input {
       background: transparent;
       border: 0;
-      line-height: 1.2em;
+      line-height: 1em;
       padding: 0px;
       font-weight: 300;
       outline: none;
       color: currentColor;
-      font-size: $body;
-      height: 1.2em;
-      margin-right: 0;
-      width: 90%;
-      border-bottom: 1px solid black;
+      font-size: $large;
+
+      height: 1em;
+      width: 95%;
+      border-bottom: 3px solid black;
+
+      @include screen-size("small") {
+        font-size: $mobile-large;
+        border-bottom: 2px solid black;
+      }
     }
 
     .form-section {
-      margin-bottom: $large-vertical-margin;
+      margin-bottom: 1em;
       width: 100%;
 
       &.submit-button {
-        display: inline-block;
-        border-bottom: 1px solid black;
-        height: auto;
-        width: auto;
+        position: relative;
+        height: 1em;
       }
     }
 
     .submit {
-      display: inline-block;
-      position: relative;
       line-height: 1em;
       color: currentColor;
-      font-size: $body;
+      font-size: $large;
+      @include screen-size("small") {
+        font-size: $mobile-large;
+      }
       background: transparent;
       outline: none;
       border: none;
@@ -92,17 +91,31 @@
       padding: 0;
       margin: 0;
       cursor: pointer;
-      height: 1em;
       text-align: center;
       font-weight: 300;
+      position: absolute;
+      top: 0;
+      left: 0;
 
       &:hover {
-        position: relative;
-        padding-top: 4px;
+        top: 8px;
+        left: -5px;
         font-family: $serif-stack;
         font-style: italic;
       }
     }
+  }
+
+  ::-webkit-input-placeholder {
+    color: $black;
+  }
+
+  :-ms-input-placeholder {
+    color: $black;
+  }
+
+  ::placeholder {
+    color: $black;
   }
 </style>
 

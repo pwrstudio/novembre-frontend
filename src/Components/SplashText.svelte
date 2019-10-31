@@ -6,9 +6,7 @@
   // # # # # # # # # # # # # #
 
   // *** PROPS
-  export let section = "hidden";
-
-  console.dir(section);
+  export let section = "landing";
 
   const magazineText =
     "<em>Novembre Magazine</em> is a printed magazine published biannually, devoted to the vertiginous excitement of contemporary urban life.";
