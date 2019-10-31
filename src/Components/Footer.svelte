@@ -99,7 +99,7 @@
         }
 
         @include screen-size("small") {
-          font-size: 46px;
+          font-size: 45px;
           font-size: $mobile_large;
           font-family: $sans-stack;
           font-style: normal;

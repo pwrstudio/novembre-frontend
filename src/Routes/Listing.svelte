@@ -241,7 +241,7 @@
 
   <div class="listing__posts" bind:this={postsContainerEl}>
     {#each items as post, i}
-      {#if i === 1}
+      {#if i === 1 && !activeCategory}
         <SplashText section={title.toLowerCase()} />
       {/if}
       <Preview {post} first={i == 0 ? true : false} />

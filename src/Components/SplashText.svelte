@@ -37,6 +37,10 @@
       z-index: 1;
       font-family: $sans-stack;
       text-transform: uppercase;
+
+      @include screen-size("small") {
+        font-size: $mobile-large;
+      }
     }
   }
 

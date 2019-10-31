@@ -99,7 +99,6 @@
       }
     }
 
-    // transform: translateX(-81vw);
     transition: transform 0.3s $transition;
 
     @include screen-size("small") {
@@ -156,13 +155,6 @@
         }
       }
     }
-
-    // &--active {
-    //   transform: translateX(4px);
-    //   @include screen-size("small") {
-    //     transform: none;
-    //   }
-    // }
   }
 </style>
 

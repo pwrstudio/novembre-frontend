@@ -101,14 +101,14 @@
     position: absolute;
     top: 0px;
     left: 10px;
-    z-index: 100;
+    z-index: 99;
   }
 
   .total-time {
     position: absolute;
     top: 0px;
     right: 10px;
-    z-index: 100;
+    z-index: 99;
   }
 
   .audio-toggle {
@@ -116,7 +116,7 @@
     position: absolute;
     top: 0px;
     left: 50%;
-    z-index: 100;
+    z-index: 99;
     transform: translateX(-50%);
   }
 
@@ -124,7 +124,7 @@
     position: absolute;
     bottom: $small-margin;
     left: 10px;
-    z-index: 100;
+    z-index: 99;
     font-size: $large;
     line-height: 1em;
     max-width: 16ch;

@@ -45,6 +45,7 @@
     font-size: $large;
     text-transform: uppercase;
     line-height: 1em;
+    overflow: hidden;
 
     @include screen-size("small") {
       font-size: $mobile-large;

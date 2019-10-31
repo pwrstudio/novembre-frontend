@@ -141,13 +141,15 @@
     $block: &;
     height: 96px;
 
+    @include screen-size("small") {
+      height: 67px;
+    }
+
     width: 100%;
-    // height: 100%;
 
     background: black;
     color: white;
     opacity: 0;
-    // transform: translateY(10px);
     transition: opacity 0.3s ease-out, transform 0.3s ease-out;
 
     &.loaded {
