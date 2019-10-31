@@ -10,7 +10,6 @@
   import { Router, links } from "svelte-routing";
   import Flickity from "flickity";
   import imagesLoaded from "imagesloaded";
-  import throttle from "just-throttle";
 
   // *** COMPONENTS
   import Ellipse from "../Ellipse.svelte";
@@ -30,7 +29,6 @@
   // *** DOM REFERENCES
   let slideShowEl = {};
   let navSlideShowEl = {};
-  let slideShowNavEl = {};
 
   // *** CONSTANTS
   const IMGIX_PARAMS = "&auto=format&q=90";
@@ -38,7 +36,7 @@
   // *** VARIABLES
   let flkty = {};
   let navFlkty = {};
-  let tickerSpeed = 0.4;
+  const tickerSpeed = 0.4;
   let isPaused = true;
   let loaded = false;
   let hovered = true;
@@ -132,20 +130,6 @@
     });
   }
 
-  // const observer = new IntersectionObserver(
-  //   entries => {
-  //     entries.forEach(entry => {
-  //       if (entry.intersectionRatio > 0.1) {
-  //         playSlideshow();
-  //       }
-  //       if (entry.intersectionRatio < 0.1) {
-  //         pauseSlideshow();
-  //       }
-  //     });
-  //   },
-  //   { threshold: [0, 0.2, 0.3, 1] }
-  // );
-
   $: {
     console.log("autoplay", autoplay);
   }
@@ -155,7 +139,6 @@
     if (slides.length > 2) {
       if ((autoplay == true || autoplay == 1) && !isRelated) {
         startTicker();
-        // observer.observe(slideShowEl);
       } else {
         let options = {
           wrapAround: true,
@@ -252,8 +235,37 @@
       height: 100%;
     }
 
+    &__slide-image {
+      height: 100%;
+
+      @include screen-size("small") {
+        height: 400px;
+      }
+
+      &--related {
+        width: 100%;
+        object-fit: cover;
+      }
+    }
+
+    &__slide-caption {
+      background: $grey;
+      color: black;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      padding: 10px;
+      font-family: $sans-stack;
+      font-size: $small;
+      width: 100%;
+      opacity: 0;
+      transition-delay: 0s;
+      transition: opacity 0.5s $transition;
+    }
+
     &__slide {
       height: 100%;
+      position: relative;
 
       @include screen-size("small") {
         height: 400px;
@@ -268,18 +280,12 @@
           height: 400px;
         }
       }
-    }
 
-    &__slide-image {
-      height: 100%;
-
-      @include screen-size("small") {
-        height: 400px;
-      }
-
-      &--related {
-        width: 100%;
-        object-fit: cover;
+      &:hover {
+        .slideshow__slide-caption {
+          opacity: 1;
+          transition-delay: 0.85s;
+        }
       }
     }
 
@@ -405,14 +411,14 @@
       on:mouseenter={() => {
         hovered = true;
         console.log('mouse enter');
-        if (autoplay == true || autoplay == 1) {
+        if ((autoplay == true || autoplay == 1) && !isRelated && !!isPreview) {
           pauseSlideshow();
         }
       }}
       on:mouseleave={() => {
         hovered = false;
         console.log('mouse leave');
-        if (autoplay == true || autoplay == 1) {
+        if ((autoplay == true || autoplay == 1) && !isRelated && !!isPreview) {
           playSlideshow();
         }
       }}>
@@ -456,6 +462,9 @@
                 class="slideshow__slide-image"
                 src={slide.src}
                 alt={slide.caption} />
+              {#if slide.caption}
+                <div class="slideshow__slide-caption">{slide.caption}</div>
+              {/if}
             </div>
           {/if}
         {/each}
@@ -469,7 +478,7 @@
         on:click={e => {
           e.stopPropagation();
           e.preventDefault();
-          flkty.previous(true);
+          flkty.next(true);
         }}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -492,7 +501,7 @@
         on:click={e => {
           e.stopPropagation();
           e.preventDefault();
-          flkty.next(true);
+          flkty.previous(true);
         }}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -512,11 +521,15 @@
         class="nav-container"
         on:mouseenter={() => {
           hovered = true;
-          pauseSlideshow();
+          if (autoplay == true || autoplay == 1) {
+            pauseSlideshow();
+          }
         }}
         on:mouseleave={() => {
           hovered = false;
-          playSlideshow();
+          if (autoplay == true || autoplay == 1) {
+            playSlideshow();
+          }
         }}>
         {#if loaded && !isPreview && !isRelated}
           <NavShow {slides} navTarget={slideShowEl} />
