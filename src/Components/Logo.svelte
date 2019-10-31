@@ -1,6 +1,4 @@
 <script>
-  // import { draw } from "svelte/transition";
-
   export let white = false;
 </script>
 

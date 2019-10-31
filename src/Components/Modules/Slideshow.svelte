@@ -25,7 +25,7 @@
   import NavShow from "./navShow.svelte";
 
   // *** STORES
-  import { navigationStyle, menuActiveGlobal } from "../../stores.js";
+  import { navigationColor, menuActiveGlobal } from "../../stores.js";
 
   // *** DOM REFERENCES
   let slideShowEl = {};
@@ -39,7 +39,7 @@
   let flkty = {};
   let navFlkty = {};
   let tickerSpeed = 0.4;
-  let isPaused = false;
+  let isPaused = true;
   let loaded = false;
   let hovered = true;
 
@@ -48,6 +48,7 @@
   };
 
   const playSlideshow = () => {
+    console.log("starting to play");
     if (isPaused) {
       isPaused = false;
       window.requestAnimationFrame(update);
@@ -86,6 +87,8 @@
     flkty.on("dragStart", () => {
       isPaused = true;
     });
+
+    playSlideshow();
 
     imagesLoaded(slideShowEl, instance => {
       try {
@@ -129,26 +132,30 @@
     });
   }
 
-  const observer = new IntersectionObserver(
-    entries => {
-      entries.forEach(entry => {
-        if (entry.intersectionRatio > 0.1) {
-          playSlideshow();
-        }
-        if (entry.intersectionRatio < 0.1) {
-          pauseSlideshow();
-        }
-      });
-    },
-    { threshold: [0, 0.2, 0.3, 1] }
-  );
+  // const observer = new IntersectionObserver(
+  //   entries => {
+  //     entries.forEach(entry => {
+  //       if (entry.intersectionRatio > 0.1) {
+  //         playSlideshow();
+  //       }
+  //       if (entry.intersectionRatio < 0.1) {
+  //         pauseSlideshow();
+  //       }
+  //     });
+  //   },
+  //   { threshold: [0, 0.2, 0.3, 1] }
+  // );
+
+  $: {
+    console.log("autoplay", autoplay);
+  }
 
   // *** ON MOUNT
   onMount(async () => {
     if (slides.length > 2) {
       if ((autoplay == true || autoplay == 1) && !isRelated) {
         startTicker();
-        observer.observe(slideShowEl);
+        // observer.observe(slideShowEl);
       } else {
         let options = {
           wrapAround: true,
@@ -397,13 +404,15 @@
       class="container"
       on:mouseenter={() => {
         hovered = true;
-        if (autoplay) {
+        console.log('mouse enter');
+        if (autoplay == true || autoplay == 1) {
           pauseSlideshow();
         }
       }}
       on:mouseleave={() => {
         hovered = false;
-        if (autoplay) {
+        console.log('mouse leave');
+        if (autoplay == true || autoplay == 1) {
           playSlideshow();
         }
       }}>

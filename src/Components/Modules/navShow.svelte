@@ -18,7 +18,7 @@
   export let navTarget = {};
 
   // *** STORES
-  import { navigationStyle, menuActiveGlobal } from "../../stores.js";
+  import { navigationColor, menuActiveGlobal } from "../../stores.js";
 
   // *** DOM REFERENCES
   let slideShowEl = {};
