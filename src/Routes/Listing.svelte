@@ -17,7 +17,7 @@
   import SplashText from "../Components/SplashText.svelte";
 
   // *** STORES
-  import { pageLocation, navigationColor } from "../stores.js";
+  import { navigationColor } from "../stores.js";
 
   // *** PROPS
   export let title = "";
@@ -48,7 +48,6 @@
 
   // *** REACTIVE
   $: {
-    // Listen for changes to query
     if (query !== currentQuery) {
       items = [];
       firstLoad = false;
@@ -132,18 +131,12 @@
 
   // *** ON MOUNT
   onMount(async () => {
-    pageLocation.set(title);
     try {
       window.scrollTo(0, 0);
       observer.observe(sentinel);
     } catch (err) {
       Sentry.captureException(err);
     }
-  });
-
-  // *** ON DESTROY
-  onDestroy(async () => {
-    pageLocation.set("");
   });
 </script>
 

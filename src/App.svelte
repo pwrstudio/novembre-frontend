@@ -19,7 +19,6 @@
   import Stockists from "./Routes/Stockists.svelte";
   import Error404 from "./Routes/Error404.svelte";
 
-  // const baseURL = "http://3.221.158.13/3/";
   const baseURL = "https://testing.novembre.global/";
 
   const listingRouteParams = {
@@ -85,7 +84,6 @@
     margin: 0;
 
     &.bureau {
-      // background: $grey;
       background-color: $grey;
     }
   }
@@ -110,12 +108,10 @@
 
   ::selection {
     background: #e4e4e4;
-    /* WebKit/Blink Browsers */
   }
 
   ::-moz-selection {
     background: #e4e4e4;
-    /* Gecko Browsers */
   }
 
   a {
