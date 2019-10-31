@@ -14,7 +14,7 @@
   import Preview from "../Components/Preview.svelte";
   import ScrollList from "../Components/ScrollList.svelte";
   import Footer from "../Components/Footer.svelte";
-  import IntroductionText from "../Components/IntroductionText.svelte";
+  import SplashText from "../Components/SplashText.svelte";
 
   // *** STORES
   import { pageLocation, navigationColor } from "../stores.js";
@@ -68,6 +68,7 @@
     finishedLoading = false;
     loadData(0, newCategory, title.toLowerCase());
   }
+
   const observer = new IntersectionObserver(
     entries => {
       entries.forEach(entry => {
@@ -171,7 +172,6 @@
     font-size: $large;
     font-weight: 300;
     text-transform: uppercase;
-    // background: black;
     color: white;
     line-height: 0.8em;
     padding-bottom: $small-margin;
@@ -222,7 +222,6 @@
 
 <div class="listing" class:landing={title === 'Landing'}>
 
-  <!-- {#if !$menuActiveGlobal} -->
   {#if showTaxonomyScroller && firstLoad}
     <div class="top-block">
       <ScrollList
@@ -233,7 +232,6 @@
           changeCategory(e.detail.newCategory, e.detail.newCategoryName);
         }} />
     </div>
-    <!-- {/if} -->
 
     {#if isQuery && firstLoad}
       {#if items.length == 0}
@@ -248,11 +246,10 @@
     {/if}
   {/if}
 
-  <!-- {currentHash} -->
   <div class="listing__posts" bind:this={postsContainerEl}>
     {#each items as post, i}
       {#if i === 1}
-        <IntroductionText />
+        <SplashText section={title.toLowerCase()} />
       {/if}
       <Preview {post} first={i == 0 ? true : false} />
     {/each}
