@@ -122,7 +122,7 @@
   </div>
 
   <div class="about-image">
-    <img src="/img/about-img.png" alt="Novembre" />
+    <img src="/img/about-img.jpg" alt="Novembre" />
   </div>
 
   <div class="about-credits">

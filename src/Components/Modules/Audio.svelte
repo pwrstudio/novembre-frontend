@@ -66,6 +66,7 @@
     font-size: $large;
     line-height: 1em;
     margin-bottom: $large-vertical-margin;
+    user-select: none;
 
     @include screen-size("small") {
       font-size: $mobile_large;
