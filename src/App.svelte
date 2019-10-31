@@ -145,6 +145,12 @@
     font-style: italic;
   }
 
+  blockquote {
+    font-size: $intro;
+    line-height: 1.2em;
+    font-style: italic;
+  }
+
   .credits-text {
     a {
       color: currentColor;
