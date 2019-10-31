@@ -7,27 +7,19 @@
 
   // *** IMPORTS
   import { Router, links } from "svelte-routing";
-  import MediaQuery from "svelte-media-query";
   import { fade } from "svelte/transition";
 
   // *** COMPONENTS
   import Logo from "./Logo.svelte";
   import SearchBox from "./SearchBox.svelte";
-  import debounce from "lodash/debounce";
 
   // *** STORES
-  import {
-    pageLocation,
-    navigationColor,
-    menuActiveGlobal
-  } from "../stores.js";
-
-  // *** PROPS
-  export let isTransparent = false;
+  import { navigationColor, menuActiveGlobal } from "../stores.js";
 
   // *** VARIABLES
   let menuActive = false;
-  let menuItems = [
+  const menuItems = [
+    { title: "FEED", target: "/" },
     { title: "MAGAZINE", target: "/magazine" },
     { title: "BUREAU", target: "/bureau" },
     { title: "ABOUT", target: "/about" },
@@ -35,33 +27,14 @@
     { title: "CONTACT", target: "/contact" },
     { title: "STOCKISTS", target: "/stockists" }
   ];
-  let scrolled = false;
 
   // *** REACTIVE
-  $: toggleText = menuActive ? "CLOSE" : "MENU";
   $: menuActiveGlobal.set(menuActive);
   $: {
-    if (menuActive) {
-      document.querySelector("body").classList.add("no-scroll");
-    } else {
-      document.querySelector("body").classList.remove("no-scroll");
-    }
+    menuActive
+      ? document.querySelector("body").classList.add("no-scroll")
+      : document.querySelector("body").classList.remove("no-scroll");
   }
-
-  // *** FUNCTIONS
-  const scroll = () => {
-    menuActive = false;
-    if (window.scrollY > 8000) {
-      window.scrollTo({
-        top: 0
-      });
-    } else {
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-      });
-    }
-  };
 </script>
 
 <style lang="scss">
@@ -96,12 +69,6 @@
       opacity: 1;
       background: transparent;
       transition: background 0.4s $transition;
-    }
-
-    &--transparent {
-      #{$block}__bar {
-        background: transparent;
-      }
     }
 
     &__logo {
@@ -164,26 +131,6 @@
           font-size: $mobile_large;
         }
       }
-
-      // .banner {
-      //   position: fixed;
-      //   top: 110px;
-      //   right: 10px;
-      //   background: orangered;
-      //   height: 360px;
-      //   width: 600px;
-
-      //   @include screen-size("small") {
-      //     display: none;
-      //   }
-
-      //   img,
-      //   video {
-      //     height: 100%;
-      //     width: 100%;
-      //     object-fit: cover;
-      //   }
-      // }
     }
 
     &__menu-item {
@@ -248,11 +195,6 @@
     }
 
     &--expanded {
-      #{$block}__bar {
-        // background: black;
-        // transition: background 0.3s $transition;
-      }
-
       #{$block}__logo {
         svg {
           fill: white;
@@ -280,62 +222,25 @@
       transition: opacity 0.1s $transition;
     }
   }
-
-  .overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: 99;
-    background: black;
-    opacity: 0.9;
-
-    &.black {
-      background: white;
-    }
-  }
 </style>
 
 <nav
   class="navigation"
-  class:navigation--transparent={isTransparent}
   class:navigation--black={$navigationColor === 'black' || menuActive}
   class:navigation--expanded={menuActive}
-  class:scrolled
   use:links>
 
   <Router>
+
     <div class="navigation__bar">
-      <MediaQuery query="(min-width: 800px)" let:matches>
-        {#if matches}
-          {#if $pageLocation === 'Landing'}
-            <span class="navigation__logo" on:click={scroll}>
-              <Logo white={!menuActive} />
-            </span>
-          {:else}
-            <!-- Menu is closed and we are anywhere else than landing -->
-            <a
-              href="/"
-              class="navigation__logo"
-              on:click={() => (menuActive = false)}>
-              <Logo white={$navigationColor === 'white'} />
-            </a>
-          {/if}
-        {:else}
-          <!-- We are on phone -->
-          <div
-            class="navigation__logo"
-            on:click={() => (menuActive = !menuActive)}>
-            <Logo white={!menuActive} />
-          </div>
-        {/if}
-        <div
-          class="navigation__toggle"
-          on:click={() => (menuActive = !menuActive)}>
-          {toggleText}
-        </div>
-      </MediaQuery>
+      <div class="navigation__logo" on:click={() => (menuActive = !menuActive)}>
+        <Logo white={$navigationColor === 'white' && !menuActive} />
+      </div>
+      <div
+        class="navigation__toggle"
+        on:click={() => (menuActive = !menuActive)}>
+        {menuActive ? 'CLOSE' : 'MENU'}
+      </div>
     </div>
 
     {#if menuActive}
@@ -345,17 +250,6 @@
     <menu class="navigation__menu" on:click={() => (menuActive = !menuActive)}>
 
       {#if menuActive}
-        <MediaQuery query="(max-width: 800px)" let:matches>
-          {#if matches}
-            <menuitem class="navigation__menu-item" in:fade={{ duration: 200 }}>
-              <a href="/" class="navigation__link">
-                <div class="navigation__link--normal">FEED</div>
-                <div class="navigation__link--hover">FEED</div>
-              </a>
-            </menuitem>
-          {/if}
-        </MediaQuery>
-
         {#each menuItems as item, menuIndex}
           <menuitem in:fade={{ duration: 200 }} class="navigation__menu-item">
             <a href={item.target} class="navigation__link">
