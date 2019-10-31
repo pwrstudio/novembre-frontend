@@ -6,9 +6,11 @@
   // # # # # # # # # # # # # #
 
   // *** IMPORTS
-  import { fade } from "svelte/transition";
-  import { quintOut } from "svelte/easing";
   import { onMount } from "svelte";
+  import mapboxgl from 'mapbox-gl'
+  import { fade } from "svelte/transition";
+  import { tick } from "svelte/internal";
+
 
   // STORES
   import { navigationColor } from "../stores.js";
@@ -20,6 +22,38 @@
   export let endpoint = "";
   export let slug = "";
   export let location = {};
+
+  let map = {};
+
+  let mapEl = {};
+
+  const initMap = () => {
+    return new Promise((resolve, reject) => {
+      mapboxgl.accessToken =
+        'pk.eyJ1IjoicHdyc3R1ZGlvIiwiYSI6ImNpbTJmMWYwazAwbXV2a201dHV4M3Q0MTEifQ.haMHeGT4HNA8zI2S0BDgGg'
+      map = new mapboxgl.Map({
+        container: mapEl,
+        style: 'mapbox://styles/pwrstudio/ck2f16esc0jgk1cljcu5yym1r',
+        center: [34.1, 24.1],
+        zoom: 1.3
+      })
+      resolve()
+    })
+  }
+    const setMarkers = () => {
+      console.log('setting markers')
+      // if (this.main.userList.length > this.markers.length) {
+      //   this.main.userList.map(user => {
+      //     var el = document.createElement('div')
+      //     el.className = 'marker'
+      //     this.markers.push(
+      //       new mapboxgl.Marker(el)
+      //         .setLngLat([user.geo.ll[1], user.geo.ll[0]])
+      //         .addTo(this.map),
+      //     )
+      //   })
+      // }
+    }
 
   // VARIABLES
   let post = loadData();
@@ -38,8 +72,10 @@
   }
 
   onMount(async () => {
-    window.scrollTo(0, 0);
+    await tick();
+    initMap()
   });
+
 </script>
 
 <style lang="scss">
@@ -50,12 +86,8 @@
     width: 100%;
     margin-right: 60px;
     margin-left: 60px;
+    margin-top: 20px;
 
-    height: auto;
-    width: 800px;
-    margin-left: auto;
-    margin-right: auto;
-    max-width: 95vw;
     margin-bottom:  $large-vertical-margin;
     line-height: 1.2em;
     overflow: hidden;
@@ -63,6 +95,8 @@
 
     @include screen-size("small") {
       column-count: 2;
+        margin-right: 20px;
+    margin-left: 20px;
     }
 
     &__item {
@@ -72,25 +106,26 @@
   }
 
   .stockist-page {
-    background: white;
-    min-height: 80vh;
-    padding-top: 150px;
+    background: xellow;
     height: auto;
-    width: 800px;
-    margin-left: auto;
-    margin-right: auto;
-    max-width: 95vw;
     margin-bottom: $large-vertical-margin;
     line-height: 1.2em;
     overflow: hidden;
 
-    // &.hide-text {
-    //   opacity: 0;
-    // }
-
     em {
       font-family: $serif-stack;
       font-style: italic;
+    }
+  }
+
+  .map {
+    height: 80vh;
+    width: 100vw;
+    outline: none;
+    border: 0;
+
+    @include screen-size('small') {
+      height: 60vh;
     }
   }
 
@@ -100,9 +135,15 @@
   <title>STOCKISTS/ NOVEMBRE</title>
 </svelte:head>
 
-{#await post then post}
+
   <article
     class="stockist-page">
+  <div
+    bind:this={mapEl}
+    class="map"/>
+
+{#await post then post}
+
 
       <div class="stockists">
         <div class="content_tab grid_12">
@@ -2804,7 +2845,9 @@
         </div>
       </div>
 
-  </article>
-
-  <Footer active={true} />
 {/await}
+
+
+</article>
+
+<Footer active={true} />

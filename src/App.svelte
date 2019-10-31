@@ -182,6 +182,10 @@
     }
   }
 
+  .mapboxgl-canvas {
+    outline: none;
+  }
+
   /*! Flickity v2.2.1 ------------------- */
 
   .flickity-enabled {

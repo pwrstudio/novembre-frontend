@@ -28,6 +28,7 @@
     "intersection-observer": "^0.7.0",
     "just-throttle": "^1.1.0",
     "lodash": "^4.17.15",
+    "mapbox-gl": "^1.5.0",
     "svelte-media-query": "^0.0.4",
     "svelte-routing": "^1.3.0"
   },
