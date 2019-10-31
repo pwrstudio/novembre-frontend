@@ -43,11 +43,11 @@
   }
 
   .magazine {
-    background-color: #ff00b4;
+    background-color: $hotpink;
   }
 
   .bureau {
-    background-color: #00ff01;
+    background-color: $neongreen;
   }
 
   .landing {

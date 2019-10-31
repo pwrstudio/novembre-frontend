@@ -5,17 +5,11 @@
   //
   // # # # # # # # # # # # # #
 
-  // *** IMPORTS
-  import { fade } from "svelte/transition";
-  import { quintOut } from "svelte/easing";
-  import { onMount } from "svelte";
-
   // STORES
   import { navigationColor } from "../stores.js";
 
   // COMPONENTS
   import Footer from "../Components/Footer.svelte";
-  import Logo from "../Components/Logo.svelte";
 
   // PROPS
   export let endpoint = "";
@@ -23,137 +17,89 @@
   export let location = {};
 
   // VARIABLES
-  let post = loadData();
+  // let post = loadData();
 
-  // LOGIC
   navigationColor.set("black");
 
-  async function loadData() {
-    try {
-      const res = await fetch(endpoint);
-      const post = await res.json();
-      return post;
-    } catch (err) {
-      Sentry.captureException(err);
-    }
-  }
-
-  onMount(async () => {
-    window.scrollTo(0, 0);
-  });
+  // async function loadData() {
+  //   try {
+  //     const res = await fetch(endpoint);
+  //     const post = await res.json();
+  //     return post;
+  //   } catch (err) {
+  //     Sentry.captureException(err);
+  //   }
+  // }
 </script>
 
 <style lang="scss">
   @import "../variables.scss";
 
-  .body-text {
+  .about {
+    display: inline-block;
+    background: $hotpink;
+    width: 100vw;
     height: auto;
-    width: 800px;
-    margin-left: auto;
-    margin-right: auto;
-    max-width: 95vw;
-    margin-bottom: $large-vertical-margin;
-    font-family: $serif-stack;
-    font-size: $body;
-    line-height: 1.2em;
-    overflow: hidden;
-
-    &:empty {
-      display: none;
-    }
-
-    p {
-      margin-bottom: $small-vertical-margin;
-    }
-
-    @include screen-size("small") {
-      font-size: $mobile_body;
-      margin-bottom: 0px;
-    }
-
-    a {
-      color: currentColor;
-      text-decoration: none;
-      border-bottom: 1px solid $black;
-      transition: border 0.3s $transition;
-
-      &:hover {
-        border-bottom: 1px solid transparent;
-      }
-    }
-
-    // &.hide-text {
-    //   opacity: 0;
-    // }
+    line-height: 1em;
+    padding-bottom: $large-vertical-margin;
   }
 
-  .credits {
-    column-count: 3;
-    width: 100%;
-    margin-right: 60px;
-    margin-left: 60px;
-
+  .about-text {
+    padding: $small-margin;
+    padding-top: 70px;
     height: auto;
+    max-width: 95%;
+    font-family: $sans-stack;
+    line-height: 1em;
+    font-size: $large;
+    text-transform: uppercase;
+
+    @include screen-size("small") {
+      font-size: $mobile_large;
+    }
+  }
+
+  .about-image {
+    width: 100vw;
+    height: 600px;
+
+    @include screen-size("small") {
+      height: 400px;
+    }
+
+    img {
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .about-credits {
     width: 800px;
     margin-left: auto;
     margin-right: auto;
+    margin-top: $small-vertical-margin;
     max-width: 95vw;
-    margin-bottom: $large-vertical-margin;
+    padding-bottom: $large-vertical-margin;
     line-height: 1.2em;
-    overflow: hidden;
     font-family: $sans-stack;
 
-    @include screen-size("small") {
-      column-count: 2;
-    }
-
-    &__item {
-      margin-bottom: $small-vertical-margin;
-      break-inside: avoid;
-    }
-  }
-
-  .about {
-    background: white;
-    min-height: 80vh;
-    padding-top: 120px;
-    height: auto;
-    width: 800px;
-    margin-left: auto;
-    margin-right: auto;
-    max-width: 95vw;
-    margin-bottom: $large-vertical-margin;
-    line-height: 1.2em;
-    overflow: hidden;
-
-    @include screen-size("small") {
-      padding-top: 100px;
-    }
-
-    // &.hide-text {
-    //   opacity: 0;
-    // }
-
-    &__header {
-      img,
-      video {
-        height: $full-height;
-        width: 100%;
-        object-fit: cover;
-      }
-
-      &--black {
-        background: black;
-      }
+    .about-credits-column {
+      width: 33.33%;
+      float: left;
 
       @include screen-size("small") {
-        // height: 70vh;
+        width: 100%;
       }
     }
 
-    em {
-      font-family: $serif-stack;
-      font-style: italic;
+    .about-credits-header {
+      text-transform: uppercase;
+    }
+
+    .about-credits-item {
+      margin-bottom: 2 * $small-vertical-margin;
+      break-inside: avoid;
     }
   }
 </style>
@@ -162,76 +108,93 @@
   <title>ABOUT / NOVEMBRE</title>
 </svelte:head>
 
-{#await post then post}
-  <article class="about">
+<!-- {#await post then post} -->
+<article class="about">
 
-    <div class="body-text">
-      {@html post.content}
-    </div>
+  <div class="about-text">
+    Novembre is an online and biannually printed magazine devoted to the
+    products that make contemporary urban life exciting.
+    <br />
+    <br />
+    Under the candid caption “Art practices, beauty & innovations”, we explore
+    the worlds of art and fashion to challenge cultural trends and produce
+    innovative imagery.
+  </div>
 
-    <!-- <div class="credits">
-      {@html post.header.credits}
-    </div> -->
-    <div class="credits">
-      <div class="stockists__item">
+  <div class="about-image">
+    <img src="/img/about-img.png" alt="Novembre" />
+  </div>
+
+  <div class="about-credits">
+
+    <div class="about-credits-column">
+      <div class="about-credits-item">
         <strong>Creative directors</strong>
         <br />
         Florence Tétier
         <br />
         Jeanne-Salomé Rochat
       </div>
-      <div class="stockists__item">
+      <div class="about-credits-item">
         <strong>Editor-in-chief</strong>
         <br />
         Florence Tétier
       </div>
-      <div class="stockists__item">
+      <div class="about-credits-item">
         <strong>Arts &amp; critic director</strong>
         <br />
         Jeanne-Salomé Rochat
       </div>
-      <div class="stockists__item">
+    </div>
+
+    <div class="about-credits-column">
+      <div class="about-credits-item">
         <strong>Editor &amp; luxury consultant</strong>
         <br />
         Florian Joye
       </div>
-      <div class="stockists__item">
+      <div class="about-credits-item">
         <strong>Fashion director</strong>
         <br />
         Georgia Pendlebury
       </div>
-      <div class="stockists__item">
+      <div class="about-credits-item">
         <strong>Editors-at-large</strong>
         <br />
         Nicolas Coulomb
       </div>
-      <div class="stockists__item">
+      <div class="about-credits-item">
         <strong>Legal advisors</strong>
         <br />
         Nancy Medina
         <br />
         Yannis Egloff
       </div>
-      <div class="stockists__item">
+      <div class="about-credits-item">
         <strong>Contributing editor</strong>
         <br />
         Marisa Makin
       </div>
-      <div class="stockists__item">
+    </div>
+
+    <div class="about-credits-column">
+      <div class="about-credits-item">
         <strong>Digital Editor</strong>
         <br />
         Morgane Nicolas
       </div>
-      <div class="stockists__item">
+      <div class="about-credits-item">
         <strong>Diffusion &amp; Circulation</strong>
         <br />
         K.D. Presse
         <br />
         Pineapple Media
       </div>
-      <div class="stockists__item">All rights reserved ©2015/16</div>
+      <div class="about-credits-item">All rights reserved ©2015/16</div>
     </div>
-  </article>
+  </div>
 
-  <Footer active={true} />
-{/await}
+</article>
+
+<Footer active={true} />
+<!-- {/await} -->
