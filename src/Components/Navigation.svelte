@@ -112,14 +112,13 @@
       position: fixed;
       display: block;
       margin: 0;
-      padding: 10px;
       opacity: 1;
       width: 100vw;
-      height: auto;
+      height: 0;
       pointer-events: none;
-      clip-path: inset(0 0 100% 0);
-      padding-bottom: 20px;
-      background: white;
+      clip-path: inset(0% 0% 100% 0%);
+      -webkit-clip-path: inset(0% 0% 100% 0%);
+      background: transparent;
 
       span {
         display: inline;
@@ -202,10 +201,15 @@
       }
 
       #{$block}__menu {
+        background: white;
         pointer-events: all;
-        clip-path: inset(0 0 0% 0);
-        transition: clip-path 0.25s $transition, opacity 0.3s $transition;
+        clip-path: inset(0% 0% 0% 0%);
+        -webkit-clip-path: inset(0% 0% 0% 0%);
+        transition: clip-path 0.25s $transition,
+          -webkit-clip-path 0.25s $transition, opacity 0.3s $transition;
         opacity: 1;
+        padding: 10px;
+        padding-bottom: 20px;
         @include screen-size("small") {
           height: $full-height;
         }
