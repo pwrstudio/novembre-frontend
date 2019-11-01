@@ -7,7 +7,7 @@
 
   // *** IMPORTS
   import { Router, links } from "svelte-routing";
-  import { fade } from "svelte/transition";
+  // import { fade, fly } from "svelte/transition";
 
   // *** COMPONENTS
   import Logo from "./Logo.svelte";
@@ -112,13 +112,15 @@
       position: fixed;
       display: block;
       margin: 0;
-      opacity: 1;
+      opacity: 0;
       width: 100vw;
-      height: 0;
+      height: auto;
       pointer-events: none;
-      clip-path: inset(0% 0% 100% 0%);
-      -webkit-clip-path: inset(0% 0% 100% 0%);
-      background: transparent;
+      // clip-path: inset(0% 0% 100% 0%);
+      // -webkit-clip-path: inset(0% 0% 100% 0%);
+      padding: 10px;
+      padding-bottom: 20px;
+      background: white;
 
       span {
         display: inline;
@@ -201,15 +203,14 @@
       }
 
       #{$block}__menu {
-        background: white;
         pointer-events: all;
-        clip-path: inset(0% 0% 0% 0%);
-        -webkit-clip-path: inset(0% 0% 0% 0%);
-        transition: clip-path 0.25s $transition,
-          -webkit-clip-path 0.25s $transition, opacity 0.3s $transition;
+        // clip-path: inset(0% 0% 0% 0%);
+        // -webkit-clip-path: inset(0% 0% 0% 0%);
+        // transition: clip-path 0.25s $transition,
+        //   -webkit-clip-path 0.25s $transition, opacity 0.3s $transition;
+        transition: opacity 0.3s $transition;
         opacity: 1;
-        padding: 10px;
-        padding-bottom: 20px;
+
         @include screen-size("small") {
           height: $full-height;
         }
@@ -223,7 +224,7 @@
       width: 100vw;
       height: $height;
       background: white;
-      transition: opacity 0.1s $transition;
+      transition: opacity 0.3s $transition;
     }
   }
 </style>
@@ -255,7 +256,7 @@
 
       {#if menuActive}
         {#each menuItems as item, menuIndex}
-          <menuitem in:fade={{ duration: 200 }} class="navigation__menu-item">
+          <menuitem class="navigation__menu-item">
             <a href={item.target} class="navigation__link">
               <div class="navigation__link--normal">
                 {@html item.title}
@@ -267,7 +268,7 @@
           </menuitem>
         {/each}
 
-        <menuitem class="navigation__menu-item" in:fade={{ duration: 200 }}>
+        <menuitem class="navigation__menu-item">
           <SearchBox {menuActive} />
         </menuitem>
       {/if}
@@ -276,3 +277,7 @@
   </Router>
 
 </nav>
+
+<!-- 
+          in:fly={{ y: -20, delay: 240, duration: 50 }}>
+            in:fly={{ y: -20, duration: 50, delay: 30 * menuIndex }} -->
