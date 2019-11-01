@@ -11,6 +11,8 @@
   import { fade } from "svelte/transition";
   import { tick } from "svelte/internal";
 
+  import sample from 'lodash/sample'
+
 
   // STORES
   import { navigationColor } from "../stores.js";
@@ -22,6 +24,31 @@
   export let endpoint = "";
   export let slug = "";
   export let location = {};
+
+  const markerList = [
+    {
+      lat: "43.771577",
+      lon: "11.249287"
+    },
+    {
+      lat: "47.377618",
+      lon: '8.516100'
+    },
+        {
+      lat: "34.084152",
+      lon: '-118.361299'
+    },
+            {
+      lat: "59.331820",
+      lon: '18.068290'
+    },
+            {
+      lat: "22.599720",
+      lon: '120.478410'
+    }
+  ]
+
+  let counter = 0
 
   let map = {};
 
@@ -41,18 +68,13 @@
     })
   }
     const setMarkers = () => {
-      console.log('setting markers')
-      // if (this.main.userList.length > this.markers.length) {
-      //   this.main.userList.map(user => {
-      //     var el = document.createElement('div')
-      //     el.className = 'marker'
-      //     this.markers.push(
-      //       new mapboxgl.Marker(el)
-      //         .setLngLat([user.geo.ll[1], user.geo.ll[0]])
-      //         .addTo(this.map),
-      //     )
-      //   })
-      // }
+        markerList.map(x => {
+          let el = document.createElement('div')
+          el.className = 'marker'
+            new mapboxgl.Marker(el)
+              .setLngLat([x.lon, x.lat])
+              .addTo(map)
+        })
     }
 
   // VARIABLES
@@ -73,8 +95,21 @@
 
   onMount(async () => {
     await tick();
-    initMap()
+    initMap().then(() => {
+      setMarkers()
+    })
   });
+
+  const flyTest = () => {
+    console.log('flyyyy')
+      map.flyTo({
+      center: sample(markerList),
+      curve: 1,
+      zoom: 14,
+      speed: 1.4
+      });
+      counter += 1
+  }
 
 </script>
 
@@ -95,8 +130,8 @@
 
     @include screen-size("small") {
       column-count: 2;
-        margin-right: 20px;
-    margin-left: 20px;
+      margin-right: 20px;
+      margin-left: 20px;
     }
 
     &__item {
@@ -132,7 +167,7 @@
 </style>
 
 <svelte:head>
-  <title>STOCKISTS/ NOVEMBRE</title>
+  <title>STOCKISTS / NOVEMBRE</title>
 </svelte:head>
 
 
@@ -144,8 +179,7 @@
 
 {#await post then post}
 
-
-      <div class="stockists">
+      <div class="stockists" on:click={flyTest}>
         <div class="content_tab grid_12">
           <div class="stockists__item">
             <strong>Beautiful Pages</strong>

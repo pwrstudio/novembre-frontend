@@ -46,7 +46,7 @@
 
   .about-text {
     padding: $small-margin;
-    padding-top: 70px;
+    padding-top: 100px;
     height: auto;
     max-width: 95%;
     font-family: $sans-stack;
@@ -122,7 +122,9 @@
   </div>
 
   <div class="about-image">
-    <img src="/img/about-img.jpg" alt="Novembre" />
+    <img
+      src="/user/themes/novembre/frontend/img/about-img.jpg"
+      alt="Novembre" />
   </div>
 
   <div class="about-credits">

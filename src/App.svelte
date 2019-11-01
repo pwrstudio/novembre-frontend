@@ -143,12 +143,21 @@
   em {
     font-family: $serif-stack;
     font-style: italic;
+    padding-right: 2px;
+  }
+
+  .marker {
+    background: $hotpink;
+    height: 10px;
+    width: 10px;
+    border-radius: 10px;
   }
 
   blockquote {
     font-size: $intro;
     line-height: 1.2em;
     font-style: italic;
+    margin: 0;
   }
 
   .credits-text {
