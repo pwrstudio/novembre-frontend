@@ -152,6 +152,13 @@
     padding-right: 2px;
   }
 
+  .splash-header {
+    color: white;
+    padding-right: 4px;
+    position: relative;
+    top: -1px;
+  }
+
   .marker {
     background: $hotpink;
     height: 10px;
