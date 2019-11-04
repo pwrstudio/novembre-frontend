@@ -1,7 +1,7 @@
 <script>
   // # # # # # # # # # # # # #
   //
-  //  Page
+  //  Contact
   //
   // # # # # # # # # # # # # #
 
@@ -98,6 +98,23 @@
         target="_blank"
         rel="noreferrer">
         @{post.header.instagram}
+      </a>
+    </div>
+
+    <div class="contact-section">
+      <div>FACEBOOK</div>
+      <a
+        href="https://facebook.com/novembremagazineworld"
+        target="_blank"
+        rel="noreferrer">
+        @novembremagazineworld
+      </a>
+    </div>
+
+    <div class="contact-section">
+      <div>LINKEDIN</div>
+      <a href="https://www.linkedin.com/novembre-magazine" target="_blank">
+        @novembre-magazine
       </a>
     </div>
 

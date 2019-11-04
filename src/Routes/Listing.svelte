@@ -146,14 +146,17 @@
   .sentinel {
     width: 100%;
     height: 1px;
-    background: black;
+    // background: black;
   }
 
   .listing {
     width: 100%;
-    // padding-top: 80px;
     min-height: 80vh;
     overflow: hidden;
+
+    &.empty {
+      background: $hotpink;
+    }
   }
 
   .landing {
@@ -203,6 +206,14 @@
     position: relative;
     top: 2px;
   }
+
+  .no-results {
+    padding-left: $small-margin;
+    padding-top: 120px;
+    font-size: $large;
+    font-family: $sans-stack;
+    color: white;
+  }
 </style>
 
 <svelte:head>
@@ -213,7 +224,10 @@
   {/if}
 </svelte:head>
 
-<div class="listing" class:landing={title === 'Landing'}>
+<div
+  class="listing"
+  class:landing={title === 'Landing'}
+  class:empty={isQuery && items.length === 0 && firstLoad}>
 
   {#if showTaxonomyScroller && firstLoad}
     <div class="top-block">
@@ -240,8 +254,13 @@
   {/if}
 
   <div class="listing__posts" bind:this={postsContainerEl}>
+
+    {#if isQuery && items.length == 0}
+      <div class="no-results">No results for “{query}”</div>
+    {/if}
+
     {#each items as post, i}
-      {#if i === 1 && !activeCategory}
+      {#if i === 0 && !activeCategory && !isQuery}
         <SplashText section={title.toLowerCase()} />
       {/if}
       <Preview {post} first={i == 0 ? true : false} />
@@ -254,4 +273,4 @@
 
 </div>
 
-<Footer active={finishedLoading} />
+<Footer active={finishedLoading || (isQuery && items.length == 0)} />

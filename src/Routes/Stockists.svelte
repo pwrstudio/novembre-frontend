@@ -96,7 +96,7 @@
   onMount(async () => {
     await tick();
     initMap().then(() => {
-      setMarkers()
+      // setMarkers()
     })
   });
 

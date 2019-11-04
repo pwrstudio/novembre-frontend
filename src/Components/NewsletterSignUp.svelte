@@ -41,6 +41,7 @@
     line-height: 1em;
     font-family: $sans-stack;
     font-size: $large;
+    background: #d9f52c;
 
     @include screen-size("small") {
       font-size: $mobile-large;

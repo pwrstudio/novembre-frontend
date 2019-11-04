@@ -138,6 +138,12 @@
       font-family: "Adobe Caslon Pro", "Caslon", "Times new roman", Times, serif;
       font-style: italic;
     }
+
+    strong {
+      font-weight: normal;
+      text-transform: none;
+      font-family: $sans-stack;
+    }
   }
 
   em {
@@ -154,8 +160,8 @@
   }
 
   blockquote {
-    font-size: $intro;
-    line-height: 1.2em;
+    font-size: $large;
+    line-height: 1em;
     font-style: italic;
     margin: 0;
   }

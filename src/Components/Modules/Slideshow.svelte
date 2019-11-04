@@ -249,8 +249,7 @@
     }
 
     &__slide-caption {
-      background: $grey;
-      color: black;
+      color: white;
       position: absolute;
       bottom: 0;
       left: 0;

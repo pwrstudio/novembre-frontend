@@ -24,6 +24,7 @@
     min-height: 100vh;
     width: 100vw;
     padding: $small-margin;
+    padding-top: 200px;
     display: flex;
     align-items: flex-end;
 
