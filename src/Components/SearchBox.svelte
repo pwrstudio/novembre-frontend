@@ -1,16 +1,26 @@
 <script>
+  // # # # # # # # # # # # # #
+  //
+  //  Searchj Box
+  //
+  // # # # # # # # # # # # # #
+
+  // *** IMPORTS
   import { onMount } from "svelte";
   import MediaQuery from "svelte-media-query";
 
+  // *** VARIABLES
   let searchActive = false;
   let searchQuery = "";
   let searchField = {};
+  let submitWidth = 0;
+  let inputWidth = 0;
 
+  // *** PROPS
   export let menuActive = false;
 
-  let openEl;
-  let submitWidth;
-  let inputWidth;
+  // *** DOM REFERENCES
+  let openEl = {};
 
   const showSearchBox = e => {
     e.preventDefault();
@@ -59,7 +69,6 @@
     position: relative;
     margin-bottom: $small-vertical-margin;
 
-    // top: -4px;
     &__input {
       display: inline-block;
       position: relative;
@@ -177,7 +186,7 @@
         e.preventDefault();
         e.stopPropagation();
       }}
-      on:keypress={e => (e.keyCode === 13 ? submitSearch : false)} />
+      on:keypress={e => (e.keyCode === 13 ? submitSearch() : false)} />
   </MediaQuery>
 
   {#if searchActive}
