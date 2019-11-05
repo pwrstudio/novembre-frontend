@@ -46,7 +46,6 @@
   };
 
   const playSlideshow = () => {
-    console.log("starting to play");
     if (isPaused) {
       isPaused = false;
       window.requestAnimationFrame(update);
@@ -128,10 +127,6 @@
           : "";
       s.src = s.url + "?h=800" + IMGIX_PARAMS;
     });
-  }
-
-  $: {
-    console.log("autoplay", autoplay);
   }
 
   // *** ON MOUNT
@@ -409,14 +404,12 @@
       class="container"
       on:mouseenter={() => {
         hovered = true;
-        console.log('mouse enter');
         if ((autoplay == true || autoplay == 1) && !isRelated && !!isPreview) {
           pauseSlideshow();
         }
       }}
       on:mouseleave={() => {
         hovered = false;
-        console.log('mouse leave');
         if ((autoplay == true || autoplay == 1) && !isRelated && !!isPreview) {
           playSlideshow();
         }

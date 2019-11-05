@@ -146,7 +146,7 @@
   .sentinel {
     width: 100%;
     height: 1px;
-    // background: black;
+    background: black;
   }
 
   .listing {
@@ -220,7 +220,7 @@
   {#if title === 'Landing'}
     <title>NOVEMBRE</title>
   {:else}
-    <title>{title} / NOVEMBRE</title>
+    <title>{title.toUpperCase()} / NOVEMBRE</title>
   {/if}
 </svelte:head>
 
@@ -267,10 +267,11 @@
     {/each}
   </div>
 
-  {#if !finishedLoading}
+  {#if !finishedLoading && !isQuery}
     <div class="sentinel" bind:this={sentinel} />
   {/if}
 
 </div>
 
-<Footer active={finishedLoading || (isQuery && items.length == 0)} />
+<Footer
+  active={finishedLoading || firstLoad || (isQuery && items.length == 0)} />

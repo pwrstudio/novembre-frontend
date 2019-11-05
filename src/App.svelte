@@ -143,6 +143,7 @@
       font-weight: normal;
       text-transform: none;
       font-family: $sans-stack;
+      font-size: 21px;
     }
   }
 

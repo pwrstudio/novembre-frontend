@@ -101,7 +101,6 @@
   });
 
   const flyTest = () => {
-    console.log('flyyyy')
       map.flyTo({
       center: sample(markerList),
       curve: 1,
@@ -118,6 +117,7 @@
 
   .stockists {
     column-count: 3;
+    column-gap: $small-margin;
     width: 100%;
     margin-right: 60px;
     margin-left: 60px;
@@ -135,8 +135,7 @@
     }
 
     &__item {
-      margin-bottom:  $small-vertical-margin;
-      break-inside: avoid;
+      margin-bottom: 2 * $small-vertical-margin;
     }
   }
 
@@ -181,6 +180,7 @@
 
       <div class="stockists" on:click={flyTest}>
         <div class="content_tab grid_12">
+
           <div class="stockists__item">
             <strong>Beautiful Pages</strong>
             <br />
