@@ -1,23 +1,29 @@
 <script>
   // # # # # # # # # # # # # #
   //
-  //  Audio module
+  //  AUDIO
   //
   // # # # # # # # # # # # # #
 
   // *** PROPS
-  export let file = "";
-  export let url = "";
+  export let fileObject = {};
   export let caption = "";
   export let size = true;
   export let backgroundColor = false;
   export let posterImage = false;
+
+  import { urlFor } from "../../sanity.js";
 
   // *** VARIABLES
   let time = 0;
   let duration = 0;
   let paused = true;
   const controlsTimeoutDuration = 2500;
+
+  console.dir(fileObject);
+
+  // const src = urlFor(fileObject).url();
+  const src = "";
 
   // *** DOM REFERENCES
   let audioEl;
@@ -167,7 +173,7 @@
   <audio
     class="audio-player"
     preload="auto"
-    src={url}
+    {src}
     bind:currentTime={time}
     bind:duration
     bind:paused

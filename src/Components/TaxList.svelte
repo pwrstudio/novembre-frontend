@@ -1,18 +1,18 @@
 <script>
   // # # # # # # # # # # # # #
   //
-  //  List of taxonomy entries
+  //  TAXONOMY LIST
   //
   // # # # # # # # # # # # # #
 
   // *** IMPORTS
-  // import { Router, links, Link } from "svelte-routing";
+  import { Router, links, Link } from "svelte-routing";
+  import { format } from "date-fns";
 
   // *** PROPS
   export let taxonomy;
   export let white = false;
   export let date = false;
-  export let isPreview = false;
 </script>
 
 <style lang="scss">
@@ -70,51 +70,25 @@
 
 <div class="taxonomy" class:white>
 
-  <!-- DATE -->
-  {#if date}
-    <span class="taxonomy__item date">{date}</span>
+  <span class="taxonomy__item date">
+    {format(new Date(date), 'yyyy/dd/MM')}
+  </span>
+
+  {#if taxonomy.subCategory}
+    <span class="taxonomy__item">
+      <a
+        href="https://testing.novembre.global/magazine#{taxonomy.subCategory.toLowerCase()}">
+        {taxonomy.subCategory}
+      </a>
+    </span>
   {/if}
 
-  {#if taxonomy.magazine}
-    {#each taxonomy.magazine as m}
-      <span class="taxonomy__item">
-        <a
-          href="https://testing.novembre.global/magazine#{m.toLowerCase()}"
-          on:click={e => {
-            e.preventDefault();
-            e.stopPropagation();
-            window.location = 'https://testing.novembre.global/magazine#' + m.toLowerCase();
-          }}>
-          {m}
-        </a>
-      </span>
-    {/each}
-  {/if}
-
-  {#if taxonomy.bureau}
-    {#each taxonomy.bureau as e}
-      <span class="taxonomy__item">
-        <a
-          href="https://testing.novembre.global/bureau/#{e}"
-          on:click={event => {
-            event.preventDefault();
-            event.stopPropagation();
-            window.location = 'https://testing.novembre.global/bureau#' + e.toLowerCase();
-          }}>
-          {e}
-        </a>
-      </span>
-    {/each}
-  {/if}
-
-  <!-- <Router> -->
-  {#if taxonomy.tag && !isPreview}
-    {#each taxonomy.tag as t}
+  <Router>
+    {#each taxonomy.tags as t}
       <span class="taxonomy__item">
         <a href="/taxonomy/{t}">{t}</a>
       </span>
     {/each}
-  {/if}
-  <!-- </Router> -->
+  </Router>
 
 </div>

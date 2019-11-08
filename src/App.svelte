@@ -9,68 +9,50 @@
   import "intersection-observer";
   import { Router, Link, Route } from "svelte-routing";
   import Navigation from "./Components/Navigation.svelte";
+  import { loadPages } from "./sanity.js";
+
+  // STORES
+  import { pages } from "./stores.js";
 
   // ROUTES
   import Listing from "./Routes/Listing.svelte";
   import Article from "./Routes/Article.svelte";
   import About from "./Routes/About.svelte";
   import Contact from "./Routes/Contact.svelte";
-  import Calendar from "./Routes/Calendar.svelte";
   import Stockists from "./Routes/Stockists.svelte";
   import Error404 from "./Routes/Error404.svelte";
 
-  const baseURL = "https://testing.novembre.global/";
+  pages.set(loadPages('*[_id == "global-config"][0]'));
 
   const listingRouteParams = {
     landing: {
       title: "Landing",
-      endpoint: baseURL + "landing.json",
       showTaxonomyScroller: false,
       showFooter: false
     },
     magazine: {
       title: "Magazine",
-      endpoint: baseURL + "magazine.json",
       showTaxonomyScroller: true
     },
     bureau: {
       title: "Bureau",
-      endpoint: baseURL + "bureau.json",
       showTaxonomyScroller: true
     },
     taxonomy: {
       title: "Tag",
-      endpoint: baseURL + "filter.json",
       showTaxonomyScroller: false,
       isQuery: true
     },
     search: {
       title: "Search",
-      endpoint: baseURL + "search.json",
       showTaxonomyScroller: false,
       isQuery: true
     }
   };
 
   const articleRouteParams = {
-    magazine: {
-      endpoint: baseURL + "magazine/"
-    },
     bureau: {
-      endpoint: baseURL + "bureau/",
       isBureau: true
-    }
-  };
-
-  const pageRouteParams = {
-    about: {
-      endpoint: baseURL + "about.json"
-    },
-    contact: {
-      endpoint: baseURL + "contact.json"
-    },
-    stockists: {
-      endpoint: baseURL + "stockists.json"
     }
   };
 </script>
@@ -174,7 +156,17 @@
     margin: 0;
   }
 
-  .credits-text {
+  .small {
+    height: auto;
+    width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 95vw;
+    margin-bottom: $large-vertical-margin;
+    font-family: $sans-stack;
+    font-size: $small;
+    line-height: 1.4em;
+    overflow: hidden;
     a {
       color: currentColor;
       text-decoration: none;
@@ -185,6 +177,82 @@
         border-bottom: 1px solid transparent;
       }
     }
+
+    p {
+      margin-bottom: $small-vertical-margin;
+    }
+
+    @include screen-size("small") {
+      font-size: $mobile_small;
+    }
+
+    a {
+      color: currentColor;
+      text-decoration: none;
+      border-bottom: 1px solid $black;
+      transition: border 0.3s $transition;
+
+      &:hover {
+        border-bottom: 1px solid transparent;
+      }
+    }
+
+    transition: opacity $transition;
+  }
+
+  .introduction {
+    height: auto;
+    width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 95vw;
+    font-family: $serif-stack;
+    font-style: italic;
+    line-height: 1.2em;
+    font-size: $intro;
+    margin-bottom: $large-vertical-margin;
+    line-height: 1.2em;
+    transition: opacity $transition;
+
+    @include screen-size("small") {
+      font-size: $mobile_intro;
+    }
+  }
+
+  .content {
+    p {
+      display: block;
+      width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+      max-width: 95vw;
+      margin-bottom: $large-vertical-margin;
+      font-family: $serif-stack;
+      font-size: $body;
+      line-height: 1.2em;
+      overflow: hidden;
+      margin-bottom: $small-vertical-margin;
+    }
+
+    @include screen-size("small") {
+      font-size: $mobile_body;
+      margin-bottom: 0px;
+    }
+
+    a {
+      color: currentColor;
+      text-decoration: none;
+      border-bottom: 1px solid $black;
+      transition: border 0.3s $transition;
+
+      &:hover {
+        border-bottom: 1px solid transparent;
+      }
+    }
+
+    // &.hide-text {
+    //   opacity: 0;
+    // }
   }
 
   .carousel {
@@ -262,6 +330,7 @@
 </style>
 
 <Navigation />
+
 <Router>
   <Route path="/" component={Listing} {...listingRouteParams.landing} />
   <Route
@@ -291,20 +360,13 @@
     component={Listing}
     {...listingRouteParams.search} />
   <Route path="search/" component={Listing} {...listingRouteParams.search} />
-  <Route
-    path="magazine/:slug"
-    component={Article}
-    {...articleRouteParams.magazine} />
+  <Route path="magazine/:slug" component={Article} />
   <Route
     path="bureau/:slug"
     component={Article}
     {...articleRouteParams.bureau} />
-  <Route path="about" component={About} {...pageRouteParams.about} />
-  <Route path="contact" component={Contact} {...pageRouteParams.contact} />
-  <Route path="calendar" component={Calendar} {...pageRouteParams.calendar} />
-  <Route
-    path="stockists"
-    component={Stockists}
-    {...pageRouteParams.stockists} />
+  <Route path="about" component={About} />
+  <Route path="contact" component={Contact} />
+  <Route path="stockists" component={Stockists} />
   <Route component={Error404} title="404" />
 </Router>

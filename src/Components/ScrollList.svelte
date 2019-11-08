@@ -1,7 +1,7 @@
 <script>
   // # # # # # # # # # # # # #
   //
-  //  Scroll list / ticker
+  //  SCROLL-LIST
   //
   // # # # # # # # # # # # # #
 

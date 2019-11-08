@@ -1,6 +1,16 @@
 <script>
+  // # # # # # # # # # # # # #
+  //
+  //  FOOTER
+  //
+  // # # # # # # # # # # # # #
+
+  // *** IMPORT
   import Logo from "./Logo.svelte";
   import MediaQuery from "svelte-media-query";
+
+  // *** PROPS
+  export let active = false;
 
   const scroll = () => {
     if (document.body.clientHeight > 6000) {
@@ -14,8 +24,6 @@
       });
     }
   };
-
-  export let active = false;
 </script>
 
 <style lang="scss">

@@ -1,7 +1,7 @@
 <script>
   // # # # # # # # # # # # # #
   //
-  //  Newsletter sign-up form
+  //  NEWSLETTER SIGN-UP
   //
   // # # # # # # # # # # # # #
 

@@ -1,7 +1,7 @@
 <script>
   // # # # # # # # # # # # # #
   //
-  //  Searchj Box
+  //  SEARCH BOX
   //
   // # # # # # # # # # # # # #
 

@@ -1,4 +1,10 @@
 <script>
+  // # # # # # # # # # # # # #
+  //
+  //  ERROR 404
+  //
+  // # # # # # # # # # # # # #
+
   import Footer from "../Components/Footer.svelte";
   import { onMount } from "svelte";
 

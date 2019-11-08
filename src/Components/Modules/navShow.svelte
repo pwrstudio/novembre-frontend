@@ -1,7 +1,7 @@
 <script>
   // # # # # # # # # # # # # #
   //
-  //  Navigation Slideshow
+  //  MINI-SLIDESHOW
   //
   // # # # # # # # # # # # # #
 
@@ -10,11 +10,13 @@
   import Flickity from "flickity-as-nav-for";
   import imagesLoaded from "imagesloaded";
 
+  import { urlFor } from "../../sanity.js";
+
   // *** COMPONENTS
   import Ellipse from "../Ellipse.svelte";
 
   // *** PROPS
-  export let slides = [];
+  export let imageArray = [];
   export let navTarget = {};
 
   // *** STORES
@@ -23,24 +25,9 @@
   // *** DOM REFERENCES
   let slideShowEl = {};
 
-  // *** CONSTANTS
-  const IMGIX_PARAMS = "&auto=format";
-
   // *** VARIABLES
   let flkty = {};
   let loaded = false;
-
-  // *** LOGIC
-  slides.forEach(s => {
-    s.url =
-      s.url && s.url.length > 0
-        ? s.url.replace(
-            "https://testing.novembre.global",
-            "https://novtest.imgix.net"
-          )
-        : "";
-    s.thumb = s.url + "?h=140&fit=crop" + IMGIX_PARAMS;
-  });
 
   // *** ON MOUNT
   onMount(async () => {
@@ -77,16 +64,16 @@
 
   .container {
     position: relative;
-    height: 140px;
+    height: 120px;
 
     @include screen-size("small") {
-      height: 120px;
+      height: 100px;
     }
   }
 
   .loading {
     text-align: center;
-    line-height: 140px;
+    line-height: 120px;
     font-size: $body;
     font-family: $sans-stack;
     display: block;
@@ -95,7 +82,7 @@
     @include screen-size("small") {
       line-height: 120px;
       font-size: $mobile_body;
-      height: 120px;
+      height: 100px;
     }
   }
 
@@ -104,29 +91,29 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: 140px;
+    height: 120px;
     text-align: center;
-    line-height: 140px;
+    line-height: 120px;
     font-size: $body;
     font-family: $sans-stack;
     display: block;
     background: $grey;
 
     @include screen-size("small") {
-      line-height: 120px;
+      line-height: 100px;
       font-size: $mobile_body;
-      height: 120px;
+      height: 100px;
     }
   }
 
   .slideshow {
     width: 100%;
-    height: 140px;
+    height: 100px;
 
     opacity: 0;
 
     @include screen-size("small") {
-      height: 120px;
+      height: 100px;
     }
 
     &__slideshow {
@@ -140,7 +127,7 @@
       cursor: pointer !important;
 
       @include screen-size("small") {
-        height: 120px;
+        height: 100px;
       }
       &:hover {
         opacity: 0.8;
@@ -159,12 +146,15 @@
 
 <div class="container">
   <div class="carousel slideshow" class:loaded bind:this={slideShowEl}>
-    {#each slides as slide}
+    {#each imageArray as slide}
       <div class="carousel-cell slideshow__slide">
         <img
           class="slideshow__slide-image"
-          src={slide.thumb}
-          alt={slide.caption} />
+          src={urlFor(slide)
+            .height(140)
+            .quality(80)
+            .auto('format')
+            .url()} />
       </div>
     {/each}
   </div>

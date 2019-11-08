@@ -1,27 +1,26 @@
 <script>
   // # # # # # # # # # # # # #
   //
-  //  Preview element
+  //  PREVIEW
   //
   // # # # # # # # # # # # # #
 
   // *** IMPORTS
-  import { onMount, onDestroy } from "svelte";
   import { Router, links } from "svelte-routing";
-  import { tick } from "svelte";
   import { fade } from "svelte/transition";
 
   import MediaQuery from "svelte-media-query";
-  import imagesLoaded from "imagesloaded";
+
+  import has from "lodash/has";
+  import get from "lodash/get";
 
   // *** COMPONENTS
   import TaxList from "./TaxList.svelte";
 
   // *** MODULES
   import Video from "./Modules/Video.svelte";
-  import Embed from "./Modules/Embed.svelte";
-  import Multi from "./Modules/Multi.svelte";
   import Image from "./Modules/Image.svelte";
+  import ImageGroup from "./Modules/ImageGroup.svelte";
   import Slideshow from "./Modules/Slideshow.svelte";
 
   // *** PROPS
@@ -29,59 +28,17 @@
   export let isHeader = false;
   export let first = false;
 
-  // *** DOM REFERENCE
-  let previewEl = {};
-
-  // *** CONSTANTS
-  let VIDEO_ROOT = "https://res.cloudinary.com/pwr/video/upload/";
-  let REMOTE_FOLDER = "novembre";
-
   // *** VARIABLES
-  let active = false;
-  // let elementHeight = 0;
-  // let lastScrollY = 0;
-  let loaded = false;
-  let videoUrl = "";
-  let videoSrc = "";
-  let elementStyles =
-    (post.header.backgroundColor
-      ? "background-color:" + post.header.backgroundColor
-      : "") +
-    (post.header.customTextColor ? "color:" + post.header.customTextColor : "");
+  let active = true;
+  let loaded = true;
 
-  // *** ON MOUNT
-  onMount(async () => {
-    imagesLoaded(previewEl, instance => {
-      loaded = true;
-    });
-
-    // await tick();
-
-    // var waypointTop = new Waypoint({
-    //   element: previewEl,
-    //   handler: function(direction) {
-    //     if (direction === "down") {
-    //       navigationColor.set(!post.header.previewColor);
-    //     }
-    //   }
-    // });
-
-    // var waypointBottom = new Waypoint({
-    //   element: previewEl,
-    //   handler: function(direction) {
-    //     if (direction === "up") {
-    //       navigationColor.set(!post.header.previewColor);
-    //     }
-    //   },
-    //   offset: function() {
-    //     return -this.element.clientHeight;
-    //   }
-    // });
-
-    // if (first) {
-    //   navigationColor.set(!post.header.previewColor);
-    // }
-  });
+  const backgroundColor = has(post, "previewColors.backgroundColor")
+    ? "background-color:" + post.previewColors.backgroundColor.hex + ";"
+    : "";
+  const customTextColor = has(post, "previewColors.customTextColor")
+    ? "color:" + post.previewColors.customTextColor.hex + ";"
+    : "";
+  const elementStyles = backgroundColor + " " + customTextColor;
 </script>
 
 <style lang="scss">
@@ -194,28 +151,13 @@
       }
     }
 
-    &--white {
-      color: white;
-    }
-
-    // &.hide-text {
-    //   .preview__title,
-    //   .preview__tags {
-    //     transition: opacity 0.3 $transition;
-    //     opacity: 0;
-    //   }
-    // }
-
     &--multi {
       &.first {
         padding-top: 60px;
-        // min-height: 100vh;
       }
       &.header {
         padding-top: 70px;
         padding-bottom: 40px;
-
-        // height: 100vh;
       }
     }
     &--text {
@@ -234,89 +176,66 @@
   .loaded {
     opacity: 1;
   }
+
+  .white {
+    color: white;
+  }
 </style>
 
-<div
-  class="preview preview--{post.header.previewType}"
-  class:loaded
-  class:preview--white={!post.header.previewColor}
-  class:first
-  class:header={isHeader}
-  style={elementStyles}
-  bind:this={previewEl}
-  use:links>
+<Router>
 
-  <!-- TAGS -->
-  {#if post.header.taxonomy && !isHeader && !first}
-    <!-- <MediaQuery query="(min-width: 800px)" let:matches> -->
-    <!-- {#if matches} -->
-    <div
-      class="preview__tags"
-      class:bottom-tags={post.header.previewType == 'multi' || post.header.previewType == 'text'}>
-      <TaxList
-        taxonomy={post.header.taxonomy}
-        white={post.header.previewColor}
-        isPreview={true} />
-    </div>
-    <!-- {/if} -->
-    <!-- </MediaQuery> -->
-  {/if}
+  <div
+    class="preview {post.preview._type}"
+    class:loaded
+    class:first
+    class:white={get(post, 'previewColors.textColor', false) == 'white'}
+    class:header={isHeader}
+    style={elementStyles}
+    use:links>
 
-  <Router>
+    <!-- TAGS -->
+    {#if !first && !isHeader}
+      <div
+        class="preview__tags"
+        class:bottom-tags={post.preview._type == 'imageGroup'}>
+        <TaxList taxonomy={post.taxonomy} />
+      </div>
+    {/if}
 
-    <!-- IMAGE -->
-    {#if post.header.previewType == 'image' && post.header.previewImage && post.header.previewImage.url}
-      <a href="/{post.header.parent}/{post.header.slug}">
-        <Image
-          size={post.header.previewSize}
-          url={post.header.previewImage.url}
-          caption={post.header.htmlTitle.fullTitle}
-          {loaded}
-          isListing={true} />
+    {#if post.preview._type === 'singleImage'}
+      <a href="/{post.taxonomy.category}/{post.slug}">
+        <Image fullwidth={true} imageObject={post.preview.image} />
       </a>
-      <!-- MULTI IMAGE -->
-    {:else if post.header.previewType == 'multi'}
-      <a href="/{post.header.parent}/{post.header.slug}">
-        <Multi files={post.header.previewMulti} {loaded} />
+    {/if}
+
+    {#if post.preview._type === 'imageGroup'}
+      <a href="/{post.taxonomy.category}/{post.slug}">
+        <ImageGroup imageArray={post.preview.images} />
       </a>
-      <!-- VIDEO -->
-    {:else if post.header.previewType == 'video'}
-      <a href="/{post.header.parent}/{post.header.slug}">
-        <Video
-          url={post.header.previewVideo.url}
-          caption={post.header.title}
-          autoplay={true}
-          loop={true}
-          muted={true} />
+    {/if}
+
+    {#if post.preview._type === 'slideshow'}
+      <a href="/{post.taxonomy.category}/{post.slug}">
+        <Slideshow imageArray={post.preview.images} />
       </a>
-      <!-- Embed -->
-    {:else if post.header.previewType == 'embed'}
-      <a href="/{post.header.parent}/{post.header.slug}">
-        <Embed url={post.header.previewEmbed.url} caption={post.header.title} />
-      </a>
-      <!-- SLIDESHOW -->
-    {:else if post.header.previewType == 'slideshow'}
-      <a href="/{post.header.parent}/{post.header.slug}">
-        <!-- {post.header.previewSlideshowAutoplay}
-        {post.header.previewSlideshowAutoplay || post.header.previewSlideshowAutoplay == 1} -->
-        <Slideshow
-          autoplay={post.header.previewSlideshowAutoplay || post.header.previewSlideshowAutoplay == 1 ? true : false}
-          slides={post.header.previewSlideshow}
-          isPreview={true}
-          {first} />
+    {/if}
+
+    {#if post.preview._type === 'video'}
+      <a href="/{post.taxonomy.category}/{post.slug}">
+        <Video fullwidth={true} videoObject={post.preview.video} />
       </a>
     {/if}
 
     {#if !isHeader}
-      <a href="/{post.header.parent}/{post.header.slug}">
+      <a href="/{post.taxonomy.category}/{post.slug}">
         <div
           class="preview__title preview__title--free"
-          class:preview__title--free={post.header.previewType == 'multi'}
-          class:preview__title--large-text={post.header.previewType == 'text'}>
-          {@html post.header.htmlTitle.fullTitle}
+          class:preview__title--free={post.preview._type == 'imageGroup'}>
+          {post.title}
         </div>
       </a>
     {/if}
-  </Router>
 
-</div>
+  </div>
+
+</Router>

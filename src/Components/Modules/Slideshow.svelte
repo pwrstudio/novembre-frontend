@@ -1,7 +1,7 @@
 <script>
   // # # # # # # # # # # # # #
   //
-  //  Slideshow module
+  //  SLIDESHOW
   //
   // # # # # # # # # # # # # #
 
@@ -11,11 +11,13 @@
   import Flickity from "flickity";
   import imagesLoaded from "imagesloaded";
 
+  import { urlFor } from "../../sanity.js";
+
   // *** COMPONENTS
   import Ellipse from "../Ellipse.svelte";
 
   // *** PROPS
-  export let slides = [];
+  export let imageArray = [];
   export let isRelated = false;
   export let isPreview = false;
   export let first = false;
@@ -29,9 +31,6 @@
   // *** DOM REFERENCES
   let slideShowEl = {};
   let navSlideShowEl = {};
-
-  // *** CONSTANTS
-  const IMGIX_PARAMS = "&auto=format&q=90";
 
   // *** VARIABLES
   let flkty = {};
@@ -101,37 +100,38 @@
 
   // *** LOGIC
 
-  slides = isPreview ? slides.slice(0, 10) : slides;
+  // slides = isPreview ? slides.slice(0, 10) : slides;
 
   // --- Build urls
-  if (slides.length == 1) {
-    slides[0].url =
-      slides[0].url && slides[0].url.length > 0
-        ? slides[0].url.replace(
-            "https://testing.novembre.global",
-            "https://novtest.imgix.net"
-          )
-        : "";
-    slides[0].src =
-      slides[0].url +
-      "?w=1400" +
-      "&ar=16:9&max-h=600&fit=crop&crop=faces&auto=format";
-  } else {
-    slides.forEach(s => {
-      s.url =
-        s.url && s.url.length > 0
-          ? s.url.replace(
-              "https://testing.novembre.global",
-              "https://novtest.imgix.net"
-            )
-          : "";
-      s.src = s.url + "?h=800" + IMGIX_PARAMS;
-    });
-  }
+  // if (slides.length == 1) {
+  //   slides[0].url =
+  //     slides[0].url && slides[0].url.length > 0
+  //       ? slides[0].url.replace(
+  //           "https://testing.novembre.global",
+  //           "https://novtest.imgix.net"
+  //         )
+  //       : "";
+  //   slides[0].src =
+  //     slides[0].url +
+  //     "?w=1400" +
+  //     "&ar=16:9&max-h=600&fit=crop&crop=faces&auto=format";
+  // } else {
+  //   slides.forEach(s => {
+  //     s.url =
+  //       s.url && s.url.length > 0
+  //         ? s.url.replace(
+  //             "https://testing.novembre.global",
+  //             "https://novtest.imgix.net"
+  //           )
+  //         : "";
+  //     s.src = s.url + "?h=800" + IMGIX_PARAMS;
+  //   });
+  // }
 
+  console.dir(imageArray);
   // *** ON MOUNT
   onMount(async () => {
-    if (slides.length > 2) {
+    if (imageArray.length > 2) {
       if ((autoplay == true || autoplay == 1) && !isRelated) {
         startTicker();
       } else {
@@ -399,7 +399,7 @@
 </style>
 
 <Router>
-  {#if slides.length > 2}
+  {#if imageArray.length > 2}
     <div
       class="container"
       on:mouseenter={() => {
@@ -431,14 +431,18 @@
         class:first
         class:loaded
         use:links>
-        {#each slides as slide}
+        {#each imageArray as slide}
           {#if isRelated}
             <div
               class="carousel-cell slideshow__slide slideshow__slide--related">
               <a href="/{slide.parent}/{slide.slug}">
                 <img
                   class="slideshow__slide-image slideshow__slide-image--related"
-                  src={slide.src}
+                  src={urlFor(slide)
+                    .width(1000)
+                    .quality(90)
+                    .auto('format')
+                    .url()}
                   alt={slide.title} />
                 <div
                   class="slideshow__title"
@@ -452,7 +456,11 @@
             <div class="carousel-cell slideshow__slide">
               <img
                 class="slideshow__slide-image"
-                src={slide.src}
+                src={urlFor(slide)
+                  .width(1000)
+                  .quality(90)
+                  .auto('format')
+                  .url()}
                 alt={slide.caption} />
               {#if slide.caption}
                 <div class="slideshow__slide-caption">{slide.caption}</div>
@@ -524,11 +532,11 @@
           }
         }}>
         {#if loaded && !isPreview && !isRelated}
-          <NavShow {slides} navTarget={slideShowEl} />
+          <NavShow {imageArray} navTarget={slideShowEl} />
         {/if}
       </div>
     {/if}
-  {:else if slides.length === 2}
+    <!-- {:else if slides.length === 2}
     <div class="static-related double">
       {#if isRelated}
         <a href="/{slides[0].parent}/{slides[0].slug}">
@@ -569,6 +577,6 @@
       {:else}
         <img src={slides[0].src} alt={slides[0].title} />
       {/if}
-    </div>
+    </div> -->
   {/if}
 </Router>

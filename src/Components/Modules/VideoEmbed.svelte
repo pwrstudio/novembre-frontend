@@ -1,6 +1,11 @@
 <script>
-  import { onMount } from "svelte";
+  // # # # # # # # # # # # # #
+  //
+  // VIDEO EMBED
+  //
+  // # # # # # # # # # # # # #
 
+  // *** PROPS
   export let url = false;
   export let caption = "";
   export let size = true;

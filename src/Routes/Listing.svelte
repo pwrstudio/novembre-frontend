@@ -1,14 +1,13 @@
 <script>
   // # # # # # # # # # # # # #
   //
-  //  Listing
+  //  LISTING
   //
   // # # # # # # # # # # # # #
 
   // *** IMPORTS
   import { onMount, onDestroy } from "svelte";
   import { fade, slide, fly } from "svelte/transition";
-  import { quintOut } from "svelte/easing";
 
   // *** COMPONENTS
   import Preview from "../Components/Preview.svelte";
@@ -18,14 +17,14 @@
 
   // *** STORES
   import { navigationColor } from "../stores.js";
+  import { loadFeed, renderBlockText } from "../sanity.js";
 
   // *** PROPS
   export let title = "";
-  export let endpoint = "";
   export let showTaxonomyScroller = false;
   export let showFooter = true;
   export let isQuery = false;
-  export let query = false;
+  // export let query = false;
   export let location = {};
 
   // *** DOM REFERENCES
@@ -43,101 +42,104 @@
   let url = "";
   let meta = {};
   let finishedLoading = false;
-  let currentQuery = query;
+  // let currentQuery = query;
   let activeCategory = window.location.hash.substr(1);
 
   // *** REACTIVE
-  $: {
-    if (query !== currentQuery) {
-      items = [];
-      firstLoad = false;
-      currentQuery = query;
-      loadData(0, currentQuery);
-    }
-  }
+  // $: {
+  //   if (query !== currentQuery) {
+  //     items = [];
+  //     firstLoad = false;
+  //     currentQuery = query;
+  //     loadData(0, currentQuery);
+  //   }
+  // }
 
   navigationColor.set("white");
 
   // *** FUNCTIONS
-  function changeCategory(newCategory) {
-    activeCategory = newCategory;
-    history.replaceState(null, null, "#" + activeCategory);
-    observer.disconnect();
-    items = [];
-    finishedLoading = false;
-    loadData(0, newCategory, title.toLowerCase());
-  }
+  // const changeCategory = newCategory => {
+  //   activeCategory = newCategory;
+  //   history.replaceState(null, null, "#" + activeCategory);
+  //   observer.disconnect();
+  //   items = [];
+  //   finishedLoading = false;
+  //   loadData(0, newCategory, title.toLowerCase());
+  // };
 
-  const observer = new IntersectionObserver(
-    entries => {
-      entries.forEach(entry => {
-        if (entry.intersectionRatio > 0 && firstLoad) {
-          if (meta.nextindex < meta.lastindex) {
-            loadData(meta.nextindex);
-          } else {
-            observer.disconnect();
-            finishedLoading = true;
-          }
-        } else {
-        }
-      });
-    },
-    { threshold: 0.5 }
-  );
+  // const observer = new IntersectionObserver(
+  //   entries => {
+  //     entries.forEach(entry => {
+  //       if (entry.intersectionRatio > 0 && firstLoad) {
+  //         if (meta.nextindex < meta.lastindex) {
+  //           loadData(meta.nextindex);
+  //         } else {
+  //           observer.disconnect();
+  //           finishedLoading = true;
+  //         }
+  //       } else {
+  //       }
+  //     });
+  //   },
+  //   { threshold: 0.5 }
+  // );
 
-  function repositionSentinel() {
-    if (postsContainerEl && sentinel) {
-      let fourthElementFromEnd = postsContainerEl.querySelector(
-        ".preview:nth-last-child(4)"
-      );
-      if (fourthElementFromEnd) {
-        postsContainerEl.insertBefore(sentinel, fourthElementFromEnd);
-      }
-    }
-  }
+  // const repositionSentinel = () => {
+  //   if (postsContainerEl && sentinel) {
+  //     let fourthElementFromEnd = postsContainerEl.querySelector(
+  //       ".preview:nth-last-child(4)"
+  //     );
+  //     if (fourthElementFromEnd) {
+  //       postsContainerEl.insertBefore(sentinel, fourthElementFromEnd);
+  //     }
+  //   }
+  // };
 
-  if (location.hash) {
-    loadData(0, location.hash.substr(1), title.toLowerCase());
-  }
+  // if (location.hash) {
+  //   loadData(0, location.hash.substr(1), title.toLowerCase());
+  // }
 
-  loadData(index, query);
+  const query =
+    '*[_type == "article"]{title, "slug": slug.current, taxonomy, "preview": preview[0], previewColors}';
 
-  function loadData(i, q, tax) {
-    if (tax) {
-      url =
-        "https://testing.novembre.global/filter.json" +
-        "/index:" +
-        i +
-        "/query:" +
-        q +
-        "/tax:" +
-        tax;
-    } else {
-      url = endpoint + "/index:" + i + (q ? "/query:" + q : "");
-    }
-    fetch(url)
-      .then(r => r.json())
-      .then(arr => {
-        items = [...items, ...arr.posts];
-        meta = arr.meta;
-        taxlist = arr.taxlist;
-        firstLoad = true;
-        setTimeout(repositionSentinel, 300);
-      })
-      .catch(err => {
-        Sentry.captureException(err);
-      });
-  }
+  const feed = loadFeed(query, {}, index);
+
+  // function loadData(i, q, tax) {
+  //   if (tax) {
+  //     url =
+  //       "https://testing.novembre.global/filter.json" +
+  //       "/index:" +
+  //       i +
+  //       "/query:" +
+  //       q +
+  //       "/tax:" +
+  //       tax;
+  //   } else {
+  //     url = endpoint + "/index:" + i + (q ? "/query:" + q : "");
+  //   }
+  //   fetch(url)
+  //     .then(r => r.json())
+  //     .then(arr => {
+  //       items = [...items, ...arr.posts];
+  //       meta = arr.meta;
+  //       taxlist = arr.taxlist;
+  //       firstLoad = true;
+  //       setTimeout(repositionSentinel, 300);
+  //     })
+  //     .catch(err => {
+  //       Sentry.captureException(err);
+  //     });
+  // }
 
   // *** ON MOUNT
-  onMount(async () => {
-    try {
-      window.scrollTo(0, 0);
-      observer.observe(sentinel);
-    } catch (err) {
-      Sentry.captureException(err);
-    }
-  });
+  // onMount(async () => {
+  //   try {
+  //     window.scrollTo(0, 0);
+  //     observer.observe(sentinel);
+  //   } catch (err) {
+  //     Sentry.captureException(err);
+  //   }
+  // });
 </script>
 
 <style lang="scss">
@@ -216,60 +218,64 @@
   }
 </style>
 
-<svelte:head>
+<!-- <svelte:head>
   {#if title === 'Landing'}
     <title>NOVEMBRE</title>
   {:else}
     <title>{title.toUpperCase()} / NOVEMBRE</title>
   {/if}
-</svelte:head>
+</svelte:head> -->
 
 <div
   class="listing"
   class:landing={title === 'Landing'}
   class:empty={isQuery && items.length === 0 && firstLoad}>
 
-  {#if showTaxonomyScroller && firstLoad}
-    <div class="top-block">
-      <ScrollList
-        taxname={title.toLowerCase()}
-        {taxlist}
-        {activeCategory}
-        on:changeCategory={e => {
-          changeCategory(e.detail.newCategory, e.detail.newCategoryName);
-        }} />
+  {#await feed then feed}
+
+    <!-- {#if showTaxonomyScroller && firstLoad}
+      <div class="top-block">
+        <ScrollList
+          taxname={title.toLowerCase()}
+          {taxlist}
+          {activeCategory}
+          on:changeCategory={e => {
+            changeCategory(e.detail.newCategory, e.detail.newCategoryName);
+          }} />
+      </div>
+
+      {#if isQuery && firstLoad}
+        {#if items.length == 0}
+          <div class="top-block">
+            <div class="query-bar">No results for “{query}”</div>
+          </div>
+        {:else}
+          <div class="top-block">
+            <span class="query-bar">{title}: {query}</span>
+          </div>
+        {/if}
+      {/if}
+    {/if} -->
+
+    <div class="listing__posts" bind:this={postsContainerEl}>
+
+      {#if isQuery && items.length == 0}
+        <div class="no-results">No results for “{query}”</div>
+      {/if}
+
+      {#each feed as post, i}
+        {#if i === 0 && !activeCategory && !isQuery}
+          <SplashText section={title.toLowerCase()} />
+        {/if}
+        <Preview {post} first={i == 0 ? true : false} />
+      {/each}
     </div>
 
-    {#if isQuery && firstLoad}
-      {#if items.length == 0}
-        <div class="top-block">
-          <div class="query-bar">No results for “{query}”</div>
-        </div>
-      {:else}
-        <div class="top-block">
-          <span class="query-bar">{title}: {query}</span>
-        </div>
-      {/if}
-    {/if}
-  {/if}
-
-  <div class="listing__posts" bind:this={postsContainerEl}>
-
-    {#if isQuery && items.length == 0}
-      <div class="no-results">No results for “{query}”</div>
+    {#if !finishedLoading && !isQuery}
+      <div class="sentinel" bind:this={sentinel} />
     {/if}
 
-    {#each items as post, i}
-      {#if i === 0 && !activeCategory && !isQuery}
-        <SplashText section={title.toLowerCase()} />
-      {/if}
-      <Preview {post} first={i == 0 ? true : false} />
-    {/each}
-  </div>
-
-  {#if !finishedLoading && !isQuery}
-    <div class="sentinel" bind:this={sentinel} />
-  {/if}
+  {/await}
 
 </div>
 

@@ -1,17 +1,16 @@
 <script>
   // # # # # # # # # # # # # #
   //
-  //  Splash Text
+  //  SPLASH TEXT
   //
   // # # # # # # # # # # # # #
 
+  import { pages } from "../stores.js";
+  import { renderBlockText } from "../sanity.js";
+  import get from "lodash/get";
+
   // *** PROPS
   export let section = "landing";
-
-  const magazineText =
-    "<em class='splash-header'>Novembre Magazine</em> is a printed magazine published biannually, devoted to the vertiginous excitement of contemporary urban life.";
-  const bureauText =
-    "<em class='splash-header'>Novembre Bureau</em> serves as an inter-disciplinary creative agency that harnesses the cultural capital of Novembre Global to provide tailor-made and bespoke creative services for media outlets, independent labels, institutions, and international luxury brand.";
 </script>
 
 <style lang="scss">
@@ -62,7 +61,9 @@
 </style>
 
 <div class="splash-text {section}">
-  <div>
-    {@html section === 'magazine' ? magazineText : bureauText}
-  </div>
+  {#await $pages then pages}
+    <div>
+      {@html section === 'magazine' ? renderBlockText(get(pages, 'magazine.content', [])) : renderBlockText(get(pages, 'bureau.content', []))}
+    </div>
+  {/await}
 </div>

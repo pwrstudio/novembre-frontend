@@ -1,37 +1,31 @@
 <script>
   // # # # # # # # # # # # # #
   //
-  //  Contact
+  //  CONTACT
   //
   // # # # # # # # # # # # # #
 
-  // STORES
-  import { navigationColor } from "../stores.js";
+  import { navigationColor, pages } from "../stores.js";
+  import { renderBlockText } from "../sanity.js";
+  import get from "lodash/get";
 
   // COMPONENTS
   import Footer from "../Components/Footer.svelte";
   import NewsletterSignUp from "../Components/NewsletterSignUp.svelte";
 
+  // *** MODULES
+  import Image from "../Components/Modules/Image.svelte";
+  import ImageGroup from "../Components/Modules/ImageGroup.svelte";
+  import VideoEmbed from "../Components/Modules/VideoEmbed.svelte";
+  import Audio from "../Components/Modules/Audio.svelte";
+  import Slideshow from "../Components/Modules/Slideshow.svelte";
+
   // PROPS
-  export let endpoint = "";
   export let slug = "";
   export let location = {};
 
-  // VARIABLES
-  let post = loadData();
-
   // LOGIC
   navigationColor.set("black");
-
-  async function loadData() {
-    try {
-      const res = await fetch(endpoint);
-      const post = await res.json();
-      return post;
-    } catch (err) {
-      Sentry.captureException(err);
-    }
-  }
 </script>
 
 <style lang="scss">
@@ -81,41 +75,36 @@
   <title>CONTACT / NOVEMBRE</title>
 </svelte:head>
 
-{#await post then post}
+{#await $pages then pages}
   <article class="contact">
 
     <div class="contact-section">
-      <div>EMAIL</div>
-      <a href="mailto:{post.header.email}" target="_blank">
-        {post.header.email}
-      </a>
-    </div>
-
-    <div class="contact-section">
-      <div>INSTAGRAM</div>
-      <a
-        href="https://www.instagram.com/{post.header.instagram}"
-        target="_blank"
-        rel="noreferrer">
-        @{post.header.instagram}
-      </a>
-    </div>
-
-    <div class="contact-section">
-      <div>FACEBOOK</div>
-      <a
-        href="https://facebook.com/novembremagazineworld"
-        target="_blank"
-        rel="noreferrer">
-        @novembremagazineworld
-      </a>
-    </div>
-
-    <div class="contact-section">
-      <div>LINKEDIN</div>
-      <a href="https://www.linkedin.com/novembre-magazine" target="_blank">
-        @novembre-magazine
-      </a>
+      {#each pages.contact.content as c}
+        {#if c._type == 'block'}
+          {@html renderBlockText(c)}
+        {/if}
+        {#if c._type == 'singleImage'}
+          <Image
+            imageObject={c.image}
+            caption={get(c, 'caption', false)}
+            alignment={get(c, 'alignment', '')}
+            fullwidth={get(c, 'fullwidth', '')} />
+        {/if}
+        {#if c._type == 'imageGroup'}
+          <ImageGroup
+            imageArray={c.images}
+            caption={get(c, 'caption', false)} />
+        {/if}
+        {#if c._type == 'video'}
+          <VideoEmbed url={c.video} caption={get(c, 'caption', false)} />
+        {/if}
+        {#if c._type == 'slideshow'}
+          <Slideshow imageArray={c.images} />
+        {/if}
+        {#if c._type == 'audio'}
+          <Audio fileObject={c.audio} />
+        {/if}
+      {/each}
     </div>
 
     <div class="contact-section">

@@ -1,13 +1,12 @@
 <script>
   // # # # # # # # # # # # # #
   //
-  //  Navigation bar and menu
+  //  NAVIGATION BAR
   //
   // # # # # # # # # # # # # #
 
   // *** IMPORTS
   import { Router, links } from "svelte-routing";
-  // import { fade, fly } from "svelte/transition";
 
   // *** COMPONENTS
   import Logo from "./Logo.svelte";
@@ -23,7 +22,6 @@
     { title: "MAGAZINE", target: "/magazine" },
     { title: "BUREAU", target: "/bureau" },
     { title: "ABOUT", target: "/about" },
-    { title: "CALENDAR", target: "/calendar" },
     { title: "CONTACT", target: "/contact" },
     { title: "STOCKISTS", target: "/stockists" }
   ];
@@ -204,10 +202,6 @@
 
       #{$block}__menu {
         pointer-events: all;
-        // clip-path: inset(0% 0% 0% 0%);
-        // -webkit-clip-path: inset(0% 0% 0% 0%);
-        // transition: clip-path 0.25s $transition,
-        //   -webkit-clip-path 0.25s $transition, opacity 0.3s $transition;
         transition: opacity 0.3s $transition;
         opacity: 1;
 
@@ -277,7 +271,3 @@
   </Router>
 
 </nav>
-
-<!-- 
-          in:fly={{ y: -20, delay: 240, duration: 50 }}>
-            in:fly={{ y: -20, duration: 50, delay: 30 * menuIndex }} -->
