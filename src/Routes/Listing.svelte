@@ -100,7 +100,7 @@
   // }
 
   const query =
-    '*[_type == "article"]{title, "slug": slug.current, taxonomy, "preview": preview[0], previewColors}';
+    '*[_type == "article" && editorialState == "live"] | order(publicationDate desc){title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}';
 
   const feed = loadFeed(query, {}, index);
 

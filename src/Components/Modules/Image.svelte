@@ -19,13 +19,15 @@
 
   // *** VARIABLES
   const src = urlFor(imageObject)
-    .width(1000)
+    .width(1400)
+    .height(1000)
     .quality(90)
     .auto("format")
     .url();
 
   const srcPortrait = urlFor(imageObject)
     .width(600)
+    .height(1000)
     .quality(90)
     .auto("format")
     .url();

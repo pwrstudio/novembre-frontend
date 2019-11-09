@@ -87,10 +87,12 @@
     return `${minutes}:${seconds}`;
   }
 
-  // --- Build urls
-  videoUrl = url.replace("https://testing.novembre.global", "");
-  videoSrc = VIDEO_ROOT + REMOTE_FOLDER + encodeURI(videoUrl);
-  posterImageSrc = videoSrc.substring(0, videoSrc.length - 4) + ".jpg";
+  // // --- Build urls
+  // videoUrl = url.replace("https://testing.novembre.global", "");
+  // videoSrc = VIDEO_ROOT + REMOTE_FOLDER + encodeURI(videoUrl);
+  // posterImageSrc = videoSrc.substring(0, videoSrc.length - 4) + ".jpg";
+
+  console.dir(url);
 
   // *** ON MOUNT
   onMount(async () => {
@@ -232,7 +234,7 @@
     {loop}
     {muted}
     poster={posterImageSrc}
-    src={videoSrc}
+    src={url}
     on:mousemove={handleMousemove}
     on:mousedown={handleMousedown}
     bind:currentTime={time}
@@ -242,7 +244,6 @@
   {#if !autoplay}
     <div class="controls" style="opacity: {duration && showControls ? 1 : 0}">
 
-      <!-- <div class="time">{format(time)} / {format(duration)}</div> -->
       <progress value={time / duration || 0} />
 
       <div class="buttons">

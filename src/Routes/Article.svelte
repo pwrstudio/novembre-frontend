@@ -170,7 +170,9 @@
     </div>
 
     <!-- TITLE -->
-    <h1 class="article__title">{post.title}</h1>
+    <h1 class="article__title">
+      {@html post.title}
+    </h1>
 
     <!-- MAIN CONTENT -->
     <div class="content">

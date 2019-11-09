@@ -39,6 +39,8 @@
     ? "color:" + post.previewColors.customTextColor.hex + ";"
     : "";
   const elementStyles = backgroundColor + " " + customTextColor;
+
+  console.dir(post);
 </script>
 
 <style lang="scss">
@@ -185,7 +187,7 @@
 <Router>
 
   <div
-    class="preview {post.preview._type}"
+    class="preview {get(post, 'preview._type', '')}"
     class:loaded
     class:first
     class:white={get(post, 'previewColors.textColor', false) == 'white'}
@@ -197,32 +199,32 @@
     {#if !first && !isHeader}
       <div
         class="preview__tags"
-        class:bottom-tags={post.preview._type == 'imageGroup'}>
+        class:bottom-tags={get(post, 'preview._type', '') == 'imageGroup'}>
         <TaxList taxonomy={post.taxonomy} />
       </div>
     {/if}
 
-    {#if post.preview._type === 'singleImage'}
+    {#if get(post, 'preview._type', '') === 'singleImage'}
       <a href="/{post.taxonomy.category}/{post.slug}">
         <Image fullwidth={true} imageObject={post.preview.image} />
       </a>
     {/if}
 
-    {#if post.preview._type === 'imageGroup'}
+    {#if get(post, 'preview._type', '') === 'imageGroup'}
       <a href="/{post.taxonomy.category}/{post.slug}">
         <ImageGroup imageArray={post.preview.images} />
       </a>
     {/if}
 
-    {#if post.preview._type === 'slideshow'}
+    {#if get(post, 'preview._type', '') === 'slideshow'}
       <a href="/{post.taxonomy.category}/{post.slug}">
         <Slideshow imageArray={post.preview.images} />
       </a>
     {/if}
 
-    {#if post.preview._type === 'video'}
+    {#if get(post, 'preview._type', '') === 'videoLoop'}
       <a href="/{post.taxonomy.category}/{post.slug}">
-        <Video fullwidth={true} videoObject={post.preview.video} />
+        <Video fullwidth={true} url={post.previewVideoUrl} />
       </a>
     {/if}
 
@@ -230,8 +232,8 @@
       <a href="/{post.taxonomy.category}/{post.slug}">
         <div
           class="preview__title preview__title--free"
-          class:preview__title--free={post.preview._type == 'imageGroup'}>
-          {post.title}
+          class:preview__title--free={get(post, 'preview._type', '') == 'imageGroup'}>
+          {@html post.title}
         </div>
       </a>
     {/if}
