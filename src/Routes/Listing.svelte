@@ -8,23 +8,28 @@
   // *** IMPORTS
   import { onMount, onDestroy } from "svelte";
   import { fade, slide, fly } from "svelte/transition";
+  import { navigate } from "svelte-routing";
 
   // *** COMPONENTS
   import Preview from "../Components/Preview.svelte";
-  import ScrollList from "../Components/ScrollList.svelte";
   import Footer from "../Components/Footer.svelte";
   import SplashText from "../Components/SplashText.svelte";
+  import MetaData from "../Components/MetaData.svelte";
 
   // *** STORES
-  import { navigationColor } from "../stores.js";
-  import { loadFeed, renderBlockText } from "../sanity.js";
+  import {
+    navigationColor,
+    activeQuery,
+    activeCategory,
+    scrollListActive
+  } from "../stores.js";
+  import { loadFeed } from "../sanity.js";
 
   // *** PROPS
   export let title = "";
-  export let showTaxonomyScroller = false;
   export let showFooter = true;
   export let isQuery = false;
-  // export let query = false;
+  export let query = false;
   export let location = {};
 
   // *** DOM REFERENCES
@@ -32,40 +37,69 @@
   let postsContainerEl = {};
 
   // *** VARIABLES
-  let fetchedPosts = [];
   let count = 0;
   let index = 0;
-  let items = [];
-  let taxlist = [];
-  let loadedTax = false;
-  let firstLoad = false;
-  let url = "";
-  let meta = {};
   let finishedLoading = false;
-  // let currentQuery = query;
-  let activeCategory = window.location.hash.substr(1);
+  let currentQuery = query;
+  let sanityQuery = "";
+  let sanityParams = {};
+
+  const doLoad = () => {
+    if (title === "Landing") {
+      sanityQuery =
+        '*[_type == "article" && editorialState == "live"] | order(publicationDate desc){title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}';
+    } else if (title === "Magazine") {
+      sanityQuery =
+        '*[_type == "article" && editorialState == "live" && taxonomy.category == "magazine" ] | order(publicationDate desc){title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}';
+    } else if (title === "Bureau") {
+      sanityQuery =
+        '*[_type == "article" && editorialState == "live" && taxonomy.category == "bureau"] | order(publicationDate desc){title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}';
+    } else if (title === "Tag") {
+      sanityQuery =
+        '*[_type == "article" && editorialState == "live" && $tag in taxonomy.tags ] | order(publicationDate desc){title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}';
+      sanityParams = { tag: query };
+    } else if (title === "Search") {
+      sanityQuery =
+        '*[_type == "article" && editorialState == "live" && title match $term || $term in taxonomy.tags ] | order(publicationDate desc){title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}';
+      sanityParams = { term: query };
+    } else if (title === "magsub") {
+      sanityQuery =
+        '*[_type == "article" && editorialState == "live" && taxonomy.category == "magazine" && taxonomy.subCategory == $subcat ] | order(publicationDate desc){title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}';
+      sanityParams = { subcat: query };
+    } else if (title === "bursub") {
+      sanityQuery =
+        '*[_type == "article" && editorialState == "live" && taxonomy.category == "bureau" && taxonomy.subCategory == $subcat ] | order(publicationDate desc){title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}';
+      sanityParams = { subcat: query };
+    } else {
+      navigate("/404");
+    }
+    return loadFeed(sanityQuery, sanityParams, index);
+  };
+
+  let feed = doLoad();
 
   // *** REACTIVE
-  // $: {
-  //   if (query !== currentQuery) {
-  //     items = [];
-  //     firstLoad = false;
-  //     currentQuery = query;
-  //     loadData(0, currentQuery);
-  //   }
-  // }
+  $: {
+    if (query !== currentQuery) {
+      currentQuery = query;
+      feed = doLoad();
+    }
+  }
+
+  $: activeQuery.set(query);
+
+  $: title === "bursub" ||
+  title === "magsub" ||
+  title === "Magazine" ||
+  title === "Bureau"
+    ? scrollListActive.set(true)
+    : scrollListActive.set(false);
+
+  $: title === "bursub" || title === "Bureau"
+    ? activeCategory.set("bureau")
+    : activeCategory.set("magazine");
 
   navigationColor.set("white");
-
-  // *** FUNCTIONS
-  // const changeCategory = newCategory => {
-  //   activeCategory = newCategory;
-  //   history.replaceState(null, null, "#" + activeCategory);
-  //   observer.disconnect();
-  //   items = [];
-  //   finishedLoading = false;
-  //   loadData(0, newCategory, title.toLowerCase());
-  // };
 
   // const observer = new IntersectionObserver(
   //   entries => {
@@ -95,51 +129,18 @@
   //   }
   // };
 
-  // if (location.hash) {
-  //   loadData(0, location.hash.substr(1), title.toLowerCase());
-  // }
-
-  const query =
-    '*[_type == "article" && editorialState == "live"] | order(publicationDate desc){title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}';
-
-  const feed = loadFeed(query, {}, index);
-
-  // function loadData(i, q, tax) {
-  //   if (tax) {
-  //     url =
-  //       "https://testing.novembre.global/filter.json" +
-  //       "/index:" +
-  //       i +
-  //       "/query:" +
-  //       q +
-  //       "/tax:" +
-  //       tax;
-  //   } else {
-  //     url = endpoint + "/index:" + i + (q ? "/query:" + q : "");
-  //   }
-  //   fetch(url)
-  //     .then(r => r.json())
-  //     .then(arr => {
-  //       items = [...items, ...arr.posts];
-  //       meta = arr.meta;
-  //       taxlist = arr.taxlist;
-  //       firstLoad = true;
-  //       setTimeout(repositionSentinel, 300);
-  //     })
-  //     .catch(err => {
-  //       Sentry.captureException(err);
-  //     });
-  // }
+  // *** ON MOUNT
+  onMount(async () => {
+    try {
+      window.scrollTo(0, 0);
+      // observer.observe(sentinel);
+    } catch (err) {
+      Sentry.captureException(err);
+    }
+  });
 
   // *** ON MOUNT
-  // onMount(async () => {
-  //   try {
-  //     window.scrollTo(0, 0);
-  //     observer.observe(sentinel);
-  //   } catch (err) {
-  //     Sentry.captureException(err);
-  //   }
-  // });
+  onDestroy(() => scrollListActive.set(false));
 </script>
 
 <style lang="scss">
@@ -155,36 +156,10 @@
     width: 100%;
     min-height: 80vh;
     overflow: hidden;
-
-    &.empty {
-      background: $hotpink;
-    }
   }
 
   .landing {
     padding-top: 0;
-  }
-
-  .top-block {
-    font-family: $sans-stack;
-    font-size: $large;
-    font-weight: 300;
-    text-transform: uppercase;
-    color: white;
-    line-height: 0.8em;
-    padding-bottom: $small-margin;
-    padding-top: $small-margin;
-    position: fixed;
-    top: 75px;
-    width: 100%;
-    left: 0;
-    z-index: 99;
-
-    @include screen-size("small") {
-      font-size: $mobile_large;
-      padding-bottom: $small-margin;
-      padding-top: $small-margin;
-    }
   }
 
   .message {
@@ -211,63 +186,32 @@
 
   .no-results {
     padding-left: $small-margin;
-    padding-top: 120px;
     font-size: $large;
     font-family: $sans-stack;
     color: white;
+    background: $hotpink;
+    height: 100vh;
+    width: 100vw;
+    padding-top: 200px;
+    text-transform: uppercase;
   }
 </style>
 
-<!-- <svelte:head>
-  {#if title === 'Landing'}
-    <title>NOVEMBRE</title>
-  {:else}
-    <title>{title.toUpperCase()} / NOVEMBRE</title>
-  {/if}
-</svelte:head> -->
-
-<div
-  class="listing"
-  class:landing={title === 'Landing'}
-  class:empty={isQuery && items.length === 0 && firstLoad}>
+<div class="listing" class:landing={title === 'Landing'}>
 
   {#await feed then feed}
 
-    <!-- {#if showTaxonomyScroller && firstLoad}
-      <div class="top-block">
-        <ScrollList
-          taxname={title.toLowerCase()}
-          {taxlist}
-          {activeCategory}
-          on:changeCategory={e => {
-            changeCategory(e.detail.newCategory, e.detail.newCategoryName);
-          }} />
-      </div>
-
-      {#if isQuery && firstLoad}
-        {#if items.length == 0}
-          <div class="top-block">
-            <div class="query-bar">No results for “{query}”</div>
-          </div>
-        {:else}
-          <div class="top-block">
-            <span class="query-bar">{title}: {query}</span>
-          </div>
-        {/if}
-      {/if}
-    {/if} -->
-
     <div class="listing__posts" bind:this={postsContainerEl}>
 
-      {#if isQuery && items.length == 0}
+      {#if isQuery && feed.length == 0}
         <div class="no-results">No results for “{query}”</div>
       {/if}
 
       {#each feed as post, i}
-        {#if i === 0 && !activeCategory && !isQuery}
+        {#if (i === 0 && title === 'Magazine') || title === 'Bureau'}
           <SplashText section={title.toLowerCase()} />
         {/if}
-        <Preview {post} first={i == 0 ? true : false} />
+        <Preview {post} isFirst={i === 0 ? true : false} />
       {/each}
     </div>
 
@@ -279,5 +223,4 @@
 
 </div>
 
-<Footer
-  active={finishedLoading || firstLoad || (isQuery && items.length == 0)} />
+<Footer active={true} />

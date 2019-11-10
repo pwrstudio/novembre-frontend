@@ -7,12 +7,15 @@
 
   // IMPORTS
   import "intersection-observer";
-  import { Router, Link, Route } from "svelte-routing";
+  import { Router, Route } from "svelte-routing";
   import Navigation from "./Components/Navigation.svelte";
   import { loadPages } from "./sanity.js";
 
+  // COMPONENTS
+  import ScrollList from "./Components/ScrollList.svelte";
+
   // STORES
-  import { pages } from "./stores.js";
+  import { pages, scrollListActive, activeCategory } from "./stores.js";
 
   // ROUTES
   import Listing from "./Routes/Listing.svelte";
@@ -27,41 +30,53 @@
   const listingRouteParams = {
     landing: {
       title: "Landing",
-      showTaxonomyScroller: false,
       showFooter: false
     },
     magazine: {
-      title: "Magazine",
-      showTaxonomyScroller: true
+      title: "Magazine"
     },
     bureau: {
-      title: "Bureau",
-      showTaxonomyScroller: true
+      title: "Bureau"
+    },
+    magazineSub: {
+      title: "magsub",
+      isQuery: true
+    },
+    bureauSub: {
+      title: "bursub",
+      isQuery: true
     },
     taxonomy: {
       title: "Tag",
-      showTaxonomyScroller: false,
       isQuery: true
     },
     search: {
       title: "Search",
-      showTaxonomyScroller: false,
       isQuery: true
     }
   };
 
-  const articleRouteParams = {
-    bureau: {
-      isBureau: true
-    }
-  };
+  const tagArray =
+    $activeCategory === "magazine"
+      ? [
+          { title: "Reportage", slug: "reportage" },
+          { title: "Motion", slug: "motion" },
+          { title: "Words", slug: "words" },
+          { title: "Features", slug: "features" },
+          { title: "Guest Features", slug: "guest-features" },
+          { title: "Sounds", slug: "sounds" }
+        ]
+      : [
+          { title: "Creative Direction", slug: "creative-direction" },
+          { title: "Workshop", slug: "workshop" },
+          { title: "Entertainment", slug: "entertainment" }
+        ];
 </script>
 
 <style lang="scss" global>
   @import "./variables.scss";
 
   html {
-    background: $grey;
     padding: 0;
     margin: 0;
 
@@ -142,80 +157,28 @@
     top: -1px;
   }
 
-  .marker {
-    background: $hotpink;
-    height: 10px;
-    width: 10px;
-    border-radius: 10px;
-  }
+  // .marker {
+  //   background: $hotpink;
+  //   height: 10px;
+  //   width: 10px;
+  //   border-radius: 10px;
+  // }
 
   blockquote {
+    display: block;
+    font-family: $serif-stack;
     font-size: $large;
     line-height: 1em;
     font-style: italic;
     margin: 0;
-  }
-
-  .small {
-    height: auto;
-    width: 800px;
     margin-left: auto;
     margin-right: auto;
-    max-width: 95vw;
-    margin-bottom: $large-vertical-margin;
-    font-family: $sans-stack;
-    font-size: $small;
-    line-height: 1.4em;
-    overflow: hidden;
-    a {
-      color: currentColor;
-      text-decoration: none;
-      border-bottom: 1px solid $black;
-      transition: border 0.3s $transition;
-
-      &:hover {
-        border-bottom: 1px solid transparent;
-      }
-    }
-
-    p {
-      margin-bottom: $small-vertical-margin;
-    }
+    max-width: 90vw;
+    margin-bottom: 1.2rem;
 
     @include screen-size("small") {
-      font-size: $mobile_small;
-    }
-
-    a {
-      color: currentColor;
-      text-decoration: none;
-      border-bottom: 1px solid $black;
-      transition: border 0.3s $transition;
-
-      &:hover {
-        border-bottom: 1px solid transparent;
-      }
-    }
-
-    transition: opacity $transition;
-  }
-
-  .introduction {
-    height: auto;
-    width: 800px;
-    margin-left: auto;
-    margin-right: auto;
-    max-width: 95vw;
-    font-family: $serif-stack;
-    font-style: italic;
-    line-height: 1.2em;
-    font-size: $intro;
-    margin-bottom: $large-vertical-margin;
-    line-height: 1.2em;
-    transition: opacity $transition;
-
-    @include screen-size("small") {
-      font-size: $mobile_intro;
+      font-size: $mobile_large;
+      max-width: 95vw;
     }
   }
 
@@ -223,15 +186,50 @@
     p {
       display: block;
       width: 800px;
-      margin-left: auto;
-      margin-right: auto;
       max-width: 95vw;
-      margin-bottom: $large-vertical-margin;
       font-family: $serif-stack;
       font-size: $body;
       line-height: 1.2em;
-      overflow: hidden;
-      margin-bottom: $small-vertical-margin;
+      margin-left: auto;
+      margin-right: auto;
+      margin-top: 0;
+      margin-bottom: 1.2em;
+
+      &.small {
+        font-family: $sans-stack;
+        font-size: $small;
+
+        a {
+          color: currentColor;
+          text-decoration: none;
+          border-bottom: 1px solid $black;
+          transition: border 0.3s $transition;
+
+          &:hover {
+            border-bottom: 1px solid transparent;
+          }
+        }
+
+        @include screen-size("small") {
+          font-size: $mobile_small;
+        }
+      }
+
+      &.interview-question {
+        font-family: $sans-stack;
+        font-size: 21px;
+        margin-bottom: 0.8em;
+      }
+
+      &.introduction {
+        font-family: $serif-stack;
+        font-style: italic;
+        font-size: $intro;
+
+        @include screen-size("small") {
+          font-size: $mobile_intro;
+        }
+      }
     }
 
     @include screen-size("small") {
@@ -249,10 +247,14 @@
         border-bottom: 1px solid transparent;
       }
     }
+  }
 
-    // &.hide-text {
-    //   opacity: 0;
-    // }
+  .splash-text {
+    div {
+      p {
+        margin: 0;
+      }
+    }
   }
 
   .carousel {
@@ -266,17 +268,6 @@
 
   .carousel.flickity-enabled {
     opacity: 1;
-  }
-
-  .bureau {
-    p {
-      column-count: 2;
-      column-fill: auto;
-
-      @include screen-size("small") {
-        column-count: unset;
-      }
-    }
   }
 
   .mapboxgl-canvas {
@@ -327,9 +318,39 @@
   }
 
   /*! Flickity v2.2.1 ------------------- */
+
+  .top-block {
+    font-family: $sans-stack;
+    font-size: $large;
+    font-weight: 300;
+    text-transform: uppercase;
+    color: white;
+    line-height: 0.8em;
+    padding-bottom: $small-margin;
+    padding-top: $small-margin;
+    position: fixed;
+    top: 75px;
+    width: 100%;
+    left: 0;
+    z-index: 99;
+
+    @include screen-size("small") {
+      font-size: $mobile_large;
+      padding-bottom: $small-margin;
+      padding-top: $small-margin;
+    }
+
+    opacity: 1;
+  }
 </style>
 
 <Navigation />
+
+{#if $scrollListActive}
+  <div class="top-block">
+    <ScrollList {tagArray} />
+  </div>
+{/if}
 
 <Router>
   <Route path="/" component={Listing} {...listingRouteParams.landing} />
@@ -337,16 +358,16 @@
     path="magazine/"
     component={Listing}
     {...listingRouteParams.magazine} />
+  <Route path="bureau" component={Listing} {...listingRouteParams.bureau} />
   <Route
     <Route
     path="magazine/category/:query"
     component={Listing}
-    {...listingRouteParams.magazine} />
-  <Route path="bureau" component={Listing} {...listingRouteParams.bureau} />
+    {...listingRouteParams.magazineSub} />
   <Route
     path="bureau/category/:query"
     component={Listing}
-    {...listingRouteParams.bureau} />
+    {...listingRouteParams.bureauSub} />
   <Route
     path="taxonomy/:query"
     component={Listing}
@@ -361,12 +382,10 @@
     {...listingRouteParams.search} />
   <Route path="search/" component={Listing} {...listingRouteParams.search} />
   <Route path="magazine/:slug" component={Article} />
-  <Route
-    path="bureau/:slug"
-    component={Article}
-    {...articleRouteParams.bureau} />
+  <Route path="bureau/:slug" component={Article} />
   <Route path="about" component={About} />
   <Route path="contact" component={Contact} />
   <Route path="stockists" component={Stockists} />
+  <Route path="404" component={Error404} title="404" />
   <Route component={Error404} title="404" />
 </Router>

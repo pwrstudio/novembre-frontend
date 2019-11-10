@@ -81,6 +81,7 @@ const sanitizeArticle = res => {
         content: get(res, 'content', []),
         preview: get(res, 'preview[0]', []),
         previewColors: get(res, 'previewColors', []),
+        previewVideoUrl: get(res, 'previewVideoUrl', '')
     }
 }
 
@@ -103,7 +104,7 @@ export const loadFeed = async (query, params, index) => {
         if (res === null) {
             return Promise.reject(new Error(404));
         }
-        console.dir(res)
+        // console.dir(res)
         // console.dir(sanitizeArticle(res))
         // return sanitizeArticle(res)
         return res

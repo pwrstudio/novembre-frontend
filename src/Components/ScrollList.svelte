@@ -8,50 +8,16 @@
   // *** IMPORTS
   import { onMount } from "svelte";
   import Flickity from "flickity";
-  import { fade, slide, fly } from "svelte/transition";
+  import { navigate } from "svelte-routing";
 
-  // *** COMPONENTS
-  import { createEventDispatcher } from "svelte";
+  // *** DOM STORES
+  import { activeQuery, activeCategory } from "../stores.js";
 
   // *** PROPS
-  export let taxlist;
-  export let taxname;
-  export let size = "large";
-  export let activeCategory = "";
+  export let tagArray = [];
 
-  let loaded = false;
-
-  // *** VARIABLES
+  // *** DOM REFERENCES
   let scrollListEl;
-  const dispatch = createEventDispatcher();
-  let taxArray = [];
-
-  try {
-    taxArray = Array.from(Object.keys(taxlist[taxname]));
-    taxArray = [...taxArray, ...taxArray];
-  } catch (err) {
-    Sentry.captureException(err);
-  }
-
-  // *** FUNCTIONS
-  function slugify(string) {
-    const a =
-      "àáäâãåăæąçćčđďèéěėëêęğǵḧìíïîįłḿǹńňñòóöôœøṕŕřßşśšșťțùúüûǘůűūųẃẍÿýźžż·/_,:;";
-    const b =
-      "aaaaaaaaacccddeeeeeeegghiiiiilmnnnnooooooprrsssssttuuuuuuuuuwxyyzzz------";
-    const p = new RegExp(a.split("").join("|"), "g");
-
-    return string
-      .toString()
-      .toLowerCase()
-      .replace(/\s+/g, "-") // Replace spaces with -
-      .replace(p, c => b.charAt(a.indexOf(c))) // Replace special characters
-      .replace(/&/g, "-and-") // Replace & with 'and'
-      .replace(/[^\w\-]+/g, "") // Remove all non-word characters
-      .replace(/\-\-+/g, "-") // Replace multiple - with single -
-      .replace(/^-+/, "") // Trim - from start of text
-      .replace(/-+$/, ""); // Trim - from end of text
-  }
 
   // TODO: change speed for mobile
   const startTicker = function() {
@@ -116,21 +82,15 @@
       cellElement,
       cellIndex
     ) {
-      dispatch("changeCategory", {
-        newCategory: slugify(cellElement.dataset.tag),
-        newCategoryName: cellElement.dataset.tag
-      });
+      navigate("/" + $activeCategory + "/category/" + cellElement.dataset.tag);
     });
-
-    setTimeout(() => {
-      update();
-      loaded = true;
-    }, 500);
   };
 
   // *** ON MOUNT
   onMount(async () => {
-    startTicker();
+    setTimeout(() => {
+      startTicker();
+    }, 500);
   });
 </script>
 
@@ -138,7 +98,6 @@
   @import "../variables.scss";
 
   .taxonomy-scroller {
-    $block: &;
     height: 96px;
 
     @include screen-size("small") {
@@ -149,29 +108,18 @@
 
     background: black;
     color: white;
-    opacity: 0;
+    opacity: 1;
     transition: opacity 0.3s ease-out, transform 0.3s ease-out;
-
-    &.loaded {
-      transform: translateY(0px) translateX(0px);
-      opacity: 1;
-    }
-
-    &.hide {
-      visibility: hidden;
-    }
 
     &__slide {
       display: inline-block;
       margin-right: 30px;
       white-space: nowrap;
       height: auto;
-      // background: red;
       overflow: visible;
       padding-top: 3px;
 
       span {
-        // height: 1em;
         cursor: pointer;
         border-bottom: 2px solid transparent;
       }
@@ -180,11 +128,6 @@
       span:active,
       span.active {
         border-bottom: 2px solid white;
-        // text-decoration: underline;
-      }
-
-      span.active {
-        // background: pink;
       }
 
       @include screen-size("small") {
@@ -193,50 +136,38 @@
     }
 
     &__slideshow {
-      &--small {
-        font-style: italic;
-        font-size: $body;
-        line-height: 45px;
-        height: 50px;
-      }
+      height: 96px;
+      width: 100%;
 
-      &--large {
-        height: 96px;
-        width: 100%;
+      position: fixed;
+      top: 2px;
+      font-family: $sans-stack;
+      font-size: $large;
+      font-weight: 300;
+      text-transform: uppercase;
+      line-height: 1.4em;
 
-        position: fixed;
-        top: 2px;
-        font-family: $sans-stack;
-        font-size: $large;
-        font-weight: 300;
-        text-transform: uppercase;
-        line-height: 1.4em;
-
-        @include screen-size("small") {
-          font-size: $mobile_large;
-          // top: 0;
-          padding-bottom: 3px;
-        }
+      @include screen-size("small") {
+        font-size: $mobile_large;
+        padding-bottom: 3px;
       }
     }
   }
 </style>
 
-<!-- {#if loaded} -->
-<div class="taxonomy-scroller" class:loaded>
+<div class="taxonomy-scroller">
   <div
     class="main-carousel taxonomy-scroller__slideshow
     taxonomy-scroller__slideshow--large"
     bind:this={scrollListEl}>
-    {#each taxArray as t}
-      <div data-tag={t} class="carousel-cell taxonomy-scroller__slide">
+    {#each tagArray as t}
+      <div data-tag={t.slug} class="carousel-cell taxonomy-scroller__slide">
         <span
-          class:active={activeCategory === slugify(t)}
+          class:active={t.slug === $activeQuery}
           class="taxonomy__item taxonomy-scroller__link">
-          {t}
+          {t.title}
         </span>
       </div>
     {/each}
   </div>
 </div>
-<!-- {/if} -->

@@ -1,12 +1,34 @@
 <script>
   // # # # # # # # # # # # # #
   //
-  //  VIDEO
+  //  LOCAL VIDEO
+  //  *
+  //  _ caption
+  //  _ maxHeigth
+  //  _ alignment
+  //  _ inlineDisplay
+  //  _ fullWidth
+  //  _ backgroundColor
+  //  *
   //
   // # # # # # # # # # # # # #
 
-  // *** IMPORT
+  // *** IMPORTS
+  import MediaQuery from "svelte-media-query";
   import { onMount } from "svelte";
+
+  // *** PROPS
+  export let caption = false;
+  export let backgroundColor = false;
+  export let alignment = "";
+  export let maxHeight = false;
+  export let fullwidth = false;
+  export let inlineDisplay = false;
+  export let isListing = false;
+
+  const customStyles =
+    (maxHeight ? "height:" + maxHeight + "vh; " : "") +
+    (backgroundColor ? "background:" + backgroundColor.hex + ";" : "");
 
   // *** PROPS
   export let url = "";
@@ -15,9 +37,7 @@
   export let loop = true;
   export let muted = true;
   export let controls = false;
-  export let caption = "";
   export let size = true;
-  export let backgroundColor = false;
 
   // *** DOM REFERENCES
   let videoEl = {};
@@ -92,7 +112,7 @@
   // videoSrc = VIDEO_ROOT + REMOTE_FOLDER + encodeURI(videoUrl);
   // posterImageSrc = videoSrc.substring(0, videoSrc.length - 4) + ".jpg";
 
-  console.dir(url);
+  // console.dir(url);
 
   // *** ON MOUNT
   onMount(async () => {

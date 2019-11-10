@@ -26,7 +26,7 @@
   // *** PROPS
   export let post = {};
   export let isHeader = false;
-  export let first = false;
+  export let isFirst = false;
 
   // *** VARIABLES
   let active = true;
@@ -39,8 +39,6 @@
     ? "color:" + post.previewColors.customTextColor.hex + ";"
     : "";
   const elementStyles = backgroundColor + " " + customTextColor;
-
-  console.dir(post);
 </script>
 
 <style lang="scss">
@@ -112,7 +110,6 @@
 
         @include screen-size("small") {
           font-size: $large;
-          // hyphens: auto;
           padding-bottom: 20px;
         }
       }
@@ -189,18 +186,20 @@
   <div
     class="preview {get(post, 'preview._type', '')}"
     class:loaded
-    class:first
-    class:white={get(post, 'previewColors.textColor', false) == 'white'}
+    class:first={isFirst}
+    class:white={get(post, 'previewColors.textColor', 'black') == 'white'}
     class:header={isHeader}
     style={elementStyles}
     use:links>
 
     <!-- TAGS -->
-    {#if !first && !isHeader}
+    {#if !isFirst && !isHeader}
       <div
         class="preview__tags"
         class:bottom-tags={get(post, 'preview._type', '') == 'imageGroup'}>
-        <TaxList taxonomy={post.taxonomy} />
+        <TaxList
+          taxonomy={post.taxonomy}
+          white={get(post, 'previewColors.textColor', 'black') === 'white'} />
       </div>
     {/if}
 
@@ -212,19 +211,19 @@
 
     {#if get(post, 'preview._type', '') === 'imageGroup'}
       <a href="/{post.taxonomy.category}/{post.slug}">
-        <ImageGroup imageArray={post.preview.images} />
+        <ImageGroup isListing={true} imageArray={post.preview.images} />
       </a>
     {/if}
 
     {#if get(post, 'preview._type', '') === 'slideshow'}
       <a href="/{post.taxonomy.category}/{post.slug}">
-        <Slideshow imageArray={post.preview.images} />
+        <Slideshow isListing={true} imageArray={post.preview.images} />
       </a>
     {/if}
 
     {#if get(post, 'preview._type', '') === 'videoLoop'}
       <a href="/{post.taxonomy.category}/{post.slug}">
-        <Video fullwidth={true} url={post.previewVideoUrl} />
+        <Video isListing={true} fullwidth={true} url={post.previewVideoUrl} />
       </a>
     {/if}
 

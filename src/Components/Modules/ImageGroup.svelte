@@ -2,6 +2,13 @@
   // # # # # # # # # # # # # #
   //
   //  IMAGE GROUP
+  //  *
+  //  _ caption
+  //  _ maxHeigth
+  //  _ alignment
+  //  _ inlineDisplay
+  //  _ backgroundColor
+  //  *
   //
   // # # # # # # # # # # # # #
 
@@ -12,7 +19,16 @@
 
   // *** PROPS
   export let imageArray = [];
-  export let caption = "";
+  export let caption = false;
+  export let isListing = false;
+  export let backgroundColor = false;
+  export let alignment = "";
+  export let maxHeight = false;
+  export let inlineDisplay = false;
+
+  const customStyles =
+    (maxHeight ? "height:" + maxHeight + "vh; " : "") +
+    (backgroundColor ? "background:" + backgroundColor.hex + ";" : "");
 
   let loaded = false;
 </script>
@@ -23,13 +39,15 @@
   .image-group {
     width: 100%;
     height: auto;
-    display: flex;
+    display: inline-block;
+    padding-bottom: 40px;
 
     &.listing {
       margin-top: 0px;
       margin-bottom: 0px;
+      padding-bottom: 0;
 
-      .image--free {
+      img {
         margin-bottom: $small-margin;
       }
     }
@@ -110,10 +128,12 @@
 
 <div
   class="image-group"
+  class:listing={isListing}
   class:group-size-1={imageArray.length === 1}
   class:group-size-2={imageArray.length === 2}
   class:group-size-3={imageArray.length === 3}
-  class:group-size-4={imageArray.length === 4}>
+  class:group-size-4={imageArray.length === 4}
+  style={customStyles}>
   {#each imageArray as image}
     <img
       class:loaded

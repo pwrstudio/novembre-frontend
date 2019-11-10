@@ -32,7 +32,6 @@
   @import "../variables.scss";
 
   .contact {
-    padding: $small-margin;
     padding-top: 100px;
     margin-bottom: $large-vertical-margin;
     font-family: $sans-stack;
@@ -48,6 +47,7 @@
 
     .contact-section {
       margin-bottom: 1em;
+      padding: $small-margin;
 
       a {
         color: currentColor;

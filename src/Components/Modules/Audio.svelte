@@ -20,8 +20,6 @@
   let paused = true;
   const controlsTimeoutDuration = 2500;
 
-  console.dir(fileObject);
-
   // const src = urlFor(fileObject).url();
   const src = "";
 

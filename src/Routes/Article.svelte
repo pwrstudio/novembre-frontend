@@ -15,6 +15,7 @@
   import TaxList from "../Components/TaxList.svelte";
   import Footer from "../Components/Footer.svelte";
   import Preview from "../Components/Preview.svelte";
+  import MetaData from "../Components/MetaData.svelte";
 
   // *** STORES
   import { navigationColor } from "../stores.js";
@@ -25,6 +26,7 @@
   import VideoEmbed from "../Components/Modules/VideoEmbed.svelte";
   import Audio from "../Components/Modules/Audio.svelte";
   import Slideshow from "../Components/Modules/Slideshow.svelte";
+  import VideoLoop from "../Components/Modules/Video.svelte";
 
   // *** PROPS
   export let slug = "";
@@ -32,7 +34,8 @@
   export let location = {};
 
   // ** CONSTANTS
-  const query = "*[slug.current == $slug]{..., related[]->{title}}[0]";
+  const query =
+    "*[slug.current == $slug]{'previewVideoUrl': preview[0].video.asset->url,..., related[]->{title, 'slug': slug.current, mainImage, 'category': taxonomy.category}}[0]";
 
   // *** VARIABLES
   let currentSlug = slug;
@@ -145,27 +148,23 @@
   }
 </style>
 
-<!-- <svelte:head>
-  <title>{title} NOVEMBRE</title>
-</svelte:head> -->
-
 {#await post then post}
+
+  <MetaData {post} />
 
   <article class="article">
 
     <!-- HEADER MEDIA -->
     <div class="article__header">
       <Preview {post} isHeader={true} />
-      <!-- {#if post.preview._type == 'singleImage'}
-        <Image imageObject={post.preview.image} fullwidth={true} />
-      {/if} -->
     </div>
 
     <!-- DATE & TAGS -->
     <div class="article__tags">
       <TaxList
         taxonomy={post.taxonomy}
-        white={true}
+        white={false}
+        isArticle={true}
         date={post.publicationDate} />
     </div>
 
@@ -184,6 +183,8 @@
           <Image
             imageObject={c.image}
             inlineDisplay={true}
+            maxHeight={get(c, 'maxHeight', false)}
+            backgroundColor={get(c, 'backgroundColor', false)}
             caption={get(c, 'caption', false)}
             alignment={get(c, 'alignment', '')}
             fullwidth={get(c, 'fullwidth', '')} />
@@ -191,7 +192,21 @@
         {#if c._type == 'imageGroup'}
           <ImageGroup
             imageArray={c.images}
+            inlineDisplay={true}
+            maxHeight={get(c, 'maxHeight', false)}
+            backgroundColor={get(c, 'backgroundColor', false)}
+            alignment={get(c, 'alignment', '')}
             caption={get(c, 'caption', false)} />
+        {/if}
+        {#if c._type == 'videoLoop'}
+          <VideoLoop
+            url=""
+            inlineDisplay={true}
+            maxHeight={get(c, 'maxHeight', false)}
+            backgroundColor={get(c, 'backgroundColor', false)}
+            caption={get(c, 'caption', false)}
+            alignment={get(c, 'alignment', '')}
+            fullwidth={get(c, 'fullwidth', '')} />
         {/if}
         {#if c._type == 'video'}
           <VideoEmbed url={c.video} caption={get(c, 'caption', false)} />
@@ -208,8 +223,7 @@
     <!-- RELATED -->
     {#if post.related}
       <div class="related-header">RELATED ARTICLES</div>
-      {#each post.related as p}{p.title}{/each}
-      <Slideshow imageArray={post.related} isRelated={true} isPreview={false} />
+      <Slideshow imageArray={post.related} isRelated={true} />
     {/if}
 
   </article>

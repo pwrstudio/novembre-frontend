@@ -20,7 +20,6 @@
   export let imageArray = [];
   export let isRelated = false;
   export let isPreview = false;
-  export let first = false;
   export let autoplay = false;
 
   import NavShow from "./navShow.svelte";
@@ -128,7 +127,6 @@
   //   });
   // }
 
-  console.dir(imageArray);
   // *** ON MOUNT
   onMount(async () => {
     if (imageArray.length > 2) {
@@ -398,145 +396,139 @@
   }
 </style>
 
-<Router>
-  {#if imageArray.length > 2}
+<!-- <Router> -->
+{#if imageArray.length > 2}
+  <div
+    class="container"
+    on:mouseenter={() => {
+      hovered = true;
+      if ((autoplay == true || autoplay == 1) && !isRelated && !!isPreview) {
+        pauseSlideshow();
+      }
+    }}
+    on:mouseleave={() => {
+      hovered = false;
+      if ((autoplay == true || autoplay == 1) && !isRelated && !!isPreview) {
+        playSlideshow();
+      }
+    }}>
+
+    {#if !loaded}
+      <div class="loading">
+        LOADING
+        <Ellipse />
+      </div>
+    {/if}
+
+    <!-- MAIN -->
     <div
-      class="container"
+      class="carousel slideshow"
+      bind:this={slideShowEl}
+      class:slideshow--related={isRelated}
+      class:slideshow--preview={isPreview}
+      class:loaded
+      use:links>
+      {#each imageArray as slide}
+        {#if isRelated}
+          <div class="carousel-cell slideshow__slide slideshow__slide--related">
+            <a href="/{slide.category}/{slide.slug}">
+              <img
+                class="slideshow__slide-image slideshow__slide-image--related"
+                src={urlFor(slide.mainImage)
+                  .width(1000)
+                  .quality(90)
+                  .auto('format')
+                  .url()}
+                alt={slide.title} />
+              <div class="slideshow__title">{slide.title}</div>
+            </a>
+          </div>
+        {:else}
+          <div class="carousel-cell slideshow__slide">
+            <img
+              class="slideshow__slide-image"
+              src={urlFor(slide)
+                .width(1000)
+                .quality(90)
+                .auto('format')
+                .url()}
+              alt={slide.caption} />
+            {#if slide.caption}
+              <div class="slideshow__slide-caption">{slide.caption}</div>
+            {/if}
+          </div>
+        {/if}
+      {/each}
+    </div>
+
+    <div
+      class="navigation previous"
+      class:hovered
+      type="button"
+      aria-label="Previous"
+      on:click={e => {
+        e.stopPropagation();
+        e.preventDefault();
+        flkty.next(true);
+      }}>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="80"
+        height="120"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="white"
+        stroke-width="0.5"
+        class="feather feather-chevron-left arrow">
+        <polyline points="15 18 9 12 15 6" />
+      </svg>
+    </div>
+
+    <div
+      class="navigation next"
+      class:hovered
+      type="button"
+      aria-label="Previous"
+      on:click={e => {
+        e.stopPropagation();
+        e.preventDefault();
+        flkty.previous(true);
+      }}>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="80"
+        height="120"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="white"
+        stroke-width="0.5"
+        class="feather feather-chevron-left arrow">
+        <polyline points="9 18 15 12 9 6" />
+      </svg>
+    </div>
+  </div>
+  {#if !isPreview && !isRelated}
+    <div
+      class="nav-container"
       on:mouseenter={() => {
         hovered = true;
-        if ((autoplay == true || autoplay == 1) && !isRelated && !!isPreview) {
+        if (autoplay == true || autoplay == 1) {
           pauseSlideshow();
         }
       }}
       on:mouseleave={() => {
         hovered = false;
-        if ((autoplay == true || autoplay == 1) && !isRelated && !!isPreview) {
+        if (autoplay == true || autoplay == 1) {
           playSlideshow();
         }
       }}>
-
-      {#if !loaded}
-        <div class="loading">
-          LOADING
-          <Ellipse />
-        </div>
+      {#if loaded && !isPreview && !isRelated}
+        <NavShow {imageArray} navTarget={slideShowEl} />
       {/if}
-
-      <!-- MAIN -->
-      <div
-        class="carousel slideshow"
-        bind:this={slideShowEl}
-        class:slideshow--related={isRelated}
-        class:slideshow--preview={isPreview}
-        class:first
-        class:loaded
-        use:links>
-        {#each imageArray as slide}
-          {#if isRelated}
-            <div
-              class="carousel-cell slideshow__slide slideshow__slide--related">
-              <a href="/{slide.parent}/{slide.slug}">
-                <img
-                  class="slideshow__slide-image slideshow__slide-image--related"
-                  src={urlFor(slide)
-                    .width(1000)
-                    .quality(90)
-                    .auto('format')
-                    .url()}
-                  alt={slide.title} />
-                <div
-                  class="slideshow__title"
-                  class:hide-text={$menuActiveGlobal}
-                  class:slideshow__title--white={!slide.header.previewColor}>
-                  {#if slide}{slide.title}{/if}
-                </div>
-              </a>
-            </div>
-          {:else}
-            <div class="carousel-cell slideshow__slide">
-              <img
-                class="slideshow__slide-image"
-                src={urlFor(slide)
-                  .width(1000)
-                  .quality(90)
-                  .auto('format')
-                  .url()}
-                alt={slide.caption} />
-              {#if slide.caption}
-                <div class="slideshow__slide-caption">{slide.caption}</div>
-              {/if}
-            </div>
-          {/if}
-        {/each}
-      </div>
-
-      <div
-        class="navigation previous"
-        class:hovered
-        type="button"
-        aria-label="Previous"
-        on:click={e => {
-          e.stopPropagation();
-          e.preventDefault();
-          flkty.next(true);
-        }}>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="80"
-          height="120"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="white"
-          stroke-width="0.5"
-          class="feather feather-chevron-left arrow">
-          <polyline points="15 18 9 12 15 6" />
-        </svg>
-      </div>
-
-      <div
-        class="navigation next"
-        class:hovered
-        type="button"
-        aria-label="Previous"
-        on:click={e => {
-          e.stopPropagation();
-          e.preventDefault();
-          flkty.previous(true);
-        }}>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="80"
-          height="120"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="white"
-          stroke-width="0.5"
-          class="feather feather-chevron-left arrow">
-          <polyline points="9 18 15 12 9 6" />
-        </svg>
-      </div>
     </div>
-    {#if !isPreview && !isRelated}
-      <div
-        class="nav-container"
-        on:mouseenter={() => {
-          hovered = true;
-          if (autoplay == true || autoplay == 1) {
-            pauseSlideshow();
-          }
-        }}
-        on:mouseleave={() => {
-          hovered = false;
-          if (autoplay == true || autoplay == 1) {
-            playSlideshow();
-          }
-        }}>
-        {#if loaded && !isPreview && !isRelated}
-          <NavShow {imageArray} navTarget={slideShowEl} />
-        {/if}
-      </div>
-    {/if}
-    <!-- {:else if slides.length === 2}
+  {/if}
+{/if}
+<!-- {:else if slides.length === 2}
     <div class="static-related double">
       {#if isRelated}
         <a href="/{slides[0].parent}/{slides[0].slug}">
@@ -577,6 +569,6 @@
       {:else}
         <img src={slides[0].src} alt={slides[0].title} />
       {/if}
-    </div> -->
-  {/if}
-</Router>
+    </div>
+  {/if}-->
+<!-- </Router> -->

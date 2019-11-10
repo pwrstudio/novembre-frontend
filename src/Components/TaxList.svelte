@@ -6,11 +6,13 @@
   // # # # # # # # # # # # # #
 
   // *** IMPORTS
-  import { Router, links, Link } from "svelte-routing";
-  import { format } from "date-fns";
+  import { Router, links } from "svelte-routing";
+  import { format, isValid } from "date-fns";
+  import sortBy from "lodash/sortBy";
 
   // *** PROPS
   export let taxonomy;
+  export let isArticle = false;
   export let white = false;
   export let date = false;
 </script>
@@ -33,12 +35,12 @@
       display: inline-block;
       text-decoration: none;
       margin-right: 10px;
-      color: white;
+      color: black;
       transition: border 0.3s $transition;
       border-bottom: 1px solid transparent;
 
       &:hover {
-        border-bottom: 1px solid white;
+        border-bottom: 1px solid black;
       }
 
       &.date {
@@ -58,37 +60,42 @@
 
     &.white {
       .taxonomy__item {
-        color: black;
+        color: white;
 
         &:hover {
-          border-bottom: 1px solid black;
+          border-bottom: 1px solid white;
         }
       }
     }
   }
 </style>
 
-<div class="taxonomy" class:white>
+<Router>
 
-  <span class="taxonomy__item date">
-    {format(new Date(date), 'yyyy/dd/MM')}
-  </span>
+  <div class="taxonomy" class:white use:links>
 
-  {#if taxonomy.subCategory}
-    <span class="taxonomy__item">
-      <a
-        href="https://testing.novembre.global/magazine#{taxonomy.subCategory.toLowerCase()}">
-        {taxonomy.subCategory}
-      </a>
-    </span>
-  {/if}
-
-  <Router>
-    {#each taxonomy.tags as t}
-      <span class="taxonomy__item">
-        <a href="/taxonomy/{t}">{t}</a>
+    {#if isArticle && isValid(date)}
+      <span class="taxonomy__item date">
+        {format(new Date(date), 'yyyy/dd/MM')}
       </span>
-    {/each}
-  </Router>
+    {/if}
 
-</div>
+    {#if taxonomy.subCategory}
+      <span class="taxonomy__item">
+        <a href="/{taxonomy.category}/category/{taxonomy.subCategory}">
+          {taxonomy.subCategory}
+        </a>
+      </span>
+    {/if}
+
+    {#if isArticle}
+      {#each sortBy(taxonomy.tags) as t}
+        <span class="taxonomy__item">
+          <a href="/taxonomy/{t}">{t}</a>
+        </span>
+      {/each}
+    {/if}
+
+  </div>
+
+</Router>

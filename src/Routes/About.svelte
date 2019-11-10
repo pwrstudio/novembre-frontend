@@ -40,7 +40,6 @@
   }
 
   .about-text {
-    padding: $small-margin;
     padding-top: 100px;
     height: auto;
     max-width: 95%;
@@ -51,6 +50,11 @@
 
     @include screen-size("small") {
       font-size: $mobile_large;
+    }
+
+    p {
+      padding: $small-margin;
+      margin-left: $small-margin;
     }
   }
 
