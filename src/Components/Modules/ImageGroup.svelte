@@ -57,7 +57,6 @@
       opacity: 0;
       transition: opacity 0.25s $transition;
       object-fit: contain;
-      object-position: bottom;
       margin-left: $small-margin;
       margin-top: $small-margin;
       height: 100%;
@@ -169,6 +168,7 @@
       img {
         margin-bottom: $small-margin;
         float: left;
+        object-position: bottom;
         max-height: 435px;
         @include screen-size("small") {
           float: unset;

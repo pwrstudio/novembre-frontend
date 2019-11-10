@@ -363,6 +363,12 @@
       margin-left: $small-margin;
     }
   }
+
+  .contact {
+    p {
+      margin-top: 0;
+    }
+  }
 </style>
 
 <Navigation />
