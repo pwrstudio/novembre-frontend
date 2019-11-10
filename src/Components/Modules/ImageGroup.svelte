@@ -117,7 +117,7 @@
 
   .caption {
     font-family: $sans-stack;
-    font-size: $small;
+    font-size: $xsmall;
     font-weight: 300;
     width: 100%;
     margin-left: auto;
@@ -192,16 +192,20 @@
     {#each imageArray as image}
       <img
         class:loaded
-        src={urlFor(image)
-          .width(1000)
-          .quality(90)
-          .auto('format')
-          .url()}
+        src={fullwidth ? urlFor(image)
+              .width(1800)
+              .height(1200)
+              .quality(90)
+              .auto('format')
+              .url() : urlFor(image)
+              .width(800)
+              .quality(90)
+              .auto('format')
+              .url()}
         alt={caption ? caption : 'novembre.global'}
         on:load={e => (loaded = true)} />
     {/each}
   </div>
-
   {#if caption}
     <div class="caption">{caption}</div>
   {/if}
