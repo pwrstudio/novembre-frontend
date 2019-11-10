@@ -9,15 +9,19 @@
   import { onMount, onDestroy } from "svelte";
   import { fade, slide, fly } from "svelte/transition";
   import { navigate } from "svelte-routing";
+  import isEmpty from "lodash/isEmpty";
+  import { urlFor } from "../sanity.js";
 
   // *** COMPONENTS
   import Preview from "../Components/Preview.svelte";
   import Footer from "../Components/Footer.svelte";
   import SplashText from "../Components/SplashText.svelte";
   import MetaData from "../Components/MetaData.svelte";
+  import TagBar from "../Components/TagBar.svelte";
 
   // *** STORES
   import {
+    feedBanners,
     navigationColor,
     activeQuery,
     activeCategory,
@@ -47,28 +51,28 @@
   const doLoad = () => {
     if (title === "Landing") {
       sanityQuery =
-        '*[_type == "article" && editorialState == "live"] | order(publicationDate desc){title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}';
+        '*[_type == "article" && editorialState == "live" && defined(preview)] | order(publicationDate desc){title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}';
     } else if (title === "Magazine") {
       sanityQuery =
-        '*[_type == "article" && editorialState == "live" && taxonomy.category == "magazine" ] | order(publicationDate desc){title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}';
+        '*[_type == "article" && editorialState == "live" && defined(preview) && taxonomy.category == "magazine" ] | order(publicationDate desc){title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}';
     } else if (title === "Bureau") {
       sanityQuery =
-        '*[_type == "article" && editorialState == "live" && taxonomy.category == "bureau"] | order(publicationDate desc){title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}';
+        '*[_type == "article" && editorialState == "live" && defined(preview) && taxonomy.category == "bureau"] | order(publicationDate desc){title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}';
     } else if (title === "Tag") {
       sanityQuery =
-        '*[_type == "article" && editorialState == "live" && $tag in taxonomy.tags ] | order(publicationDate desc){title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}';
+        '*[_type == "article" && editorialState == "live" && defined(preview) && $tag in taxonomy.tags ] | order(publicationDate desc){title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}';
       sanityParams = { tag: query };
     } else if (title === "Search") {
       sanityQuery =
-        '*[_type == "article" && editorialState == "live" && title match $term || $term in taxonomy.tags ] | order(publicationDate desc){title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}';
+        '*[_type == "article" && editorialState == "live" && defined(preview) && title match $term || $term in taxonomy.tags ] | order(publicationDate desc){title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}';
       sanityParams = { term: query };
     } else if (title === "magsub") {
       sanityQuery =
-        '*[_type == "article" && editorialState == "live" && taxonomy.category == "magazine" && taxonomy.subCategory == $subcat ] | order(publicationDate desc){title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}';
+        '*[_type == "article" && editorialState == "live" && defined(preview) && taxonomy.category == "magazine" && taxonomy.subCategory == $subcat ] | order(publicationDate desc){title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}';
       sanityParams = { subcat: query };
     } else if (title === "bursub") {
       sanityQuery =
-        '*[_type == "article" && editorialState == "live" && taxonomy.category == "bureau" && taxonomy.subCategory == $subcat ] | order(publicationDate desc){title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}';
+        '*[_type == "article" && editorialState == "live" && defined(preview) && taxonomy.category == "bureau" && taxonomy.subCategory == $subcat ] | order(publicationDate desc){title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}';
       sanityParams = { subcat: query };
     } else {
       navigate("/404");
@@ -138,9 +142,6 @@
       Sentry.captureException(err);
     }
   });
-
-  // *** ON MOUNT
-  onDestroy(() => scrollListActive.set(false));
 </script>
 
 <style lang="scss">
@@ -195,30 +196,63 @@
     padding-top: 200px;
     text-transform: uppercase;
   }
+
+  .feed-banner {
+    display: block;
+    width: 100vw;
+    margin: 0;
+    line-height: 0;
+
+    img {
+      width: 100%;
+      height: auto;
+    }
+  }
 </style>
+
+{#if title === 'Tag' || title === 'Search'}
+  <TagBar text={$activeQuery} />
+{/if}
 
 <div class="listing" class:landing={title === 'Landing'}>
 
-  {#await feed then feed}
+  {#await $feedBanners then feedBanners}
 
-    <div class="listing__posts" bind:this={postsContainerEl}>
+    {#await feed then feed}
 
-      {#if isQuery && feed.length == 0}
-        <div class="no-results">No results for “{query}”</div>
+      <div class="listing__posts" bind:this={postsContainerEl}>
+
+        {#if isQuery && feed.length == 0}
+          <div class="no-results">No results for “{query}”</div>
+        {/if}
+
+        {#each feed as post, i}
+          {#if i === 0 && (title === 'Magazine' || title === 'Bureau')}
+            <SplashText section={title.toLowerCase()} />
+          {/if}
+          {#if !isEmpty(feedBanners) && feedBanners.find(b => b.positionInFeed == i)}
+            <a
+              href={feedBanners.find(b => b.positionInFeed == i).link}
+              target="_blank"
+              rel="noreferrer"
+              class="feed-banner">
+              <img
+                src={urlFor(feedBanners.find(b => b.positionInFeed == i).image)
+                  .width(1400)
+                  .quality(90)
+                  .auto('format')
+                  .url()} />
+            </a>
+          {/if}
+          <Preview {post} isFirst={i === 0 ? true : false} />
+        {/each}
+      </div>
+
+      {#if !finishedLoading && !isQuery}
+        <div class="sentinel" bind:this={sentinel} />
       {/if}
 
-      {#each feed as post, i}
-        {#if (i === 0 && title === 'Magazine') || title === 'Bureau'}
-          <SplashText section={title.toLowerCase()} />
-        {/if}
-        <Preview {post} isFirst={i === 0 ? true : false} />
-      {/each}
-    </div>
-
-    {#if !finishedLoading && !isQuery}
-      <div class="sentinel" bind:this={sentinel} />
-    {/if}
-
+    {/await}
   {/await}
 
 </div>

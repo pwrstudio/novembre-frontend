@@ -91,7 +91,18 @@ export const loadArticle = async (query, params) => {
         if (res === null) {
             return Promise.reject(new Error(404));
         }
-        return sanitizeArticle(res)
+
+        let postConstruction = sanitizeArticle(res)
+
+        const linksQuery =
+            '*[placeAsSidebar._ref == $id][0]'
+        postConstruction.banner = await client.fetch(linksQuery, {
+            id: postConstruction.id
+        })
+
+        console.dir(postConstruction)
+
+        return postConstruction
     } catch (err) {
         Sentry.captureException(err)
         return Promise.reject(new Error(404));
@@ -104,9 +115,6 @@ export const loadFeed = async (query, params, index) => {
         if (res === null) {
             return Promise.reject(new Error(404));
         }
-        // console.dir(res)
-        // console.dir(sanitizeArticle(res))
-        // return sanitizeArticle(res)
         return res
     } catch (err) {
         Sentry.captureException(err)

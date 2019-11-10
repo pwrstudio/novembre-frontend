@@ -24,6 +24,7 @@
   export let alignment = "";
   export let maxHeight = false;
   export let fullwidth = false;
+  export let isListing = false;
   export let inlineDisplay = false;
 
   const customStyles =

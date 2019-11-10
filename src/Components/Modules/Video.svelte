@@ -145,6 +145,7 @@
       height: $full-height;
       width: 100vw;
       pointer-events: none;
+      margin-bottom: 1.2em;
 
       @include screen-size("small") {
         height: 70vh;
@@ -181,6 +182,10 @@
 
     &--playing {
       cursor: grab;
+    }
+
+    &.listing {
+      margin-bottom: 0;
     }
   }
 
@@ -228,10 +233,6 @@
 
     pointer-events: none;
 
-    // &:hover {
-    //   height: 20px;
-    // }
-
     &::-webkit-progress-value {
       background-color: rgba(255, 255, 255, 1);
     }
@@ -244,12 +245,13 @@
 
 <div
   class="video"
+  class:listing={isListing}
   class:video--full={size == true || size == 'fullWidth'}
   class:video--inline={size == 'proportional'}
   style="background-color: {backgroundColor}">
 
   <video
-    class="video-player"
+    class="video-player {alignment}"
     preload="metadata"
     {loop}
     {muted}

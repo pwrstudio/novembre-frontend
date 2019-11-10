@@ -10,12 +10,22 @@
   import { Router, Route } from "svelte-routing";
   import Navigation from "./Components/Navigation.svelte";
   import { loadPages } from "./sanity.js";
+  import isEmpty from "lodash/isEmpty";
+  import { urlFor } from "./sanity.js";
+  import { fade } from "svelte/transition";
 
   // COMPONENTS
   import ScrollList from "./Components/ScrollList.svelte";
 
   // STORES
-  import { pages, scrollListActive, activeCategory } from "./stores.js";
+  import {
+    pages,
+    menuBanners,
+    feedBanners,
+    overlayBanners,
+    scrollListActive,
+    activeCategory
+  } from "./stores.js";
 
   // ROUTES
   import Listing from "./Routes/Listing.svelte";
@@ -26,6 +36,17 @@
   import Error404 from "./Routes/Error404.svelte";
 
   pages.set(loadPages('*[_id == "global-config"][0]'));
+  menuBanners.set(
+    loadPages('*[_type == "banner" && editorialState == "live" && placeInMenu]')
+  );
+  feedBanners.set(
+    loadPages('*[_type == "banner" && editorialState == "live" && placeInFeed]')
+  );
+  overlayBanners.set(
+    loadPages(
+      '*[_type == "banner" && editorialState == "live" && placeAsOverlay]'
+    )
+  );
 
   const listingRouteParams = {
     landing: {
@@ -56,21 +77,23 @@
     }
   };
 
-  const tagArray =
-    $activeCategory === "magazine"
-      ? [
-          { title: "Reportage", slug: "reportage" },
-          { title: "Motion", slug: "motion" },
-          { title: "Words", slug: "words" },
-          { title: "Features", slug: "features" },
-          { title: "Guest Features", slug: "guest-features" },
-          { title: "Sounds", slug: "sounds" }
-        ]
-      : [
-          { title: "Creative Direction", slug: "creative-direction" },
-          { title: "Workshop", slug: "workshop" },
-          { title: "Entertainment", slug: "entertainment" }
-        ];
+  const magazineTags = [
+    { title: "Reportage", slug: "reportage" },
+    { title: "Motion", slug: "motion" },
+    { title: "Words", slug: "words" },
+    { title: "Features", slug: "features" },
+    { title: "Guest Features", slug: "guest-features" },
+    { title: "Sounds", slug: "sounds" }
+  ];
+
+  const bureauTags = [
+    { title: "Creative Direction", slug: "creative-direction" },
+    { title: "Workshop", slug: "workshop" },
+    { title: "Entertainment", slug: "entertainment" },
+    { title: "Creative Direction", slug: "creative-direction" },
+    { title: "Workshop", slug: "workshop" },
+    { title: "Entertainment", slug: "entertainment" }
+  ];
 </script>
 
 <style lang="scss" global>
@@ -319,37 +342,54 @@
 
   /*! Flickity v2.2.1 ------------------- */
 
-  .top-block {
-    font-family: $sans-stack;
-    font-size: $large;
-    font-weight: 300;
-    text-transform: uppercase;
-    color: white;
-    line-height: 0.8em;
-    padding-bottom: $small-margin;
-    padding-top: $small-margin;
+  .overlay-banner {
     position: fixed;
-    top: 75px;
-    width: 100%;
+    top: 0;
     left: 0;
-    z-index: 99;
+    right: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.9);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-    @include screen-size("small") {
-      font-size: $mobile_large;
-      padding-bottom: $small-margin;
-      padding-top: $small-margin;
+    .inner {
+      display: block;
+      max-width: 90vw;
+      max-height: 90vh;
     }
-
-    opacity: 1;
   }
 </style>
 
 <Navigation />
 
-{#if $scrollListActive}
-  <div class="top-block">
-    <ScrollList {tagArray} />
-  </div>
+{#await $overlayBanners then overlayBanners}
+  {#if !isEmpty(overlayBanners)}
+    <div class="overlay-banner">
+      <a
+        href={overlayBanners[0].link}
+        target="_blank"
+        rel="noreferrer"
+        class="inner">
+        <img
+          src={urlFor(overlayBanners[0].image)
+            .width(500)
+            .quality(90)
+            .auto('format')
+            .url()} />
+      </a>
+    </div>
+  {/if}
+{/await}
+
+{#if $scrollListActive && $activeCategory === 'magazine'}
+  <ScrollList tagArray={magazineTags} />
+{/if}
+
+{#if $scrollListActive && $activeCategory === 'bureau'}
+  <ScrollList tagArray={bureauTags} />
 {/if}
 
 <Router>

@@ -205,7 +205,10 @@
 
     {#if get(post, 'preview._type', '') === 'singleImage'}
       <a href="/{post.taxonomy.category}/{post.slug}">
-        <Image fullwidth={true} imageObject={post.preview.image} />
+        <Image
+          fullwidth={true}
+          isListing={true}
+          imageObject={post.preview.image} />
       </a>
     {/if}
 

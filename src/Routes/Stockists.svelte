@@ -14,7 +14,9 @@
   import sample from "lodash/sample";
 
   // STORES
-  import { navigationColor } from "../stores.js";
+  import { navigationColor, scrollListActive } from "../stores.js";
+
+  scrollListActive.set(false);
 
   // COMPONENTS
   import Footer from "../Components/Footer.svelte";

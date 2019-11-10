@@ -7,13 +7,15 @@
 
   // *** IMPORTS
   import { Router, links } from "svelte-routing";
+  import isEmpty from "lodash/isEmpty";
 
   // *** COMPONENTS
   import Logo from "./Logo.svelte";
   import SearchBox from "./SearchBox.svelte";
+  import { urlFor } from "../sanity.js";
 
   // *** STORES
-  import { navigationColor, menuActiveGlobal } from "../stores.js";
+  import { menuBanners, navigationColor, menuActiveGlobal } from "../stores.js";
 
   // *** VARIABLES
   let menuActive = false;
@@ -33,6 +35,8 @@
       ? document.querySelector("body").classList.add("no-scroll")
       : document.querySelector("body").classList.remove("no-scroll");
   }
+
+  console.dir($menuBanners);
 </script>
 
 <style lang="scss">
@@ -221,6 +225,19 @@
       transition: opacity 0.3s $transition;
     }
   }
+
+  .banner {
+    position: absolute;
+    right: 10px;
+    top: 0;
+    height: 90%;
+    max-width: 50vw;
+
+    img {
+      height: 90%;
+      max-width: 50vw;
+    }
+  }
 </style>
 
 <nav
@@ -266,6 +283,23 @@
           <SearchBox {menuActive} />
         </menuitem>
       {/if}
+
+      {#await $menuBanners then menuBanners}
+        {#if !isEmpty(menuBanners)}
+          <a
+            href={menuBanners[0].link}
+            target="_blank"
+            rel="noreferrer"
+            class="banner">
+            <img
+              src={urlFor(menuBanners[0].image)
+                .width(700)
+                .quality(90)
+                .auto('format')
+                .url()} />
+          </a>
+        {/if}
+      {/await}
 
     </menu>
   </Router>

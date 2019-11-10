@@ -5,7 +5,7 @@
   //
   // # # # # # # # # # # # # #
 
-  import { navigationColor, pages } from "../stores.js";
+  import { navigationColor, pages, scrollListActive } from "../stores.js";
   import { renderBlockText } from "../sanity.js";
   import get from "lodash/get";
 
@@ -26,6 +26,7 @@
 
   // LOGIC
   navigationColor.set("black");
+  scrollListActive.set(false);
 </script>
 
 <style lang="scss">

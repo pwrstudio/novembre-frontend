@@ -1,7 +1,7 @@
 <script>
   // # # # # # # # # # # # # #
   //
-  //  IMAGE GROUP
+  //  MEDIA GROUP
   //  *
   //  _ caption
   //  _ maxHeigth
@@ -23,6 +23,7 @@
   export let isListing = false;
   export let backgroundColor = false;
   export let alignment = "";
+  export let fullwidth = false;
   export let maxHeight = false;
   export let inlineDisplay = false;
 
@@ -38,31 +39,21 @@
 
   .image-group {
     width: 100%;
-    height: auto;
-    display: inline-block;
-    padding-bottom: 40px;
-
-    &.listing {
-      margin-top: 0px;
-      margin-bottom: 0px;
-      padding-bottom: 0;
-
-      img {
-        margin-bottom: $small-margin;
-      }
-    }
+    height: 100vh;
+    display: inline-flex;
+    padding-bottom: 2 * $small-margin;
+    margin-bottom: 1.2em;
+    align-items: flex-start;
 
     img {
       opacity: 0;
       transition: opacity 0.25s $transition;
-      max-height: 440px;
-      float: left;
+      object-fit: contain;
       margin-left: $small-margin;
       margin-top: $small-margin;
-      height: auto;
+      height: 100%;
 
       @include screen-size("small") {
-        float: unset;
         max-height: unset;
       }
 
@@ -74,11 +65,11 @@
 
   .group-size-1 {
     img {
-      max-width: 45vw;
+      height: 100%;
 
       @include screen-size("small") {
         max-width: unset;
-        width: 75vw;
+        width: 95vw;
       }
     }
   }
@@ -124,11 +115,58 @@
     text-align: center;
     margin-bottom: $large-vertical-margin;
   }
+
+  .left {
+    justify-content: flex-start;
+  }
+
+  .right {
+    justify-content: flex-end;
+  }
+
+  .center {
+    justify-content: center;
+  }
+
+  .fullwidth {
+    height: $full-height;
+    width: 100vw;
+    padding: 0;
+
+    img {
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
+      max-width: unset;
+      padding: 0;
+      margin: 0;
+    }
+  }
+
+  .image-group {
+    &.listing {
+      margin-top: 0px;
+      margin-bottom: 0px;
+      padding-bottom: 0;
+      display: inline-block;
+      max-height: 440px;
+
+      img {
+        margin-bottom: $small-margin;
+        float: left;
+        max-height: 435px;
+        @include screen-size("small") {
+          float: unset;
+        }
+      }
+    }
+  }
 </style>
 
 <div
-  class="image-group"
+  class="image-group {alignment}"
   class:listing={isListing}
+  class:fullwidth
   class:group-size-1={imageArray.length === 1}
   class:group-size-2={imageArray.length === 2}
   class:group-size-3={imageArray.length === 3}
@@ -145,7 +183,6 @@
       alt={caption ? caption : 'novembre.global'}
       on:load={e => (loaded = true)} />
   {/each}
-
 </div>
 
 {#if caption}

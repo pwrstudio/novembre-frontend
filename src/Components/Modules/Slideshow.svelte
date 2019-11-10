@@ -19,7 +19,7 @@
   // *** PROPS
   export let imageArray = [];
   export let isRelated = false;
-  export let isPreview = false;
+  export let isListing = false;
   export let autoplay = false;
 
   import NavShow from "./navShow.svelte";
@@ -99,7 +99,7 @@
 
   // *** LOGIC
 
-  // slides = isPreview ? slides.slice(0, 10) : slides;
+  // slides = isListing ? slides.slice(0, 10) : slides;
 
   // --- Build urls
   // if (slides.length == 1) {
@@ -126,6 +126,8 @@
   //     s.src = s.url + "?h=800" + IMGIX_PARAMS;
   //   });
   // }
+
+  console.log(imageArray);
 
   // *** ON MOUNT
   onMount(async () => {
@@ -396,19 +398,18 @@
   }
 </style>
 
-<!-- <Router> -->
-{#if imageArray.length > 2}
+<Router>
   <div
     class="container"
     on:mouseenter={() => {
       hovered = true;
-      if ((autoplay == true || autoplay == 1) && !isRelated && !!isPreview) {
+      if ((autoplay == true || autoplay == 1) && !isRelated && !!isListing) {
         pauseSlideshow();
       }
     }}
     on:mouseleave={() => {
       hovered = false;
-      if ((autoplay == true || autoplay == 1) && !isRelated && !!isPreview) {
+      if ((autoplay == true || autoplay == 1) && !isRelated && !!isListing) {
         playSlideshow();
       }
     }}>
@@ -425,7 +426,7 @@
       class="carousel slideshow"
       bind:this={slideShowEl}
       class:slideshow--related={isRelated}
-      class:slideshow--preview={isPreview}
+      class:slideshow--preview={isListing}
       class:loaded
       use:links>
       {#each imageArray as slide}
@@ -507,7 +508,7 @@
       </svg>
     </div>
   </div>
-  {#if !isPreview && !isRelated}
+  {#if !isListing && !isRelated}
     <div
       class="nav-container"
       on:mouseenter={() => {
@@ -522,53 +523,9 @@
           playSlideshow();
         }
       }}>
-      {#if loaded && !isPreview && !isRelated}
+      {#if loaded && !isListing && !isRelated}
         <NavShow {imageArray} navTarget={slideShowEl} />
       {/if}
     </div>
   {/if}
-{/if}
-<!-- {:else if slides.length === 2}
-    <div class="static-related double">
-      {#if isRelated}
-        <a href="/{slides[0].parent}/{slides[0].slug}">
-          <img src={slides[0].src} alt={slides[0].title} />
-          <div
-            class="slideshow__title"
-            class:hide-text={$menuActiveGlobal}
-            class:slideshow__title--white={slides[0].header.previewColor}>
-            {slides[0].title}
-          </div>
-        </a>
-        <a href="/{slides[1].parent}/{slides[1].slug}">
-          <img src={slides[1].src} alt={slides[1].title} />
-          <div
-            class="slideshow__title"
-            class:hide-text={$menuActiveGlobal}
-            class:slideshow__title--white={slides[1].header.previewColor}>
-            {slides[1].title}
-          </div>
-        </a>
-      {:else}
-        <img src={slides[0].src} alt={slides[0].title} />
-        <img src={slides[1].src} alt={slides[1].title} />
-      {/if}
-    </div>
-  {:else if slides.length === 1}
-    <div class="static-related single">
-      {#if isRelated}
-        <a href="/{slides[0].parent}/{slides[0].slug}">
-          <img src={slides[0].src} alt={slides[0].title} />
-          <div
-            class="slideshow__title"
-            class:hide-text={$menuActiveGlobal}
-            class:slideshow__title--white={slides[0].header.previewColor}>
-            {slides[0].title}
-          </div>
-        </a>
-      {:else}
-        <img src={slides[0].src} alt={slides[0].title} />
-      {/if}
-    </div>
-  {/if}-->
-<!-- </Router> -->
+</Router>

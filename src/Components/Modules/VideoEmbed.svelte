@@ -39,62 +39,30 @@
   @import "../../variables.scss";
 
   .embed {
-    $block: &;
-
-    width: 100%;
-    height: auto;
-
     color: white;
-
-    font-family: $sans-stack;
-    font-size: $small;
-
-    margin-bottom: $large-vertical-margin;
-
-    position: relative;
-
-    &--full {
-      height: $full-height;
-      width: 100vw;
-
-      @include screen-size("small") {
-        height: 70vh;
-      }
-    }
-
-    &--inline {
-      height: auto;
-      width: 100%;
-      height: $full-height;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-      @include screen-size("small") {
-        height: 70vh;
-      }
-
-      .inner {
-        width: 800px;
-        margin-left: auto;
-        margin-right: auto;
-        max-width: 95vw;
-      }
-    }
-
+    margin-bottom: 1.2em;
     cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-    &--playing {
-      cursor: grab;
+    height: $full-height;
+    width: 100vw;
+
+    @include screen-size("small") {
+      height: 70vh;
+    }
+
+    .inner {
+      width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+      max-width: 95vw;
     }
   }
 </style>
 
-<div
-  class="embed"
-  class:embed--full={size == true || size == 'fullWidth'}
-  class:embed--inline={size == 'proportional'}
-  style="background-color: {backgroundColor}">
+<div class="embed" style="background-color: {backgroundColor}">
 
   {#await post then post}
     <div class="inner">

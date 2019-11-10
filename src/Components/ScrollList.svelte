@@ -7,6 +7,9 @@
 
   // *** IMPORTS
   import { onMount } from "svelte";
+  import { tick } from "svelte/internal";
+  import { scale } from "svelte/transition";
+
   import Flickity from "flickity";
   import { navigate } from "svelte-routing";
 
@@ -19,13 +22,15 @@
   // *** DOM REFERENCES
   let scrollListEl;
 
+  let loaded = false;
+
   // TODO: change speed for mobile
   const startTicker = function() {
     // Play with this value to change the speed
     let tickerSpeed = 0.7;
 
     let flickity = null;
-    let isPaused = false;
+    let isPaused = true;
 
     const update = () => {
       if (isPaused) return;
@@ -84,13 +89,18 @@
     ) {
       navigate("/" + $activeCategory + "/category/" + cellElement.dataset.tag);
     });
+
+    play();
+
+    setTimeout(() => {
+      loaded = true;
+    }, 500);
   };
 
   // *** ON MOUNT
   onMount(async () => {
-    setTimeout(() => {
-      startTicker();
-    }, 500);
+    await tick();
+    startTicker();
   });
 </script>
 
@@ -99,13 +109,28 @@
 
   .taxonomy-scroller {
     height: 96px;
+    font-family: $sans-stack;
+    font-size: $large;
+    font-weight: 300;
+    text-transform: uppercase;
+    line-height: 0.8em;
+    padding-bottom: $small-margin;
+    padding-top: $small-margin;
+    position: fixed;
+    top: 75px;
+    width: 100%;
+    left: 0;
+    overflow: hidden;
+    z-index: 99;
 
     @include screen-size("small") {
+      font-size: $mobile_large;
+      padding-bottom: $small-margin;
+      padding-top: $small-margin;
       height: 67px;
     }
 
     width: 100%;
-
     background: black;
     color: white;
     opacity: 1;
@@ -138,14 +163,15 @@
     &__slideshow {
       height: 96px;
       width: 100%;
-
-      position: fixed;
-      top: 2px;
       font-family: $sans-stack;
       font-size: $large;
       font-weight: 300;
-      text-transform: uppercase;
       line-height: 1.4em;
+      opacity: 0;
+
+      &.loaded {
+        opacity: 1;
+      }
 
       @include screen-size("small") {
         font-size: $mobile_large;
@@ -157,6 +183,7 @@
 
 <div class="taxonomy-scroller">
   <div
+    class:loaded
     class="main-carousel taxonomy-scroller__slideshow
     taxonomy-scroller__slideshow--large"
     bind:this={scrollListEl}>

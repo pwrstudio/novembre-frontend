@@ -9,6 +9,7 @@
   import { Router, links } from "svelte-routing";
   import { format, isValid } from "date-fns";
   import sortBy from "lodash/sortBy";
+  import isEmpty from "lodash/isEmpty";
 
   // *** PROPS
   export let taxonomy;
@@ -74,7 +75,7 @@
 
   <div class="taxonomy" class:white use:links>
 
-    {#if isArticle && isValid(date)}
+    {#if isArticle && !isEmpty(date)}
       <span class="taxonomy__item date">
         {format(new Date(date), 'yyyy/dd/MM')}
       </span>

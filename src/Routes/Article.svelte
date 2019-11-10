@@ -9,7 +9,8 @@
   import { fade, slide } from "svelte/transition";
   import { quintOut } from "svelte/easing";
   import get from "lodash/get";
-  import { loadArticle, renderBlockText } from "../sanity.js";
+  import isEmpty from "lodash/isEmpty";
+  import { urlFor, loadArticle, renderBlockText } from "../sanity.js";
 
   // *** COMPONENTS
   import TaxList from "../Components/TaxList.svelte";
@@ -18,7 +19,7 @@
   import MetaData from "../Components/MetaData.svelte";
 
   // *** STORES
-  import { navigationColor } from "../stores.js";
+  import { navigationColor, scrollListActive } from "../stores.js";
 
   // *** MODULES
   import Image from "../Components/Modules/Image.svelte";
@@ -42,6 +43,7 @@
   let title = "";
 
   navigationColor.set("black");
+  scrollListActive.set(false);
 
   // *** REACTIVE
   $: {
@@ -146,11 +148,41 @@
       border-bottom: 1px solid transparent;
     }
   }
+
+  .sidebar-banner {
+    position: fixed;
+    top: 20vh;
+    right: 2 * $small-margin;
+    width: 200px;
+    z-index: 10;
+    border-bottom: 0;
+
+    img {
+      width: 100%;
+      max-height: 70vh;
+      object-fit: contain;
+    }
+  }
 </style>
 
 {#await post then post}
 
   <MetaData {post} />
+
+  {#if post.banner}
+    <a
+      href={post.banner.link}
+      target="_blank"
+      rel="noreferrer"
+      class="sidebar-banner">
+      <img
+        src={urlFor(post.banner.image)
+          .width(500)
+          .quality(90)
+          .auto('format')
+          .url()} />
+    </a>
+  {/if}
 
   <article class="article">
 
@@ -196,11 +228,14 @@
             maxHeight={get(c, 'maxHeight', false)}
             backgroundColor={get(c, 'backgroundColor', false)}
             alignment={get(c, 'alignment', '')}
+            fullwidth={get(c, 'fullwidth', '')}
             caption={get(c, 'caption', false)} />
         {/if}
         {#if c._type == 'videoLoop'}
           <VideoLoop
-            url=""
+            url={'https://cdn.sanity.io/files/gj963qwj/production/' + c.video.asset._ref
+                .replace('file-', '')
+                .replace('-mp4', '.mp4')}
             inlineDisplay={true}
             maxHeight={get(c, 'maxHeight', false)}
             backgroundColor={get(c, 'backgroundColor', false)}
@@ -209,7 +244,10 @@
             fullwidth={get(c, 'fullwidth', '')} />
         {/if}
         {#if c._type == 'video'}
-          <VideoEmbed url={c.video} caption={get(c, 'caption', false)} />
+          <VideoEmbed
+            url={c.video}
+            backgroundColor={get(c, 'backgroundColor', false)}
+            caption={get(c, 'caption', false)} />
         {/if}
         {#if c._type == 'slideshow'}
           <Slideshow imageArray={c.images} />
@@ -221,7 +259,7 @@
     </div>
 
     <!-- RELATED -->
-    {#if post.related}
+    {#if post.related && !isEmpty(post.related)}
       <div class="related-header">RELATED ARTICLES</div>
       <Slideshow imageArray={post.related} isRelated={true} />
     {/if}

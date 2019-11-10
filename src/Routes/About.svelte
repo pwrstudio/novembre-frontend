@@ -6,7 +6,7 @@
   // # # # # # # # # # # # # #
 
   // STORES
-  import { navigationColor, pages } from "../stores.js";
+  import { navigationColor, pages, scrollListActive } from "../stores.js";
   import { renderBlockText } from "../sanity.js";
   import get from "lodash/get";
 
@@ -25,6 +25,7 @@
   export let location = {};
 
   navigationColor.set("black");
+  scrollListActive.set(false);
 </script>
 
 <style lang="scss">
@@ -127,69 +128,15 @@
     <div class="about-credits">
 
       <div class="about-credits-column">
-        <div class="about-credits-item">
-          <strong>Creative directors</strong>
-          <br />
-          Florence Tétier
-          <br />
-          Jeanne-Salomé Rochat
-        </div>
-        <div class="about-credits-item">
-          <strong>Editor-in-chief</strong>
-          <br />
-          Florence Tétier
-        </div>
-        <div class="about-credits-item">
-          <strong>Arts &amp; critic director</strong>
-          <br />
-          Jeanne-Salomé Rochat
-        </div>
+        {@html renderBlockText(pages.credits.columnOne.content)}
       </div>
 
       <div class="about-credits-column">
-        <div class="about-credits-item">
-          <strong>Editor &amp; luxury consultant</strong>
-          <br />
-          Florian Joye
-        </div>
-        <div class="about-credits-item">
-          <strong>Fashion director</strong>
-          <br />
-          Georgia Pendlebury
-        </div>
-        <div class="about-credits-item">
-          <strong>Editors-at-large</strong>
-          <br />
-          Nicolas Coulomb
-        </div>
-        <div class="about-credits-item">
-          <strong>Legal advisors</strong>
-          <br />
-          Nancy Medina
-          <br />
-          Yannis Egloff
-        </div>
-        <div class="about-credits-item">
-          <strong>Contributing editor</strong>
-          <br />
-          Marisa Makin
-        </div>
+        {@html renderBlockText(pages.credits.columnTwo.content)}
       </div>
 
       <div class="about-credits-column">
-        <div class="about-credits-item">
-          <strong>Digital Editor</strong>
-          <br />
-          Morgane Nicolas
-        </div>
-        <div class="about-credits-item">
-          <strong>Diffusion &amp; Circulation</strong>
-          <br />
-          K.D. Presse
-          <br />
-          Pineapple Media
-        </div>
-        <div class="about-credits-item">All rights reserved ©2015/16</div>
+        {@html renderBlockText(pages.credits.columnThree.content)}
       </div>
     </div>
 
