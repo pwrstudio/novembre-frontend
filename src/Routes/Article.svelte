@@ -6,6 +6,7 @@
   // # # # # # # # # # # # # #
 
   // *** IMPORTS
+  import { onMount } from "svelte";
   import { fade, slide } from "svelte/transition";
   import { quintOut } from "svelte/easing";
   import get from "lodash/get";
@@ -31,7 +32,6 @@
 
   // *** PROPS
   export let slug = "";
-  export let isBureau = false;
   export let location = {};
 
   // ** CONSTANTS
@@ -54,6 +54,11 @@
   }
 
   let post = loadArticle(query, { slug: slug });
+
+  // *** ON MOUNT
+  onMount(async () => {
+    window.scrollTo(0, 0);
+  });
 </script>
 
 <style lang="scss">
@@ -130,7 +135,6 @@
 
     @include screen-size("small") {
       font-size: $mobile_large;
-      // margin-bottom: 0px;
     }
   }
 
@@ -154,7 +158,7 @@
     top: 20vh;
     right: 2 * $small-margin;
     width: 200px;
-    z-index: 10;
+    z-index: 100;
     border-bottom: 0;
 
     img {
@@ -162,6 +166,15 @@
       max-height: 70vh;
       object-fit: contain;
     }
+
+    @include screen-size("small") {
+      display: none;
+    }
+  }
+
+  .bottom-space {
+    height: $large-vertical-margin;
+    width: 100%;
   }
 </style>
 
@@ -237,6 +250,7 @@
                 .replace('file-', '')
                 .replace('-mp4', '.mp4')}
             inlineDisplay={true}
+            autoplay={get(c, 'autoplay', false)}
             maxHeight={get(c, 'maxHeight', false)}
             backgroundColor={get(c, 'backgroundColor', false)}
             caption={get(c, 'caption', false)}
@@ -253,7 +267,15 @@
           <Slideshow imageArray={c.images} />
         {/if}
         {#if c._type == 'audio'}
-          <Audio fileObject={c.audio} />
+          <Audio
+            url={'https://cdn.sanity.io/files/gj963qwj/production/' + c.audio.asset._ref
+                .replace('file-', '')
+                .replace('-mp3', '.mp3')}
+            title={get(c, 'title', '')}
+            link={get(c, 'link', false)}
+            posterImage={get(c, 'image', false)}
+            backgroundColor={get(c, 'backgroundColor.hex', false)}
+            foregroundColor={get(c, 'foregroundColor.hex', false)} />
         {/if}
       {/each}
     </div>
@@ -262,6 +284,8 @@
     {#if post.related && !isEmpty(post.related)}
       <div class="related-header">RELATED ARTICLES</div>
       <Slideshow imageArray={post.related} isRelated={true} />
+    {:else}
+      <div class="bottom-space" />
     {/if}
 
   </article>

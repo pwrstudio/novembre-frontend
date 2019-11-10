@@ -40,7 +40,7 @@
 
   .embed {
     color: white;
-    margin-bottom: 1.2em;
+    margin-bottom: $large-vertical-margin;
     cursor: pointer;
     display: flex;
     justify-content: center;
@@ -62,7 +62,7 @@
   }
 </style>
 
-<div class="embed" style="background-color: {backgroundColor}">
+<div class="embed" style="background-color: {backgroundColor.hex}">
 
   {#await post then post}
     <div class="inner">

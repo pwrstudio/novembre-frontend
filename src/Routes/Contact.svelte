@@ -5,6 +5,9 @@
   //
   // # # # # # # # # # # # # #
 
+  // *** IMPORTS
+  import { onMount } from "svelte";
+
   import { navigationColor, pages, scrollListActive } from "../stores.js";
   import { renderBlockText } from "../sanity.js";
   import get from "lodash/get";
@@ -27,6 +30,11 @@
   // LOGIC
   navigationColor.set("black");
   scrollListActive.set(false);
+
+  // *** ON MOUNT
+  onMount(async () => {
+    window.scrollTo(0, 0);
+  });
 </script>
 
 <style lang="scss">
@@ -40,6 +48,8 @@
     text-transform: uppercase;
     line-height: 1em;
     overflow: hidden;
+    padding-left: 0;
+    padding-right: 0;
 
     @include screen-size("small") {
       font-size: $mobile-large;
@@ -49,6 +59,10 @@
     .contact-section {
       margin-bottom: 1em;
       padding: $small-margin;
+
+      &.mail {
+        background: #d9f52c;
+      }
 
       a {
         color: currentColor;
@@ -108,7 +122,7 @@
       {/each}
     </div>
 
-    <div class="contact-section">
+    <div class="contact-section mail">
       <NewsletterSignUp />
     </div>
 

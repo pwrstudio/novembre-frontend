@@ -6,7 +6,7 @@
   // # # # # # # # # # # # # #
 
   // *** IMPORTS
-  import { onMount, onDestroy } from "svelte";
+  import { onMount } from "svelte";
   import { fade, slide, fly } from "svelte/transition";
   import { navigate } from "svelte-routing";
   import isEmpty from "lodash/isEmpty";
@@ -195,6 +195,11 @@
     width: 100vw;
     padding-top: 200px;
     text-transform: uppercase;
+
+    @include screen-size("small") {
+      padding-top: 160px;
+      font-size: $mobile_large;
+    }
   }
 
   .feed-banner {

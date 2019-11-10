@@ -93,6 +93,7 @@
   }
 
   onMount(async () => {
+    window.scrollTo(0, 0);
     await tick();
     initMap().then(() => {
       // setMarkers()

@@ -18,26 +18,34 @@
   import { onMount } from "svelte";
 
   // *** PROPS
+  export let url = "";
+  export let posterImage = "";
   export let caption = false;
   export let backgroundColor = false;
   export let alignment = "";
   export let maxHeight = false;
+  export let autoplay = false;
   export let fullwidth = false;
   export let inlineDisplay = false;
   export let isListing = false;
+  export let loop = true;
+  export let muted = true;
+  export let controls = false;
+
+  // console.log("caption", caption);
+  // console.log("backgroundColor", backgroundColor);
+  // console.log("alignment", alignment);
+  // console.log("maxHeight", maxHeight);
+  // console.log(fullwidth);
+  // console.log("autoplay", autoplay);
+  // console.log(inlineDisplay);
+  // console.log(isListing);
 
   const customStyles =
     (maxHeight ? "height:" + maxHeight + "vh; " : "") +
     (backgroundColor ? "background:" + backgroundColor.hex + ";" : "");
 
   // *** PROPS
-  export let url = "";
-  export let autoplay = true;
-  export let posterImage = "";
-  export let loop = true;
-  export let muted = true;
-  export let controls = false;
-  export let size = true;
 
   // *** DOM REFERENCES
   let videoEl = {};
@@ -116,11 +124,13 @@
 
   // *** ON MOUNT
   onMount(async () => {
-    let promise = videoEl.play();
-    if (promise !== undefined) {
-      promise.catch(err => {
-        Sentry.captureException(err);
-      });
+    if (autoplay || isListing) {
+      let promise = videoEl.play();
+      if (promise !== undefined) {
+        promise.catch(err => {
+          Sentry.captureException(err);
+        });
+      }
     }
   });
 </script>
@@ -129,8 +139,6 @@
   @import "../../variables.scss";
 
   .video {
-    $block: &;
-
     width: 100%;
     height: auto;
 
@@ -140,12 +148,16 @@
     font-size: $small;
 
     position: relative;
+    display: flex;
+    justify-content: center;
+
+    margin-bottom: $large-vertical-margin;
 
     &--full {
       height: $full-height;
       width: 100vw;
       pointer-events: none;
-      margin-bottom: 1.2em;
+      margin-bottom: $large-vertical-margin;
 
       @include screen-size("small") {
         height: 70vh;
@@ -246,15 +258,14 @@
 <div
   class="video"
   class:listing={isListing}
-  class:video--full={size == true || size == 'fullWidth'}
-  class:video--inline={size == 'proportional'}
-  style="background-color: {backgroundColor}">
+  class:video--full={fullwidth || isListing}
+  style={customStyles}>
 
   <video
     class="video-player {alignment}"
     preload="metadata"
     {loop}
-    {muted}
+    muted={autoplay || isListing}
     poster={posterImageSrc}
     src={url}
     on:mousemove={handleMousemove}
@@ -263,10 +274,10 @@
     bind:duration
     bind:paused
     bind:this={videoEl} />
-  {#if !autoplay}
+  {#if !autoplay && !isListing}
     <div class="controls" style="opacity: {duration && showControls ? 1 : 0}">
 
-      <progress value={time / duration || 0} />
+      <!-- <progress value={time / duration || 0} /> -->
 
       <div class="buttons">
         {#if paused}

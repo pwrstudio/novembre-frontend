@@ -37,6 +37,7 @@
     font-family: $sans-stack;
     padding-top: $small-margin;
     margin-bottom: -$small-margin;
+    overflow: hidden;
 
     opacity: 0;
     transition: none;
@@ -94,7 +95,7 @@
         font-weight: 500;
         font-style: italic;
         opacity: 0;
-        z-index: 1000;
+        z-index: 11;
         hyphens: none;
         white-space: nowrap;
 

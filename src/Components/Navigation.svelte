@@ -123,6 +123,8 @@
       padding: 10px;
       padding-bottom: 20px;
       background: white;
+      top: 0;
+      padding-top: $height;
 
       span {
         display: inline;
@@ -140,9 +142,9 @@
       display: block;
       height: 63px;
 
-      @include screen-size("small") {
-        height: 55px;
-      }
+      // @include screen-size("small") {
+      //   height: 55px;
+      // }
     }
 
     &__link {
@@ -157,9 +159,9 @@
         opacity: 1;
         font-weight: 300;
 
-        @include screen-size("small") {
-          font-size: 45px;
-        }
+        // @include screen-size("small") {
+        //   font-size: 45px;
+        // }
       }
 
       &--hover {
@@ -175,7 +177,7 @@
         hyphens: none;
 
         @include screen-size("small") {
-          font-size: 45px;
+          font-size: $large;
           font-family: $sans-stack;
           font-style: normal;
           font-weight: 300;
@@ -223,19 +225,24 @@
       height: $height;
       background: white;
       transition: opacity 0.3s $transition;
+      display: none;
     }
   }
 
   .banner {
     position: absolute;
     right: 10px;
-    top: 0;
+    top: $height;
     height: 90%;
     max-width: 50vw;
 
     img {
       height: 90%;
       max-width: 50vw;
+    }
+
+    @include screen-size("small") {
+      display: none;
     }
   }
 </style>

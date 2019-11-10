@@ -5,6 +5,9 @@
   //
   // # # # # # # # # # # # # #
 
+  // *** IMPORTS
+  import { onMount } from "svelte";
+
   // STORES
   import { navigationColor, pages, scrollListActive } from "../stores.js";
   import { renderBlockText } from "../sanity.js";
@@ -26,6 +29,11 @@
 
   navigationColor.set("black");
   scrollListActive.set(false);
+
+  // *** ON MOUNT
+  onMount(async () => {
+    window.scrollTo(0, 0);
+  });
 </script>
 
 <style lang="scss">
@@ -104,6 +112,9 @@
         {#if c._type == 'singleImage'}
           <Image
             imageObject={c.image}
+            inlineDisplay={true}
+            maxHeight={get(c, 'maxHeight', false)}
+            backgroundColor={get(c, 'backgroundColor', false)}
             caption={get(c, 'caption', false)}
             alignment={get(c, 'alignment', '')}
             fullwidth={get(c, 'fullwidth', '')} />
@@ -111,10 +122,30 @@
         {#if c._type == 'imageGroup'}
           <ImageGroup
             imageArray={c.images}
+            inlineDisplay={true}
+            maxHeight={get(c, 'maxHeight', false)}
+            backgroundColor={get(c, 'backgroundColor', false)}
+            alignment={get(c, 'alignment', '')}
+            fullwidth={get(c, 'fullwidth', '')}
             caption={get(c, 'caption', false)} />
         {/if}
+        {#if c._type == 'videoLoop'}
+          <VideoLoop
+            url={'https://cdn.sanity.io/files/gj963qwj/production/' + c.video.asset._ref
+                .replace('file-', '')
+                .replace('-mp4', '.mp4')}
+            inlineDisplay={true}
+            maxHeight={get(c, 'maxHeight', false)}
+            backgroundColor={get(c, 'backgroundColor', false)}
+            caption={get(c, 'caption', false)}
+            alignment={get(c, 'alignment', '')}
+            fullwidth={get(c, 'fullwidth', '')} />
+        {/if}
         {#if c._type == 'video'}
-          <VideoEmbed url={c.video} caption={get(c, 'caption', false)} />
+          <VideoEmbed
+            url={c.video}
+            backgroundColor={get(c, 'backgroundColor', false)}
+            caption={get(c, 'caption', false)} />
         {/if}
         {#if c._type == 'slideshow'}
           <Slideshow imageArray={c.images} />

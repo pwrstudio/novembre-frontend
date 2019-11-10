@@ -31,6 +31,10 @@
     (maxHeight ? "height:" + maxHeight + "vh; " : "") +
     (backgroundColor ? "background:" + backgroundColor.hex + ";" : "");
 
+  const customStylesPhone = backgroundColor
+    ? "background:" + backgroundColor.hex + ";"
+    : "";
+
   let loaded = false;
 </script>
 
@@ -42,19 +46,26 @@
     height: 100vh;
     display: inline-flex;
     padding-bottom: 2 * $small-margin;
-    margin-bottom: 1.2em;
+    margin-bottom: $large-vertical-margin;
     align-items: flex-start;
+
+    @include screen-size("small") {
+      height: auto;
+    }
 
     img {
       opacity: 0;
       transition: opacity 0.25s $transition;
       object-fit: contain;
+      object-position: bottom;
       margin-left: $small-margin;
       margin-top: $small-margin;
       height: 100%;
 
       @include screen-size("small") {
         max-height: unset;
+        object-fit: unset;
+        height: auto;
       }
 
       &.loaded {
@@ -79,7 +90,7 @@
       max-width: 40vw;
       @include screen-size("small") {
         max-width: unset;
-        width: 46vw;
+        width: 40vw;
       }
     }
   }
@@ -90,7 +101,7 @@
 
       @include screen-size("small") {
         max-width: unset;
-        width: 42vw;
+        width: 30vw;
       }
     }
   }
@@ -100,7 +111,7 @@
       max-width: 23vw;
       @include screen-size("small") {
         max-width: unset;
-        width: 38vw;
+        width: 23vw;
       }
     }
   }
@@ -150,6 +161,10 @@
       padding-bottom: 0;
       display: inline-block;
       max-height: 440px;
+      @include screen-size("small") {
+        height: auto;
+        width: 10000px;
+      }
 
       img {
         margin-bottom: $small-margin;
@@ -163,28 +178,32 @@
   }
 </style>
 
-<div
-  class="image-group {alignment}"
-  class:listing={isListing}
-  class:fullwidth
-  class:group-size-1={imageArray.length === 1}
-  class:group-size-2={imageArray.length === 2}
-  class:group-size-3={imageArray.length === 3}
-  class:group-size-4={imageArray.length === 4}
-  style={customStyles}>
-  {#each imageArray as image}
-    <img
-      class:loaded
-      src={urlFor(image)
-        .width(1000)
-        .quality(90)
-        .auto('format')
-        .url()}
-      alt={caption ? caption : 'novembre.global'}
-      on:load={e => (loaded = true)} />
-  {/each}
-</div>
+<MediaQuery query="(min-width: 800px)" let:matches>
 
-{#if caption}
-  <div class="caption">{caption}</div>
-{/if}
+  <div
+    class="image-group {alignment}"
+    class:listing={isListing}
+    class:fullwidth
+    class:group-size-1={imageArray.length === 1}
+    class:group-size-2={imageArray.length === 2}
+    class:group-size-3={imageArray.length === 3}
+    class:group-size-4={imageArray.length === 4}
+    style={matches ? customStyles : customStylesPhone}>
+    {#each imageArray as image}
+      <img
+        class:loaded
+        src={urlFor(image)
+          .width(1000)
+          .quality(90)
+          .auto('format')
+          .url()}
+        alt={caption ? caption : 'novembre.global'}
+        on:load={e => (loaded = true)} />
+    {/each}
+  </div>
+
+  {#if caption}
+    <div class="caption">{caption}</div>
+  {/if}
+
+</MediaQuery>

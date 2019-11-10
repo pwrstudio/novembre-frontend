@@ -5,14 +5,16 @@
   //
   // # # # # # # # # # # # # #
 
+  import { urlFor } from "../../sanity.js";
+
   // *** PROPS
-  export let fileObject = {};
-  export let caption = "";
+  export let url = "";
+  export let title = "";
+  export let link = "";
   export let size = true;
   export let backgroundColor = false;
+  export let foregroundColor = false;
   export let posterImage = false;
-
-  import { urlFor } from "../../sanity.js";
 
   // *** VARIABLES
   let time = 0;
@@ -93,6 +95,8 @@
     position: relative;
     width: auto;
     height: 440px;
+    max-width: 90vw;
+    object-fit: cover;
     pointer-events: none;
     z-index: 90;
     mix-blend-mode: multiply;
@@ -137,6 +141,12 @@
     @include screen-size("small") {
       font-size: $mobile_large;
     }
+    a {
+      border: 0;
+      &:hover {
+        border-bottom: 2px solid black;
+      }
+    }
   }
 
   progress {
@@ -155,7 +165,7 @@
     }
 
     &::-webkit-progress-bar {
-      background-color: rgba(200, 200, 200, 0);
+      background-color: rgba(255, 255, 255, 0);
     }
   }
 </style>
@@ -171,7 +181,7 @@
   <audio
     class="audio-player"
     preload="auto"
-    {src}
+    src={url}
     bind:currentTime={time}
     bind:duration
     bind:paused
@@ -180,7 +190,14 @@
   <div class="controls">
 
     {#if posterImage}
-      <img src={posterImage} class="poster-image" alt={caption} />
+      <img
+        src={urlFor(posterImage)
+          .width(500)
+          .quality(90)
+          .auto('format')
+          .url()}
+        class="poster-image"
+        alt={title} />
     {/if}
 
     <div class="audio-toggle">{paused ? 'PLAY' : 'PAUSE'}</div>
@@ -189,7 +206,11 @@
 
     <div class="total-time">{format(duration)}</div>
 
-    <div class="audio-title">{caption}</div>
+    <div class="audio-title">
+      {#if link}
+        <a href={link} target="_blank2" rel="noreferrer">{title}</a>
+      {:else}{title}{/if}
+    </div>
 
     <progress value={time / duration || 0} />
 

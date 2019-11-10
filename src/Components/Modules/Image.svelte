@@ -68,7 +68,7 @@
   }
 
   .bottom-space {
-    margin-bottom: 1.2em;
+    margin-bottom: $large-vertical-margin;
   }
 
   img {

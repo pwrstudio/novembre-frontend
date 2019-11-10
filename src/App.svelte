@@ -173,19 +173,14 @@
     padding-right: 2px;
   }
 
-  .splash-header {
-    color: white;
-    padding-right: 4px;
-    position: relative;
-    top: -1px;
+  .splash-text {
+    em {
+      color: white;
+      padding-right: 4px;
+      position: relative;
+      top: -1px;
+    }
   }
-
-  // .marker {
-  //   background: $hotpink;
-  //   height: 10px;
-  //   width: 10px;
-  //   border-radius: 10px;
-  // }
 
   blockquote {
     display: block;
@@ -216,7 +211,7 @@
       margin-left: auto;
       margin-right: auto;
       margin-top: 0;
-      margin-bottom: 1.2em;
+      margin-bottom: $large-vertical-margin;
 
       &.small {
         font-family: $sans-stack;
@@ -359,6 +354,13 @@
       display: block;
       max-width: 90vw;
       max-height: 90vh;
+    }
+  }
+
+  .about-text {
+    p {
+      margin-top: 0;
+      margin-left: $small-margin;
     }
   }
 </style>
