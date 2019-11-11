@@ -97,37 +97,8 @@
     });
   };
 
-  // *** LOGIC
-
-  // slides = isListing ? slides.slice(0, 10) : slides;
-
-  // --- Build urls
-  // if (slides.length == 1) {
-  //   slides[0].url =
-  //     slides[0].url && slides[0].url.length > 0
-  //       ? slides[0].url.replace(
-  //           "https://testing.novembre.global",
-  //           "https://novtest.imgix.net"
-  //         )
-  //       : "";
-  //   slides[0].src =
-  //     slides[0].url +
-  //     "?w=1400" +
-  //     "&ar=16:9&max-h=600&fit=crop&crop=faces&auto=format";
-  // } else {
-  //   slides.forEach(s => {
-  //     s.url =
-  //       s.url && s.url.length > 0
-  //         ? s.url.replace(
-  //             "https://testing.novembre.global",
-  //             "https://novtest.imgix.net"
-  //           )
-  //         : "";
-  //     s.src = s.url + "?h=800" + IMGIX_PARAMS;
-  //   });
-  // }
-
-  console.log(imageArray);
+  console.log("IMAGARRAy");
+  console.dir(imageArray);
 
   // *** ON MOUNT
   onMount(async () => {
@@ -399,134 +370,200 @@
 </style>
 
 <Router>
-  <div
-    class="container"
-    on:mouseenter={() => {
-      hovered = true;
-      if ((autoplay == true || autoplay == 1) && !isRelated && !!isListing) {
-        pauseSlideshow();
-      }
-    }}
-    on:mouseleave={() => {
-      hovered = false;
-      if ((autoplay == true || autoplay == 1) && !isRelated && !!isListing) {
-        playSlideshow();
-      }
-    }}>
-
-    {#if !loaded}
-      <div class="loading">
-        LOADING
-        <Ellipse />
-      </div>
-    {/if}
-
-    <!-- MAIN -->
+  {#if imageArray.length > 2}
     <div
-      class="carousel slideshow"
-      bind:this={slideShowEl}
-      class:slideshow--related={isRelated}
-      class:slideshow--preview={isListing}
-      class:loaded
-      use:links>
-      {#each imageArray as slide}
-        {#if isRelated}
-          <div class="carousel-cell slideshow__slide slideshow__slide--related">
-            <a href="/{slide.category}/{slide.slug}">
-              <img
-                class="slideshow__slide-image slideshow__slide-image--related"
-                src={urlFor(slide.mainImage)
-                  .width(1000)
-                  .quality(90)
-                  .auto('format')
-                  .url()}
-                alt={slide.title} />
-              <div class="slideshow__title">
-                {@html slide.title}
-              </div>
-            </a>
-          </div>
-        {:else}
-          <div class="carousel-cell slideshow__slide">
-            <img
-              class="slideshow__slide-image"
-              src={urlFor(slide)
-                .width(1000)
-                .quality(90)
-                .auto('format')
-                .url()}
-              alt={slide.caption} />
-            {#if slide.caption}
-              <div class="slideshow__slide-caption">{slide.caption}</div>
-            {/if}
-          </div>
-        {/if}
-      {/each}
-    </div>
-
-    <div
-      class="navigation previous"
-      class:hovered
-      type="button"
-      aria-label="Previous"
-      on:click={e => {
-        e.stopPropagation();
-        e.preventDefault();
-        flkty.next(true);
-      }}>
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="80"
-        height="120"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="white"
-        stroke-width="0.5"
-        class="feather feather-chevron-left arrow">
-        <polyline points="15 18 9 12 15 6" />
-      </svg>
-    </div>
-
-    <div
-      class="navigation next"
-      class:hovered
-      type="button"
-      aria-label="Previous"
-      on:click={e => {
-        e.stopPropagation();
-        e.preventDefault();
-        flkty.previous(true);
-      }}>
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="80"
-        height="120"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="white"
-        stroke-width="0.5"
-        class="feather feather-chevron-left arrow">
-        <polyline points="9 18 15 12 9 6" />
-      </svg>
-    </div>
-  </div>
-  {#if !isListing && !isRelated}
-    <div
-      class="nav-container"
+      class="container"
       on:mouseenter={() => {
         hovered = true;
-        if (autoplay == true || autoplay == 1) {
+        if ((autoplay == true || autoplay == 1) && !isRelated && !!isListing) {
           pauseSlideshow();
         }
       }}
       on:mouseleave={() => {
         hovered = false;
-        if (autoplay == true || autoplay == 1) {
+        if ((autoplay == true || autoplay == 1) && !isRelated && !!isListing) {
           playSlideshow();
         }
       }}>
-      {#if loaded && !isListing && !isRelated}
-        <NavShow {imageArray} navTarget={slideShowEl} />
+
+      {#if !loaded}
+        <div class="loading">
+          LOADING
+          <Ellipse />
+        </div>
+      {/if}
+
+      <!-- MAIN -->
+      <div
+        class="carousel slideshow"
+        bind:this={slideShowEl}
+        class:slideshow--related={isRelated}
+        class:slideshow--preview={isListing}
+        class:loaded
+        use:links>
+        {#each imageArray as slide}
+          {#if isRelated}
+            <div
+              class="carousel-cell slideshow__slide slideshow__slide--related">
+              <a href="/{slide.category}/{slide.slug}">
+                <img
+                  class="slideshow__slide-image slideshow__slide-image--related"
+                  src={urlFor(slide.mainImage)
+                    .height(600)
+                    .quality(80)
+                    .auto('format')
+                    .url()}
+                  alt={slide.title} />
+                <div class="slideshow__title">
+                  {@html slide.title}
+                </div>
+              </a>
+            </div>
+          {:else}
+            <div class="carousel-cell slideshow__slide">
+              <img
+                class="slideshow__slide-image"
+                src={urlFor(slide)
+                  .height(600)
+                  .quality(80)
+                  .auto('format')
+                  .url()}
+                alt={slide.caption} />
+              {#if slide.caption}
+                <div class="slideshow__slide-caption">{slide.caption}</div>
+              {/if}
+            </div>
+          {/if}
+        {/each}
+      </div>
+
+      <div
+        class="navigation previous"
+        class:hovered
+        type="button"
+        aria-label="Previous"
+        on:click={e => {
+          e.stopPropagation();
+          e.preventDefault();
+          flkty.next(true);
+        }}>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="80"
+          height="120"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="white"
+          stroke-width="0.5"
+          class="feather feather-chevron-left arrow">
+          <polyline points="15 18 9 12 15 6" />
+        </svg>
+      </div>
+
+      <div
+        class="navigation next"
+        class:hovered
+        type="button"
+        aria-label="Previous"
+        on:click={e => {
+          e.stopPropagation();
+          e.preventDefault();
+          flkty.previous(true);
+        }}>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="80"
+          height="120"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="white"
+          stroke-width="0.5"
+          class="feather feather-chevron-left arrow">
+          <polyline points="9 18 15 12 9 6" />
+        </svg>
+      </div>
+    </div>
+    {#if !isListing && !isRelated}
+      <div
+        class="nav-container"
+        on:mouseenter={() => {
+          hovered = true;
+          if (autoplay == true || autoplay == 1) {
+            pauseSlideshow();
+          }
+        }}
+        on:mouseleave={() => {
+          hovered = false;
+          if (autoplay == true || autoplay == 1) {
+            playSlideshow();
+          }
+        }}>
+        {#if loaded && !isListing && !isRelated}
+          <NavShow {imageArray} navTarget={slideShowEl} />
+        {/if}
+      </div>
+    {/if}
+  {:else if imageArray.length === 2}
+    <div class="static-related double">
+      {#if isRelated}
+        <a href="/{imageArray[0].category}/{imageArray[0].slug}">
+          <img
+            src={urlFor(imageArray[0].mainImage)
+              .height(600)
+              .quality(80)
+              .auto('format')
+              .url()}
+            alt={imageArray[0].title} />
+          <div class="slideshow__title">{imageArray[0].title}</div>
+        </a>
+        <a href="/{imageArray[1].category}/{imageArray[1].slug}">
+          <img
+            src={urlFor(imageArray[1].mainImage)
+              .height(600)
+              .quality(80)
+              .auto('format')
+              .url()}
+            alt={imageArray[1].title} />
+          <div class="slideshow__title">{imageArray[1].title}</div>
+        </a>
+      {:else}
+        <img
+          src={urlFor(imageArray[0].mainImage)
+            .height(600)
+            .quality(90)
+            .auto('format')
+            .url()}
+          alt={imageArray[0].title} />
+        <img
+          src={urlFor(imageArray[1].mainImage)
+            .height(600)
+            .quality(90)
+            .auto('format')
+            .url()}
+          alt={imageArray[1].title} />
+      {/if}
+    </div>
+  {:else if imageArray.length === 1}
+    <div class="static-related single">
+      {#if isRelated}
+        <a href="/{imageArray[0].category}/{imageArray[0].slug}">
+          <img
+            src={urlFor(imageArray[0].mainImage)
+              .width(1200)
+              .quality(90)
+              .auto('format')
+              .url()}
+            alt={imageArray[0].title} />
+          <div class="slideshow__title">{imageArray[0].title}</div>
+        </a>
+      {:else}
+        <img
+          src={urlFor(imageArray[0].mainImage)
+            .width(1200)
+            .quality(90)
+            .auto('format')
+            .url()}
+          alt={imageArray[0].title} />
       {/if}
     </div>
   {/if}
