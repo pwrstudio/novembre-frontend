@@ -39,7 +39,6 @@
         .quality(80)
         .height(1200)
         .width(1200)
-        .auto("format")
         .url()
     : "https://novembre.global/logo.png";
 </script>
