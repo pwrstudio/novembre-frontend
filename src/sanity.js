@@ -70,6 +70,7 @@ const sanitizeArticle = res => {
         id: get(res, '_id', ''),
         editorialState: get(res, 'editorialState', ''),
         title: get(res, 'title', ''),
+        mainImage: get(res, 'mainImage', false),
         slug: get(res, 'slug.current', ''),
         publicationDate: get(res, 'publicationDate', ''),
         taxonomy: {
