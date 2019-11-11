@@ -10,7 +10,7 @@
   import { fade, slide, fly } from "svelte/transition";
   import { navigate } from "svelte-routing";
   import isEmpty from "lodash/isEmpty";
-  import { urlFor } from "../sanity.js";
+  import { urlFor, loadFeed } from "../sanity.js";
 
   // *** COMPONENTS
   import Preview from "../Components/Preview.svelte";
@@ -27,7 +27,6 @@
     activeCategory,
     scrollListActive
   } from "../stores.js";
-  import { loadFeed } from "../sanity.js";
 
   // *** PROPS
   export let title = "";
@@ -214,6 +213,8 @@
     }
   }
 </style>
+
+<MetaData />
 
 {#if title === 'Tag' || title === 'Search'}
   <TagBar text={$activeQuery} />

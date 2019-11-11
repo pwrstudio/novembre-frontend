@@ -19,9 +19,8 @@
   // *** PROPS
   export let post = {};
 
-  //   activeCategory.set(get(post, "taxonomy.category", ""));
-
-  const defaultDescription = "XXXXX";
+  const defaultDescription =
+    "Novembre Global is a platform for expression, guiding individuals and professionals in search of inspiration, new styles and emergent cultural trends.";
 
   const title =
     (has(post, "title") && !isEmpty(post.title) ? post.title + " / " : "") +
@@ -35,14 +34,14 @@
         })
       : defaultDescription;
 
-  //   const image = has(post, "preview.asset")
-  //     ? urlFor(post.mainImage)
-  //         .quality(80)
-  //         .height(1200)
-  //         .width(1200)
-  //         .auto("format")
-  //         .url()
-  //     : siteInfo.image;
+  const image = has(post, "mainImage")
+    ? urlFor(post.mainImage)
+        .quality(80)
+        .height(1200)
+        .width(1200)
+        .auto("format")
+        .url()
+    : "https://novembre.global/logo.png";
 </script>
 
 <svelte:head>
@@ -52,7 +51,7 @@
   <meta property="description" content={description} />
   <meta property="og:description" content={description} />
   <meta property="twitter:description" content={description} />
-  <!-- <meta property="image" content={image} />
+  <meta property="image" content={image} />
   <meta property="og:image" content={image} />
-  <meta property="twitter:image" content={image} /> -->
+  <meta property="twitter:image" content={image} />
 </svelte:head>

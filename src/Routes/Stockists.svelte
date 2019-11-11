@@ -11,6 +11,8 @@
   import { fade } from "svelte/transition";
   import { tick } from "svelte/internal";
 
+  import MetaData from "../Components/MetaData.svelte";
+
   import sample from "lodash/sample";
 
   // STORES
@@ -163,9 +165,7 @@
   }
 </style>
 
-<svelte:head>
-  <title>STOCKISTS / NOVEMBRE</title>
-</svelte:head>
+<MetaData post={{ title: 'Stockists' }} />
 
 <article class="stockist-page">
   <div bind:this={mapEl} class="map" />

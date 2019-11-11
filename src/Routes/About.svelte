@@ -7,11 +7,13 @@
 
   // *** IMPORTS
   import { onMount } from "svelte";
+  import { renderBlockText } from "../sanity.js";
+  import get from "lodash/get";
+
+  import MetaData from "../Components/MetaData.svelte";
 
   // STORES
   import { navigationColor, pages, scrollListActive } from "../stores.js";
-  import { renderBlockText } from "../sanity.js";
-  import get from "lodash/get";
 
   // *** MODULES
   import Image from "../Components/Modules/Image.svelte";
@@ -97,9 +99,7 @@
   }
 </style>
 
-<svelte:head>
-  <title>ABOUT / NOVEMBRE</title>
-</svelte:head>
+<MetaData post={{ title: 'About' }} />
 
 {#await $pages then pages}
   <article class="about">

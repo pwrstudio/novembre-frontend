@@ -9,10 +9,8 @@
   import "intersection-observer";
   import { Router, Route } from "svelte-routing";
   import Navigation from "./Components/Navigation.svelte";
-  import { loadPages } from "./sanity.js";
   import isEmpty from "lodash/isEmpty";
-  import { urlFor } from "./sanity.js";
-  import { fade } from "svelte/transition";
+  import { urlFor, loadPages } from "./sanity.js";
 
   // COMPONENTS
   import ScrollList from "./Components/ScrollList.svelte";

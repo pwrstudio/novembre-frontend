@@ -15,6 +15,7 @@
   // COMPONENTS
   import Footer from "../Components/Footer.svelte";
   import NewsletterSignUp from "../Components/NewsletterSignUp.svelte";
+  import MetaData from "../Components/MetaData.svelte";
 
   // *** MODULES
   import Image from "../Components/Modules/Image.svelte";
@@ -86,9 +87,7 @@
   }
 </style>
 
-<svelte:head>
-  <title>CONTACT / NOVEMBRE</title>
-</svelte:head>
+<MetaData post={{ title: 'Contact' }} />
 
 {#await $pages then pages}
   <article class="contact">
