@@ -11,6 +11,8 @@
   import Navigation from "./Components/Navigation.svelte";
   import isEmpty from "lodash/isEmpty";
   import { urlFor, loadPages } from "./sanity.js";
+  import Cookies from "js-cookie";
+  import { fade } from "svelte/transition";
 
   // COMPONENTS
   import ScrollList from "./Components/ScrollList.svelte";
@@ -33,7 +35,7 @@
   import Stockists from "./Routes/Stockists.svelte";
   import Error404 from "./Routes/Error404.svelte";
 
-  let overlayActive = true;
+  let overlayActive = false;
 
   pages.set(loadPages('*[_id == "global-config"][0]'));
   menuBanners.set(
@@ -94,6 +96,15 @@
     { title: "Workshop", slug: "workshop" },
     { title: "Entertainment", slug: "entertainment" }
   ];
+
+  if (!Cookies.get("nov_seen-banner")) {
+    setTimeout(() => {
+      overlayActive = true;
+    }, 3000);
+    Cookies.set("nov_seen-banner", "true", {
+      expires: 1 / 24
+    });
+  }
 </script>
 
 <style lang="scss" global>
@@ -219,12 +230,13 @@
 
         a {
           color: currentColor;
-          text-decoration: none;
-          border-bottom: 1px solid $black;
+          text-decoration: underline;
+          border-bottom: none;
           transition: border 0.3s $transition;
 
           &:hover {
-            border-bottom: 1px solid transparent;
+            text-decoration: none;
+            border-bottom: none;
           }
         }
 
@@ -349,6 +361,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
 
     .inner {
       display: block;
@@ -396,7 +409,12 @@
 
 {#await $overlayBanners then overlayBanners}
   {#if !isEmpty(overlayBanners) && overlayActive}
-    <div class="overlay-banner">
+    <div
+      class="overlay-banner"
+      on:click={e => {
+        overlayActive = false;
+      }}
+      in:fade>
       <a
         href={overlayBanners[0].link}
         target="_blank"
