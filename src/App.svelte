@@ -403,6 +403,27 @@
       margin-top: 0;
     }
   }
+
+  .stockists-placeholder {
+    a {
+      border-bottom: 2px solid black;
+
+      &:hover {
+        border-bottom: 2px solid transparent;
+      }
+    }
+  }
+
+  .about-text,
+  .contact {
+    a {
+      border-bottom: 3px solid black;
+
+      &:hover {
+        border-bottom: 3px solid transparent;
+      }
+    }
+  }
 </style>
 
 <Navigation />

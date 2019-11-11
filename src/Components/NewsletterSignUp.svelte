@@ -11,12 +11,14 @@
   // VARIABLES
   let emailAddress = "";
   let emailName = "";
+  let emailCompany = "";
   let success = false;
 
   // LOGIC
   const submit = () => {
     console.log(emailAddress);
     console.log(emailName);
+    console.log(emailCompany);
 
     fetch(
       "https://testing.novembre.global/user/themes/novembre/dist/php/subscribe.php?email=" +
@@ -130,12 +132,21 @@
   {:else}
     <form class="newsletter-signup">
       <div class="form-section">NEWSLETTER</div>
+
       <div class="form-section">
         <input
           name="email_name"
           placeholder="NAME"
           class="mailing-list__input"
           bind:value={emailName} />
+      </div>
+
+      <div class="form-section">
+        <input
+          name="email_company"
+          placeholder="COMPANY"
+          class="mailing-list__input"
+          bind:value={emailCompany} />
       </div>
 
       <div class="form-section">
