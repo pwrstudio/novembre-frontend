@@ -346,7 +346,7 @@
     right: 0;
     width: 100vw;
     height: 100vh;
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.8);
     z-index: 1000;
     display: flex;
     justify-content: center;
