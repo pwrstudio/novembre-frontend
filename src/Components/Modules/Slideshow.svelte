@@ -441,7 +441,9 @@
                   .auto('format')
                   .url()}
                 alt={slide.title} />
-              <div class="slideshow__title">{slide.title}</div>
+              <div class="slideshow__title">
+                {@html slide.title}
+              </div>
             </a>
           </div>
         {:else}
