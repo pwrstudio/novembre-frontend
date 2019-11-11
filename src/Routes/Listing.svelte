@@ -188,8 +188,7 @@
     padding-left: $small-margin;
     font-size: $large;
     font-family: $sans-stack;
-    color: white;
-    background: $hotpink;
+    color: black;
     height: 100vh;
     width: 100vw;
     padding-top: 200px;
