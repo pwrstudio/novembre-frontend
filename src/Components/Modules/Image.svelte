@@ -1,230 +1,205 @@
 <script>
   // # # # # # # # # # # # # #
   //
-  //  Image module
+  //  SINGLE IMAGE
+  //  *
+  //  _ caption
+  //  _ maxHeigth
+  //  _ alignment
+  //  _ inlineDisplay
+  //  _ fullWidth
+  //  _ backgroundColor
+  //  *
   //
   // # # # # # # # # # # # # #
 
   // *** IMPORTS
-  import { onMount } from "svelte";
   import MediaQuery from "svelte-media-query";
-  import { fade } from "svelte/transition";
-  import imagesLoaded from "imagesloaded";
-  // import buildURL from "imagesloaded";
+  import { urlFor } from "../../sanity.js";
 
   // *** PROPS
-  export let url = "";
-  export let caption = "";
-  export let size = false;
+  export let imageObject = {};
+  export let caption = false;
+  export let backgroundColor = false;
+  export let alignment = "";
+  export let maxHeight = false;
+  export let fullwidth = false;
   export let isListing = false;
-  export let loaded = false;
-  export let height = false;
-  export let width = false;
-  export let file = false;
-  export let alignment = "center";
+  export let inlineDisplay = false;
 
-  // *** DOM REFERENCES
-  let imageEl = {};
+  const customStyles =
+    (maxHeight ? "height:" + maxHeight + "vh; " : "") +
+    (backgroundColor ? "background:" + backgroundColor.hex + ";" : "");
 
   // *** VARIABLES
-  let src = "";
-  let srcset = "";
-  let srcPortrait = "";
-  let srcsetPortrait = "";
-  let sizes = "";
+  const src = fullwidth
+    ? urlFor(imageObject)
+        .width(1800)
+        .height(1200)
+        .quality(100)
+        .auto("format")
+        .url()
+    : urlFor(imageObject)
+        .width(800)
+        .quality(90)
+        .auto("format")
+        .url();
 
-  // *** CONSTANTS
-  let IMGIX_PARAMS = "&auto=format";
-  let FULLWIDTH_PARAMS = "&ar=16:9&fit=crop&crop=faces&auto=format";
-  let PORTRAIT_PARAMS = "&ar=9:16&fit=crop&crop=faces&auto=format";
+  const srcPortrait = urlFor(imageObject)
+    .width(800)
+    .quality(90)
+    .auto("format")
+    .url();
 
-  // Set base image size
-  url = url.replace(
-    "https://testing.novembre.global",
-    "https://novtest.imgix.net"
-  );
-
-  url = encodeURI(url);
-
-  src =
-    url + "?w=1200" + (size === "fullWidth" ? FULLWIDTH_PARAMS : IMGIX_PARAMS);
-  srcPortrait = url + "?w=1000" + PORTRAIT_PARAMS;
-
-  // Generate srcset
-  if (size === "fullWidth") {
-    srcset = ["", 600, 800, 1000, 1200, 1400, 1600, 2000].reduce(
-      (result, size) => {
-        return (
-          result + url + "?w=" + size + FULLWIDTH_PARAMS + " " + size + "w, "
-        );
-      }
-    );
-
-    srcsetPortrait = ["", 600, 800, 1000, 1200, 1400, 1600, 2000].reduce(
-      (result, size) => {
-        return (
-          result + url + "?w=" + size + PORTRAIT_PARAMS + " " + size + "w, "
-        );
-      }
-    );
-  } else {
-    srcset = ["", 600, 800, 1000, 1200, 1400, 1600, 2000].reduce(
-      (result, size) => {
-        return result + url + "?w=" + size + IMGIX_PARAMS + " " + size + "w, ";
-      }
-    );
-
-    srcsetPortrait = ["", 600, 800, 1000, 1200, 1400, 1600, 2000].reduce(
-      (result, size) => {
-        return result + url + "?w=" + size + IMGIX_PARAMS + " " + size + "w, ";
-      }
-    );
-  }
-
-  if (size === true || size === "fullWidth") {
-    sizes = "80vw";
-  } else {
-    sizes = "70vw";
-  }
-
-  // *** ON MOUNT
-  onMount(async () => {
-    imagesLoaded(imageEl, instance => {
-      loaded = true;
-    });
-  });
+  let loaded = false;
 </script>
 
 <style lang="scss">
   @import "../../variables.scss";
 
-  .image {
+  .single-image {
+    height: 100vh;
     width: 100%;
-    height: auto;
 
-    $block: &;
-
-    margin-bottom: $large-vertical-margin;
-
-    &.listing {
-      margin-top: 0px;
-      margin-bottom: 0px;
-
-      .image--free {
-        margin-bottom: $small-margin;
-      }
-    }
-
-    &--full {
-      height: $full-height;
-      width: 100vw;
-      margin-bottom: $large-vertical-margin;
-
-      img,
-      video {
-        height: 100%;
-        width: 100%;
-        object-fit: cover;
-      }
-
-      .caption {
-        height: auto;
-        width: 800px;
-        margin-left: auto;
-        margin-right: auto;
-        max-width: 95vw;
-        margin-bottom: $large-vertical-margin;
-      }
-    }
-
-    &__image {
-      opacity: 0;
-      transition: opacity 0.2s $transition;
-
-      &.loaded {
-        opacity: 1;
-      }
-    }
-
-    &--inline {
-      height: 900px;
-      width: 800px;
-      max-width: 95vw;
-      max-height: 100vh;
-      margin-bottom: $large-vertical-margin;
-
-      img,
-      video {
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
-      }
-
-      &.center {
-        margin-left: auto;
-        margin-right: auto;
-      }
-
-      &.left {
-        margin-left: 0px;
-        margin-right: auto;
-      }
-
-      &.right {
-        margin-left: auto;
-        margin-right: 0px;
-      }
+    @include screen-size("small") {
+      height: auto;
+      width: 100%;
     }
   }
 
-  .caption {
+  .bottom-space {
+    margin-bottom: $large-vertical-margin;
+  }
+
+  img {
+    opacity: 0;
+    transition: opacity 0.25s $transition;
+    height: 100%;
+    width: 800px;
+    object-fit: contain;
+    max-width: 95vw;
+    display: block;
+
+    @include screen-size("small") {
+      height: auto;
+      width: 100%;
+    }
+
+    &.loaded {
+      opacity: 1;
+    }
+  }
+
+  figure {
+    display: inline-block;
+    height: 100%;
+    margin: 0;
+  }
+
+  figcaption {
     font-family: $sans-stack;
     font-size: $small;
     font-weight: 300;
     width: 100%;
-    margin-left: auto;
-    margin-right: auto;
     text-align: center;
-    margin-bottom: $large-vertical-margin;
   }
 
-  // .center {
-  //   .caption {
-  //     text-align: center;
-  //   }
-  // }
+  .center {
+    text-align: center;
+    figure {
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
 
-  // .left {
-  //   .caption {
-  //     text-align: left;
-  //   }
-  // }
+  .left {
+    text-align: left;
+    @include screen-size("small") {
+      text-align: center;
+    }
 
-  // .right {
-  //   .caption {
-  //     text-align: right;
-  //   }
-  // }
+    figure {
+      margin-left: $small-margin;
+      margin-right: auto;
+
+      @include screen-size("small") {
+        margin-left: auto;
+        margin-right: auto;
+      }
+    }
+  }
+
+  .right {
+    text-align: right;
+
+    @include screen-size("small") {
+      text-align: center;
+    }
+
+    figure {
+      margin-left: auto;
+      margin-right: $small-margin;
+
+      @include screen-size("small") {
+        margin-left: auto;
+        margin-right: auto;
+      }
+    }
+  }
+
+  .fullwidth {
+    height: $full-height;
+    width: 100vw;
+    padding: 0;
+
+    img {
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
+      max-width: unset;
+    }
+
+    figure {
+      height: $full-height;
+      width: 100vw;
+      display: block;
+    }
+
+    figcaption {
+      height: auto;
+      width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+      max-width: 95vw;
+      margin-bottom: $large-vertical-margin;
+    }
+  }
+
+  .listing {
+    margin-top: 0px;
+    margin-bottom: 0px;
+
+    img {
+      margin-bottom: $small-margin;
+    }
+  }
 </style>
 
 <div
-  class="image {alignment}"
-  class:image--full={size == true || size == 'fullWidth'}
-  class:image--inline={size == 'proportional' || size == 'inline'}
-  class:listing={isListing}
-  bind:this={imageEl}>
-
+  class="single-image {alignment}"
+  class:fullwidth
+  class:bottom-space={inlineDisplay}
+  style={customStyles}>
   <MediaQuery query="(min-width: 800px)" let:matches>
-    <img
-      class="image__image"
-      class:loaded
-      srcset={matches ? srcset : srcsetPortrait}
-      {sizes}
-      src={matches ? src : srcPortrait}
-      alt={caption} />
-    {#if !isListing}
-      <div class="caption">{caption}</div>
-    {/if}
+    <figure>
+      <img
+        class:loaded
+        src={matches ? src : srcPortrait}
+        alt={caption ? caption : 'novembre.global'}
+        on:load={e => (loaded = true)} />
+      {#if caption}
+        <figcaption>{caption}</figcaption>
+      {/if}
+    </figure>
   </MediaQuery>
-
 </div>

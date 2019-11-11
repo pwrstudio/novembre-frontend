@@ -1,18 +1,21 @@
 <script>
   // # # # # # # # # # # # # #
   //
-  //  List of taxonomy entries
+  //  TAXONOMY LIST
   //
   // # # # # # # # # # # # # #
 
   // *** IMPORTS
-  // import { Router, links, Link } from "svelte-routing";
+  import { Router, links } from "svelte-routing";
+  import { format, isValid } from "date-fns";
+  import sortBy from "lodash/sortBy";
+  import isEmpty from "lodash/isEmpty";
 
   // *** PROPS
   export let taxonomy;
+  export let isArticle = false;
   export let white = false;
   export let date = false;
-  export let isPreview = false;
 </script>
 
 <style lang="scss">
@@ -33,12 +36,12 @@
       display: inline-block;
       text-decoration: none;
       margin-right: 10px;
-      color: white;
+      color: black;
       transition: border 0.3s $transition;
       border-bottom: 1px solid transparent;
 
       &:hover {
-        border-bottom: 1px solid white;
+        border-bottom: 1px solid black;
       }
 
       &.date {
@@ -58,63 +61,42 @@
 
     &.white {
       .taxonomy__item {
-        color: black;
+        color: white;
 
         &:hover {
-          border-bottom: 1px solid black;
+          border-bottom: 1px solid white;
         }
       }
     }
   }
 </style>
 
-<div class="taxonomy" class:white>
+<Router>
 
-  <!-- DATE -->
-  {#if date}
-    <span class="taxonomy__item date">{date}</span>
-  {/if}
+  <div class="taxonomy" class:white use:links>
 
-  {#if taxonomy.magazine}
-    {#each taxonomy.magazine as m}
+    {#if isArticle && !isEmpty(date)}
+      <span class="taxonomy__item date">
+        {format(new Date(date), 'yyyy/dd/MM')}
+      </span>
+    {/if}
+
+    {#if taxonomy.subCategory}
       <span class="taxonomy__item">
-        <a
-          href="https://testing.novembre.global/magazine#{m.toLowerCase()}"
-          on:click={e => {
-            e.preventDefault();
-            e.stopPropagation();
-            window.location = 'https://testing.novembre.global/magazine#' + m.toLowerCase();
-          }}>
-          {m}
+        <a href="/{taxonomy.category}/category/{taxonomy.subCategory}">
+          {taxonomy.subCategory}
         </a>
       </span>
-    {/each}
-  {/if}
+    {/if}
 
-  {#if taxonomy.bureau}
-    {#each taxonomy.bureau as e}
-      <span class="taxonomy__item">
-        <a
-          href="https://testing.novembre.global/bureau/#{e}"
-          on:click={event => {
-            event.preventDefault();
-            event.stopPropagation();
-            window.location = 'https://testing.novembre.global/bureau#' + e.toLowerCase();
-          }}>
-          {e}
-        </a>
-      </span>
-    {/each}
-  {/if}
+    {#if isArticle}
+      {#each sortBy(taxonomy.tags) as t}
+        <span class="taxonomy__item">
+          <a href="/taxonomy/{t}">{t}</a>
+        </span>
+      {/each}
+    {/if}
 
-  <!-- <Router> -->
-  {#if taxonomy.tag && !isPreview}
-    {#each taxonomy.tag as t}
-      <span class="taxonomy__item">
-        <a href="/taxonomy/{t}">{t}</a>
-      </span>
-    {/each}
-  {/if}
-  <!-- </Router> -->
+  </div>
 
-</div>
+</Router>

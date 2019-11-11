@@ -1,6 +1,16 @@
 <script>
+  // # # # # # # # # # # # # #
+  //
+  //  FOOTER
+  //
+  // # # # # # # # # # # # # #
+
+  // *** IMPORT
   import Logo from "./Logo.svelte";
   import MediaQuery from "svelte-media-query";
+
+  // *** PROPS
+  export let active = false;
 
   const scroll = () => {
     if (document.body.clientHeight > 6000) {
@@ -14,8 +24,6 @@
       });
     }
   };
-
-  export let active = false;
 </script>
 
 <style lang="scss">
@@ -29,6 +37,7 @@
     font-family: $sans-stack;
     padding-top: $small-margin;
     margin-bottom: -$small-margin;
+    overflow: hidden;
 
     opacity: 0;
     transition: none;
@@ -86,7 +95,7 @@
         font-weight: 500;
         font-style: italic;
         opacity: 0;
-        z-index: 1000;
+        z-index: 11;
         hyphens: none;
         white-space: nowrap;
 

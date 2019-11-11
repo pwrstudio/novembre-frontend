@@ -1,20 +1,21 @@
 <script>
   // # # # # # # # # # # # # #
   //
-  //  Navigation bar and menu
+  //  NAVIGATION BAR
   //
   // # # # # # # # # # # # # #
 
   // *** IMPORTS
   import { Router, links } from "svelte-routing";
-  // import { fade, fly } from "svelte/transition";
+  import isEmpty from "lodash/isEmpty";
 
   // *** COMPONENTS
   import Logo from "./Logo.svelte";
   import SearchBox from "./SearchBox.svelte";
+  import { urlFor } from "../sanity.js";
 
   // *** STORES
-  import { navigationColor, menuActiveGlobal } from "../stores.js";
+  import { menuBanners, navigationColor, menuActiveGlobal } from "../stores.js";
 
   // *** VARIABLES
   let menuActive = false;
@@ -23,7 +24,6 @@
     { title: "MAGAZINE", target: "/magazine" },
     { title: "BUREAU", target: "/bureau" },
     { title: "ABOUT", target: "/about" },
-    { title: "CALENDAR", target: "/calendar" },
     { title: "CONTACT", target: "/contact" },
     { title: "STOCKISTS", target: "/stockists" }
   ];
@@ -35,6 +35,8 @@
       ? document.querySelector("body").classList.add("no-scroll")
       : document.querySelector("body").classList.remove("no-scroll");
   }
+
+  console.dir($menuBanners);
 </script>
 
 <style lang="scss">
@@ -121,6 +123,8 @@
       padding: 10px;
       padding-bottom: 20px;
       background: white;
+      top: 0;
+      padding-top: $height;
 
       span {
         display: inline;
@@ -138,9 +142,9 @@
       display: block;
       height: 63px;
 
-      @include screen-size("small") {
-        height: 55px;
-      }
+      // @include screen-size("small") {
+      //   height: 55px;
+      // }
     }
 
     &__link {
@@ -155,9 +159,9 @@
         opacity: 1;
         font-weight: 300;
 
-        @include screen-size("small") {
-          font-size: 45px;
-        }
+        // @include screen-size("small") {
+        //   font-size: 45px;
+        // }
       }
 
       &--hover {
@@ -173,7 +177,7 @@
         hyphens: none;
 
         @include screen-size("small") {
-          font-size: 45px;
+          font-size: $large;
           font-family: $sans-stack;
           font-style: normal;
           font-weight: 300;
@@ -204,10 +208,6 @@
 
       #{$block}__menu {
         pointer-events: all;
-        // clip-path: inset(0% 0% 0% 0%);
-        // -webkit-clip-path: inset(0% 0% 0% 0%);
-        // transition: clip-path 0.25s $transition,
-        //   -webkit-clip-path 0.25s $transition, opacity 0.3s $transition;
         transition: opacity 0.3s $transition;
         opacity: 1;
 
@@ -225,6 +225,24 @@
       height: $height;
       background: white;
       transition: opacity 0.3s $transition;
+      display: none;
+    }
+  }
+
+  .banner {
+    position: absolute;
+    right: 10px;
+    top: $height;
+    height: 90%;
+    max-width: 50vw;
+
+    img {
+      height: 90%;
+      max-width: 50vw;
+    }
+
+    @include screen-size("small") {
+      display: none;
     }
   }
 </style>
@@ -273,11 +291,24 @@
         </menuitem>
       {/if}
 
+      {#await $menuBanners then menuBanners}
+        {#if !isEmpty(menuBanners)}
+          <a
+            href={menuBanners[0].link}
+            target="_blank"
+            rel="noreferrer"
+            class="banner">
+            <img
+              src={urlFor(menuBanners[0].image)
+                .width(700)
+                .quality(90)
+                .auto('format')
+                .url()} />
+          </a>
+        {/if}
+      {/await}
+
     </menu>
   </Router>
 
 </nav>
-
-<!-- 
-          in:fly={{ y: -20, delay: 240, duration: 50 }}>
-            in:fly={{ y: -20, duration: 50, delay: 30 * menuIndex }} -->

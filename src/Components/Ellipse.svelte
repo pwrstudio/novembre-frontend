@@ -1,7 +1,7 @@
 <script>
   // # # # # # # # # # # # # #
   //
-  //  Ellipse animation
+  //  ELLIPSE ANIMATION
   //
   // # # # # # # # # # # # # #
 

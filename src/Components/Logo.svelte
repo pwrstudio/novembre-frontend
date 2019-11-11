@@ -1,4 +1,11 @@
 <script>
+  // # # # # # # # # # # # # #
+  //
+  //  LOGO
+  //
+  // # # # # # # # # # # # # #
+
+  // *** PROPS
   export let white = false;
 </script>
 

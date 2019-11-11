@@ -1,44 +1,46 @@
 <script>
   // # # # # # # # # # # # # #
   //
-  //  Contact
+  //  CONTACT
   //
   // # # # # # # # # # # # # #
 
-  // STORES
-  import { navigationColor } from "../stores.js";
+  // *** IMPORTS
+  import { onMount } from "svelte";
+
+  import { navigationColor, pages, scrollListActive } from "../stores.js";
+  import { renderBlockText } from "../sanity.js";
+  import get from "lodash/get";
 
   // COMPONENTS
   import Footer from "../Components/Footer.svelte";
   import NewsletterSignUp from "../Components/NewsletterSignUp.svelte";
 
+  // *** MODULES
+  import Image from "../Components/Modules/Image.svelte";
+  import ImageGroup from "../Components/Modules/ImageGroup.svelte";
+  import VideoEmbed from "../Components/Modules/VideoEmbed.svelte";
+  import Audio from "../Components/Modules/Audio.svelte";
+  import Slideshow from "../Components/Modules/Slideshow.svelte";
+
   // PROPS
-  export let endpoint = "";
   export let slug = "";
   export let location = {};
 
-  // VARIABLES
-  let post = loadData();
-
   // LOGIC
   navigationColor.set("black");
+  scrollListActive.set(false);
 
-  async function loadData() {
-    try {
-      const res = await fetch(endpoint);
-      const post = await res.json();
-      return post;
-    } catch (err) {
-      Sentry.captureException(err);
-    }
-  }
+  // *** ON MOUNT
+  onMount(async () => {
+    window.scrollTo(0, 0);
+  });
 </script>
 
 <style lang="scss">
   @import "../variables.scss";
 
   .contact {
-    padding: $small-margin;
     padding-top: 100px;
     margin-bottom: $large-vertical-margin;
     font-family: $sans-stack;
@@ -46,6 +48,8 @@
     text-transform: uppercase;
     line-height: 1em;
     overflow: hidden;
+    padding-left: 0;
+    padding-right: 0;
 
     @include screen-size("small") {
       font-size: $mobile-large;
@@ -54,6 +58,11 @@
 
     .contact-section {
       margin-bottom: 1em;
+      padding: $small-margin;
+
+      &.mail {
+        background: #d9f52c;
+      }
 
       a {
         color: currentColor;
@@ -81,44 +90,39 @@
   <title>CONTACT / NOVEMBRE</title>
 </svelte:head>
 
-{#await post then post}
+{#await $pages then pages}
   <article class="contact">
 
     <div class="contact-section">
-      <div>EMAIL</div>
-      <a href="mailto:{post.header.email}" target="_blank">
-        {post.header.email}
-      </a>
+      {#each pages.contact.content as c}
+        {#if c._type == 'block'}
+          {@html renderBlockText(c)}
+        {/if}
+        {#if c._type == 'singleImage'}
+          <Image
+            imageObject={c.image}
+            caption={get(c, 'caption', false)}
+            alignment={get(c, 'alignment', '')}
+            fullwidth={get(c, 'fullwidth', '')} />
+        {/if}
+        {#if c._type == 'imageGroup'}
+          <ImageGroup
+            imageArray={c.images}
+            caption={get(c, 'caption', false)} />
+        {/if}
+        {#if c._type == 'video'}
+          <VideoEmbed url={c.video} caption={get(c, 'caption', false)} />
+        {/if}
+        {#if c._type == 'slideshow'}
+          <Slideshow imageArray={c.images} />
+        {/if}
+        {#if c._type == 'audio'}
+          <Audio fileObject={c.audio} />
+        {/if}
+      {/each}
     </div>
 
-    <div class="contact-section">
-      <div>INSTAGRAM</div>
-      <a
-        href="https://www.instagram.com/{post.header.instagram}"
-        target="_blank"
-        rel="noreferrer">
-        @{post.header.instagram}
-      </a>
-    </div>
-
-    <div class="contact-section">
-      <div>FACEBOOK</div>
-      <a
-        href="https://facebook.com/novembremagazineworld"
-        target="_blank"
-        rel="noreferrer">
-        @novembremagazineworld
-      </a>
-    </div>
-
-    <div class="contact-section">
-      <div>LINKEDIN</div>
-      <a href="https://www.linkedin.com/novembre-magazine" target="_blank">
-        @novembre-magazine
-      </a>
-    </div>
-
-    <div class="contact-section">
+    <div class="contact-section mail">
       <NewsletterSignUp />
     </div>
 

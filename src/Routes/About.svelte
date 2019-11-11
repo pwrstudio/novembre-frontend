@@ -1,35 +1,39 @@
 <script>
   // # # # # # # # # # # # # #
   //
-  //  Page
+  //  ABOUT
   //
   // # # # # # # # # # # # # #
 
+  // *** IMPORTS
+  import { onMount } from "svelte";
+
   // STORES
-  import { navigationColor } from "../stores.js";
+  import { navigationColor, pages, scrollListActive } from "../stores.js";
+  import { renderBlockText } from "../sanity.js";
+  import get from "lodash/get";
+
+  // *** MODULES
+  import Image from "../Components/Modules/Image.svelte";
+  import ImageGroup from "../Components/Modules/ImageGroup.svelte";
+  import VideoEmbed from "../Components/Modules/VideoEmbed.svelte";
+  import Audio from "../Components/Modules/Audio.svelte";
+  import Slideshow from "../Components/Modules/Slideshow.svelte";
 
   // COMPONENTS
   import Footer from "../Components/Footer.svelte";
 
   // PROPS
-  export let endpoint = "";
   export let slug = "";
   export let location = {};
 
-  // VARIABLES
-  // let post = loadData();
-
   navigationColor.set("black");
+  scrollListActive.set(false);
 
-  // async function loadData() {
-  //   try {
-  //     const res = await fetch(endpoint);
-  //     const post = await res.json();
-  //     return post;
-  //   } catch (err) {
-  //     Sentry.captureException(err);
-  //   }
-  // }
+  // *** ON MOUNT
+  onMount(async () => {
+    window.scrollTo(0, 0);
+  });
 </script>
 
 <style lang="scss">
@@ -45,7 +49,6 @@
   }
 
   .about-text {
-    padding: $small-margin;
     padding-top: 100px;
     height: auto;
     max-width: 95%;
@@ -57,20 +60,10 @@
     @include screen-size("small") {
       font-size: $mobile_large;
     }
-  }
 
-  .about-image {
-    width: 100vw;
-    height: 600px;
-
-    @include screen-size("small") {
-      height: 400px;
-    }
-
-    img {
-      height: 100%;
-      width: 100%;
-      object-fit: cover;
+    p {
+      padding: $small-margin;
+      margin-left: $small-margin;
     }
   }
 
@@ -108,95 +101,77 @@
   <title>ABOUT / NOVEMBRE</title>
 </svelte:head>
 
-<!-- {#await post then post} -->
-<article class="about">
+{#await $pages then pages}
+  <article class="about">
 
-  <div class="about-text">
-    Novembre is an online and biannually printed magazine devoted to the
-    products that make contemporary urban life exciting.
-    <br />
-    <br />
-    Under the candid caption “Art practices, beauty & innovations”, we explore
-    the worlds of art and fashion to challenge cultural trends and produce
-    innovative imagery.
-  </div>
+    <div class="about-text">
+      {#each pages.about.content as c}
+        {#if c._type == 'block'}
+          {@html renderBlockText(c)}
+        {/if}
+        {#if c._type == 'singleImage'}
+          <Image
+            imageObject={c.image}
+            inlineDisplay={true}
+            maxHeight={get(c, 'maxHeight', false)}
+            backgroundColor={get(c, 'backgroundColor', false)}
+            caption={get(c, 'caption', false)}
+            alignment={get(c, 'alignment', '')}
+            fullwidth={get(c, 'fullwidth', '')} />
+        {/if}
+        {#if c._type == 'imageGroup'}
+          <ImageGroup
+            imageArray={c.images}
+            inlineDisplay={true}
+            maxHeight={get(c, 'maxHeight', false)}
+            backgroundColor={get(c, 'backgroundColor', false)}
+            alignment={get(c, 'alignment', '')}
+            fullwidth={get(c, 'fullwidth', '')}
+            caption={get(c, 'caption', false)} />
+        {/if}
+        {#if c._type == 'videoLoop'}
+          <VideoLoop
+            url={'https://cdn.sanity.io/files/gj963qwj/production/' + c.video.asset._ref
+                .replace('file-', '')
+                .replace('-mp4', '.mp4')}
+            inlineDisplay={true}
+            maxHeight={get(c, 'maxHeight', false)}
+            backgroundColor={get(c, 'backgroundColor', false)}
+            caption={get(c, 'caption', false)}
+            alignment={get(c, 'alignment', '')}
+            fullwidth={get(c, 'fullwidth', '')} />
+        {/if}
+        {#if c._type == 'video'}
+          <VideoEmbed
+            url={c.video}
+            backgroundColor={get(c, 'backgroundColor', false)}
+            caption={get(c, 'caption', false)} />
+        {/if}
+        {#if c._type == 'slideshow'}
+          <Slideshow imageArray={c.images} />
+        {/if}
+        {#if c._type == 'audio'}
+          <Audio fileObject={c.audio} />
+        {/if}
+      {/each}
+    </div>
 
-  <div class="about-image">
-    <img
-      src="/user/themes/novembre/frontend/img/about-img.jpg"
-      alt="Novembre" />
-  </div>
+    <div class="about-credits">
 
-  <div class="about-credits">
-
-    <div class="about-credits-column">
-      <div class="about-credits-item">
-        <strong>Creative directors</strong>
-        <br />
-        Florence Tétier
-        <br />
-        Jeanne-Salomé Rochat
+      <div class="about-credits-column">
+        {@html renderBlockText(pages.credits.columnOne.content)}
       </div>
-      <div class="about-credits-item">
-        <strong>Editor-in-chief</strong>
-        <br />
-        Florence Tétier
+
+      <div class="about-credits-column">
+        {@html renderBlockText(pages.credits.columnTwo.content)}
       </div>
-      <div class="about-credits-item">
-        <strong>Arts &amp; critic director</strong>
-        <br />
-        Jeanne-Salomé Rochat
+
+      <div class="about-credits-column">
+        {@html renderBlockText(pages.credits.columnThree.content)}
       </div>
     </div>
 
-    <div class="about-credits-column">
-      <div class="about-credits-item">
-        <strong>Editor &amp; luxury consultant</strong>
-        <br />
-        Florian Joye
-      </div>
-      <div class="about-credits-item">
-        <strong>Fashion director</strong>
-        <br />
-        Georgia Pendlebury
-      </div>
-      <div class="about-credits-item">
-        <strong>Editors-at-large</strong>
-        <br />
-        Nicolas Coulomb
-      </div>
-      <div class="about-credits-item">
-        <strong>Legal advisors</strong>
-        <br />
-        Nancy Medina
-        <br />
-        Yannis Egloff
-      </div>
-      <div class="about-credits-item">
-        <strong>Contributing editor</strong>
-        <br />
-        Marisa Makin
-      </div>
-    </div>
+  </article>
 
-    <div class="about-credits-column">
-      <div class="about-credits-item">
-        <strong>Digital Editor</strong>
-        <br />
-        Morgane Nicolas
-      </div>
-      <div class="about-credits-item">
-        <strong>Diffusion &amp; Circulation</strong>
-        <br />
-        K.D. Presse
-        <br />
-        Pineapple Media
-      </div>
-      <div class="about-credits-item">All rights reserved ©2015/16</div>
-    </div>
-  </div>
-
-</article>
-
-<Footer active={true} />
-<!-- {/await} -->
+  <Footer active={true} />
+{/await}

@@ -1,90 +1,63 @@
 <script>
   // # # # # # # # # # # # # #
   //
-  //  Single article page
+  //  ARTICLE
   //
   // # # # # # # # # # # # # #
 
   // *** IMPORTS
-  import { onMount, onDestroy } from "svelte";
+  import { onMount } from "svelte";
   import { fade, slide } from "svelte/transition";
   import { quintOut } from "svelte/easing";
+  import get from "lodash/get";
+  import isEmpty from "lodash/isEmpty";
+  import { urlFor, loadArticle, renderBlockText } from "../sanity.js";
 
   // *** COMPONENTS
   import TaxList from "../Components/TaxList.svelte";
   import Footer from "../Components/Footer.svelte";
   import Preview from "../Components/Preview.svelte";
-
-  // *** MODULES
-  import BodyText from "../Components/Modules/BodyText.svelte";
-  import IntroductionText from "../Components/Modules/IntroductionText.svelte";
-  import QuoteText from "../Components/Modules/QuoteText.svelte";
-  import CreditsText from "../Components/Modules/CreditsText.svelte";
-  import Image from "../Components/Modules/Image.svelte";
-  import Video from "../Components/Modules/Video.svelte";
-  import Embed from "../Components/Modules/Embed.svelte";
-  import Audio from "../Components/Modules/Audio.svelte";
-  import Slideshow from "../Components/Modules/Slideshow.svelte";
-  import Portal from "../Components/Modules/Portal.svelte";
+  import MetaData from "../Components/MetaData.svelte";
 
   // *** STORES
-  import { navigationColor } from "../stores.js";
+  import { navigationColor, scrollListActive } from "../stores.js";
+
+  // *** MODULES
+  import Image from "../Components/Modules/Image.svelte";
+  import ImageGroup from "../Components/Modules/ImageGroup.svelte";
+  import VideoEmbed from "../Components/Modules/VideoEmbed.svelte";
+  import Audio from "../Components/Modules/Audio.svelte";
+  import Slideshow from "../Components/Modules/Slideshow.svelte";
+  import VideoLoop from "../Components/Modules/Video.svelte";
 
   // *** PROPS
   export let slug = "";
-  export let endpoint = "";
-  export let isBureau = false;
   export let location = {};
+
+  // ** CONSTANTS
+  const query =
+    "*[slug.current == $slug]{'previewVideoUrl': preview[0].video.asset->url,..., related[]->{title, 'slug': slug.current, mainImage, 'category': taxonomy.category}}[0]";
 
   // *** VARIABLES
   let currentSlug = slug;
   let title = "";
 
   navigationColor.set("black");
+  scrollListActive.set(false);
 
   // *** REACTIVE
   $: {
     if (slug !== currentSlug) {
-      post = loadData();
+      post = loadArticle(query, { slug: slug });
       currentSlug = slug;
     }
   }
 
-  // *** FUNCTIONS
-  async function loadData() {
-    try {
-      const res = await fetch(endpoint + slug + ".json");
-      const post = await res.json();
-      window.scrollTo(0, 0);
-      title = post.header.htmlTitle.fullTitle + " /";
-      return post;
-    } catch (err) {
-      Sentry.captureException(err);
-    }
-  }
-
-  let post = loadData();
+  let post = loadArticle(query, { slug: slug });
 
   // *** ON MOUNT
   onMount(async () => {
     window.scrollTo(0, 0);
-    if (isBureau) {
-      try {
-        document.getElementsByTagName("html")[0].classList.add("bureau");
-      } catch (err) {
-        Sentry.captureException(err);
-      }
-    }
-  });
-
-  // *** ON MOUNT
-  onDestroy(async () => {
-    window.scrollTo(0, 0);
-    try {
-      document.getElementsByTagName("html")[0].classList.remove("bureau");
-    } catch (err) {
-      Sentry.captureException(err);
-    }
   });
 </script>
 
@@ -162,78 +135,157 @@
 
     @include screen-size("small") {
       font-size: $mobile_large;
-      // margin-bottom: 0px;
     }
+  }
+
+  .bureau {
+    font-family: $sans-stack;
+  }
+
+  a {
+    color: currentColor;
+    text-decoration: none;
+    border-bottom: 1px solid $black;
+    transition: border 0.3s $transition;
+
+    &:hover {
+      border-bottom: 1px solid transparent;
+    }
+  }
+
+  .sidebar-banner {
+    position: fixed;
+    top: 20vh;
+    right: 2 * $small-margin;
+    width: 200px;
+    z-index: 100;
+    border-bottom: 0;
+
+    img {
+      width: 100%;
+      max-height: 70vh;
+      object-fit: contain;
+    }
+
+    @include screen-size("small") {
+      display: none;
+    }
+  }
+
+  .bottom-space {
+    height: $large-vertical-margin;
+    width: 100%;
   }
 </style>
 
-<svelte:head>
-  <title>{title} NOVEMBRE</title>
-</svelte:head>
-
 {#await post then post}
 
-  <article
-    class="article"
-    class:top-padded={post.header.previewType == 'text'}
-    class:bureau={isBureau}>
+  <MetaData {post} />
+
+  {#if post.banner}
+    <a
+      href={post.banner.link}
+      target="_blank"
+      rel="noreferrer"
+      class="sidebar-banner">
+      <img
+        src={urlFor(post.banner.image)
+          .width(500)
+          .quality(90)
+          .auto('format')
+          .url()} />
+    </a>
+  {/if}
+
+  <article class="article">
 
     <!-- HEADER MEDIA -->
-    {#if post.header.previewType != 'text'}
-      <div class="article__header">
-        <Preview {post} isHeader={true} />
-      </div>
-    {/if}
+    <div class="article__header">
+      <Preview {post} isHeader={true} />
+    </div>
 
     <!-- DATE & TAGS -->
-    {#if post.header.taxonomy}
-      <div class="article__tags">
-        <TaxList
-          taxonomy={post.header.taxonomy}
-          white={true}
-          date={post.header.date} />
-      </div>
-    {/if}
+    <div class="article__tags">
+      <TaxList
+        taxonomy={post.taxonomy}
+        white={false}
+        isArticle={true}
+        date={post.publicationDate} />
+    </div>
 
     <!-- TITLE -->
     <h1 class="article__title">
-      {@html post.header.htmlTitle.fullTitle}
+      {@html post.title}
     </h1>
 
     <!-- MAIN CONTENT -->
-    {#if post.header.fieldSelection}
-      {#each post.header.fieldSelection as { select, body, introduction, quote, credits, image, video, embed, audio, slideshow, portal }}
-        {#if select == 'body'}
-          <BodyText {...body} {isBureau} />
-        {:else if select == 'introduction'}
-          <IntroductionText {...introduction} />
-        {:else if select == 'quote'}
-          <QuoteText {...quote} />
-        {:else if select == 'credits'}
-          <CreditsText {...credits} />
-        {:else if select == 'image'}
-          <Image {...image} />
-        {:else if select == 'video'}
-          <Video {...video} />
-        {:else if select == 'embed'}
-          <Embed {...embed} />
-        {:else if select == 'audio'}
-          <Audio {...audio} />
-        {:else if select == 'slideshow'}
-          <Slideshow {...slideshow} isRelated={false} isPreview={false} />
-        {:else if select == 'portal'}
-          <Portal {...portal} />
+    <div class="content">
+      {#each post.content as c}
+        {#if c._type == 'block'}
+          {@html renderBlockText(c)}
+        {/if}
+        {#if c._type == 'singleImage'}
+          <Image
+            imageObject={c.image}
+            inlineDisplay={true}
+            maxHeight={get(c, 'maxHeight', false)}
+            backgroundColor={get(c, 'backgroundColor', false)}
+            caption={get(c, 'caption', false)}
+            alignment={get(c, 'alignment', '')}
+            fullwidth={get(c, 'fullwidth', '')} />
+        {/if}
+        {#if c._type == 'imageGroup'}
+          <ImageGroup
+            imageArray={c.images}
+            inlineDisplay={true}
+            maxHeight={get(c, 'maxHeight', false)}
+            backgroundColor={get(c, 'backgroundColor', false)}
+            alignment={get(c, 'alignment', '')}
+            fullwidth={get(c, 'fullwidth', '')}
+            caption={get(c, 'caption', false)} />
+        {/if}
+        {#if c._type == 'videoLoop'}
+          <VideoLoop
+            url={'https://cdn.sanity.io/files/gj963qwj/production/' + c.video.asset._ref
+                .replace('file-', '')
+                .replace('-mp4', '.mp4')}
+            inlineDisplay={true}
+            autoplay={get(c, 'autoplay', false)}
+            maxHeight={get(c, 'maxHeight', false)}
+            backgroundColor={get(c, 'backgroundColor', false)}
+            caption={get(c, 'caption', false)}
+            alignment={get(c, 'alignment', '')}
+            fullwidth={get(c, 'fullwidth', '')} />
+        {/if}
+        {#if c._type == 'video'}
+          <VideoEmbed
+            url={c.video}
+            backgroundColor={get(c, 'backgroundColor', false)}
+            caption={get(c, 'caption', false)} />
+        {/if}
+        {#if c._type == 'slideshow'}
+          <Slideshow imageArray={c.images} />
+        {/if}
+        {#if c._type == 'audio'}
+          <Audio
+            url={'https://cdn.sanity.io/files/gj963qwj/production/' + c.audio.asset._ref
+                .replace('file-', '')
+                .replace('-mp3', '.mp3')}
+            title={get(c, 'title', '')}
+            link={get(c, 'link', false)}
+            posterImage={get(c, 'image', false)}
+            backgroundColor={get(c, 'backgroundColor.hex', false)}
+            foregroundColor={get(c, 'foregroundColor.hex', false)} />
         {/if}
       {/each}
-    {/if}
+    </div>
 
     <!-- RELATED -->
-    {#if post.header && post.header.related && post.header.related.length > 0}
+    {#if post.related && !isEmpty(post.related)}
       <div class="related-header">RELATED ARTICLES</div>
-      <Slideshow
-        slides={post.header.related}
-        isRelated={true}
-        isPreview={false} />
+      <Slideshow imageArray={post.related} isRelated={true} />
+    {:else}
+      <div class="bottom-space" />
     {/if}
 
   </article>
