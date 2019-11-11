@@ -160,7 +160,7 @@
       margin-bottom: $large-vertical-margin;
 
       @include screen-size("small") {
-        height: 70vh;
+        // height: 70vh;
       }
 
       video {
