@@ -33,7 +33,7 @@
     div {
       user-select: none;
       color: black;
-      font-size: $large;
+      font-size: $intro;
       font-weight: 300;
       line-height: 0.85em;
       text-decoration: none;
@@ -42,7 +42,7 @@
       text-transform: uppercase;
 
       @include screen-size("small") {
-        font-size: $mobile-large;
+        font-size: $mobile-intro;
       }
     }
   }
