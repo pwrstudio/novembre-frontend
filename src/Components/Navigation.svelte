@@ -55,6 +55,8 @@
     font-weight: 300;
     font-size: $large;
 
+    mix-blend-mode: exclusion;
+
     width: 100vw;
     z-index: 100;
 
@@ -118,8 +120,6 @@
       width: 100vw;
       height: auto;
       pointer-events: none;
-      // clip-path: inset(0% 0% 100% 0%);
-      // -webkit-clip-path: inset(0% 0% 100% 0%);
       padding: 10px;
       padding-bottom: 20px;
       background: white;
@@ -200,6 +200,8 @@
     }
 
     &--expanded {
+      mix-blend-mode: normal;
+
       #{$block}__logo {
         svg {
           fill: white;
@@ -233,12 +235,13 @@
     position: absolute;
     right: 10px;
     top: $height;
-    height: 90%;
+    height: 300px;
+    max-height: 90%;
     max-width: 50vw;
 
     img {
-      height: 90%;
-      max-width: 50vw;
+      height: 100%;
+      max-width: 100%;
     }
 
     @include screen-size("small") {
@@ -249,7 +252,7 @@
 
 <nav
   class="navigation"
-  class:navigation--black={$navigationColor === 'black' || menuActive}
+  class:navigation--black={menuActive}
   class:navigation--expanded={menuActive}
   use:links>
 
@@ -257,7 +260,7 @@
 
     <div class="navigation__bar">
       <div class="navigation__logo" on:click={() => (menuActive = !menuActive)}>
-        <Logo white={$navigationColor === 'white' && !menuActive} />
+        <Logo black={menuActive} />
       </div>
       <div
         class="navigation__toggle"
@@ -266,9 +269,9 @@
       </div>
     </div>
 
-    {#if menuActive}
+    <!-- {#if menuActive}
       <div class="bg-bar" />
-    {/if}
+    {/if} -->
 
     <menu class="navigation__menu" on:click={() => (menuActive = !menuActive)}>
 

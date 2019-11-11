@@ -6,7 +6,8 @@
   // # # # # # # # # # # # # #
 
   // *** PROPS
-  export let white = false;
+  export let white = true;
+  export let black = false;
 </script>
 
 <style lang="scss">
@@ -23,9 +24,19 @@
       display: block;
     }
 
-    &--white {
+    path {
+      fill: white;
+    }
+
+    &.white {
       path {
         fill: white;
+      }
+    }
+
+    &.black {
+      path {
+        fill: black;
       }
     }
   }
@@ -33,7 +44,8 @@
 
 <svg
   class="logo"
-  class:logo--white={white}
+  class:white
+  class:black
   version="1.1"
   id="Layer_1"
   xmlns="http://www.w3.org/2000/svg"

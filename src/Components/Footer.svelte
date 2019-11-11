@@ -158,7 +158,7 @@
       <Logo />
     {:else}
       <div on:click={scroll} class="footer__logo">
-        <Logo />
+        <Logo black={true} />
       </div>
     {/if}
   </MediaQuery>
