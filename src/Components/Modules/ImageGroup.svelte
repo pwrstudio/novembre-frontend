@@ -21,6 +21,7 @@
   export let imageArray = [];
   export let caption = false;
   export let isListing = false;
+  export let isHeader = false;
   export let backgroundColor = false;
   export let alignment = "";
   export let fullwidth = false;
@@ -168,8 +169,32 @@
       img {
         margin-bottom: $small-margin;
         float: left;
-        object-position: bottom;
+        object-position: top;
         max-height: 435px;
+        @include screen-size("small") {
+          float: unset;
+        }
+      }
+    }
+  }
+
+  .image-group {
+    &.header {
+      margin-top: 0px;
+      margin-bottom: 0px;
+      padding-bottom: 0;
+      display: inline-block;
+      max-height: 580px;
+      @include screen-size("small") {
+        height: auto;
+        width: 10000px;
+      }
+
+      img {
+        margin-bottom: $small-margin;
+        float: left;
+        object-position: top;
+        max-height: 575px;
         @include screen-size("small") {
           float: unset;
         }
@@ -183,6 +208,7 @@
   <div
     class="image-group {alignment}"
     class:listing={isListing}
+    class:header={isHeader}
     class:fullwidth
     class:group-size-1={imageArray.length === 1}
     class:group-size-2={imageArray.length === 2}
