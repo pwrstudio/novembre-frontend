@@ -7,6 +7,7 @@
 
   // *** IMPORTS
   import { onMount } from "svelte";
+  import { navigate } from "svelte-routing";
   import MediaQuery from "svelte-media-query";
 
   // *** VARIABLES
@@ -43,7 +44,7 @@
 
   const submitSearch = () => {
     if (searchQuery.length > 0) {
-      window.location = "/search/" + searchQuery;
+      navigate("/search/" + searchQuery);
     } else {
       searchActive = false;
     }
