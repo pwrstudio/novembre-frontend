@@ -155,7 +155,7 @@
         <div class="footer__link--hover right">BACK TO TOP</div>
       </div>
 
-      <Logo />
+      <Logo black={true} />
     {:else}
       <div on:click={scroll} class="footer__logo">
         <Logo black={true} />

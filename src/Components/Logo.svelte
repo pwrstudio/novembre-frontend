@@ -8,6 +8,8 @@
   // *** PROPS
   export let white = true;
   export let black = false;
+
+  console.log("black", black);
 </script>
 
 <style lang="scss">
@@ -36,7 +38,7 @@
 
     &.black {
       path {
-        fill: black;
+        fill: black !important;
       }
     }
   }
