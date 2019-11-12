@@ -188,8 +188,8 @@
     em {
       color: white;
       padding-right: 4px;
-      // position: relative;
-      // top: 0px;
+      position: relative;
+      top: -1px;
     }
   }
 
