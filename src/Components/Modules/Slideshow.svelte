@@ -514,7 +514,9 @@
               .auto('format')
               .url()}
             alt={imageArray[0].title} />
-          <div class="slideshow__title">{imageArray[0].title}</div>
+          <div class="slideshow__title">
+            {@html imageArray[0].title}
+          </div>
         </a>
         <a href="/{imageArray[1].category}/{imageArray[1].slug}">
           <img
@@ -524,7 +526,9 @@
               .auto('format')
               .url()}
             alt={imageArray[1].title} />
-          <div class="slideshow__title">{imageArray[1].title}</div>
+          <div class="slideshow__title">
+            {@html imageArray[1].title}
+          </div>
         </a>
       {:else}
         <img
@@ -554,7 +558,9 @@
               .auto('format')
               .url()}
             alt={imageArray[0].title} />
-          <div class="slideshow__title">{imageArray[0].title}</div>
+          <div class="slideshow__title">
+            {@html imageArray[0].title}
+          </div>
         </a>
       {:else}
         <img

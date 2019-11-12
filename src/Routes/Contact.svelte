@@ -49,6 +49,7 @@
     text-transform: uppercase;
     line-height: 1em;
     overflow: hidden;
+    background: #f6f6f6;
     padding-left: 0;
     padding-right: 0;
 

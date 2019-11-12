@@ -84,7 +84,7 @@
     {#if taxonomy.subCategory}
       <span class="taxonomy__item">
         <a href="/{taxonomy.category}/category/{taxonomy.subCategory}">
-          {taxonomy.subCategory}
+          {taxonomy.subCategory.replace('-', ' ')}
         </a>
       </span>
     {/if}
