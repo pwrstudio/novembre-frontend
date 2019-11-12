@@ -372,13 +372,9 @@
 
     .inner {
       display: block;
-      width: 80vw;
-      height: 75vh;
       img {
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
-        object-position: center;
+        max-width: 80vw;
+        max-height: 75vh;
       }
     }
 
