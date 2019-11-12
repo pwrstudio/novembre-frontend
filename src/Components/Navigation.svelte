@@ -19,6 +19,8 @@
 
   // *** VARIABLES
   let menuActive = false;
+  let searchActive = false;
+
   const menuItems = [
     { title: "FEED", target: "/" },
     { title: "MAGAZINE", target: "/magazine" },
@@ -35,8 +37,6 @@
       ? document.querySelector("body").classList.add("no-scroll")
       : document.querySelector("body").classList.remove("no-scroll");
   }
-
-  console.dir($menuBanners);
 </script>
 
 <style lang="scss">
@@ -55,10 +55,10 @@
     font-weight: 300;
     font-size: $large;
 
-    mix-blend-mode: exclusion;
+    mix-blend-mode: difference;
 
     width: 100vw;
-    z-index: 100;
+    z-index: 1000;
 
     color: white;
 
@@ -238,6 +238,13 @@
     height: 300px;
     max-height: 90%;
     max-width: 50vw;
+    opacity: 1;
+    transition: opacity 0.25 ease-out;
+
+    &.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
 
     img {
       height: 100%;
@@ -294,6 +301,9 @@
             on:closeMenu={e => {
               menuActive = false;
             }}
+            on:searchActive={e => {
+              searchActive = true;
+            }}
             {menuActive} />
         </menuitem>
       {/if}
@@ -303,6 +313,7 @@
           <a
             href={menuBanners[0].link}
             target="_blank"
+            class:hidden={searchActive}
             rel="noreferrer"
             class="banner">
             <img

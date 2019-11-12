@@ -75,7 +75,7 @@
 
   <div class="taxonomy" class:white use:links>
 
-    {#if isArticle && !isEmpty(date)}
+    {#if !isEmpty(date)}
       <span class="taxonomy__item date">
         {format(new Date(date), 'yyyy/dd/MM')}
       </span>

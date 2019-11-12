@@ -189,6 +189,7 @@
     font-size: $large;
     font-family: $sans-stack;
     color: black;
+    background: #f6f6f6;
     height: 100vh;
     width: 100vw;
     padding-top: 200px;

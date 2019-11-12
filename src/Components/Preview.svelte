@@ -13,6 +13,7 @@
 
   import has from "lodash/has";
   import get from "lodash/get";
+  import kebabCase from "lodash/kebabCase";
 
   // *** COMPONENTS
   import TaxList from "./TaxList.svelte";
@@ -45,8 +46,6 @@
   @import "../variables.scss";
 
   .preview {
-    $block: &;
-
     position: relative;
     user-select: none;
     color: black;
@@ -93,6 +92,7 @@
         bottom: unset;
         margin-left: $small-margin;
         margin-top: $small-margin;
+        padding-bottom: $small-margin;
       }
 
       @include screen-size("small") {
@@ -150,7 +150,7 @@
       }
     }
 
-    &--multi {
+    &.image-group {
       &.first {
         padding-top: 60px;
       }
@@ -159,7 +159,7 @@
         padding-bottom: 40px;
       }
     }
-    &--text {
+    &.text {
       &.first {
         padding-top: 155px;
       }
@@ -184,7 +184,7 @@
 <Router>
 
   <div
-    class="preview {get(post, 'preview._type', '')}"
+    class="preview {kebabCase(get(post, 'preview._type', ''))}"
     class:loaded
     class:first={isFirst}
     class:white={get(post, 'previewColors.textColor', 'black') == 'white'}

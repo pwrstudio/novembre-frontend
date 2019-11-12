@@ -41,6 +41,7 @@
   // *** VARIABLES
   let currentSlug = slug;
   let title = "";
+  let bannerActive = false;
 
   navigationColor.set("black");
   scrollListActive.set(false);
@@ -58,6 +59,9 @@
   // *** ON MOUNT
   onMount(async () => {
     window.scrollTo(0, 0);
+    setTimeout(() => {
+      bannerActive = true;
+    }, 3000);
   });
 </script>
 
@@ -66,6 +70,7 @@
 
   .article {
     background: white;
+    overflow-x: hidden;
 
     &.top-padded {
       padding-top: 100px;
@@ -108,7 +113,7 @@
 
       @include screen-size("small") {
         font-size: $mobile_xlarge;
-        margin-bottom: $small-vertical-margin;
+        margin-bottom: $large-vertical-margin;
       }
 
       transition: opacity $transition;
@@ -182,9 +187,10 @@
 
   <MetaData {post} />
 
-  {#if post.banner}
+  {#if post.banner && bannerActive}
     <a
       href={post.banner.link}
+      in:fade
       target="_blank"
       rel="noreferrer"
       class="sidebar-banner">

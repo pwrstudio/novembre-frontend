@@ -188,8 +188,8 @@
     em {
       color: white;
       padding-right: 4px;
-      position: relative;
-      top: -1px;
+      // position: relative;
+      // top: 0px;
     }
   }
 
@@ -223,6 +223,13 @@
       margin-right: auto;
       margin-top: 0;
       margin-bottom: $large-vertical-margin;
+
+      @include screen-size("small") {
+        max-width: unset;
+        width: calc(100% - 10px);
+        margin-left: $small-margin;
+        margin-right: $small-margin;
+      }
 
       &.small {
         font-family: $sans-stack;
@@ -366,7 +373,7 @@
     .inner {
       display: block;
       width: 80vw;
-      height: 60vh;
+      height: 75vh;
       img {
         width: 100%;
         height: 100%;
@@ -384,6 +391,10 @@
       transform: scale(1);
       transition: transform 0.25s ease-out;
       cursor: pointer;
+
+      @include screen-size("small") {
+        width: 50px;
+      }
 
       &:hover {
         transform: scale(1.1);
@@ -407,9 +418,15 @@
   .stockists-placeholder {
     a {
       border-bottom: 2px solid black;
+      @include screen-size("small") {
+        border-bottom: 1px solid black;
+      }
 
       &:hover {
         border-bottom: 2px solid transparent;
+        @include screen-size("small") {
+          border-bottom: 1px solid transparent;
+        }
       }
     }
   }
@@ -419,8 +436,16 @@
     a {
       border-bottom: 3px solid black;
 
+      @include screen-size("small") {
+        border-bottom: 1px solid black;
+      }
+
       &:hover {
         border-bottom: 3px solid transparent;
+
+        @include screen-size("small") {
+          border-bottom: 1px solid transparent;
+        }
       }
     }
   }

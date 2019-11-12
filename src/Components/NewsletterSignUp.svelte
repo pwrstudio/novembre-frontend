@@ -10,19 +10,27 @@
 
   // VARIABLES
   let emailAddress = "";
-  let emailName = "";
+  let emailFirstName = "";
+  let emailLastName = "";
   let emailCompany = "";
   let success = false;
 
   // LOGIC
   const submit = () => {
     console.log(emailAddress);
-    console.log(emailName);
+    console.log(emailFirstName);
+    console.log(emailLastName);
     console.log(emailCompany);
 
     fetch(
       "https://testing.novembre.global/user/themes/novembre/dist/php/subscribe.php?email=" +
-        emailAddress
+        encodeURIComponent(emailAddress) +
+        "&firstname=" +
+        encodeURIComponent(emailFirstName) +
+        "&lastname=" +
+        encodeURIComponent(emailLastName) +
+        "&company=" +
+        encodeURIComponent(emailCompany)
     )
       .then(function(response) {
         console.log(response);
@@ -109,11 +117,12 @@
   }
 
   ::-webkit-input-placeholder {
-    color: $black;
+    color: grey;
   }
 
   :-ms-input-placeholder {
     color: $black;
+    opacity: 0.8;
   }
 
   ::placeholder {
@@ -121,7 +130,7 @@
   }
 </style>
 
-<div class="mailing-list">
+<div id="mailing-list" class="mailing-list">
   {#if success}
     <span in:fade>
       <strong>Thank you.</strong>
@@ -135,10 +144,18 @@
 
       <div class="form-section">
         <input
-          name="email_name"
-          placeholder="NAME"
+          name="email_first_name"
+          placeholder="FIRST NAME"
           class="mailing-list__input"
-          bind:value={emailName} />
+          bind:value={emailFirstName} />
+      </div>
+
+      <div class="form-section">
+        <input
+          name="email_last_name"
+          placeholder="LAST NAME"
+          class="mailing-list__input"
+          bind:value={emailLastName} />
       </div>
 
       <div class="form-section">
@@ -157,7 +174,7 @@
       </div>
 
       <div class="form-section submit-button">
-        <button class="submit" on:click={submit}>Sign up</button>
+        <div class="submit" on:click={submit}>Sign up</div>
       </div>
 
     </form>

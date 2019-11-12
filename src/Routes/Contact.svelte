@@ -54,7 +54,7 @@
     padding-right: 0;
 
     @include screen-size("small") {
-      font-size: $mobile-large;
+      font-size: $mobile-body;
       margin-bottom: $small-vertical-margin;
     }
 
@@ -64,6 +64,8 @@
 
       &.mail {
         background: #d9f52c;
+        padding-bottom: 40px;
+        margin-bottom: 0;
       }
 
       a {

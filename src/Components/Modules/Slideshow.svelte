@@ -269,6 +269,7 @@
       bottom: $small-margin;
       left: $small-margin;
       max-width: 95%;
+      color: white;
 
       em {
         font-family: $serif-stack;

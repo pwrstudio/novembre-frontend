@@ -80,7 +80,7 @@
 
       @include screen-size("small") {
         max-width: unset;
-        width: 95vw;
+        width: 85vw;
       }
     }
   }
@@ -90,7 +90,7 @@
       max-width: 40vw;
       @include screen-size("small") {
         max-width: unset;
-        width: 40vw;
+        width: 45vw;
       }
     }
   }
@@ -101,7 +101,7 @@
 
       @include screen-size("small") {
         max-width: unset;
-        width: 30vw;
+        width: 45vw;
       }
     }
   }
@@ -111,7 +111,7 @@
       max-width: 23vw;
       @include screen-size("small") {
         max-width: unset;
-        width: 23vw;
+        width: 45vw;
       }
     }
   }
@@ -164,6 +164,7 @@
       @include screen-size("small") {
         height: auto;
         width: 10000px;
+        max-height: unset;
       }
 
       img {
@@ -173,6 +174,7 @@
         max-height: 435px;
         @include screen-size("small") {
           float: unset;
+          max-height: unset;
         }
       }
     }
@@ -184,7 +186,7 @@
       margin-bottom: 0px;
       padding-bottom: 0;
       display: inline-block;
-      max-height: 580px;
+      max-height: 540px;
       @include screen-size("small") {
         height: auto;
         width: 10000px;
@@ -194,7 +196,7 @@
         margin-bottom: $small-margin;
         float: left;
         object-position: top;
-        max-height: 575px;
+        max-height: 535px;
         @include screen-size("small") {
           float: unset;
         }

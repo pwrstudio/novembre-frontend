@@ -153,6 +153,11 @@
     font-size: $intro;
     font-family: $sans-stack;
 
+    @include screen-size("small") {
+      margin-top: 0px;
+      font-size: $mobile_intro;
+    }
+
     &__item {
       margin-bottom: 2 * $small-vertical-margin;
     }

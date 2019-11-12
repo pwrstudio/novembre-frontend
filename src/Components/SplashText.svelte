@@ -27,7 +27,7 @@
     align-items: flex-end;
 
     @include screen-size("small") {
-      padding-top: 160px;
+      padding-top: 140px;
     }
 
     div {
@@ -42,7 +42,7 @@
       text-transform: uppercase;
 
       @include screen-size("small") {
-        font-size: $mobile-intro;
+        // font-size: $mobile-intro;
       }
     }
   }

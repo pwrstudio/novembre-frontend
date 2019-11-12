@@ -85,6 +85,7 @@
 
       @include screen-size("small") {
         width: 100%;
+        float: unset;
       }
     }
 
