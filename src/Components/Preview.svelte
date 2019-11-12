@@ -223,7 +223,10 @@
 
     {#if get(post, 'preview._type', '') === 'slideshow'}
       <a href="/{post.taxonomy.category}/{post.slug}">
-        <Slideshow isListing={true} imageArray={post.preview.images} />
+        <Slideshow
+          autoplay={post.preview.autoplay}
+          isListing={true}
+          imageArray={post.preview.images} />
       </a>
     {/if}
 

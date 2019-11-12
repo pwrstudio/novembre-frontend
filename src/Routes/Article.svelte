@@ -264,7 +264,7 @@
             caption={get(c, 'caption', false)} />
         {/if}
         {#if c._type == 'slideshow'}
-          <Slideshow imageArray={c.images} />
+          <Slideshow autoplay={c.autoplay} imageArray={c.images} />
         {/if}
         {#if c._type == 'audio'}
           <Audio

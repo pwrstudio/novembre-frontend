@@ -375,13 +375,13 @@
       class="container"
       on:mouseenter={() => {
         hovered = true;
-        if ((autoplay == true || autoplay == 1) && !isRelated && !!isListing) {
+        if ((autoplay == true || autoplay == 1) && !isRelated && !isListing) {
           pauseSlideshow();
         }
       }}
       on:mouseleave={() => {
         hovered = false;
-        if ((autoplay == true || autoplay == 1) && !isRelated && !!isListing) {
+        if ((autoplay == true || autoplay == 1) && !isRelated && !isListing) {
           playSlideshow();
         }
       }}>

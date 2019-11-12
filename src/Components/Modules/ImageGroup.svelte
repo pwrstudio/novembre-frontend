@@ -224,7 +224,7 @@
               .quality(90)
               .auto('format')
               .url() : urlFor(image)
-              .width(800)
+              .width(1200 / imageArray.length)
               .quality(90)
               .auto('format')
               .url()}

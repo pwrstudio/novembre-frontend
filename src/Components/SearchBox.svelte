@@ -9,6 +9,9 @@
   import { onMount } from "svelte";
   import { navigate } from "svelte-routing";
   import MediaQuery from "svelte-media-query";
+  import { createEventDispatcher } from "svelte";
+
+  const dispatch = createEventDispatcher();
 
   // *** VARIABLES
   let searchActive = false;
@@ -45,6 +48,7 @@
   const submitSearch = () => {
     if (searchQuery.length > 0) {
       navigate("/search/" + searchQuery);
+      dispatch("closeMenu", {});
     } else {
       searchActive = false;
     }
@@ -91,7 +95,7 @@
 
       @include screen-size("small") {
         width: 90vw;
-        font-size: $large;
+        font-size: 45px;
         display: none;
         border-bottom: 0;
         background: transparent;
@@ -122,7 +126,7 @@
       cursor: pointer;
 
       @include screen-size("small") {
-        font-size: $large;
+        font-size: 45px;
       }
 
       &:hover {
@@ -133,7 +137,7 @@
         font-size: $large;
 
         @include screen-size("small") {
-          font-size: $large;
+          font-size: 45px;
           font-family: $sans-stack;
           top: unset;
           font-style: normal;
@@ -147,7 +151,7 @@
       line-height: 1em;
 
       @include screen-size("small") {
-        font-size: $large;
+        font-size: 45px;
       }
 
       &:hover {
@@ -158,7 +162,7 @@
         font-size: $large;
 
         @include screen-size("small") {
-          font-size: $large;
+          font-size: 45px;
           font-family: $sans-stack;
           top: unset;
           font-style: normal;

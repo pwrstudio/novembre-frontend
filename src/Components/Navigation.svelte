@@ -142,9 +142,9 @@
       display: block;
       height: 63px;
 
-      // @include screen-size("small") {
-      //   height: 55px;
-      // }
+      @include screen-size("small") {
+        height: 55px;
+      }
     }
 
     &__link {
@@ -159,9 +159,9 @@
         opacity: 1;
         font-weight: 300;
 
-        // @include screen-size("small") {
-        //   font-size: 45px;
-        // }
+        @include screen-size("small") {
+          font-size: 45px;
+        }
       }
 
       &--hover {
@@ -177,7 +177,7 @@
         hyphens: none;
 
         @include screen-size("small") {
-          font-size: $large;
+          font-size: 45px;
           font-family: $sans-stack;
           font-style: normal;
           font-weight: 300;
@@ -290,7 +290,11 @@
         {/each}
 
         <menuitem class="navigation__menu-item">
-          <SearchBox {menuActive} />
+          <SearchBox
+            on:closeMenu={e => {
+              menuActive = false;
+            }}
+            {menuActive} />
         </menuitem>
       {/if}
 
