@@ -10,28 +10,23 @@
 
   // VARIABLES
   let emailAddress = "";
-  let emailFirstName = "";
-  let emailLastName = "";
-  let emailCompany = "";
+  let emailName = "";
   let success = false;
 
   // LOGIC
   const submit = () => {
     console.log(emailAddress);
-    console.log(emailFirstName);
-    console.log(emailLastName);
-    console.log(emailCompany);
+    console.log(emailName);
 
-    fetch(
-      "https://testing.novembre.global/user/themes/novembre/dist/php/subscribe.php?email=" +
-        encodeURIComponent(emailAddress) +
-        "&firstname=" +
-        encodeURIComponent(emailFirstName) +
-        "&lastname=" +
-        encodeURIComponent(emailLastName) +
-        "&company=" +
-        encodeURIComponent(emailCompany)
-    )
+    const url =
+      "https://novembre-email-signup.pwr1.now.sh/api/signup?email=" +
+      encodeURIComponent(emailAddress) +
+      "&name=" +
+      encodeURIComponent(emailName);
+
+    console.log(url);
+
+    fetch(url)
       .then(function(response) {
         console.log(response);
         success = true;
@@ -117,7 +112,7 @@
   }
 
   ::-webkit-input-placeholder {
-    color: grey;
+    color: $black;
   }
 
   :-ms-input-placeholder {
@@ -126,7 +121,8 @@
   }
 
   ::placeholder {
-    color: $black;
+    color: rgba(0, 0, 0, 0.6);
+    font-family: $sans-stack;
   }
 </style>
 
@@ -145,25 +141,9 @@
       <div class="form-section">
         <input
           name="email_first_name"
-          placeholder="FIRST NAME"
+          placeholder="NAME"
           class="mailing-list__input"
-          bind:value={emailFirstName} />
-      </div>
-
-      <div class="form-section">
-        <input
-          name="email_last_name"
-          placeholder="LAST NAME"
-          class="mailing-list__input"
-          bind:value={emailLastName} />
-      </div>
-
-      <div class="form-section">
-        <input
-          name="email_company"
-          placeholder="COMPANY"
-          class="mailing-list__input"
-          bind:value={emailCompany} />
+          bind:value={emailName} />
       </div>
 
       <div class="form-section">

@@ -81,6 +81,14 @@
 
   let feed = doLoad();
 
+  // feed.then(posts => {
+  //   posts.forEach(p => {
+  //     console.log(
+  //       "https://novembre.global/" + p.taxonomy.category + "/" + p.slug
+  //     );
+  //   });
+  // });
+
   // *** REACTIVE
   $: {
     if (query !== currentQuery) {
