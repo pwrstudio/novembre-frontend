@@ -8,6 +8,7 @@
   // *** IMPORT
   import Logo from "./Logo.svelte";
   import MediaQuery from "svelte-media-query";
+  import { Link } from "svelte-routing";
 
   // *** PROPS
   export let active = false;
@@ -155,7 +156,9 @@
         <div class="footer__link--hover right">BACK TO TOP</div>
       </div>
 
-      <Logo black={true} />
+      <div on:click={scroll} class="footer__logo">
+        <Logo black={true} />
+      </div>
     {:else}
       <div on:click={scroll} class="footer__logo">
         <Logo black={true} />

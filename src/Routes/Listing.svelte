@@ -150,6 +150,7 @@
     width: 100%;
     height: 1px;
     background: black;
+    opacity: 0;
   }
 
   .listing {
@@ -233,7 +234,7 @@
         {/if}
 
         {#each feed as post, i}
-          {#if i === 0 && (title === 'Magazine' || title === 'Bureau')}
+          {#if i === 0 && (title === 'Magazine' || title === 'Bureau' || title === 'Landing')}
             <SplashText section={title.toLowerCase()} />
           {/if}
           {#if !isEmpty(feedBanners) && feedBanners.find(b => b.positionInFeed == i)}

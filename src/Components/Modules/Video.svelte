@@ -16,10 +16,11 @@
   // *** IMPORTS
   import MediaQuery from "svelte-media-query";
   import { onMount } from "svelte";
+  import { urlFor } from "../../sanity.js";
 
   // *** PROPS
   export let url = "";
-  export let posterImage = "";
+  export let posterImage = {};
   export let caption = false;
   export let backgroundColor = false;
   export let alignment = "";
@@ -64,7 +65,6 @@
   let post = {};
   let videoUrl = "";
   let videoSrc = "";
-  let posterImageSrc = "";
 
   // *** FUNCTIONS
 
@@ -114,13 +114,6 @@
 
     return `${minutes}:${seconds}`;
   }
-
-  // // --- Build urls
-  // videoUrl = url.replace("https://testing.novembre.global", "");
-  // videoSrc = VIDEO_ROOT + REMOTE_FOLDER + encodeURI(videoUrl);
-  // posterImageSrc = videoSrc.substring(0, videoSrc.length - 4) + ".jpg";
-
-  // console.dir(url);
 
   // *** ON MOUNT
   onMount(async () => {
@@ -266,7 +259,11 @@
     preload="metadata"
     {loop}
     muted={autoplay || isListing}
-    poster={posterImageSrc}
+    poster={posterImage ? urlFor(posterImage)
+          .width(1200)
+          .quality(90)
+          .auto('format')
+          .url() : ''}
     src={url}
     on:mousemove={handleMousemove}
     on:mousedown={handleMousedown}

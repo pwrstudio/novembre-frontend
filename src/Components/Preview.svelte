@@ -19,7 +19,7 @@
   import TaxList from "./TaxList.svelte";
 
   // *** MODULES
-  import Video from "./Modules/Video.svelte";
+  import VideoLoop from "./Modules/Video.svelte";
   import Image from "./Modules/Image.svelte";
   import ImageGroup from "./Modules/ImageGroup.svelte";
   import Slideshow from "./Modules/Slideshow.svelte";
@@ -232,7 +232,11 @@
 
     {#if get(post, 'preview._type', '') === 'videoLoop'}
       <a href="/{post.taxonomy.category}/{post.slug}">
-        <Video isListing={true} fullwidth={true} url={post.previewVideoUrl} />
+        <VideoLoop
+          isListing={true}
+          fullwidth={true}
+          url={post.previewVideoUrl}
+          posterImage={get(post, 'preview.posterImage', post.mainImage)} />
       </a>
     {/if}
 

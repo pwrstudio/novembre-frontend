@@ -10,6 +10,7 @@
   import { Router, links } from "svelte-routing";
   import Flickity from "flickity";
   import imagesLoaded from "imagesloaded";
+  import get from "lodash/get";
 
   import { urlFor } from "../../sanity.js";
 
@@ -38,6 +39,9 @@
   let isPaused = true;
   let loaded = false;
   let hovered = true;
+
+  console.log("slids");
+  console.dir(imageArray);
 
   const pauseSlideshow = () => {
     isPaused = true;
@@ -96,9 +100,6 @@
       loaded = true;
     });
   };
-
-  console.log("IMAGARRAy");
-  console.dir(imageArray);
 
   // *** ON MOUNT
   onMount(async () => {
@@ -280,8 +281,10 @@
         font-size: $mobile_large;
       }
 
-      &--white {
-        color: white;
+      &.double {
+        @include screen-size("small") {
+          font-size: $mobile_intro;
+        }
       }
     }
 
@@ -409,13 +412,15 @@
               <a href="/{slide.category}/{slide.slug}">
                 <img
                   class="slideshow__slide-image slideshow__slide-image--related"
-                  src={urlFor(slide.mainImage)
+                  src={urlFor(get(slide, 'relatedSlideshow.image', slide.mainImage))
                     .height(600)
                     .quality(80)
                     .auto('format')
                     .url()}
                   alt={slide.title} />
-                <div class="slideshow__title">
+                <div
+                  class="slideshow__title"
+                  style="color: {get(slide, 'relatedSlideshow.textColor.hex', 'white')};">
                   {@html slide.title}
                 </div>
               </a>
@@ -509,25 +514,29 @@
       {#if isRelated}
         <a href="/{imageArray[0].category}/{imageArray[0].slug}">
           <img
-            src={urlFor(imageArray[0].mainImage)
+            src={urlFor(get(imageArray[0], 'relatedSlideshow.image', imageArray[0].mainImage))
               .height(600)
               .quality(80)
               .auto('format')
               .url()}
             alt={imageArray[0].title} />
-          <div class="slideshow__title">
+          <div
+            class="slideshow__title double"
+            style="color: {get(imageArray[0], 'relatedSlideshow.textColor.hex', 'white')};">
             {@html imageArray[0].title}
           </div>
         </a>
         <a href="/{imageArray[1].category}/{imageArray[1].slug}">
           <img
-            src={urlFor(imageArray[1].mainImage)
+            src={urlFor(get(imageArray[1], 'relatedSlideshow.image', imageArray[1].mainImage))
               .height(600)
               .quality(80)
               .auto('format')
               .url()}
             alt={imageArray[1].title} />
-          <div class="slideshow__title">
+          <div
+            class="slideshow__title double"
+            style="color: {get(imageArray[1], 'relatedSlideshow.textColor.hex', 'white')};">
             {@html imageArray[1].title}
           </div>
         </a>
@@ -553,13 +562,15 @@
       {#if isRelated}
         <a href="/{imageArray[0].category}/{imageArray[0].slug}">
           <img
-            src={urlFor(imageArray[0].mainImage)
+            src={urlFor(get(imageArray[0], 'relatedSlideshow.image', imageArray[0].mainImage))
               .width(1200)
               .quality(90)
               .auto('format')
               .url()}
             alt={imageArray[0].title} />
-          <div class="slideshow__title">
+          <div
+            class="slideshow__title"
+            style="color: {get(imageArray[0], 'relatedSlideshow.textColor.hex', 'white')};">
             {@html imageArray[0].title}
           </div>
         </a>

@@ -11,6 +11,32 @@
 
   // *** PROPS
   export let section = "landing";
+
+  // *** VARIABLES
+  let backgroundColor = "";
+  let content = [];
+
+  console.dir($pages);
+  console.log(section);
+
+  $pages.then(pages => {
+    console.log(pages);
+    if (section === "landing") {
+      backgroundColor = get(pages, "feedColor.hex", "");
+      content = get(pages, "feed.content", []);
+    }
+    if (section === "magazine") {
+      backgroundColor = get(pages, "magazineColor.hex", "");
+      content = get(pages, "magazine.content", []);
+    }
+    if (section === "bureau") {
+      backgroundColor = get(pages, "bureauColor.hex", "");
+      content = get(pages, "bureau.content", []);
+    }
+
+    console.log(backgroundColor);
+    console.log(content);
+  });
 </script>
 
 <style lang="scss">
@@ -42,28 +68,26 @@
       text-transform: uppercase;
 
       @include screen-size("small") {
-        // font-size: $mobile-intro;
+        font-size: $mobile-intro;
       }
     }
   }
 
-  .magazine {
-    background-color: $hotpink;
-  }
+  // .magazine {
+  //   background-color: $hotpink;
+  // }
 
-  .bureau {
-    background-color: $neongreen;
-  }
+  // .bureau {
+  //   background-color: $neongreen;
+  // }
 
   .landing {
-    display: none;
+    padding-top: 100px;
   }
 </style>
 
-<div class="splash-text {section}">
-  {#await $pages then pages}
-    <div>
-      {@html section === 'magazine' ? renderBlockText(get(pages, 'magazine.content', [])) : renderBlockText(get(pages, 'bureau.content', []))}
-    </div>
-  {/await}
+<div class="splash-text {section}" style="background: {backgroundColor};">
+  <div>
+    {@html renderBlockText(content)}
+  </div>
 </div>

@@ -36,7 +36,7 @@
 
   // ** CONSTANTS
   const query =
-    "*[slug.current == $slug]{'previewVideoUrl': preview[0].video.asset->url,..., related[]->{title, 'slug': slug.current, mainImage, 'category': taxonomy.category}}[0]";
+    "*[slug.current == $slug]{'previewVideoUrl': preview[0].video.asset->url,..., related[]->{title, 'slug': slug.current, mainImage, relatedSlideshow, 'category': taxonomy.category}}[0]";
 
   // *** VARIABLES
   let currentSlug = slug;
@@ -63,6 +63,8 @@
       bannerActive = true;
     }, 3000);
   });
+
+  console.dir(post);
 </script>
 
 <style lang="scss">
@@ -256,6 +258,7 @@
                 .replace('file-', '')
                 .replace('-mp4', '.mp4')}
             inlineDisplay={true}
+            posterImage={get(c, 'preview.posterImage', '')}
             autoplay={get(c, 'autoplay', false)}
             maxHeight={get(c, 'maxHeight', false)}
             backgroundColor={get(c, 'backgroundColor', false)}

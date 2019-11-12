@@ -82,7 +82,8 @@ const sanitizeArticle = res => {
         content: get(res, 'content', []),
         preview: get(res, 'preview[0]', []),
         previewColors: get(res, 'previewColors', []),
-        previewVideoUrl: get(res, 'previewVideoUrl', '')
+        previewVideoUrl: get(res, 'previewVideoUrl', ''),
+        relatedSlideshow: get(res, 'relatedSlideshow', {})
     }
 }
 
