@@ -220,11 +220,11 @@
   <TagBar text={$activeQuery} />
 {/if}
 
-<div class="listing" class:landing={title === 'Landing'}>
+{#await $feedBanners then feedBanners}
 
-  {#await $feedBanners then feedBanners}
+  {#await feed then feed}
 
-    {#await feed then feed}
+    <div class="listing" class:landing={title === 'Landing'}>
 
       <div class="listing__posts" bind:this={postsContainerEl}>
 
@@ -258,9 +258,9 @@
         <div class="sentinel" bind:this={sentinel} />
       {/if}
 
-    {/await}
+    </div>
+
+    <Footer active={true} />
+
   {/await}
-
-</div>
-
-<Footer active={true} />
+{/await}
