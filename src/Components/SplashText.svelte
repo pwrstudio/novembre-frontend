@@ -53,7 +53,7 @@
     align-items: flex-end;
 
     @include screen-size("small") {
-      padding-top: 140px;
+      padding-top: 150px;
     }
 
     div {
