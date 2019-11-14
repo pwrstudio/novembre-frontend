@@ -24,7 +24,7 @@
 
   const title =
     (has(post, "title") && !isEmpty(post.title) ? post.title + " / " : "") +
-    "NOVEMBRE";
+    "NOVEMBRE GLOBAL";
 
   const description =
     has(post, "content") && isArray(post.content) && !isEmpty(post.content)
