@@ -8,7 +8,7 @@
   // *** IMPORT
   import Logo from "./Logo.svelte";
   import MediaQuery from "svelte-media-query";
-  import { Link } from "svelte-routing";
+  import { navigate } from "svelte-routing";
 
   // *** PROPS
   export let active = false;
@@ -53,6 +53,7 @@
 
     &__logo {
       display: block;
+      cursor: pointer;
       @include screen-size("small") {
         position: relative;
         left: -1%;
@@ -156,11 +157,19 @@
         <div class="footer__link--hover right">BACK TO TOP</div>
       </div>
 
-      <div on:click={scroll} class="footer__logo">
+      <div
+        class="footer__logo"
+        on:click={e => {
+          navigate('/');
+        }}>
         <Logo black={true} />
       </div>
     {:else}
-      <div on:click={scroll} class="footer__logo">
+      <div
+        class="footer__logo"
+        on:click={e => {
+          navigate('/');
+        }}>
         <Logo black={true} />
       </div>
     {/if}
