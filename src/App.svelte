@@ -389,7 +389,7 @@
       cursor: pointer;
 
       @include screen-size("small") {
-        width: 50px;
+        width: 30px;
       }
 
       &:hover {
