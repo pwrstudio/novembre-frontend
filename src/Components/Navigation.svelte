@@ -23,8 +23,8 @@
 
   const menuItems = [
     { title: "FEED", target: "/" },
-    { title: "MAGAZINE", target: "/magazine" },
     { title: "BUREAU", target: "/bureau" },
+    { title: "MAGAZINE", target: "/magazine" },
     { title: "ABOUT", target: "/about" },
     { title: "CONTACT", target: "/contact" },
     { title: "STOCKISTS", target: "/stockists" }
