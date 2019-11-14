@@ -56,11 +56,11 @@
     max-width: 95%;
     font-family: $sans-stack;
     line-height: 1em;
-    font-size: $large;
+    font-size: $intro;
     text-transform: uppercase;
 
     @include screen-size("small") {
-      font-size: $mobile_large;
+      font-size: $mobile_intro;
     }
 
     p {

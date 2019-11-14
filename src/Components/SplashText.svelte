@@ -61,7 +61,7 @@
       color: black;
       font-size: $intro;
       font-weight: 300;
-      line-height: 0.85em;
+      line-height: 1em;
       text-decoration: none;
       z-index: 1;
       font-family: $sans-stack;
@@ -72,14 +72,6 @@
       }
     }
   }
-
-  // .magazine {
-  //   background-color: $hotpink;
-  // }
-
-  // .bureau {
-  //   background-color: $neongreen;
-  // }
 
   .landing {
     padding-top: 100px;
