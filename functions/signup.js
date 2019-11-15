@@ -18,8 +18,7 @@ exports.handler = function (event, context, callback) {
         .post("contact", { 'version': 'v3' })
         .request({
             "Email": event.queryStringParameters.email || "",
-            "Name": event.queryStringParameters.name || "",
-            "IsExcludedFromCampaigns": "true"
+            "Name": event.queryStringParameters.name || ""
         })
 
     createContact
@@ -34,15 +33,33 @@ exports.handler = function (event, context, callback) {
 
             addToList
                 .then((result) => {
-                    callback(get(result, "response.Data[0].ID", "No ID"));
+                    callback(
+                        null, {
+                        statusCode: 200,
+                        body: JSON.stringify({
+                            result: result
+                        })
+                    });
                 })
                 .catch((err) => {
-                    callback(err);
+                    callback(
+                        null, {
+                        statusCode: 400,
+                        body: JSON.stringify({
+                            result: err
+                        })
+                    });
                 })
 
         })
         .catch((err) => {
-            callback(err);
+            callback(
+                null, {
+                statusCode: 400,
+                body: JSON.stringify({
+                    result: err
+                })
+            });
         })
 
 }
