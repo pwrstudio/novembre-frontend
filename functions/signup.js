@@ -28,14 +28,14 @@ exports.handler = function (event, context, callback) {
             if (result && result.response && result.response.status === 201) {
                 callback(null, {
                     statusCode: 200,
-                    body: "Hello, World"
+                    body: result.response
                 });
             } else {
-                callback('ERROR');
+                callback(result);
             }
         })
         .catch((err) => {
-            callback('ERROR');
+            callback(err);
         })
 
 }
