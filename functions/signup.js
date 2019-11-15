@@ -10,24 +10,36 @@ const MJ_APIKEY_PRIVATE = '6cf5f30f60d2db2006bf516a25e10400'
 const mailjet = require('node-mailjet')
     .connect(MJ_APIKEY_PUBLIC, MJ_APIKEY_PRIVATE)
 
+const get = require('lodash/get')
 
 exports.handler = function (event, context, callback) {
 
-    const request = mailjet
+    const createContact = mailjet
         .post("contact", { 'version': 'v3' })
         .request({
-            "Email": event.queryStringParameters.email,
-            "Name": event.queryStringParameters.name,
+            "Email": event.queryStringParameters.email || "",
+            "Name": event.queryStringParameters.name || "",
             "IsExcludedFromCampaigns": "true"
         })
 
-    request
+    createContact
         .then((result) => {
-            callback(result);
-            // callback(null, {
-            //     statusCode: 200,
-            //     body: 'Success'
-            // });
+
+            const addToList = mailjet
+                .post("listrecipient", { 'version': 'v3' })
+                .request({
+                    "ContactID": get(result, "response.Data[0].ID", ""),
+                    "ListID": "9UKn",
+                })
+
+            addToList
+                .then((result) => {
+                    callback(get(result, "response.Data[0].ID", "No ID"));
+                })
+                .catch((err) => {
+                    callback(err);
+                })
+
         })
         .catch((err) => {
             callback(err);
