@@ -19,7 +19,7 @@
     console.log(emailName);
 
     const url =
-      "https://novembre-email-signup.pwr1.now.sh/api/signup?email=" +
+      "https://signup-form--novembre.netlify.com/.netlify/functions/signup?email=" +
       encodeURIComponent(emailAddress) +
       "&name=" +
       encodeURIComponent(emailName);
