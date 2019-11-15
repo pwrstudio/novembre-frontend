@@ -27,7 +27,7 @@ exports.handler = function (event, context, callback) {
             const addToList = mailjet
                 .post("listrecipient", { 'version': 'v3' })
                 .request({
-                    "ContactID": get(result, "response.Data[0].ID", ""),
+                    "ContactAlt": event.queryStringParameters.email,
                     "ListID": "9UKn",
                 })
 
