@@ -13,8 +13,6 @@ const mailjet = require('node-mailjet')
 
 exports.handler = function (event, context, callback) {
 
-    console.dir(event)
-
     const request = mailjet
         .post("contact", { 'version': 'v3' })
         .request({
@@ -28,7 +26,7 @@ exports.handler = function (event, context, callback) {
             if (result && result.response && result.response.status === 201) {
                 callback(null, {
                     statusCode: 200,
-                    body: result.response.stringify()
+                    body: event.queryStringParameters.email
                 });
             } else {
                 callback('ERROR TYPE 1');
