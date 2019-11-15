@@ -28,10 +28,10 @@ exports.handler = function (event, context, callback) {
             if (result && result.response && result.response.status === 201) {
                 callback(null, {
                     statusCode: 200,
-                    body: result.response
+                    body: result.response.stringify()
                 });
             } else {
-                callback(result);
+                callback('ERROR TYPE 1');
             }
         })
         .catch((err) => {
