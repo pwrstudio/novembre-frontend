@@ -28,7 +28,7 @@ exports.handler = function (event, context, callback) {
                 .post("listrecipient", { 'version': 'v3' })
                 .request({
                     "ContactAlt": event.queryStringParameters.email,
-                    "ListID": "9UKn",
+                    "ListID": "2363091",
                 })
 
             addToList
