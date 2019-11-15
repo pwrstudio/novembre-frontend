@@ -23,14 +23,11 @@ exports.handler = function (event, context, callback) {
 
     request
         .then((result) => {
-            if (result && result.response && result.response.status === 201) {
-                callback(null, {
-                    statusCode: 200,
-                    body: event.queryStringParameters.email
-                });
-            } else {
-                callback('ERROR TYPE 1');
-            }
+            callback(null, {
+                statusCode: 200,
+                body: 'Success'
+            });
+
         })
         .catch((err) => {
             callback(err);
