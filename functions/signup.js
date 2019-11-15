@@ -23,11 +23,11 @@ exports.handler = function (event, context, callback) {
 
     request
         .then((result) => {
-            callback(null, {
-                statusCode: 200,
-                body: 'Success'
-            });
-
+            callback(result);
+            // callback(null, {
+            //     statusCode: 200,
+            //     body: 'Success'
+            // });
         })
         .catch((err) => {
             callback(err);
