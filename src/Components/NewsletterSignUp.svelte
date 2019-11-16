@@ -1,9 +1,9 @@
 <script>
-  // # # # # # # # # # # # # #
+  // # # # # # # # # # #
   //
-  //  NEWSLETTER SIGN-UP
+  // NEWSLETTER SIGN-UP
   //
-  // # # # # # # # # # # # # #
+  // # # # # # # # # # #
 
   // *** IMPORTS
   import { fade } from "svelte/transition";
@@ -17,26 +17,23 @@
 
   // LOGIC
   const submit = () => {
-    console.log(emailAddress);
-    console.log(emailFirstName);
-    console.log(emailLastName);
-    console.log(emailCompany);
+    const url =
+      "https://novembre.global/.netlify/functions/signup?email=" +
+      encodeURIComponent(emailAddress) +
+      "&firstname=" +
+      encodeURIComponent(emailFirstName) +
+      "&lastname=" +
+      encodeURIComponent(emailLastName) +
+      "&company=" +
+      encodeURIComponent(emailCompany);
 
-    fetch(
-      "https://testing.novembre.global/user/themes/novembre/dist/php/subscribe.php?email=" +
-        encodeURIComponent(emailAddress) +
-        "&firstname=" +
-        encodeURIComponent(emailFirstName) +
-        "&lastname=" +
-        encodeURIComponent(emailLastName) +
-        "&company=" +
-        encodeURIComponent(emailCompany)
-    )
+    fetch(url)
       .then(function(response) {
         console.log(response);
         success = true;
       })
       .catch(err => {
+        console.error(err);
         Sentry.captureException(err);
       });
   };
@@ -117,7 +114,7 @@
   }
 
   ::-webkit-input-placeholder {
-    color: grey;
+    color: $black;
   }
 
   :-ms-input-placeholder {
@@ -126,7 +123,8 @@
   }
 
   ::placeholder {
-    color: $black;
+    color: rgba(0, 0, 0, 0.6);
+    font-family: $sans-stack;
   }
 </style>
 

@@ -124,9 +124,9 @@
       {/each}
     </div>
 
-    <!-- <div class="contact-section mail">
+    <div class="contact-section mail">
       <NewsletterSignUp />
-    </div> -->
+    </div>
 
   </article>
 

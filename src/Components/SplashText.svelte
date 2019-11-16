@@ -16,11 +16,7 @@
   let backgroundColor = "";
   let content = [];
 
-  console.dir($pages);
-  console.log(section);
-
   $pages.then(pages => {
-    console.log(pages);
     if (section === "landing") {
       backgroundColor = get(pages, "feedColor.hex", "");
       content = get(pages, "feed.content", []);
@@ -33,9 +29,6 @@
       backgroundColor = get(pages, "bureauColor.hex", "");
       content = get(pages, "bureau.content", []);
     }
-
-    console.log(backgroundColor);
-    console.log(content);
   });
 </script>
 
