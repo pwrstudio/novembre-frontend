@@ -63,8 +63,6 @@
       bannerActive = true;
     }, 3000);
   });
-
-  console.dir(post);
 </script>
 
 <style lang="scss">

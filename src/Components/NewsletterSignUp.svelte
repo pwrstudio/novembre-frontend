@@ -1,30 +1,31 @@
 <script>
-  // # # # # # # # # # # # # #
+  // # # # # # # # # # #
   //
-  //  NEWSLETTER SIGN-UP
+  // NEWSLETTER SIGN-UP
   //
-  // # # # # # # # # # # # # #
+  // # # # # # # # # # #
 
   // *** IMPORTS
   import { fade } from "svelte/transition";
 
   // VARIABLES
   let emailAddress = "";
-  let emailName = "";
+  let emailFirstName = "";
+  let emailLastName = "";
+  let emailCompany = "";
   let success = false;
 
   // LOGIC
   const submit = () => {
-    console.log(emailAddress);
-    console.log(emailName);
-
     const url =
-      "https://signup-form--novembre.netlify.com/.netlify/functions/signup?email=" +
+      "https://novembre.global/.netlify/functions/signup?email=" +
       encodeURIComponent(emailAddress) +
-      "&name=" +
-      encodeURIComponent(emailName);
-
-    console.log(url);
+      "&firstname=" +
+      encodeURIComponent(emailFirstName) +
+      "&lastname=" +
+      encodeURIComponent(emailLastName) +
+      "&company=" +
+      encodeURIComponent(emailCompany);
 
     fetch(url)
       .then(function(response) {
@@ -32,6 +33,7 @@
         success = true;
       })
       .catch(err => {
+        console.error(err);
         Sentry.captureException(err);
       });
   };
@@ -141,9 +143,25 @@
       <div class="form-section">
         <input
           name="email_first_name"
-          placeholder="NAME"
+          placeholder="FIRST NAME"
           class="mailing-list__input"
-          bind:value={emailName} />
+          bind:value={emailFirstName} />
+      </div>
+
+      <div class="form-section">
+        <input
+          name="email_last_name"
+          placeholder="LAST NAME"
+          class="mailing-list__input"
+          bind:value={emailLastName} />
+      </div>
+
+      <div class="form-section">
+        <input
+          name="email_company"
+          placeholder="COMPANY"
+          class="mailing-list__input"
+          bind:value={emailCompany} />
       </div>
 
       <div class="form-section">

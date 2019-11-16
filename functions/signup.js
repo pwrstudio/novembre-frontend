@@ -1,6 +1,6 @@
 /**
  *
- * Create a new contact:
+ * Create a new contact
  *
  */
 
@@ -17,8 +17,7 @@ exports.handler = function (event, context, callback) {
     const createContact = mailjet
         .post("contact", { 'version': 'v3' })
         .request({
-            "Email": event.queryStringParameters.email || "",
-            "Name": event.queryStringParameters.name || ""
+            "Email": event.queryStringParameters.email || ""
         })
 
     createContact

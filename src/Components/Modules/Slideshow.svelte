@@ -40,9 +40,6 @@
   let loaded = false;
   let hovered = true;
 
-  console.log("slids");
-  console.dir(imageArray);
-
   const pauseSlideshow = () => {
     isPaused = true;
   };
