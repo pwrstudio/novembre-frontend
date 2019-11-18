@@ -7,7 +7,6 @@
 
   // *** IMPORTS
   import { onMount } from "svelte";
-  import mapboxgl from "mapbox-gl";
   import { fade } from "svelte/transition";
   import { tick } from "svelte/internal";
   import { renderBlockText } from "../sanity.js";
