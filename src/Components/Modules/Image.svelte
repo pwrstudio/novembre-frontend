@@ -36,7 +36,7 @@
     ? urlFor(imageObject)
         .width(1800)
         .height(1200)
-        .quality(100)
+        .quality(90)
         .auto("format")
         .url()
     : urlFor(imageObject)
