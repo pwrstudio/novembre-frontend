@@ -64,7 +64,6 @@ const serializers = {
     }
 }
 
-
 const sanitizeArticle = res => {
     return {
         id: get(res, '_id', ''),
@@ -109,7 +108,7 @@ export const loadArticle = async (query, params) => {
     }
 }
 
-export const loadFeed = async (query, params, index) => {
+export const loadFeed = async (query, params) => {
     try {
         const res = await client.fetch(query, params)
         if (res === null) {

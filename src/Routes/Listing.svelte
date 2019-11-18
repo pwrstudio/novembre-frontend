@@ -10,6 +10,8 @@
   import { fade, slide, fly } from "svelte/transition";
   import { navigate } from "svelte-routing";
   import isEmpty from "lodash/isEmpty";
+  import isArray from "lodash/isArray";
+  import get from "lodash/get";
   import { urlFor, loadFeed } from "../sanity.js";
 
   // *** COMPONENTS
@@ -30,8 +32,6 @@
 
   // *** PROPS
   export let title = "";
-  export let showFooter = true;
-  export let isQuery = false;
   export let query = false;
   export let location = {};
 
@@ -39,66 +39,113 @@
   let sentinel = {};
   let postsContainerEl = {};
 
+  // *** CONSTANTS
+  const BATCH_SIZE = 5;
+
   // *** VARIABLES
-  let count = 0;
   let index = 0;
-  let finishedLoading = false;
   let currentQuery = query;
   let sanityQuery = "";
   let sanityParams = {};
+  let postsArray = [];
+
+  const logSitemap = posts => {
+    posts.forEach(p => {
+      console.log(
+        "https://novembre.global/" + p.taxonomy.category + "/" + p.slug
+      );
+    });
+  };
 
   const doLoad = () => {
     if (title === "Landing") {
       sanityQuery =
-        '*[_type == "article" && editorialState == "live" && defined(preview)] | order(publicationDate desc){title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}';
+        '*[_type == "article" && editorialState == "live" && defined(preview)] | order(publicationDate desc){"totalPosts": count(*[_type == "article" && editorialState == "live" && defined(preview)]), title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}[$start...$end]';
+      sanityParams = {
+        start: index * BATCH_SIZE,
+        end: (index + 1) * BATCH_SIZE
+      };
     } else if (title === "Magazine") {
       sanityQuery =
-        '*[_type == "article" && editorialState == "live" && defined(preview) && taxonomy.category == "magazine" ] | order(publicationDate desc){title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}';
+        '*[_type == "article" && editorialState == "live" && defined(preview) && taxonomy.category == "magazine" ] | order(publicationDate desc){"totalPosts": count(*[_type == "article" && editorialState == "live" && defined(preview) && taxonomy.category == "magazine" ]), title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}[$start...$end]';
+      sanityParams = {
+        start: index * BATCH_SIZE,
+        end: (index + 1) * BATCH_SIZE
+      };
     } else if (title === "Bureau") {
       sanityQuery =
-        '*[_type == "article" && editorialState == "live" && defined(preview) && taxonomy.category == "bureau"] | order(publicationDate desc){title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}';
+        '*[_type == "article" && editorialState == "live" && defined(preview) && taxonomy.category == "bureau"] | order(publicationDate desc){"totalPosts": count(*[_type == "article" && editorialState == "live" && defined(preview) && taxonomy.category == "bureau"]), title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}[$start...$end]';
+      sanityParams = {
+        start: index * BATCH_SIZE,
+        end: (index + 1) * BATCH_SIZE
+      };
     } else if (title === "Tag") {
       sanityQuery =
-        '*[_type == "article" && editorialState == "live" && defined(preview) && $tag in taxonomy.tags ] | order(publicationDate desc){title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}';
-      sanityParams = { tag: query };
+        '*[_type == "article" && editorialState == "live" && defined(preview) && $tag in taxonomy.tags] | order(publicationDate desc){"totalPosts": count(*[_type == "article" && editorialState == "live" && defined(preview) && $tag in taxonomy.tags]), title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}[$start...$end]';
+      sanityParams = {
+        tag: query,
+        start: index * BATCH_SIZE,
+        end: (index + 1) * BATCH_SIZE
+      };
     } else if (title === "Search") {
       sanityQuery =
-        '*[_type == "article" && editorialState == "live" && defined(preview) && title match $term || $term in taxonomy.tags ] | order(publicationDate desc){title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}';
-      sanityParams = { term: query };
+        '*[_type == "article" && editorialState == "live" && defined(preview) && title match $term || $term in taxonomy.tags ] | order(publicationDate desc){"totalPosts": count(*[_type == "article" && editorialState == "live" && defined(preview) && title match $term || $term in taxonomy.tags ]), title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}[$start...$end]';
+      sanityParams = {
+        term: query,
+        start: index * BATCH_SIZE,
+        end: (index + 1) * BATCH_SIZE
+      };
     } else if (title === "magsub") {
       sanityQuery =
-        '*[_type == "article" && editorialState == "live" && defined(preview) && taxonomy.category == "magazine" && taxonomy.subCategory == $subcat ] | order(publicationDate desc){title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}';
-      sanityParams = { subcat: query };
+        '*[_type == "article" && editorialState == "live" && defined(preview) && taxonomy.category == "magazine" && taxonomy.subCategory == $subcat ] | order(publicationDate desc){"totalPosts": count(*[_type == "article" && editorialState == "live" && defined(preview) && taxonomy.category == "magazine" && taxonomy.subCategory == $subcat ]), title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}[$start...$end]';
+      sanityParams = {
+        subcat: query,
+        start: index * BATCH_SIZE,
+        end: (index + 1) * BATCH_SIZE
+      };
     } else if (title === "bursub") {
       sanityQuery =
-        '*[_type == "article" && editorialState == "live" && defined(preview) && taxonomy.category == "bureau" && taxonomy.subCategory == $subcat ] | order(publicationDate desc){title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}';
-      sanityParams = { subcat: query };
+        '*[_type == "article" && editorialState == "live" && defined(preview) && taxonomy.category == "bureau" && taxonomy.subCategory == $subcat ] | order(publicationDate desc){"totalPosts": count(*[_type == "article" && editorialState == "live" && defined(preview) && taxonomy.category == "bureau" && taxonomy.subCategory == $subcat ]), title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}[$start...$end]';
+      sanityParams = {
+        subcat: query,
+        start: index * BATCH_SIZE,
+        end: (index + 1) * BATCH_SIZE
+      };
     } else {
       navigate("/404");
     }
-    return loadFeed(sanityQuery, sanityParams, index);
+    loadFeed(sanityQuery, sanityParams, index).then(posts => {
+      postsArray = [...postsArray, ...posts];
+      setTimeout(() => {
+        if (index === 0) {
+          window.scrollTo(0, 0);
+          console.log("Connecting observer");
+          observer.observe(sentinel);
+        }
+        console.log(get(postsArray, "[0].totalPosts", 100));
+        console.log((index + 1) * BATCH_SIZE);
+        if (
+          (index + 1) * BATCH_SIZE >=
+          get(postsArray, "[0].totalPosts", 100)
+        ) {
+          console.log("Disconnecting observer");
+          observer.disconnect();
+        }
+      }, 100);
+    });
   };
 
-  let feed = doLoad();
-
-  // feed.then(posts => {
-  //   posts.forEach(p => {
-  //     console.log(
-  //       "https://novembre.global/" + p.taxonomy.category + "/" + p.slug
-  //     );
-  //   });
-  // });
-
-  // *** REACTIVE
+  // Re-load if query changes
   $: {
     if (query !== currentQuery) {
       currentQuery = query;
-      feed = doLoad();
+      postsArray = [];
+      index = 0;
+      doLoad();
     }
   }
 
-  $: activeQuery.set(query);
-
+  // Enable scroll list for selected listings
   $: title === "bursub" ||
   title === "magsub" ||
   title === "Magazine" ||
@@ -106,48 +153,41 @@
     ? scrollListActive.set(true)
     : scrollListActive.set(false);
 
+  $: activeQuery.set(query);
+
   $: title === "bursub" || title === "Bureau"
     ? activeCategory.set("bureau")
     : activeCategory.set("magazine");
 
   navigationColor.set("white");
 
-  // const observer = new IntersectionObserver(
-  //   entries => {
-  //     entries.forEach(entry => {
-  //       if (entry.intersectionRatio > 0 && firstLoad) {
-  //         if (meta.nextindex < meta.lastindex) {
-  //           loadData(meta.nextindex);
-  //         } else {
-  //           observer.disconnect();
-  //           finishedLoading = true;
-  //         }
-  //       } else {
-  //       }
-  //     });
-  //   },
-  //   { threshold: 0.5 }
-  // );
+  const observer = new IntersectionObserver(
+    entries => {
+      entries.forEach(entry => {
+        if (entry.intersectionRatio > 0) {
+          console.log("SENTINEL HIT");
+          index += 1;
+          doLoad();
+        }
+      });
+    },
+    { threshold: 0.5 }
+  );
 
-  // const repositionSentinel = () => {
-  //   if (postsContainerEl && sentinel) {
-  //     let fourthElementFromEnd = postsContainerEl.querySelector(
-  //       ".preview:nth-last-child(4)"
-  //     );
-  //     if (fourthElementFromEnd) {
-  //       postsContainerEl.insertBefore(sentinel, fourthElementFromEnd);
-  //     }
-  //   }
-  // };
+  const repositionSentinel = () => {
+    if (postsContainerEl && sentinel) {
+      let fourthElementFromEnd = postsContainerEl.querySelector(
+        ".preview:nth-last-child(4)"
+      );
+      if (fourthElementFromEnd)
+        postsContainerEl.insertBefore(sentinel, fourthElementFromEnd);
+    }
+  };
 
   // *** ON MOUNT
   onMount(async () => {
-    try {
-      window.scrollTo(0, 0);
-      // observer.observe(sentinel);
-    } catch (err) {
-      Sentry.captureException(err);
-    }
+    window.scrollTo(0, 0);
+    doLoad();
   });
 </script>
 
@@ -231,17 +271,16 @@
 
 {#await $feedBanners then feedBanners}
 
-  {#await feed then feed}
-
+  {#if isArray(postsArray)}
     <div class="listing" class:landing={title === 'Landing'}>
 
       <div class="listing__posts" bind:this={postsContainerEl}>
 
-        {#if isQuery && feed.length == 0}
+        {#if query && postsArray.length === 0}
           <div class="no-results">No results for “{query}”</div>
         {/if}
 
-        {#each feed as post, i}
+        {#each postsArray as post, i}
           {#if i === 0 && (title === 'Magazine' || title === 'Bureau' || title === 'Landing')}
             <SplashText section={title.toLowerCase()} />
           {/if}
@@ -263,13 +302,10 @@
         {/each}
       </div>
 
-      {#if !finishedLoading && !isQuery}
-        <div class="sentinel" bind:this={sentinel} />
-      {/if}
+      <div class="sentinel" bind:this={sentinel} />
 
     </div>
 
     <Footer active={true} />
-
-  {/await}
+  {/if}
 {/await}

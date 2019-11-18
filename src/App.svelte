@@ -52,8 +52,7 @@
 
   const listingRouteParams = {
     landing: {
-      title: "Landing",
-      showFooter: false
+      title: "Landing"
     },
     magazine: {
       title: "Magazine"
@@ -62,20 +61,16 @@
       title: "Bureau"
     },
     magazineSub: {
-      title: "magsub",
-      isQuery: true
+      title: "magsub"
     },
     bureauSub: {
-      title: "bursub",
-      isQuery: true
+      title: "bursub"
     },
     taxonomy: {
-      title: "Tag",
-      isQuery: true
+      title: "Tag"
     },
     search: {
-      title: "Search",
-      isQuery: true
+      title: "Search"
     }
   };
 
