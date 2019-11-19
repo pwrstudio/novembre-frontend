@@ -20,6 +20,7 @@
   import SplashText from "../Components/SplashText.svelte";
   import MetaData from "../Components/MetaData.svelte";
   import TagBar from "../Components/TagBar.svelte";
+  import Ellipse from "../Components/Ellipse.svelte";
 
   // *** STORES
   import {
@@ -48,6 +49,7 @@
   let sanityQuery = "";
   let sanityParams = {};
   let postsArray = [];
+  let loadingCompleted = false;
 
   const logSitemap = posts => {
     posts.forEach(p => {
@@ -129,6 +131,7 @@
           get(postsArray, "[0].totalPosts", 100)
         ) {
           console.log("Disconnecting observer");
+          loadingCompleted = true;
           observer.disconnect();
         }
       }, 100);
@@ -196,9 +199,17 @@
 
   .sentinel {
     width: 100%;
-    height: 1px;
-    background: black;
-    opacity: 0;
+    height: 400px;
+    text-align: center;
+    line-height: 400px;
+    font-size: $large;
+    font-family: $sans-stack;
+    display: block;
+    background: $grey;
+
+    @include screen-size("small") {
+      font-size: $mobile_large;
+    }
   }
 
   .listing {
@@ -302,7 +313,12 @@
         {/each}
       </div>
 
-      <div class="sentinel" bind:this={sentinel} />
+      {#if !loadingCompleted}
+        <div class="sentinel" bind:this={sentinel}>
+          LOADING
+          <Ellipse />
+        </div>
+      {/if}
 
     </div>
 
