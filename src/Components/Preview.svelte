@@ -193,12 +193,13 @@
     use:links>
 
     <!-- TAGS -->
-    {#if !isFirst && !isHeader}
+    {#if !isHeader}
       <div
         class="preview__tags"
         class:bottom-tags={get(post, 'preview._type', '') == 'imageGroup'}>
         <TaxList
           taxonomy={post.taxonomy}
+          date={post.publicationDate}
           white={get(post, 'previewColors.textColor', 'black') === 'white'} />
       </div>
     {/if}
