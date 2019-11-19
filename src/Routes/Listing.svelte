@@ -134,7 +134,7 @@
           loadingCompleted = true;
           observer.disconnect();
         }
-      }, 100);
+      }, 250);
     });
   };
 
