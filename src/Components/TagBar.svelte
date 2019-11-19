@@ -37,7 +37,7 @@
 
     width: 100%;
     background: black;
-    color: white;
+    color: $white;
     opacity: 1;
     transition: opacity 0.3s ease-out, transform 0.3s ease-out;
   }

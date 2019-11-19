@@ -69,7 +69,7 @@
   @import "../variables.scss";
 
   .article {
-    background: white;
+    background: $white;
     overflow-x: hidden;
 
     &.top-padded {

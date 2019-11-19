@@ -7,7 +7,6 @@
 
   // *** IMPORTS
   import { onMount } from "svelte";
-  import mapboxgl from "mapbox-gl";
   import { fade } from "svelte/transition";
   import { tick } from "svelte/internal";
   import { renderBlockText } from "../sanity.js";
@@ -64,7 +63,8 @@
         "pk.eyJ1IjoicHdyc3R1ZGlvIiwiYSI6ImNpbTJmMWYwazAwbXV2a201dHV4M3Q0MTEifQ.haMHeGT4HNA8zI2S0BDgGg";
       map = new mapboxgl.Map({
         container: mapEl,
-        style: "mapbox://styles/pwrstudio/ck2f16esc0jgk1cljcu5yym1r",
+        style:
+          "mapbox://styles/pwrstudio/ck2f16esc0jgk1cljcu5yym1r?optimize=true",
         center: [34.1, 24.1],
         zoom: 1.3
       });

@@ -51,6 +51,7 @@
     color: black;
     opacity: 0;
     overflow: hidden;
+    background: $white;
 
     &__tags {
       position: absolute;
@@ -97,7 +98,6 @@
 
       @include screen-size("small") {
         font-size: $mobile_large;
-        // hyphens: auto;
       }
 
       &--large-text {
@@ -177,7 +177,7 @@
   }
 
   .white {
-    color: white;
+    color: $white;
   }
 </style>
 
@@ -193,12 +193,13 @@
     use:links>
 
     <!-- TAGS -->
-    {#if !isFirst && !isHeader}
+    {#if !isHeader}
       <div
         class="preview__tags"
         class:bottom-tags={get(post, 'preview._type', '') == 'imageGroup'}>
         <TaxList
           taxonomy={post.taxonomy}
+          date={post.publicationDate}
           white={get(post, 'previewColors.textColor', 'black') === 'white'} />
       </div>
     {/if}

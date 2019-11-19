@@ -39,22 +39,20 @@
   @import "../../variables.scss";
 
   .embed {
-    color: white;
+    color: $white;
     margin-bottom: $large-vertical-margin;
     cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;
 
-    height: $full-height;
+    padding-bottom: $small-vertical-margin;
+    padding-top: $small-vertical-margin;
+
     width: 100vw;
 
-    @include screen-size("small") {
-      height: 70vh;
-    }
-
     .inner {
-      width: 800px;
+      width: 640px;
       margin-left: auto;
       margin-right: auto;
       max-width: 95vw;

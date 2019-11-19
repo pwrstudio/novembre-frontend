@@ -34,9 +34,9 @@
   // *** VARIABLES
   const src = fullwidth
     ? urlFor(imageObject)
-        .width(1800)
-        .height(1200)
-        .quality(100)
+        .width(1600)
+        .height(1100)
+        .quality(90)
         .auto("format")
         .url()
     : urlFor(imageObject)
@@ -102,6 +102,7 @@
     font-weight: 300;
     width: 100%;
     text-align: center;
+    letter-spacing: 0.1em;
   }
 
   .center {

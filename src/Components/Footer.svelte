@@ -15,9 +15,7 @@
 
   const scroll = () => {
     if (document.body.clientHeight > 6000) {
-      window.scrollTo({
-        top: 0
-      });
+      window.scrollTo(0, 0);
     } else {
       window.scrollTo({
         top: 0,

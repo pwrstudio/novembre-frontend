@@ -10,16 +10,14 @@
 
   // *** VARIABLES
   let text = "";
-  let timer;
+  let timer = {};
+
+  const NUMBER_OF_PERIODS = 5;
 
   // *** ON MOUNT
   onMount(async () => {
     timer = setInterval(() => {
-      if (text.length < 3) {
-        text += ".";
-      } else {
-        text = "";
-      }
+      text = text.length < NUMBER_OF_PERIODS ? text + "." : "";
     }, 500);
   });
 

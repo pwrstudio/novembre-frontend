@@ -61,10 +61,10 @@
 
     &.white {
       .taxonomy__item {
-        color: white;
+        color: $white;
 
         &:hover {
-          border-bottom: 1px solid white;
+          border-bottom: 1px solid $white;
         }
       }
     }
@@ -77,7 +77,7 @@
 
     {#if !isEmpty(date)}
       <span class="taxonomy__item date">
-        {format(new Date(date), 'yyyy/dd/MM')}
+        {format(new Date(date), 'yyyy/MM/dd')}
       </span>
     {/if}
 

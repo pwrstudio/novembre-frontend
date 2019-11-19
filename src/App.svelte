@@ -52,8 +52,7 @@
 
   const listingRouteParams = {
     landing: {
-      title: "Landing",
-      showFooter: false
+      title: "Landing"
     },
     magazine: {
       title: "Magazine"
@@ -62,20 +61,16 @@
       title: "Bureau"
     },
     magazineSub: {
-      title: "magsub",
-      isQuery: true
+      title: "magsub"
     },
     bureauSub: {
-      title: "bursub",
-      isQuery: true
+      title: "bursub"
     },
     taxonomy: {
-      title: "Tag",
-      isQuery: true
+      title: "Tag"
     },
     search: {
-      title: "Search",
-      isQuery: true
+      title: "Search"
     }
   };
 
@@ -120,7 +115,7 @@
   }
 
   body {
-    background: white;
+    background: $white;
     padding: 0;
     margin: 0;
     width: 100vw;
@@ -186,7 +181,7 @@
 
   .splash-text {
     em {
-      color: white;
+      color: $white;
       padding-right: 4px;
       position: relative;
       top: -1px;
@@ -234,6 +229,7 @@
       &.small {
         font-family: $sans-stack;
         font-size: $small;
+        letter-spacing: 0.1em;
 
         a {
           color: currentColor;
