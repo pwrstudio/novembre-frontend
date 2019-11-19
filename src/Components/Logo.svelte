@@ -25,12 +25,12 @@
     }
 
     path {
-      fill: white;
+      fill: $white;
     }
 
     &.white {
       path {
-        fill: white;
+        fill: $white;
       }
     }
 

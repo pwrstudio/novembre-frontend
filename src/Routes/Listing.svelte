@@ -223,22 +223,6 @@
     padding-top: 0;
   }
 
-  .message {
-    font-family: $sans-stack;
-    font-size: $large;
-    font-weight: 300;
-    text-transform: uppercase;
-    padding-top: 80px;
-    background: white;
-    color: black;
-    margin-left: $small-margin;
-    min-height: 100vh;
-
-    @include screen-size("small") {
-      font-size: $mobile_large;
-    }
-  }
-
   .query-bar {
     padding-left: $small-margin;
     position: relative;

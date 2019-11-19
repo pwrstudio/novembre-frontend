@@ -33,15 +33,6 @@
   export let muted = true;
   export let controls = false;
 
-  // console.log("caption", caption);
-  // console.log("backgroundColor", backgroundColor);
-  // console.log("alignment", alignment);
-  // console.log("maxHeight", maxHeight);
-  // console.log(fullwidth);
-  // console.log("autoplay", autoplay);
-  // console.log(inlineDisplay);
-  // console.log(isListing);
-
   const customStyles =
     (maxHeight ? "height:" + maxHeight + "vh; " : "") +
     (backgroundColor ? "background:" + backgroundColor.hex + ";" : "");
@@ -65,8 +56,6 @@
   let post = {};
   let videoUrl = "";
   let videoSrc = "";
-
-  // *** FUNCTIONS
 
   // --- Video controls
   function handleMousemove(e) {
@@ -135,7 +124,7 @@
     width: 100%;
     height: auto;
 
-    color: white;
+    color: $white;
 
     font-family: $sans-stack;
     font-size: $small;

@@ -60,7 +60,7 @@
     width: 100vw;
     z-index: 1000;
 
-    color: white;
+    color: $white;
 
     &--black {
       color: black;
@@ -122,7 +122,7 @@
       pointer-events: none;
       padding: 10px;
       padding-bottom: 20px;
-      background: white;
+      background: $white;
       top: 0;
       padding-top: $height;
 
@@ -204,7 +204,7 @@
 
       #{$block}__logo {
         svg {
-          fill: white;
+          fill: $white;
         }
       }
 
@@ -225,7 +225,7 @@
       left: 0;
       width: 100vw;
       height: $height;
-      background: white;
+      background: $white;
       transition: opacity 0.3s $transition;
       display: none;
     }

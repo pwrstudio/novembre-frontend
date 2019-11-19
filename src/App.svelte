@@ -115,7 +115,7 @@
   }
 
   body {
-    background: white;
+    background: $white;
     padding: 0;
     margin: 0;
     width: 100vw;
@@ -181,7 +181,7 @@
 
   .splash-text {
     em {
-      color: white;
+      color: $white;
       padding-right: 4px;
       position: relative;
       top: -1px;

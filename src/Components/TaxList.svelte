@@ -61,10 +61,10 @@
 
     &.white {
       .taxonomy__item {
-        color: white;
+        color: $white;
 
         &:hover {
-          border-bottom: 1px solid white;
+          border-bottom: 1px solid $white;
         }
       }
     }

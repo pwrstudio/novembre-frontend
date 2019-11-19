@@ -51,6 +51,7 @@
     color: black;
     opacity: 0;
     overflow: hidden;
+    background: $white;
 
     &__tags {
       position: absolute;
@@ -97,7 +98,6 @@
 
       @include screen-size("small") {
         font-size: $mobile_large;
-        // hyphens: auto;
       }
 
       &--large-text {
@@ -177,7 +177,7 @@
   }
 
   .white {
-    color: white;
+    color: $white;
   }
 </style>
 

@@ -213,7 +213,7 @@
     }
 
     &__slide-caption {
-      color: white;
+      color: $white;
       position: absolute;
       bottom: 0;
       left: 0;
@@ -267,7 +267,7 @@
       bottom: $small-margin;
       left: $small-margin;
       max-width: 95%;
-      color: white;
+      color: $white;
 
       em {
         font-family: $serif-stack;
