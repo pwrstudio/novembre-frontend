@@ -15,7 +15,7 @@
   // *** ON MOUNT
   onMount(async () => {
     timer = setInterval(() => {
-      if (text.length < 3) {
+      if (text.length < 5) {
         text += ".";
       } else {
         text = "";

@@ -199,13 +199,14 @@
 
   .sentinel {
     width: 100%;
-    height: 400px;
+    height: 300px;
     text-align: center;
-    line-height: 400px;
+    line-height: 300px;
     font-size: $large;
     font-family: $sans-stack;
     display: block;
     background: $grey;
+    color: $darkgrey;
 
     @include screen-size("small") {
       font-size: $mobile_large;
