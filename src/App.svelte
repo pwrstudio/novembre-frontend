@@ -229,6 +229,7 @@
       &.small {
         font-family: $sans-stack;
         font-size: $small;
+        letter-spacing: 0.1em;
 
         a {
           color: currentColor;
