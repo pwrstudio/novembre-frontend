@@ -77,7 +77,7 @@
 
     {#if !isEmpty(date)}
       <span class="taxonomy__item date">
-        {format(new Date(date), 'yyyy/dd/MM')}
+        {format(new Date(date), 'yyyy/MM/dd')}
       </span>
     {/if}
 
