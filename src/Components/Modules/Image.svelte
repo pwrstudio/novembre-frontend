@@ -34,8 +34,8 @@
   // *** VARIABLES
   const src = fullwidth
     ? urlFor(imageObject)
-        .width(1800)
-        .height(1200)
+        .width(1600)
+        .height(1100)
         .quality(90)
         .auto("format")
         .url()
