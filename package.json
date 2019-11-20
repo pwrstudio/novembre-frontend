@@ -27,6 +27,7 @@
     "@sanity/image-url": "^0.140.15",
     "core-js": "^3.2.1",
     "date-fns": "^2.7.0",
+    "date-fns-tz": "^1.0.8",
     "flickity-as-nav-for": "^2.0.1",
     "imagesloaded": "^4.1.4",
     "intersection-observer": "^0.7.0",
