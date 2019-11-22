@@ -13,6 +13,7 @@
   import isArray from "lodash/isArray";
   import get from "lodash/get";
   import { urlFor, loadFeed } from "../sanity.js";
+  import { zonedTimeToUtc } from "date-fns-tz";
 
   // *** COMPONENTS
   import Preview from "../Components/Preview.svelte";
@@ -60,58 +61,72 @@
   };
 
   const doLoad = () => {
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    console.log(tz);
+    let currentTime = format(
+      zonedTimeToUtc(new Date(), tz),
+      "yyyy-MM-dd'T'hh:mm:00:000'Z'"
+    );
+
     if (title === "Landing") {
       sanityQuery =
-        '*[_type == "article" && editorialState == "live" && defined(preview)] | order(stickied desc, publicationDate desc){publicationDate, "totalPosts": count(*[_type == "article" && editorialState == "live" && defined(preview)]), title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}[$start...$end]';
+        '*[_type == "article" && editorialState == "preview" && defined(preview) && $currentTime > publicationDate] | order(stickied desc, publicationDate desc){publicationDate, "totalPosts": count(*[_type == "article" && editorialState == "live" && defined(preview)]), title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}[$start...$end]';
       sanityParams = {
         start: index * BATCH_SIZE,
-        end: (index + 1) * BATCH_SIZE
+        end: (index + 1) * BATCH_SIZE,
+        currentTime: currentTime
       };
     } else if (title === "Magazine") {
       sanityQuery =
-        '*[_type == "article" && editorialState == "live" && defined(preview) && taxonomy.category == "magazine" ] | order(stickied desc, publicationDate desc){publicationDate, "totalPosts": count(*[_type == "article" && editorialState == "live" && defined(preview) && taxonomy.category == "magazine" ]), title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}[$start...$end]';
+        '*[_type == "article" && editorialState == "live" && defined(preview) && taxonomy.category == "magazine" && $currentTime > publicationDate ] | order(stickied desc, publicationDate desc){publicationDate, "totalPosts": count(*[_type == "article" && editorialState == "live" && defined(preview) && taxonomy.category == "magazine" ]), title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}[$start...$end]';
       sanityParams = {
         start: index * BATCH_SIZE,
-        end: (index + 1) * BATCH_SIZE
+        end: (index + 1) * BATCH_SIZE,
+        currentTime: currentTime
       };
     } else if (title === "Bureau") {
       sanityQuery =
-        '*[_type == "article" && editorialState == "live" && defined(preview) && taxonomy.category == "bureau"] | order(stickied desc, publicationDate desc){publicationDate, "totalPosts": count(*[_type == "article" && editorialState == "live" && defined(preview) && taxonomy.category == "bureau"]), title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}[$start...$end]';
+        '*[_type == "article" && editorialState == "live" && defined(preview) && taxonomy.category == "bureau" && $currentTime > publicationDate] | order(stickied desc, publicationDate desc){publicationDate, "totalPosts": count(*[_type == "article" && editorialState == "live" && defined(preview) && taxonomy.category == "bureau"]), title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}[$start...$end]';
       sanityParams = {
         start: index * BATCH_SIZE,
-        end: (index + 1) * BATCH_SIZE
+        end: (index + 1) * BATCH_SIZE,
+        currentTime: currentTime
       };
     } else if (title === "Tag") {
       sanityQuery =
-        '*[_type == "article" && editorialState == "live" && defined(preview) && $tag in taxonomy.tags] | order(publicationDate desc){publicationDate, "totalPosts": count(*[_type == "article" && editorialState == "live" && defined(preview) && $tag in taxonomy.tags]), title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}[$start...$end]';
+        '*[_type == "article" && editorialState == "live" && defined(preview) && $tag in taxonomy.tags && $currentTime > publicationDate] | order(publicationDate desc){publicationDate, "totalPosts": count(*[_type == "article" && editorialState == "live" && defined(preview) && $tag in taxonomy.tags]), title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}[$start...$end]';
       sanityParams = {
         tag: query,
         start: index * BATCH_SIZE,
-        end: (index + 1) * BATCH_SIZE
+        end: (index + 1) * BATCH_SIZE,
+        currentTime: currentTime
       };
     } else if (title === "Search") {
       sanityQuery =
-        '*[_type == "article" && editorialState == "live" && defined(preview) && title match $term || $term in taxonomy.tags ] | order(publicationDate desc){publicationDate, "totalPosts": count(*[_type == "article" && editorialState == "live" && defined(preview) && title match $term || $term in taxonomy.tags ]), title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}[$start...$end]';
+        '*[_type == "article" && editorialState == "live" && defined(preview) && $currentTime > publicationDate && (title match $term || $term in taxonomy.tags) ] | order(publicationDate desc){publicationDate, "totalPosts": count(*[_type == "article" && editorialState == "live" && defined(preview) && title match $term || $term in taxonomy.tags ]), title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}[$start...$end]';
       sanityParams = {
         term: `*${query}*`,
         start: index * BATCH_SIZE,
-        end: (index + 1) * BATCH_SIZE
+        end: (index + 1) * BATCH_SIZE,
+        currentTime: currentTime
       };
     } else if (title === "magsub") {
       sanityQuery =
-        '*[_type == "article" && editorialState == "live" && defined(preview) && taxonomy.category == "magazine" && taxonomy.subCategory == $subcat ] | order(publicationDate desc){publicationDate, "totalPosts": count(*[_type == "article" && editorialState == "live" && defined(preview) && taxonomy.category == "magazine" && taxonomy.subCategory == $subcat ]), title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}[$start...$end]';
+        '*[_type == "article" && editorialState == "live" && defined(preview) && taxonomy.category == "magazine" && taxonomy.subCategory == $subcat && $currentTime > publicationDate ] | order(publicationDate desc){publicationDate, "totalPosts": count(*[_type == "article" && editorialState == "live" && defined(preview) && taxonomy.category == "magazine" && taxonomy.subCategory == $subcat ]), title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}[$start...$end]';
       sanityParams = {
         subcat: query,
         start: index * BATCH_SIZE,
-        end: (index + 1) * BATCH_SIZE
+        end: (index + 1) * BATCH_SIZE,
+        currentTime: currentTime
       };
     } else if (title === "bursub") {
       sanityQuery =
-        '*[_type == "article" && editorialState == "live" && defined(preview) && taxonomy.category == "bureau" && taxonomy.subCategory == $subcat ] | order(publicationDate desc){publicationDate, "totalPosts": count(*[_type == "article" && editorialState == "live" && defined(preview) && taxonomy.category == "bureau" && taxonomy.subCategory == $subcat ]), title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}[$start...$end]';
+        '*[_type == "article" && editorialState == "live" && defined(preview) && taxonomy.category == "bureau" && taxonomy.subCategory == $subcat && $currentTime > publicationDate ] | order(publicationDate desc){publicationDate, "totalPosts": count(*[_type == "article" && editorialState == "live" && defined(preview) && taxonomy.category == "bureau" && taxonomy.subCategory == $subcat ]), title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}[$start...$end]';
       sanityParams = {
         subcat: query,
         start: index * BATCH_SIZE,
-        end: (index + 1) * BATCH_SIZE
+        end: (index + 1) * BATCH_SIZE,
+        currentTime: currentTime
       };
     } else {
       navigate("/404");
