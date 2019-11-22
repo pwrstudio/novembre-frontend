@@ -13,7 +13,6 @@
   import isArray from "lodash/isArray";
   import get from "lodash/get";
   import { urlFor, loadFeed } from "../sanity.js";
-  import { format } from "date-fns";
   import { zonedTimeToUtc } from "date-fns-tz";
 
   // *** COMPONENTS
@@ -64,31 +63,9 @@
   const doLoad = () => {
     const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
     console.log(tz);
-    let currentTime = format(
-      zonedTimeToUtc(new Date(), tz),
-      "yyyy-MM-dd'T'hh:mm:00:000'Z'"
-    );
-
-    // TODO: convert timezone
-    // const timeZone = "Europe/Berlin";
-    // const zonedDate = utcToZonedTime(date, timeZone);
-    // const testDate = "2019-11-19T10:00:00.000Z";
-    console.log(currentTime);
-    // console.log(currentTimeUTC);
-    // publicationDate:2019-11-20T10:50:00.000Z
-
-    // 11 => 10
-
-    // console.log(testDate);
-    // console.log(currentTime > testDate);
-    // 019-11-20T07:50:00.000Z
-
-    // const date = getDatePickerValue()     // e.g. 2014-06-25 10:00:00 (picked in any time zone)
-    // const timeZone = getTimeZoneValue()   // e.g. America/Los_Angeles
-
-    // const utcDate = zonedTimeToUtc(date, timeZone)  // In June 10am in Los Angeles is 5pm UTC
-
-    // postToServer(utcDate.toISOString(), timeZone) /
+    // Get current time as UTC
+    const currentTime = zonedTimeToUtc(new Date()).toISOString();
+    console.log("currentTime", currentTime);
 
     if (title === "Landing") {
       sanityQuery =
