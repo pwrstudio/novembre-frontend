@@ -93,7 +93,7 @@
       sanityQuery =
         '*[_type == "article" && editorialState == "live" && defined(preview) && title match $term || $term in taxonomy.tags ] | order(publicationDate desc){publicationDate, "totalPosts": count(*[_type == "article" && editorialState == "live" && defined(preview) && title match $term || $term in taxonomy.tags ]), title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}[$start...$end]';
       sanityParams = {
-        term: query,
+        term: `*${query}*`,
         start: index * BATCH_SIZE,
         end: (index + 1) * BATCH_SIZE
       };
