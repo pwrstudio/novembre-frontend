@@ -70,7 +70,6 @@
 
   .article {
     background: $white;
-    overflow-x: hidden;
 
     &.top-padded {
       padding-top: 100px;
