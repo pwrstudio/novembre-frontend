@@ -301,6 +301,7 @@
               rel="noreferrer"
               class="feed-banner">
               <img
+                alt="novembre.global"
                 src={urlFor(feedBanners.find(b => b.positionInFeed == i).image)
                   .width(1400)
                   .quality(90)

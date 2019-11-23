@@ -456,6 +456,7 @@
         rel="noreferrer"
         class="inner">
         <img
+          alt="novembre.global"
           src={urlFor(overlayBanners[0].image)
             .width(1000)
             .quality(90)

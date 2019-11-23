@@ -149,6 +149,7 @@
     {#each imageArray as slide}
       <div class="carousel-cell slideshow__slide">
         <img
+          alt="novembre.global"
           class="slideshow__slide-image"
           src={urlFor(slide)
             .height(140)

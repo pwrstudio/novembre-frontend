@@ -195,6 +195,7 @@
       rel="noreferrer"
       class="sidebar-banner">
       <img
+        alt="novembre.global"
         src={urlFor(post.banner.image)
           .width(500)
           .quality(90)

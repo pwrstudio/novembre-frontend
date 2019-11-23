@@ -317,6 +317,7 @@
             rel="noreferrer"
             class="banner">
             <img
+              alt="novembre.global"
               src={urlFor(menuBanners[0].image)
                 .width(700)
                 .quality(90)
