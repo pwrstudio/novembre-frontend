@@ -67,9 +67,11 @@
     const currentTime = zonedTimeToUtc(new Date()).toISOString();
     console.log("currentTime", currentTime);
 
+    // && editorialState == "live"
+
     if (title === "Landing") {
       sanityQuery =
-        '*[_type == "article" && editorialState == "live" && $currentTime > publicationDate] | order(publicationDate desc){publicationDate, "totalPosts": count(*[_type == "article" && editorialState == "live" && $currentTime > publicationDate]), title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}[$start...$end]';
+        '*[_type == "article" && $currentTime > publicationDate] | order(publicationDate desc){publicationDate, "totalPosts": count(*[_type == "article" && editorialState == "live" && $currentTime > publicationDate]), title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}[$start...$end]';
       sanityParams = {
         start: index * BATCH_SIZE,
         end: (index + 1) * BATCH_SIZE,

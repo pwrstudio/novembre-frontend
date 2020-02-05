@@ -96,7 +96,7 @@ export const loadArticle = async (query, params) => {
         let postConstruction = sanitizeArticle(res)
 
         const linksQuery =
-            '*[placeAsSidebar._ref == $id && editorialState == "live"][0]'
+            '*[editorialState == "preview" && (placeAsSidebarInAll || placeAsSidebarInSelected[]._ref == $id)][0]'
         postConstruction.banner = await client.fetch(linksQuery, {
             id: postConstruction.id
         })

@@ -100,13 +100,15 @@
         font-size: $mobile_large;
       }
 
-      &--large-text {
+      &.text-only {
         font-size: $xlarge;
         position: static;
         left: unset;
         bottom: unset;
+        padding-top: 40px;
         margin-left: $small-margin;
         margin-top: $small-margin;
+        padding-bottom: $small-margin;
 
         @include screen-size("small") {
           font-size: $large;
@@ -159,11 +161,12 @@
         padding-bottom: 40px;
       }
     }
-    &.text {
-      &.first {
-        padding-top: 155px;
-      }
-    }
+
+    // &.text-only {
+    //   &.first {
+    //     padding-top: 155px;
+    //   }
+    // }
 
     &.header {
       a {
@@ -244,7 +247,7 @@
     {#if !isHeader}
       <a href="/{post.taxonomy.category}/{post.slug}">
         <div
-          class="preview__title preview__title--free"
+          class="preview__title preview__title--free {kebabCase(get(post, 'preview._type', ''))}"
           class:preview__title--free={get(post, 'preview._type', '') == 'imageGroup'}>
           {@html post.title}
         </div>
