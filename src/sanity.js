@@ -108,6 +108,23 @@ export const loadArticle = async (query, params) => {
     }
 }
 
+
+export const loadProduct = async (query, params) => {
+    try {
+        const res = await client.fetch(query, params)
+        if (res === null) {
+            return Promise.reject(new Error(404));
+        }
+
+        console.dir(res)
+
+        return res
+    } catch (err) {
+        Sentry.captureException(err)
+        return Promise.reject(new Error(404));
+    }
+}
+
 export const loadFeed = async (query, params) => {
     try {
         const res = await client.fetch(query, params)
@@ -127,6 +144,24 @@ export const loadPages = async query => {
         if (res === null) {
             return Promise.reject(new Error(404));
         }
+
+        return res
+    } catch (err) {
+        Sentry.captureException(err)
+        return Promise.reject(new Error(404));
+    }
+}
+
+export const loadProducts = async query => {
+    try {
+        const res = await client.fetch(query)
+        if (res === null) {
+            return Promise.reject(new Error(404));
+        }
+
+        // let postConstruction = sanitize(res)
+
+        console.dir(res)
 
         return res
     } catch (err) {

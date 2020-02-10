@@ -31,6 +31,8 @@
   import Listing from "./Routes/Listing.svelte";
   import Article from "./Routes/Article.svelte";
   import About from "./Routes/About.svelte";
+  import Shop from "./Routes/Shop.svelte";
+  import Product from "./Routes/Product.svelte";
   import Contact from "./Routes/Contact.svelte";
   import Stockists from "./Routes/Stockists.svelte";
   import Error404 from "./Routes/Error404.svelte";
@@ -438,6 +440,18 @@
       }
     }
   }
+
+  .snipcart .about-text {
+    z-index: 10000;
+  }
+
+  .description,
+  .details {
+    p {
+      margin-top: 0;
+      margin-bottom: 20px;
+    }
+  }
 </style>
 
 <Navigation />
@@ -525,6 +539,8 @@
   <Route path="search/" component={Listing} {...listingRouteParams.search} />
   <Route path="magazine/:slug" component={Article} />
   <Route path="bureau/:slug" component={Article} />
+  <Route path="shop" component={Shop} />
+  <Route path="shop/:slug" component={Product} />
   <Route path="about" component={About} />
   <Route path="contact" component={Contact} />
   <Route path="stockists" component={Stockists} />

@@ -25,6 +25,7 @@
     { title: "FEED", target: "/" },
     { title: "BUREAU", target: "/bureau" },
     { title: "MAGAZINE", target: "/magazine" },
+    { title: "SHOP", target: "/shop" },
     { title: "ABOUT", target: "/about" },
     { title: "CONTACT", target: "/contact" },
     { title: "STOCKISTS", target: "/stockists" }
