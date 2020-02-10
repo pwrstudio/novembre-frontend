@@ -151,9 +151,9 @@
     }
 
     &.image-group {
-      &.first {
-        padding-top: 60px;
-      }
+      // &.first {
+      //   padding-top: 60px;
+      // }
       &.header {
         padding-top: 70px;
         padding-bottom: 40px;

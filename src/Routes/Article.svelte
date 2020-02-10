@@ -70,7 +70,6 @@
 
   .article {
     background: $white;
-    overflow-x: hidden;
 
     &.top-padded {
       padding-top: 100px;
@@ -195,6 +194,7 @@
       rel="noreferrer"
       class="sidebar-banner">
       <img
+        alt="novembre.global"
         src={urlFor(post.banner.image)
           .width(500)
           .quality(90)
