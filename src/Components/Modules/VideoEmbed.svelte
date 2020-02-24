@@ -11,7 +11,6 @@
   // *** PROPS
   export let url = false;
   export let caption = "";
-  export let size = true;
   export let backgroundColor = false;
 </script>
 
@@ -31,22 +30,35 @@
 
     width: 100vw;
 
+    &.fullscreen {
+      height: 100vh;
+    }
+
     .inner {
-      width: 640px;
-      margin-left: auto;
-      margin-right: auto;
-      max-width: 95vw;
+      width: 720px;
+
+      @include screen-size("small") {
+        width: 480px;
+      }
+
+      iframe {
+        width: 100%;
+      }
     }
   }
 </style>
 
-<div class="embed" style="background-color: {backgroundColor.hex}">
+<div
+  class="embed"
+  style="background-color: {backgroundColor.hex}"
+  class:fullscreen={backgroundColor}>
 
   <div class="inner">
     {#if url.includes('youtube')}
       <iframe
         width="720"
         height="480"
+        title={caption}
         src="https://www.youtube.com/embed/{getVideoId(url).id}"
         frameborder="0"
         allow="accelerometer; autoplay; encrypted-media; gyroscope;
@@ -57,6 +69,7 @@
       <iframe
         width="720"
         height="480"
+        title={caption}
         src="https://player.vimeo.com/video/{getVideoId(url).id}"
         frameborder="0"
         byline="false"
