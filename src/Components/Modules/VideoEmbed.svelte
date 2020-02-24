@@ -5,34 +5,13 @@
   //
   // # # # # # # # # # # # # #
 
+  // *** IMPORTS
+  import getVideoId from "get-video-id";
+
   // *** PROPS
   export let url = false;
   export let caption = "";
-  export let size = true;
   export let backgroundColor = false;
-
-  let post = {};
-
-  // *** FUNCTIONS
-  async function loadData() {
-    try {
-      const res = await fetch(
-        "https://iframe.ly/api/iframely?url=" +
-          url +
-          "&api_key=c64ca8b7ee9ebe2bc48ff5"
-      );
-      const post = await res.json();
-      if (post && post.html) {
-        return post;
-      } else {
-        return { html: "" };
-      }
-    } catch (err) {
-      Sentry.captureException(err);
-    }
-  }
-
-  post = loadData();
 </script>
 
 <style lang="scss">
@@ -51,21 +30,53 @@
 
     width: 100vw;
 
+    &.fullscreen {
+      height: 100vh;
+    }
+
     .inner {
-      width: 640px;
-      margin-left: auto;
-      margin-right: auto;
-      max-width: 95vw;
+      width: 720px;
+
+      @include screen-size("small") {
+        width: 480px;
+      }
+
+      iframe {
+        width: 100%;
+      }
     }
   }
 </style>
 
-<div class="embed" style="background-color: {backgroundColor.hex}">
+<div
+  class="embed"
+  style="background-color: {backgroundColor.hex}"
+  class:fullscreen={backgroundColor}>
 
-  {#await post then post}
-    <div class="inner">
-      {@html post.html}
-    </div>
-  {/await}
+  <div class="inner">
+    {#if url.includes('youtube')}
+      <iframe
+        width="720"
+        height="480"
+        title={caption}
+        src="https://www.youtube.com/embed/{getVideoId(url).id}"
+        frameborder="0"
+        allow="accelerometer; autoplay; encrypted-media; gyroscope;
+        picture-in-picture"
+        allowfullscreen />
+    {/if}
+    {#if url.includes('vimeo')}
+      <iframe
+        width="720"
+        height="480"
+        title={caption}
+        src="https://player.vimeo.com/video/{getVideoId(url).id}"
+        frameborder="0"
+        byline="false"
+        color="#ffffff"
+        allow="autoplay; fullscreen"
+        allowfullscreen />
+    {/if}
+  </div>
 
 </div>

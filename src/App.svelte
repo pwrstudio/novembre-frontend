@@ -202,11 +202,28 @@
 
     @include screen-size("small") {
       font-size: $mobile_large;
-      max-width: 95vw;
+      margin-left: $small-margin;
+      margin-right: $small-margin;
+    }
+
+    a {
+      display: inline-block;
+      height: 0.85em;
     }
   }
 
   .content {
+    a {
+      color: currentColor;
+      text-decoration: none;
+      border-bottom: 1px solid $black;
+      transition: border 0.3s $transition;
+
+      &:hover {
+        border-bottom: 1px solid transparent;
+      }
+    }
+
     p {
       display: block;
       width: 800px;
@@ -262,23 +279,17 @@
         @include screen-size("small") {
           font-size: $mobile_intro;
         }
+
+        a {
+          display: inline-block;
+          height: 1em;
+        }
       }
     }
 
     @include screen-size("small") {
       font-size: $mobile_body;
       margin-bottom: 0px;
-    }
-
-    a {
-      color: currentColor;
-      text-decoration: none;
-      border-bottom: 1px solid $black;
-      transition: border 0.3s $transition;
-
-      &:hover {
-        border-bottom: 1px solid transparent;
-      }
     }
   }
 
