@@ -70,6 +70,8 @@
 
   .article {
     background: $white;
+    width: 100%;
+    overflow: hidden;
 
     &.top-padded {
       padding-top: 100px;
@@ -113,6 +115,7 @@
       @include screen-size("small") {
         font-size: $mobile_xlarge;
         margin-bottom: $large-vertical-margin;
+        overflow: hidden;
       }
 
       transition: opacity $transition;
