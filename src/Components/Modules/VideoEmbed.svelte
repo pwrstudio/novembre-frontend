@@ -5,34 +5,14 @@
   //
   // # # # # # # # # # # # # #
 
+  // *** IMPORTS
+  import getVideoId from "get-video-id";
+
   // *** PROPS
   export let url = false;
   export let caption = "";
   export let size = true;
   export let backgroundColor = false;
-
-  let post = {};
-
-  // *** FUNCTIONS
-  async function loadData() {
-    try {
-      const res = await fetch(
-        "https://iframe.ly/api/iframely?url=" +
-          url +
-          "&api_key=c64ca8b7ee9ebe2bc48ff5"
-      );
-      const post = await res.json();
-      if (post && post.html) {
-        return post;
-      } else {
-        return { html: "" };
-      }
-    } catch (err) {
-      Sentry.captureException(err);
-    }
-  }
-
-  post = loadData();
 </script>
 
 <style lang="scss">
@@ -62,10 +42,28 @@
 
 <div class="embed" style="background-color: {backgroundColor.hex}">
 
-  {#await post then post}
-    <div class="inner">
-      {@html post.html}
-    </div>
-  {/await}
+  <div class="inner">
+    {#if url.includes('youtube')}
+      <iframe
+        width="720"
+        height="480"
+        src="https://www.youtube.com/embed/{getVideoId(url).id}"
+        frameborder="0"
+        allow="accelerometer; autoplay; encrypted-media; gyroscope;
+        picture-in-picture"
+        allowfullscreen />
+    {/if}
+    {#if url.includes('vimeo')}
+      <iframe
+        width="720"
+        height="480"
+        src="https://player.vimeo.com/video/{getVideoId(url).id}"
+        frameborder="0"
+        byline="false"
+        color="#ffffff"
+        allow="autoplay; fullscreen"
+        allowfullscreen />
+    {/if}
+  </div>
 
 </div>
