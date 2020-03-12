@@ -480,7 +480,6 @@
             muted
             loop />
         {/if}
-
         {#if overlayBanners[0].image}
           <img
             alt="novembre.global"

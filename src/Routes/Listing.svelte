@@ -266,7 +266,8 @@
     margin: 0;
     line-height: 0;
 
-    img {
+    img,
+    video {
       width: 100%;
       height: auto;
     }
@@ -294,19 +295,35 @@
           {#if i === 0 && (title === 'Magazine' || title === 'Bureau' || title === 'Landing')}
             <SplashText section={title.toLowerCase()} />
           {/if}
+
           {#if !isEmpty(feedBanners) && feedBanners.find(b => b.positionInFeed == i)}
             <a
               href={feedBanners.find(b => b.positionInFeed == i).link}
               target="_blank"
               rel="noreferrer"
               class="feed-banner">
-              <img
-                alt="novembre.global"
-                src={urlFor(feedBanners.find(b => b.positionInFeed == i).image)
-                  .width(1400)
-                  .quality(90)
-                  .auto('format')
-                  .url()} />
+
+              {#if feedBanners.find(b => b.positionInFeed == i).video}
+                <video
+                  src={'https://cdn.sanity.io/files/gj963qwj/production/' + feedBanners
+                      .find(b => b.positionInFeed == i)
+                      .video.asset._ref.replace('file-', '')
+                      .replace('-mp4', '.mp4')}
+                  autoplay
+                  muted
+                  loop />
+              {/if}
+
+              {#if feedBanners.find(b => b.positionInFeed == i).image}
+                <img
+                  alt="novembre.global"
+                  src={urlFor(feedBanners.find(b => b.positionInFeed == i).image)
+                    .width(1400)
+                    .quality(90)
+                    .auto('format')
+                    .url()} />
+              {/if}
+
             </a>
           {/if}
           <Preview {post} isFirst={i === 0 ? true : false} />
