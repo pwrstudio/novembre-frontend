@@ -383,6 +383,11 @@
         max-width: 80vw;
         max-height: 75vh;
       }
+
+      video {
+        max-width: 70vw;
+        max-height: 65vh;
+      }
     }
 
     .close {
@@ -466,13 +471,25 @@
         target="_blank"
         rel="noreferrer"
         class="inner">
-        <img
-          alt="novembre.global"
-          src={urlFor(overlayBanners[0].image)
-            .width(1000)
-            .quality(90)
-            .auto('format')
-            .url()} />
+        {#if overlayBanners[0].video}
+          <video
+            src={'https://cdn.sanity.io/files/gj963qwj/production/' + overlayBanners[0].video.asset._ref
+                .replace('file-', '')
+                .replace('-mp4', '.mp4')}
+            autoplay
+            muted
+            loop />
+        {/if}
+
+        {#if overlayBanners[0].image}
+          <img
+            alt="novembre.global"
+            src={urlFor(overlayBanners[0].image)
+              .width(1000)
+              .quality(90)
+              .auto('format')
+              .url()} />
+        {/if}
       </a>
 
       <svg
