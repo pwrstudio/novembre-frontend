@@ -316,13 +316,25 @@
             class:hidden={searchActive}
             rel="noreferrer"
             class="banner">
-            <img
-              alt="novembre.global"
-              src={urlFor(menuBanners[0].image)
-                .width(700)
-                .quality(90)
-                .auto('format')
-                .url()} />
+
+            {#if menuBanners[0].video}
+              <video
+                src={'https://cdn.sanity.io/files/gj963qwj/production/' + menuBanners[0].video.asset._ref
+                    .replace('file-', '')
+                    .replace('-mp4', '.mp4')}
+                autoplay
+                muted
+                loop />
+            {/if}
+            {#if menuBanners[0].image}
+              <img
+                alt="novembre.global"
+                src={urlFor(menuBanners[0].image)
+                  .width(700)
+                  .quality(90)
+                  .auto('format')
+                  .url()} />
+            {/if}
           </a>
         {/if}
       {/await}
