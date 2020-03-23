@@ -16,6 +16,7 @@
 
   // COMPONENTS
   import ScrollList from "./Components/ScrollList.svelte";
+  import NewsletterSignUp from "./Components/NewsletterSignUp.svelte";
 
   // STORES
   import {
@@ -36,6 +37,7 @@
   import Error404 from "./Routes/Error404.svelte";
 
   let overlayActive = false;
+  let mailingListOverlayActive = false;
 
   pages.set(loadPages('*[_id == "global-config"][0]'));
   menuBanners.set(
@@ -95,6 +97,7 @@
   if (!Cookies.get("nov_seen-banner")) {
     setTimeout(() => {
       overlayActive = true;
+      mailingListOverlayActive = true;
     }, 3000);
     Cookies.set("nov_seen-banner", "true", {
       expires: 1 / 24
@@ -377,8 +380,13 @@
     align-items: center;
     cursor: pointer;
 
+    &.mailing-list {
+      background: rgba(255, 255, 255, 0.95);
+    }
+
     .inner {
       display: block;
+
       img {
         max-width: 80vw;
         max-height: 75vh;
@@ -458,42 +466,22 @@
 
 <Navigation />
 
-{#await $overlayBanners then overlayBanners}
-  {#if !isEmpty(overlayBanners) && overlayActive}
+<!-- MAILING LIST SIGN UP  -->
+{#await $pages then pages}
+  {#if pages.showMailingListOverlay && mailingListOverlayActive}
     <div
-      class="overlay-banner"
+      id="mailing-list-overlay"
+      class="overlay-banner mailing-list"
       on:click={e => {
-        overlayActive = false;
+        if (e.target.id === 'mailing-list-overlay') mailingListOverlayActive = false;
       }}
       in:fade>
-      <a
-        href={overlayBanners[0].link}
-        target="_blank"
-        rel="noreferrer"
-        class="inner">
-        {#if overlayBanners[0].video}
-          <video
-            src={'https://cdn.sanity.io/files/gj963qwj/production/' + overlayBanners[0].video.asset._ref
-                .replace('file-', '')
-                .replace('-mp4', '.mp4')}
-            autoplay
-            muted
-            loop />
-        {/if}
-        {#if overlayBanners[0].image}
-          <img
-            alt="novembre.global"
-            src={urlFor(overlayBanners[0].image)
-              .width(1000)
-              .quality(90)
-              .auto('format')
-              .url()} />
-        {/if}
-      </a>
-
+      <div class="inner">
+        <NewsletterSignUp compact={true} />
+      </div>
       <svg
         on:click={e => {
-          overlayActive = false;
+          mailingListOverlayActive = false;
         }}
         version="1.1"
         xmlns="http://www.w3.org/2000/svg"
@@ -511,6 +499,62 @@
       </svg>
     </div>
   {/if}
+
+  {#await $overlayBanners then overlayBanners}
+    {#if !pages.showMailingListOverlay && !isEmpty(overlayBanners) && overlayActive}
+      <div
+        class="overlay-banner"
+        on:click={e => {
+          overlayActive = false;
+        }}
+        in:fade>
+        <a
+          href={overlayBanners[0].link}
+          target="_blank"
+          rel="noreferrer"
+          class="inner">
+          {#if overlayBanners[0].video}
+            <video
+              src={'https://cdn.sanity.io/files/gj963qwj/production/' + overlayBanners[0].video.asset._ref
+                  .replace('file-', '')
+                  .replace('-mp4', '.mp4')}
+              autoplay
+              muted
+              loop />
+          {/if}
+          {#if overlayBanners[0].image}
+            <img
+              alt="novembre.global"
+              src={urlFor(overlayBanners[0].image)
+                .width(1000)
+                .quality(90)
+                .auto('format')
+                .url()} />
+          {/if}
+        </a>
+
+        <svg
+          on:click={e => {
+            overlayActive = false;
+          }}
+          version="1.1"
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          x="0px"
+          y="0px"
+          class="close"
+          viewBox="0 0 1000 1000"
+          enable-background="new 0 0 1000 1000"
+          xml:space="preserve">
+          <g
+            transform="translate(0.000000,511.000000) scale(0.100000,-0.100000)">
+            <path
+              d="M146.3,4961c-27.2-27.2-46.3-73.5-46.3-103.5c0-32.7,876.6-928.3,2346.6-2398.3L4795.8,110L2446.6-2239.3C840.4-3845.4,100-4604.9,100-4643c0-68.1,81.7-147,152.4-147c32.7,0,928.3,876.6,2398.3,2346.6L5000-94.2l2349.3-2349.3C8955.4-4049.6,9714.9-4790,9753-4790c68.1,0,147,81.7,147,152.4c0,32.7-876.6,928.3-2346.6,2398.3L5204.2,110l2349.3,2349.3C9159.5,4065.4,9900,4824.9,9900,4863c0,68.1-81.7,147-152.4,147c-32.7,0-928.3-876.6-2398.3-2346.6L5000,314.2L2650.7,2663.4C1044.6,4269.6,285.1,5010,247,5010C214.3,5010,170.8,4988.2,146.3,4961z" />
+          </g>
+        </svg>
+      </div>
+    {/if}
+  {/await}
 {/await}
 
 {#if $scrollListActive && $activeCategory === 'magazine'}
