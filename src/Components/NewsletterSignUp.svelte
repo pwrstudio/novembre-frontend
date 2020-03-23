@@ -8,6 +8,9 @@
   // *** IMPORTS
   import { fade } from "svelte/transition";
 
+  // *** PROPS
+  export let compact = false;
+
   // VARIABLES
   let emailAddress = "";
   let emailFirstName = "";
@@ -88,9 +91,11 @@
       line-height: 1em;
       color: currentColor;
       font-size: $large;
+
       @include screen-size("small") {
         font-size: $mobile-large;
       }
+
       background: transparent;
       outline: none;
       border: none;
@@ -111,6 +116,32 @@
         font-style: italic;
       }
     }
+
+    &.compact {
+      font-size: $intro;
+
+      input {
+        font-size: $intro;
+        border-bottom: 1px solid black;
+
+        @include screen-size("small") {
+          font-size: $mobile-intro;
+          border-bottom: 1px solid black;
+        }
+      }
+
+      .submit {
+        font-size: $intro;
+        @include screen-size("small") {
+          font-size: $mobile-intro;
+        }
+
+        &:hover {
+          top: 3px;
+          left: -5px;
+        }
+      }
+    }
   }
 
   ::-webkit-input-placeholder {
@@ -128,7 +159,7 @@
   }
 </style>
 
-<div id="mailing-list" class="mailing-list">
+<div id="mailing-list" class="mailing-list" class:compact>
   {#if success}
     <span in:fade>
       <strong>Thank you.</strong>
@@ -137,9 +168,14 @@
       shortly.
     </span>
   {:else}
-    <form class="newsletter-signup">
-      <div class="form-section">NEWSLETTER</div>
+    <form class="newsletter-signup" class:compact>
+      {#if compact}
+        <div class="form-section">Subscribe to our correspondence channel</div>
+      {:else}
+        <div class="form-section">NEWSLETTER</div>
+      {/if}
 
+      <!-- {#if !compact} -->
       <div class="form-section">
         <input
           name="email_first_name"
@@ -163,6 +199,7 @@
           class="mailing-list__input"
           bind:value={emailCompany} />
       </div>
+      <!-- {/if} -->
 
       <div class="form-section">
         <input
