@@ -97,9 +97,17 @@
   if (!Cookies.get("nov_seen-banner")) {
     setTimeout(() => {
       overlayActive = true;
-      mailingListOverlayActive = true;
     }, 3000);
     Cookies.set("nov_seen-banner", "true", {
+      expires: 1 / 24
+    });
+  }
+
+  if (!Cookies.get("nov_seen-mailing-list")) {
+    setTimeout(() => {
+      mailingListOverlayActive = true;
+    }, 3000);
+    Cookies.set("nov_seen-mailing-list", "true", {
       expires: 1 / 24
     });
   }

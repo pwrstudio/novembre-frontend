@@ -128,6 +128,35 @@
       <NewsletterSignUp />
     </div>
 
+    <div class="contact-section">
+      {#each pages.socialMedia.content as c}
+        {#if c._type == 'block'}
+          {@html renderBlockText(c)}
+        {/if}
+        {#if c._type == 'singleImage'}
+          <Image
+            imageObject={c.image}
+            caption={get(c, 'caption', false)}
+            alignment={get(c, 'alignment', '')}
+            fullwidth={get(c, 'fullwidth', '')} />
+        {/if}
+        {#if c._type == 'imageGroup'}
+          <ImageGroup
+            imageArray={c.images}
+            caption={get(c, 'caption', false)} />
+        {/if}
+        {#if c._type == 'video'}
+          <VideoEmbed url={c.video} caption={get(c, 'caption', false)} />
+        {/if}
+        {#if c._type == 'slideshow'}
+          <Slideshow imageArray={c.images} />
+        {/if}
+        {#if c._type == 'audio'}
+          <Audio fileObject={c.audio} />
+        {/if}
+      {/each}
+    </div>
+
   </article>
 
   <Footer active={true} />
