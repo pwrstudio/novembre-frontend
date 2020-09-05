@@ -52,6 +52,7 @@
     )
   );
 
+
   const listingRouteParams = {
     landing: {
       title: "Landing"
@@ -93,15 +94,15 @@
     { title: "Workshop", slug: "workshop" },
     { title: "Entertainment", slug: "entertainment" }
   ];
-
-  if (!Cookies.get("nov_seen-banner")) {
+  
+  // if (!Cookies.get("nov_seen-banner")) {
     setTimeout(() => {
       overlayActive = true;
     }, 3000);
-    Cookies.set("nov_seen-banner", "true", {
-      expires: 1 / 24
-    });
-  }
+  //   Cookies.set("nov_seen-banner", "true", {
+  //     expires: 1 / 24
+  //   });
+  // }
 
   if (!Cookies.get("nov_seen-mailing-list")) {
     setTimeout(() => {
@@ -509,7 +510,8 @@
   {/if}
 
   {#await $overlayBanners then overlayBanners}
-    {#if !pages.showMailingListOverlay && !isEmpty(overlayBanners) && overlayActive}
+    {#if !isEmpty(overlayBanners) && overlayActive}
+    dfsdf
       <div
         class="overlay-banner"
         on:click={e => {
@@ -521,7 +523,7 @@
           target="_blank"
           rel="noreferrer"
           class="inner">
-          {#if overlayBanners[0].video}
+          {#if overlayBanners[0].video && overlayBanners[0].video.asset && overlayBanners[0].video.asset._ref}
             <video
               src={'https://cdn.sanity.io/files/gj963qwj/production/' + overlayBanners[0].video.asset._ref
                   .replace('file-', '')

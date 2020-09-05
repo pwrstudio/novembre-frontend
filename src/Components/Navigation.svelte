@@ -317,7 +317,7 @@
             rel="noreferrer"
             class="banner">
 
-            {#if menuBanners[0].video}
+            {#if menuBanners[0].video && menuBanners[0].video.asset && menuBanners[0].video.asset._ref}
               <video
                 src={'https://cdn.sanity.io/files/gj963qwj/production/' + menuBanners[0].video.asset._ref
                     .replace('file-', '')

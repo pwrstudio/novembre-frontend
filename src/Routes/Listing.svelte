@@ -303,7 +303,7 @@
               rel="noreferrer"
               class="feed-banner">
 
-              {#if feedBanners.find(b => b.positionInFeed == i).video}
+              {#if feedBanners.find(b => b.positionInFeed == i)[0].video && feedBanners.find(b => b.positionInFeed == i)[0].video.asset && feedBanners.find(b => b.positionInFeed == i)[0].video.asset._ref}
                 <video
                   src={'https://cdn.sanity.io/files/gj963qwj/production/' + feedBanners
                       .find(b => b.positionInFeed == i)
