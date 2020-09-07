@@ -52,7 +52,6 @@
     )
   );
 
-
   const listingRouteParams = {
     landing: {
       title: "Landing"
@@ -94,11 +93,11 @@
     { title: "Workshop", slug: "workshop" },
     { title: "Entertainment", slug: "entertainment" }
   ];
-  
+
   // if (!Cookies.get("nov_seen-banner")) {
-    setTimeout(() => {
-      overlayActive = true;
-    }, 3000);
+  setTimeout(() => {
+    overlayActive = true;
+  }, 3000);
   //   Cookies.set("nov_seen-banner", "true", {
   //     expires: 1 / 24
   //   });
@@ -511,7 +510,7 @@
 
   {#await $overlayBanners then overlayBanners}
     {#if !isEmpty(overlayBanners) && overlayActive}
-    dfsdf
+      dfsdf
       <div
         class="overlay-banner"
         on:click={e => {
