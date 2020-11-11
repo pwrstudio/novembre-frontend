@@ -56,6 +56,10 @@
 
   let post = loadArticle(query, { slug: slug });
 
+  post.then(p => {
+    console.log('post', p)
+  })
+
   // *** ON MOUNT
   onMount(async () => {
     window.scrollTo(0, 0);
@@ -236,7 +240,7 @@
         {#if c._type == 'singleImage'}
           <Image
             imageObject={c.image}
-            inlineDisplay={true}
+            inlineDisplay={c.noBottomMargin ? false : true}
             maxHeight={get(c, 'maxHeight', false)}
             backgroundColor={get(c, 'backgroundColor', false)}
             caption={get(c, 'caption', false)}
@@ -246,7 +250,7 @@
         {#if c._type == 'imageGroup'}
           <ImageGroup
             imageArray={c.images}
-            inlineDisplay={true}
+            inlineDisplay={c.noBottomMargin ? false : true}
             maxHeight={get(c, 'maxHeight', false)}
             backgroundColor={get(c, 'backgroundColor', false)}
             alignment={get(c, 'alignment', '')}
@@ -258,7 +262,7 @@
             url={'https://cdn.sanity.io/files/gj963qwj/production/' + c.video.asset._ref
                 .replace('file-', '')
                 .replace('-mp4', '.mp4')}
-            inlineDisplay={true}
+            inlineDisplay={c.noBottomMargin ? false : true}
             posterImage={get(c, 'preview.posterImage', '')}
             autoplay={get(c, 'autoplay', false)}
             maxHeight={get(c, 'maxHeight', false)}

@@ -28,6 +28,8 @@
   export let maxHeight = false;
   export let inlineDisplay = false;
 
+  // console.log('__ imageGroup: inlineDisplay =>', inlineDisplay)
+
   const customStyles =
     (maxHeight ? "height:" + maxHeight + "vh; " : "") +
     (backgroundColor ? "background:" + backgroundColor.hex + ";" : "");
@@ -47,8 +49,12 @@
     height: 100vh;
     display: inline-flex;
     padding-bottom: 2 * $small-margin;
-    margin-bottom: $large-vertical-margin;
+    // margin-bottom: $large-vertical-margin;
     align-items: flex-start;
+
+    &.bottom-space {
+      margin-bottom: $large-vertical-margin;
+    }
 
     @include screen-size("small") {
       height: auto;
@@ -217,6 +223,7 @@
     class:group-size-2={imageArray.length === 2}
     class:group-size-3={imageArray.length === 3}
     class:group-size-4={imageArray.length === 4}
+    class:bottom-space={inlineDisplay}
     style={matches ? customStyles : customStylesPhone}>
     {#each imageArray as image}
       <img
