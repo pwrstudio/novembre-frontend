@@ -67,6 +67,7 @@ const serializers = {
 const sanitizeArticle = res => {
     return {
         id: get(res, '_id', ''),
+        adTag: get(res, 'adTag', false),
         editorialState: get(res, 'editorialState', ''),
         title: get(res, 'title', ''),
         mainImage: get(res, 'mainImage', false),
