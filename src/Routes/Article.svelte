@@ -243,6 +243,7 @@
         {#if c._type == 'singleImage'}
           <Image
             imageObject={c.image}
+            linkUrl={c.linkUrl}
             inlineDisplay={c.noBottomMargin ? false : true}
             maxHeight={get(c, 'maxHeight', false)}
             backgroundColor={get(c, 'backgroundColor', false)}
@@ -253,6 +254,7 @@
         {#if c._type == 'imageGroup'}
           <ImageGroup
             imageArray={c.images}
+            linkUrl={c.linkUrl}
             inlineDisplay={c.noBottomMargin ? false : true}
             maxHeight={get(c, 'maxHeight', false)}
             backgroundColor={get(c, 'backgroundColor', false)}

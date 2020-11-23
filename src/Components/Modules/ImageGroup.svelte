@@ -13,32 +13,33 @@
   // # # # # # # # # # # # # #
 
   // *** IMPORTS
-  import MediaQuery from "svelte-media-query";
-  import { fade } from "svelte/transition";
-  import { urlFor } from "../../sanity.js";
+  import MediaQuery from "svelte-media-query"
+  import { fade } from "svelte/transition"
+  import { urlFor } from "../../sanity.js"
 
   // *** PROPS
-  export let imageArray = [];
-  export let caption = false;
-  export let isListing = false;
-  export let isHeader = false;
-  export let backgroundColor = false;
-  export let alignment = "";
-  export let fullwidth = false;
-  export let maxHeight = false;
-  export let inlineDisplay = false;
+  export let imageArray = []
+  export let caption = false
+  export let isListing = false
+  export let isHeader = false
+  export let backgroundColor = false
+  export let alignment = ""
+  export let fullwidth = false
+  export let maxHeight = false
+  export let inlineDisplay = false
+  export let linkUrl = false
 
   // console.log('__ imageGroup: inlineDisplay =>', inlineDisplay)
 
   const customStyles =
     (maxHeight ? "height:" + maxHeight + "vh; " : "") +
-    (backgroundColor ? "background:" + backgroundColor.hex + ";" : "");
+    (backgroundColor ? "background:" + backgroundColor.hex + ";" : "")
 
   const customStylesPhone = backgroundColor
     ? "background:" + backgroundColor.hex + ";"
-    : "";
+    : ""
 
-  let loaded = false;
+  let loaded = false
 </script>
 
 <style lang="scss">
@@ -51,6 +52,7 @@
     padding-bottom: 2 * $small-margin;
     // margin-bottom: $large-vertical-margin;
     align-items: flex-start;
+    border-bottom: none;
 
     &.bottom-space {
       margin-bottom: $large-vertical-margin;
@@ -213,37 +215,68 @@
 </style>
 
 <MediaQuery query="(min-width: 800px)" let:matches>
-
-  <div
-    class="image-group {alignment}"
-    class:listing={isListing}
-    class:header={isHeader}
-    class:fullwidth
-    class:group-size-1={imageArray.length === 1}
-    class:group-size-2={imageArray.length === 2}
-    class:group-size-3={imageArray.length === 3}
-    class:group-size-4={imageArray.length === 4}
-    class:bottom-space={inlineDisplay}
-    style={matches ? customStyles : customStylesPhone}>
-    {#each imageArray as image}
-      <img
-        class:loaded
-        src={fullwidth ? urlFor(image)
-              .width(1800)
-              .height(1200)
-              .quality(90)
-              .auto('format')
-              .url() : urlFor(image)
-              .width(1200 / imageArray.length)
-              .quality(90)
-              .auto('format')
-              .url()}
-        alt={caption ? caption : 'novembre.global'}
-        on:load={e => (loaded = true)} />
-    {/each}
-  </div>
+  {#if linkUrl}
+    <a
+      href={linkUrl}
+      target="_blank"
+      class="image-group {alignment}"
+      class:listing={isListing}
+      class:header={isHeader}
+      class:fullwidth
+      class:group-size-1={imageArray.length === 1}
+      class:group-size-2={imageArray.length === 2}
+      class:group-size-3={imageArray.length === 3}
+      class:group-size-4={imageArray.length === 4}
+      class:bottom-space={inlineDisplay}
+      style={matches ? customStyles : customStylesPhone}>
+      {#each imageArray as image}
+        <img
+          class:loaded
+          src={fullwidth ? urlFor(image)
+                .width(1800)
+                .height(1200)
+                .quality(90)
+                .auto('format')
+                .url() : urlFor(image)
+                .width(1200 / imageArray.length)
+                .quality(90)
+                .auto('format')
+                .url()}
+          alt={caption ? caption : 'novembre.global'}
+          on:load={e => (loaded = true)} />
+      {/each}
+    </a>
+  {:else}
+    <div
+      class="image-group {alignment}"
+      class:listing={isListing}
+      class:header={isHeader}
+      class:fullwidth
+      class:group-size-1={imageArray.length === 1}
+      class:group-size-2={imageArray.length === 2}
+      class:group-size-3={imageArray.length === 3}
+      class:group-size-4={imageArray.length === 4}
+      class:bottom-space={inlineDisplay}
+      style={matches ? customStyles : customStylesPhone}>
+      {#each imageArray as image}
+        <img
+          class:loaded
+          src={fullwidth ? urlFor(image)
+                .width(1800)
+                .height(1200)
+                .quality(90)
+                .auto('format')
+                .url() : urlFor(image)
+                .width(1200 / imageArray.length)
+                .quality(90)
+                .auto('format')
+                .url()}
+          alt={caption ? caption : 'novembre.global'}
+          on:load={e => (loaded = true)} />
+      {/each}
+    </div>
+  {/if}
   {#if caption}
     <div class="caption">{caption}</div>
   {/if}
-
 </MediaQuery>
