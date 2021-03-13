@@ -147,6 +147,7 @@
     <div class="about-credits">
 
       <div class="about-credits-column">
+        <iframe allow="autoplay *; encrypted-media *; fullscreen *" frameborder="0" height="450" style="width:100%;max-width:660px;overflow:hidden;background:transparent;" sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation" src="https://embed.music.apple.com/de/playlist/todays-chill/pl.2bb29727dbc34a63936787297305c37c"></iframe>
         {@html renderBlockText(get(pages, 'credits.columnOne.content', []))}
       </div>
 
