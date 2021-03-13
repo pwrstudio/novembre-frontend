@@ -7,7 +7,6 @@
 
   // *** IMPORTS
   import { onMount } from "svelte";
-  import { fade, slide, fly } from "svelte/transition";
   import { navigate } from "svelte-routing";
   import isEmpty from "lodash/isEmpty";
   import isArray from "lodash/isArray";

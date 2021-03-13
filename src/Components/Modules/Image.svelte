@@ -27,8 +27,6 @@
   export let isListing = false;
   export let inlineDisplay = false;
 
-  // console.log('inlineDisplay', inlineDisplay )
-
   const customStyles =
     (maxHeight ? "height:" + maxHeight + "vh; " : "") +
     (backgroundColor ? "background:" + backgroundColor.hex + ";" : "");

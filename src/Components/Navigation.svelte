@@ -26,8 +26,8 @@
     { title: "BUREAU", target: "/bureau" },
     { title: "MAGAZINE", target: "/magazine" },
     { title: "ABOUT", target: "/about" },
-    { title: "CONTACT", target: "/contact" },
-    { title: "STOCKISTS", target: "/stockists" }
+    { title: "CONTACT", target: "/contact" }
+    // { title: "STOCKISTS", target: "/stockists" }
   ];
 
   // *** REACTIVE

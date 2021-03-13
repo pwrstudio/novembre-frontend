@@ -14,7 +14,6 @@
 
   // *** IMPORTS
   import MediaQuery from "svelte-media-query"
-  import { fade } from "svelte/transition"
   import { urlFor } from "../../sanity.js"
 
   // *** PROPS
@@ -28,8 +27,6 @@
   export let maxHeight = false
   export let inlineDisplay = false
   export let linkUrl = false
-
-  // console.log('__ imageGroup: inlineDisplay =>', inlineDisplay)
 
   const customStyles =
     (maxHeight ? "height:" + maxHeight + "vh; " : "") +

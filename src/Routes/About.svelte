@@ -10,8 +10,6 @@
   import { renderBlockText } from "../sanity.js";
   import get from "lodash/get";
 
-  import MetaData from "../Components/MetaData.svelte";
-
   // STORES
   import { navigationColor, pages, scrollListActive } from "../stores.js";
 
@@ -24,6 +22,7 @@
 
   // COMPONENTS
   import Footer from "../Components/Footer.svelte";
+  import MetaData from "../Components/MetaData.svelte";
 
   // PROPS
   export let slug = "";
@@ -148,15 +147,15 @@
     <div class="about-credits">
 
       <div class="about-credits-column">
-        {@html renderBlockText(pages.credits.columnOne.content)}
+        {@html renderBlockText(get(pages, 'credits.columnOne.content', []))}
       </div>
 
       <div class="about-credits-column">
-        {@html renderBlockText(pages.credits.columnTwo.content)}
+        {@html renderBlockText(get(pages, 'credits.columnTwo.content', []))}
       </div>
 
       <div class="about-credits-column">
-        {@html renderBlockText(pages.credits.columnThree.content)}
+        {@html renderBlockText(get(pages, 'credits.columnThree.content', []))}
       </div>
     </div>
 

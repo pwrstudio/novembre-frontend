@@ -33,7 +33,7 @@
   import Article from "./Routes/Article.svelte";
   import About from "./Routes/About.svelte";
   import Contact from "./Routes/Contact.svelte";
-  import Stockists from "./Routes/Stockists.svelte";
+  // import Stockists from "./Routes/Stockists.svelte";
   import Error404 from "./Routes/Error404.svelte";
 
   let overlayActive = false;
@@ -510,7 +510,6 @@
 
   {#await $overlayBanners then overlayBanners}
     {#if !isEmpty(overlayBanners) && overlayActive}
-      dfsdf
       <div
         class="overlay-banner"
         on:click={e => {
@@ -582,7 +581,6 @@
     {...listingRouteParams.magazine} />
   <Route path="bureau" component={Listing} {...listingRouteParams.bureau} />
   <Route
-    <Route
     path="magazine/category/:query"
     component={Listing}
     {...listingRouteParams.magazineSub} />
@@ -607,7 +605,7 @@
   <Route path="bureau/:slug" component={Article} />
   <Route path="about" component={About} />
   <Route path="contact" component={Contact} />
-  <Route path="stockists" component={Stockists} />
+  <!-- <Route path="stockists" component={Stockists} /> -->
   <Route path="404" component={Error404} title="404" />
   <Route component={Error404} title="404" />
 </Router>

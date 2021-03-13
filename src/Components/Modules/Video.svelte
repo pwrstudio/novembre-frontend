@@ -37,8 +37,6 @@
     (maxHeight ? "height:" + maxHeight + "vh; " : "") +
     (backgroundColor ? "background:" + backgroundColor.hex + ";" : "");
 
-  // *** PROPS
-
   // *** DOM REFERENCES
   let videoEl = {};
 

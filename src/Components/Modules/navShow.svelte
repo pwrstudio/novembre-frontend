@@ -9,7 +9,6 @@
   import { onMount } from "svelte";
   import Flickity from "flickity-as-nav-for";
   import imagesLoaded from "imagesloaded";
-
   import { urlFor } from "../../sanity.js";
 
   // *** COMPONENTS
@@ -18,9 +17,6 @@
   // *** PROPS
   export let imageArray = [];
   export let navTarget = {};
-
-  // *** STORES
-  import { navigationColor, menuActiveGlobal } from "../../stores.js";
 
   // *** DOM REFERENCES
   let slideShowEl = {};

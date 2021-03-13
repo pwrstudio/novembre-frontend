@@ -7,8 +7,7 @@
 
   // *** IMPORTS
   import { onMount } from "svelte"
-  import { fade, slide } from "svelte/transition"
-  import { quintOut } from "svelte/easing"
+  import { fade } from "svelte/transition"
   import get from "lodash/get"
   import isEmpty from "lodash/isEmpty"
   import { urlFor, loadArticle, renderBlockText } from "../sanity.js"
@@ -40,7 +39,6 @@
 
   // *** VARIABLES
   let currentSlug = slug
-  let title = ""
   let bannerActive = false
 
   navigationColor.set("black")

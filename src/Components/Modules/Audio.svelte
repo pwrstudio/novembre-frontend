@@ -20,29 +20,30 @@
   let time = 0;
   let duration = 0;
   let paused = true;
+
+  // *** CONSTANTS
   const controlsTimeoutDuration = 2500;
 
-  // const src = urlFor(fileObject).url();
-  const src = "";
-
   // *** DOM REFERENCES
-  let audioEl;
+  let audioEl = {};
 
-  function handleMousemove(e) {
+  // *** FUNCTIONS
+  const handleMousemove = e => {
     if (e.which !== 1) return; // mouse not down
     if (!duration) return; // audio not loaded yet
     const { left, right } = this.getBoundingClientRect();
     time = (duration * (e.clientX - left)) / (right - left);
   }
 
-  function handleMousedown(e) {
-    function handleMouseup() {
+  const handleMousedown = e => {
+
+    const handleMouseup = () => {
       if (paused) audioEl.play();
       else audioEl.pause();
       cancel();
     }
 
-    function cancel() {
+    const cancel = () => {
       e.target.removeEventListener("mouseup", handleMouseup);
     }
 
