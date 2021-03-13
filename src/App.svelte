@@ -524,6 +524,7 @@
           class="inner">
           {#if overlayBanners[0].video && overlayBanners[0].video.asset && overlayBanners[0].video.asset._ref}
             <video
+              playsinline="playsinline"
               src={'https://cdn.sanity.io/files/gj963qwj/production/' + overlayBanners[0].video.asset._ref
                   .replace('file-', '')
                   .replace('-mp4', '.mp4')}

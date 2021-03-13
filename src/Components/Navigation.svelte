@@ -319,6 +319,7 @@
 
             {#if menuBanners[0].video && menuBanners[0].video.asset && menuBanners[0].video.asset._ref}
               <video
+                playsinline="playsinline"
                 src={'https://cdn.sanity.io/files/gj963qwj/production/' + menuBanners[0].video.asset._ref
                     .replace('file-', '')
                     .replace('-mp4', '.mp4')}

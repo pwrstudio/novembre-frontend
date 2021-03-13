@@ -244,6 +244,7 @@
   <video
     class="video-player {alignment}"
     preload="metadata"
+    playsinline="playsinline"
     {loop}
     muted={autoplay || isListing}
     poster={posterImage ? urlFor(posterImage)
