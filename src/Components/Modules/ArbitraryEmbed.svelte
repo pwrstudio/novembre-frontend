@@ -7,10 +7,10 @@
     
     // *** PROPS
     // export let  = false;
-    export let code = "xxxx";
+    export let code = "";
     // export let backgroundColor = false;
 
-    console.log('ARBITRARY EMBED: code =>', code)
+    // console.log('ARBITRARY EMBED: code =>', code)
   </script>
   
   <style lang="scss">
