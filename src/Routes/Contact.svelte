@@ -22,6 +22,7 @@
   import Image from "../Components/Modules/Image.svelte";
   import ImageGroup from "../Components/Modules/ImageGroup.svelte";
   import VideoEmbed from "../Components/Modules/VideoEmbed.svelte";
+  import ArbitraryEmbed from "../Components/Modules/ArbitraryEmbed.svelte";
   import Audio from "../Components/Modules/Audio.svelte";
   import Slideshow from "../Components/Modules/Slideshow.svelte";
 
@@ -122,6 +123,10 @@
           {/if}
           {#if c._type == 'audio'}
             <Audio fileObject={c.audio} />
+          {/if}
+          {#if c._type == 'arbitraryEmbed'}
+            <ArbitraryEmbed
+              code={console.arbitraryEmbed} />
           {/if}
         {/each}
       {/if}

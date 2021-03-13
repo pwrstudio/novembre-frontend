@@ -26,6 +26,7 @@
   import ImageGroup from "../Components/Modules/ImageGroup.svelte"
   import VideoEmbed from "../Components/Modules/VideoEmbed.svelte"
   import Audio from "../Components/Modules/Audio.svelte"
+  import ArbitraryEmbed from "../Components/Modules/ArbitraryEmbed.svelte";
   import Slideshow from "../Components/Modules/Slideshow.svelte"
   import VideoLoop from "../Components/Modules/Video.svelte"
 
@@ -293,6 +294,10 @@
             posterImage={get(c, 'image', false)}
             backgroundColor={get(c, 'backgroundColor.hex', false)}
             foregroundColor={get(c, 'foregroundColor.hex', false)} />
+        {/if}
+        {#if c._type == 'arbitraryEmbed'}
+          <ArbitraryEmbed
+            code={c.embedCode} />
         {/if}
       {/each}
     </div>
