@@ -125,7 +125,7 @@
     font-family: $sans-stack;
     font-size: $xsmall;
     font-weight: 300;
-    width: 100%;
+    width: 90%;
     margin-left: auto;
     margin-right: auto;
     text-align: center;
