@@ -153,11 +153,19 @@
     width: 100vw;
     padding: 0;
 
+    @include screen-size("small") {
+      height: auto;
+    }
+
     img {
       height: 100%;
       width: 100%;
       object-fit: cover;
       max-width: unset;
+
+      @include screen-size("small") {
+        object-fit: contain;
+      }
     }
 
     figure {

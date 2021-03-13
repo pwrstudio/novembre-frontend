@@ -150,6 +150,10 @@
     width: 100vw;
     padding: 0;
 
+    @include screen-size("small") {
+      height: auto;
+    }
+
     img {
       height: 100%;
       width: 100%;
@@ -157,6 +161,11 @@
       max-width: unset;
       padding: 0;
       margin: 0;
+
+      @include screen-size("small") {
+        object-fit: contain;
+      }
+
     }
   }
 
