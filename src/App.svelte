@@ -132,6 +132,7 @@
     width: 100vw;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overscroll-behavior: none;
 
     &.no-scroll {
       overflow: hidden;
