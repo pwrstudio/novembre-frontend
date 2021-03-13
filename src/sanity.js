@@ -109,6 +109,19 @@ export const loadArticle = async (query, params) => {
     }
 }
 
+export const loadSatelliteSite = async (query, params) => {
+    try {
+        const res = await client.fetch(query, params)
+        if (res === null) {
+            return Promise.reject(new Error(404));
+        }
+        return res
+    } catch (err) {
+        Sentry.captureException(err)
+        return Promise.reject(new Error(404));
+    }
+}
+
 export const loadFeed = async (query, params) => {
     try {
         const res = await client.fetch(query, params)
