@@ -47,13 +47,8 @@
     height: 100vh;
     display: inline-flex;
     padding-bottom: 2 * $small-margin;
-    // margin-bottom: $large-vertical-margin;
     align-items: flex-start;
     border-bottom: none;
-
-    &.bottom-space {
-      margin-bottom: $large-vertical-margin;
-    }
 
     @include screen-size("small") {
       height: auto;
@@ -75,6 +70,13 @@
 
       &.loaded {
         opacity: 1;
+      }
+    }
+
+    &.bottom-space {
+      margin-bottom: $large-vertical-margin;
+      img {
+        margin-top: -$small-margin;
       }
     }
   }
