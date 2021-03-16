@@ -185,11 +185,8 @@
   }
 
   .listing {
-    margin-top: 0px;
-    margin-bottom: 0px;
-
     img {
-      margin-bottom: $small-margin;
+      object-fit: cover;
     }
   }
 </style>
@@ -197,6 +194,7 @@
 <div
   class="single-image {alignment}"
   class:fullwidth
+  class:listing={isListing}
   class:bottom-space={inlineDisplay}
   style={customStyles}>
   <MediaQuery query="(min-width: 800px)" let:matches>
