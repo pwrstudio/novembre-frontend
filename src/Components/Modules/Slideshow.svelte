@@ -11,11 +11,11 @@
   import Flickity from "flickity";
   import imagesLoaded from "imagesloaded";
   import get from "lodash/get";
-
   import { urlFor } from "../../sanity.js";
 
   // *** COMPONENTS
   import Ellipse from "../Ellipse.svelte";
+  import NavShow from "./navShow.svelte";
 
   // *** PROPS
   export let imageArray = [];
@@ -23,18 +23,11 @@
   export let isListing = false;
   export let autoplay = false;
 
-  import NavShow from "./navShow.svelte";
-
-  // *** STORES
-  import { navigationColor, menuActiveGlobal } from "../../stores.js";
-
   // *** DOM REFERENCES
   let slideShowEl = {};
-  let navSlideShowEl = {};
 
   // *** VARIABLES
   let flkty = {};
-  let navFlkty = {};
   const tickerSpeed = 0.4;
   let isPaused = true;
   let loaded = false;

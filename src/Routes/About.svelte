@@ -10,8 +10,6 @@
   import { renderBlockText } from "../sanity.js";
   import get from "lodash/get";
 
-  import MetaData from "../Components/MetaData.svelte";
-
   // STORES
   import { navigationColor, pages, scrollListActive } from "../stores.js";
 
@@ -19,11 +17,13 @@
   import Image from "../Components/Modules/Image.svelte";
   import ImageGroup from "../Components/Modules/ImageGroup.svelte";
   import VideoEmbed from "../Components/Modules/VideoEmbed.svelte";
+  import ArbitraryEmbed from "../Components/Modules/ArbitraryEmbed.svelte";
   import Audio from "../Components/Modules/Audio.svelte";
   import Slideshow from "../Components/Modules/Slideshow.svelte";
 
   // COMPONENTS
   import Footer from "../Components/Footer.svelte";
+  import MetaData from "../Components/MetaData.svelte";
 
   // PROPS
   export let slug = "";
@@ -142,21 +142,25 @@
         {#if c._type == 'audio'}
           <Audio fileObject={c.audio} />
         {/if}
+        {#if c._type == 'arbitraryEmbed'}
+          <ArbitraryEmbed
+            code={console.arbitraryEmbed} />
+        {/if}
       {/each}
     </div>
 
     <div class="about-credits">
 
       <div class="about-credits-column">
-        {@html renderBlockText(pages.credits.columnOne.content)}
+        {@html renderBlockText(get(pages, 'credits.columnOne.content', []))}
       </div>
 
       <div class="about-credits-column">
-        {@html renderBlockText(pages.credits.columnTwo.content)}
+        {@html renderBlockText(get(pages, 'credits.columnTwo.content', []))}
       </div>
 
       <div class="about-credits-column">
-        {@html renderBlockText(pages.credits.columnThree.content)}
+        {@html renderBlockText(get(pages, 'credits.columnThree.content', []))}
       </div>
     </div>
 

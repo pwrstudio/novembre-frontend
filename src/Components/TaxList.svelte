@@ -7,7 +7,7 @@
 
   // *** IMPORTS
   import { Router, links } from "svelte-routing";
-  import { format, isValid } from "date-fns";
+  import { format } from "date-fns";
   import sortBy from "lodash/sortBy";
   import isEmpty from "lodash/isEmpty";
 

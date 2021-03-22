@@ -25,7 +25,8 @@
     feedBanners,
     overlayBanners,
     scrollListActive,
-    activeCategory
+    activeCategory,
+    satelliteSiteActive
   } from "./stores.js";
 
   // ROUTES
@@ -33,7 +34,8 @@
   import Article from "./Routes/Article.svelte";
   import About from "./Routes/About.svelte";
   import Contact from "./Routes/Contact.svelte";
-  import Stockists from "./Routes/Stockists.svelte";
+  // import Stockists from "./Routes/Stockists.svelte";
+  import SatelliteSite from "./Routes/Satellite.svelte";
   import Error404 from "./Routes/Error404.svelte";
 
   let overlayActive = false;
@@ -94,14 +96,14 @@
     { title: "Entertainment", slug: "entertainment" }
   ];
 
-  // if (!Cookies.get("nov_seen-banner")) {
-  setTimeout(() => {
-    overlayActive = true;
-  }, 3000);
-  //   Cookies.set("nov_seen-banner", "true", {
-  //     expires: 1 / 24
-  //   });
-  // }
+  if (!Cookies.get("nov_seen-banner")) {
+    setTimeout(() => {
+      overlayActive = true;
+    }, 3000);
+    Cookies.set("nov_seen-banner", "true", {
+      expires: 1 / 24
+    });
+  }
 
   if (!Cookies.get("nov_seen-mailing-list")) {
     setTimeout(() => {
@@ -132,6 +134,7 @@
     width: 100vw;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overscroll-behavior: none;
 
     &.no-scroll {
       overflow: hidden;
@@ -472,79 +475,26 @@
   }
 </style>
 
-<Navigation />
+{#if !$satelliteSiteActive}
+  <!-- NAVIGATION -->
+  <Navigation />
 
-<!-- MAILING LIST SIGN UP  -->
-{#await $pages then pages}
-  {#if pages.showMailingListOverlay && mailingListOverlayActive}
-    <div
-      id="mailing-list-overlay"
-      class="overlay-banner mailing-list"
-      on:click={e => {
-        if (e.target.id === 'mailing-list-overlay') mailingListOverlayActive = false;
-      }}
-      in:fade>
-      <div class="inner">
-        <NewsletterSignUp compact={true} />
-      </div>
-      <svg
-        on:click={e => {
-          mailingListOverlayActive = false;
-        }}
-        version="1.1"
-        xmlns="http://www.w3.org/2000/svg"
-        xmlns:xlink="http://www.w3.org/1999/xlink"
-        x="0px"
-        y="0px"
-        class="close"
-        viewBox="0 0 1000 1000"
-        enable-background="new 0 0 1000 1000"
-        xml:space="preserve">
-        <g transform="translate(0.000000,511.000000) scale(0.100000,-0.100000)">
-          <path
-            d="M146.3,4961c-27.2-27.2-46.3-73.5-46.3-103.5c0-32.7,876.6-928.3,2346.6-2398.3L4795.8,110L2446.6-2239.3C840.4-3845.4,100-4604.9,100-4643c0-68.1,81.7-147,152.4-147c32.7,0,928.3,876.6,2398.3,2346.6L5000-94.2l2349.3-2349.3C8955.4-4049.6,9714.9-4790,9753-4790c68.1,0,147,81.7,147,152.4c0,32.7-876.6,928.3-2346.6,2398.3L5204.2,110l2349.3,2349.3C9159.5,4065.4,9900,4824.9,9900,4863c0,68.1-81.7,147-152.4,147c-32.7,0-928.3-876.6-2398.3-2346.6L5000,314.2L2650.7,2663.4C1044.6,4269.6,285.1,5010,247,5010C214.3,5010,170.8,4988.2,146.3,4961z" />
-        </g>
-      </svg>
-    </div>
-  {/if}
-
-  {#await $overlayBanners then overlayBanners}
-    {#if !isEmpty(overlayBanners) && overlayActive}
-      dfsdf
+  <!-- MAILING LIST SIGN UP  -->
+  {#await $pages then pages}
+    {#if pages.showMailingListOverlay && mailingListOverlayActive}
       <div
-        class="overlay-banner"
+        id="mailing-list-overlay"
+        class="overlay-banner mailing-list"
         on:click={e => {
-          overlayActive = false;
+          if (e.target.id === 'mailing-list-overlay') mailingListOverlayActive = false;
         }}
         in:fade>
-        <a
-          href={overlayBanners[0].link}
-          target="_blank"
-          rel="noreferrer"
-          class="inner">
-          {#if overlayBanners[0].video && overlayBanners[0].video.asset && overlayBanners[0].video.asset._ref}
-            <video
-              src={'https://cdn.sanity.io/files/gj963qwj/production/' + overlayBanners[0].video.asset._ref
-                  .replace('file-', '')
-                  .replace('-mp4', '.mp4')}
-              autoplay
-              muted
-              loop />
-          {/if}
-          {#if overlayBanners[0].image}
-            <img
-              alt="novembre.global"
-              src={urlFor(overlayBanners[0].image)
-                .width(1000)
-                .quality(90)
-                .auto('format')
-                .url()} />
-          {/if}
-        </a>
-
+        <div class="inner">
+          <NewsletterSignUp compact={true} />
+        </div>
         <svg
           on:click={e => {
-            overlayActive = false;
+            mailingListOverlayActive = false;
           }}
           version="1.1"
           xmlns="http://www.w3.org/2000/svg"
@@ -555,34 +505,90 @@
           viewBox="0 0 1000 1000"
           enable-background="new 0 0 1000 1000"
           xml:space="preserve">
-          <g
-            transform="translate(0.000000,511.000000) scale(0.100000,-0.100000)">
+          <g transform="translate(0.000000,511.000000) scale(0.100000,-0.100000)">
             <path
               d="M146.3,4961c-27.2-27.2-46.3-73.5-46.3-103.5c0-32.7,876.6-928.3,2346.6-2398.3L4795.8,110L2446.6-2239.3C840.4-3845.4,100-4604.9,100-4643c0-68.1,81.7-147,152.4-147c32.7,0,928.3,876.6,2398.3,2346.6L5000-94.2l2349.3-2349.3C8955.4-4049.6,9714.9-4790,9753-4790c68.1,0,147,81.7,147,152.4c0,32.7-876.6,928.3-2346.6,2398.3L5204.2,110l2349.3,2349.3C9159.5,4065.4,9900,4824.9,9900,4863c0,68.1-81.7,147-152.4,147c-32.7,0-928.3-876.6-2398.3-2346.6L5000,314.2L2650.7,2663.4C1044.6,4269.6,285.1,5010,247,5010C214.3,5010,170.8,4988.2,146.3,4961z" />
           </g>
         </svg>
       </div>
     {/if}
+
+    {#await $overlayBanners then overlayBanners}
+      {#if !isEmpty(overlayBanners) && overlayActive}
+        <div
+          class="overlay-banner"
+          on:click={e => {
+            overlayActive = false;
+          }}
+          in:fade>
+          <a
+            href={overlayBanners[0].link}
+            target="_blank"
+            rel="noreferrer"
+            class="inner">
+            {#if overlayBanners[0].video && overlayBanners[0].video.asset && overlayBanners[0].video.asset._ref}
+              <video
+                playsinline="playsinline"
+                src={'https://cdn.sanity.io/files/gj963qwj/production/' + overlayBanners[0].video.asset._ref
+                    .replace('file-', '')
+                    .replace('-mp4', '.mp4')}
+                autoplay
+                muted
+                loop />
+            {/if}
+            {#if overlayBanners[0].image}
+              <img
+                alt="novembre.global"
+                src={urlFor(overlayBanners[0].image)
+                  .width(1000)
+                  .quality(90)
+                  .auto('format')
+                  .url()} />
+            {/if}
+          </a>
+
+          <svg
+            on:click={e => {
+              overlayActive = false;
+            }}
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+            x="0px"
+            y="0px"
+            class="close"
+            viewBox="0 0 1000 1000"
+            enable-background="new 0 0 1000 1000"
+            xml:space="preserve">
+            <g
+              transform="translate(0.000000,511.000000) scale(0.100000,-0.100000)">
+              <path
+                d="M146.3,4961c-27.2-27.2-46.3-73.5-46.3-103.5c0-32.7,876.6-928.3,2346.6-2398.3L4795.8,110L2446.6-2239.3C840.4-3845.4,100-4604.9,100-4643c0-68.1,81.7-147,152.4-147c32.7,0,928.3,876.6,2398.3,2346.6L5000-94.2l2349.3-2349.3C8955.4-4049.6,9714.9-4790,9753-4790c68.1,0,147,81.7,147,152.4c0,32.7-876.6,928.3-2346.6,2398.3L5204.2,110l2349.3,2349.3C9159.5,4065.4,9900,4824.9,9900,4863c0,68.1-81.7,147-152.4,147c-32.7,0-928.3-876.6-2398.3-2346.6L5000,314.2L2650.7,2663.4C1044.6,4269.6,285.1,5010,247,5010C214.3,5010,170.8,4988.2,146.3,4961z" />
+            </g>
+          </svg>
+        </div>
+      {/if}
+    {/await}
   {/await}
-{/await}
 
-{#if $scrollListActive && $activeCategory === 'magazine'}
-  <ScrollList tagArray={magazineTags} />
-{/if}
+  {#if $scrollListActive && $activeCategory === 'magazine'}
+    <ScrollList tagArray={magazineTags} />
+  {/if}
 
-{#if $scrollListActive && $activeCategory === 'bureau'}
-  <ScrollList tagArray={bureauTags} />
+  {#if $scrollListActive && $activeCategory === 'bureau'}
+    <ScrollList tagArray={bureauTags} />
+  {/if}
 {/if}
 
 <Router>
   <Route path="/" component={Listing} {...listingRouteParams.landing} />
+  <Route path="site/:slug" component={SatelliteSite} />
   <Route
     path="magazine/"
     component={Listing}
     {...listingRouteParams.magazine} />
   <Route path="bureau" component={Listing} {...listingRouteParams.bureau} />
   <Route
-    <Route
     path="magazine/category/:query"
     component={Listing}
     {...listingRouteParams.magazineSub} />
@@ -607,7 +613,7 @@
   <Route path="bureau/:slug" component={Article} />
   <Route path="about" component={About} />
   <Route path="contact" component={Contact} />
-  <Route path="stockists" component={Stockists} />
+  <!-- <Route path="stockists" component={Stockists} /> -->
   <Route path="404" component={Error404} title="404" />
   <Route component={Error404} title="404" />
 </Router>
