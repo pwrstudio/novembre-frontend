@@ -27,8 +27,6 @@
   export let isListing = false;
   export let inlineDisplay = false;
 
-  // console.log('inlineDisplay', inlineDisplay )
-
   const customStyles =
     (maxHeight ? "height:" + maxHeight + "vh; " : "") +
     (backgroundColor ? "background:" + backgroundColor.hex + ";" : "");
@@ -155,11 +153,19 @@
     width: 100vw;
     padding: 0;
 
+    @include screen-size("small") {
+      height: auto;
+    }
+
     img {
       height: 100%;
       width: 100%;
       object-fit: cover;
       max-width: unset;
+
+      @include screen-size("small") {
+        object-fit: contain;
+      }
     }
 
     figure {
@@ -179,11 +185,8 @@
   }
 
   .listing {
-    margin-top: 0px;
-    margin-bottom: 0px;
-
     img {
-      margin-bottom: $small-margin;
+      object-fit: cover;
     }
   }
 </style>
@@ -191,6 +194,7 @@
 <div
   class="single-image {alignment}"
   class:fullwidth
+  class:listing={isListing}
   class:bottom-space={inlineDisplay}
   style={customStyles}>
   <MediaQuery query="(min-width: 800px)" let:matches>

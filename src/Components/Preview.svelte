@@ -7,10 +7,7 @@
 
   // *** IMPORTS
   import { Router, links } from "svelte-routing";
-  import { fade } from "svelte/transition";
-
   import MediaQuery from "svelte-media-query";
-
   import has from "lodash/has";
   import get from "lodash/get";
   import kebabCase from "lodash/kebabCase";

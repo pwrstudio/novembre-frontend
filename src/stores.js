@@ -10,5 +10,4 @@ export const overlayBanners = writable([])
 export const activeCategory = writable('')
 export const activeQuery = writable('')
 export const scrollListActive = writable(false)
-
-
+export const satelliteSiteActive = writable(false)

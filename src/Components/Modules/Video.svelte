@@ -37,8 +37,6 @@
     (maxHeight ? "height:" + maxHeight + "vh; " : "") +
     (backgroundColor ? "background:" + backgroundColor.hex + ";" : "");
 
-  // *** PROPS
-
   // *** DOM REFERENCES
   let videoEl = {};
 
@@ -246,6 +244,7 @@
   <video
     class="video-player {alignment}"
     preload="metadata"
+    playsinline="playsinline"
     {loop}
     muted={autoplay || isListing}
     poster={posterImage ? urlFor(posterImage)

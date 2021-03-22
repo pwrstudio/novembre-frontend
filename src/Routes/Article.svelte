@@ -7,8 +7,7 @@
 
   // *** IMPORTS
   import { onMount } from "svelte"
-  import { fade, slide } from "svelte/transition"
-  import { quintOut } from "svelte/easing"
+  import { fade } from "svelte/transition"
   import get from "lodash/get"
   import isEmpty from "lodash/isEmpty"
   import { urlFor, loadArticle, renderBlockText } from "../sanity.js"
@@ -27,6 +26,7 @@
   import ImageGroup from "../Components/Modules/ImageGroup.svelte"
   import VideoEmbed from "../Components/Modules/VideoEmbed.svelte"
   import Audio from "../Components/Modules/Audio.svelte"
+  import ArbitraryEmbed from "../Components/Modules/ArbitraryEmbed.svelte";
   import Slideshow from "../Components/Modules/Slideshow.svelte"
   import VideoLoop from "../Components/Modules/Video.svelte"
 
@@ -40,7 +40,6 @@
 
   // *** VARIABLES
   let currentSlug = slug
-  let title = ""
   let bannerActive = false
 
   navigationColor.set("black")
@@ -295,6 +294,10 @@
             posterImage={get(c, 'image', false)}
             backgroundColor={get(c, 'backgroundColor.hex', false)}
             foregroundColor={get(c, 'foregroundColor.hex', false)} />
+        {/if}
+        {#if c._type == 'arbitraryEmbed'}
+          <ArbitraryEmbed
+            code={c.embedCode} />
         {/if}
       {/each}
     </div>

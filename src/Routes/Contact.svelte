@@ -11,6 +11,7 @@
   import { navigationColor, pages, scrollListActive } from "../stores.js";
   import { renderBlockText } from "../sanity.js";
   import get from "lodash/get";
+  import has from "lodash/has";
 
   // COMPONENTS
   import Footer from "../Components/Footer.svelte";
@@ -21,6 +22,7 @@
   import Image from "../Components/Modules/Image.svelte";
   import ImageGroup from "../Components/Modules/ImageGroup.svelte";
   import VideoEmbed from "../Components/Modules/VideoEmbed.svelte";
+  import ArbitraryEmbed from "../Components/Modules/ArbitraryEmbed.svelte";
   import Audio from "../Components/Modules/Audio.svelte";
   import Slideshow from "../Components/Modules/Slideshow.svelte";
 
@@ -96,32 +98,38 @@
   <article class="contact">
 
     <div class="contact-section">
-      {#each pages.contact.content as c}
-        {#if c._type == 'block'}
-          {@html renderBlockText(c)}
-        {/if}
-        {#if c._type == 'singleImage'}
-          <Image
-            imageObject={c.image}
-            caption={get(c, 'caption', false)}
-            alignment={get(c, 'alignment', '')}
-            fullwidth={get(c, 'fullwidth', '')} />
-        {/if}
-        {#if c._type == 'imageGroup'}
-          <ImageGroup
-            imageArray={c.images}
-            caption={get(c, 'caption', false)} />
-        {/if}
-        {#if c._type == 'video'}
-          <VideoEmbed url={c.video} caption={get(c, 'caption', false)} />
-        {/if}
-        {#if c._type == 'slideshow'}
-          <Slideshow imageArray={c.images} />
-        {/if}
-        {#if c._type == 'audio'}
-          <Audio fileObject={c.audio} />
-        {/if}
-      {/each}
+      {#if has(pages, 'contact.content') && Array.isArray(pages.contact.content)}
+        {#each pages.contact.content as c}
+          {#if c._type == 'block'}
+            {@html renderBlockText(c)}
+          {/if}
+          {#if c._type == 'singleImage'}
+            <Image
+              imageObject={c.image}
+              caption={get(c, 'caption', false)}
+              alignment={get(c, 'alignment', '')}
+              fullwidth={get(c, 'fullwidth', '')} />
+          {/if}
+          {#if c._type == 'imageGroup'}
+            <ImageGroup
+              imageArray={c.images}
+              caption={get(c, 'caption', false)} />
+          {/if}
+          {#if c._type == 'video'}
+            <VideoEmbed url={c.video} caption={get(c, 'caption', false)} />
+          {/if}
+          {#if c._type == 'slideshow'}
+            <Slideshow imageArray={c.images} />
+          {/if}
+          {#if c._type == 'audio'}
+            <Audio fileObject={c.audio} />
+          {/if}
+          {#if c._type == 'arbitraryEmbed'}
+            <ArbitraryEmbed
+              code={console.arbitraryEmbed} />
+          {/if}
+        {/each}
+      {/if}
     </div>
 
     <div class="contact-section mail">
@@ -129,32 +137,34 @@
     </div>
 
     <div class="contact-section">
-      {#each pages.socialMedia.content as c}
-        {#if c._type == 'block'}
-          {@html renderBlockText(c)}
-        {/if}
-        {#if c._type == 'singleImage'}
-          <Image
-            imageObject={c.image}
-            caption={get(c, 'caption', false)}
-            alignment={get(c, 'alignment', '')}
-            fullwidth={get(c, 'fullwidth', '')} />
-        {/if}
-        {#if c._type == 'imageGroup'}
-          <ImageGroup
-            imageArray={c.images}
-            caption={get(c, 'caption', false)} />
-        {/if}
-        {#if c._type == 'video'}
-          <VideoEmbed url={c.video} caption={get(c, 'caption', false)} />
-        {/if}
-        {#if c._type == 'slideshow'}
-          <Slideshow imageArray={c.images} />
-        {/if}
-        {#if c._type == 'audio'}
-          <Audio fileObject={c.audio} />
-        {/if}
-      {/each}
+      {#if has(pages, 'socialMedia.content') && Array.isArray(pages.socialMedia.content)}
+        {#each pages.socialMedia.content as c}
+          {#if c._type == 'block'}
+            {@html renderBlockText(c)}
+          {/if}
+          {#if c._type == 'singleImage'}
+            <Image
+              imageObject={c.image}
+              caption={get(c, 'caption', false)}
+              alignment={get(c, 'alignment', '')}
+              fullwidth={get(c, 'fullwidth', '')} />
+          {/if}
+          {#if c._type == 'imageGroup'}
+            <ImageGroup
+              imageArray={c.images}
+              caption={get(c, 'caption', false)} />
+          {/if}
+          {#if c._type == 'video'}
+            <VideoEmbed url={c.video} caption={get(c, 'caption', false)} />
+          {/if}
+          {#if c._type == 'slideshow'}
+            <Slideshow imageArray={c.images} />
+          {/if}
+          {#if c._type == 'audio'}
+            <Audio fileObject={c.audio} />
+          {/if}
+        {/each}
+      {/if}
     </div>
 
   </article>

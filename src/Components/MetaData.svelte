@@ -6,7 +6,6 @@
   // # # # # # # # # # # # # #
 
   // _lodash
-  import get from "lodash/get";
   import has from "lodash/has";
   import isArray from "lodash/isArray";
   import isEmpty from "lodash/isEmpty";
@@ -54,10 +53,12 @@
   <title>{title}</title>
   <meta property="og:title" content={title} />
   <meta property="twitter:title" content={title} />
+  <meta name="twitter:card" content="summary_large_image" />
   <meta property="description" content={description} />
   <meta property="og:description" content={description} />
   <meta property="twitter:description" content={description} />
   <meta property="image" content={image} />
+  <meta property="og:type" content="website" />
   <meta property="og:image" content={image} />
   <meta property="twitter:image" content={image} />
 </svelte:head>
