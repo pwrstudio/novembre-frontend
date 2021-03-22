@@ -19,12 +19,19 @@
   // *** PROPS
   export let post = {};
 
+  const stripHtml = html => {
+    let tmp = document.createElement("DIV");
+    tmp.innerHTML = html;
+    return tmp.textContent || tmp.innerText || "";
+  };
+
   const defaultDescription =
     "Novembre Global is a platform for expression, guiding individuals and professionals in search of inspiration, new styles and emergent cultural trends.";
 
   const title =
-    (has(post, "title") && !isEmpty(post.title) ? post.title + " / " : "") +
-    "NOVEMBRE GLOBAL";
+    (has(post, "title") && !isEmpty(post.title)
+      ? stripHtml(post.title) + " / "
+      : "") + "NOVEMBRE GLOBAL";
 
   const description =
     has(post, "content") && isArray(post.content) && !isEmpty(post.content)

@@ -69,7 +69,7 @@
 
     if (title === "Landing") {
       sanityQuery =
-        '*[_type == "article" && $currentTime > publicationDate] | order(publicationDate desc){publicationDate, "totalPosts": count(*[_type == "article" && $currentTime > publicationDate]), title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}[$start...$end]';
+        '*[_type == "article" && editorialState == "live" && $currentTime > publicationDate] | order(publicationDate desc){publicationDate, "totalPosts": count(*[_type == "article" && editorialState == "live" && $currentTime > publicationDate]), title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}[$start...$end]';
       sanityParams = {
         start: index * BATCH_SIZE,
         end: (index + 1) * BATCH_SIZE,
@@ -77,7 +77,7 @@
       };
     } else if (title === "Magazine") {
       sanityQuery =
-        '*[_type == "article" && taxonomy.category == "magazine" && $currentTime > publicationDate] | order(publicationDate desc){publicationDate, "totalPosts": count(*[_type == "article" && taxonomy.category == "magazine" && $currentTime > publicationDate]), title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}[$start...$end]';
+        '*[_type == "article" && editorialState == "live" && taxonomy.category == "magazine" && $currentTime > publicationDate] | order(publicationDate desc){publicationDate, "totalPosts": count(*[_type == "article" && editorialState == "live" && taxonomy.category == "magazine" && $currentTime > publicationDate]), title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}[$start...$end]';
       sanityParams = {
         start: index * BATCH_SIZE,
         end: (index + 1) * BATCH_SIZE,
@@ -85,7 +85,7 @@
       };
     } else if (title === "Bureau") {
       sanityQuery =
-        '*[_type == "article" && taxonomy.category == "bureau" && $currentTime > publicationDate] | order(publicationDate desc){publicationDate, "totalPosts": count(*[_type == "article" && taxonomy.category == "bureau" && $currentTime > publicationDate]), title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}[$start...$end]';
+        '*[_type == "article" && editorialState == "live" && taxonomy.category == "bureau" && $currentTime > publicationDate] | order(publicationDate desc){publicationDate, "totalPosts": count(*[_type == "article" && editorialState == "live" && taxonomy.category == "bureau" && $currentTime > publicationDate]), title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}[$start...$end]';
       sanityParams = {
         start: index * BATCH_SIZE,
         end: (index + 1) * BATCH_SIZE,
@@ -93,7 +93,7 @@
       };
     } else if (title === "Tag") {
       sanityQuery =
-        '*[_type == "article" && $tag in taxonomy.tags && $currentTime > publicationDate] | order(publicationDate desc){publicationDate, "totalPosts": count(*[_type == "article" && $tag in taxonomy.tags && $currentTime > publicationDate]), title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}[$start...$end]';
+        '*[_type == "article" && editorialState == "live" && $tag in taxonomy.tags && $currentTime > publicationDate] | order(publicationDate desc){publicationDate, "totalPosts": count(*[_type == "article" && editorialState == "live" && $tag in taxonomy.tags && $currentTime > publicationDate]), title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}[$start...$end]';
       sanityParams = {
         tag: query,
         start: index * BATCH_SIZE,
@@ -102,7 +102,7 @@
       };
     } else if (title === "Search") {
       sanityQuery =
-        '*[_type == "article" && title match $term || $term in taxonomy.tags && $currentTime > publicationDate] | order(publicationDate desc){publicationDate, "totalPosts": count(*[_type == "article" && title match $term || $term in taxonomy.tags && $currentTime > publicationDate]), title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}[$start...$end]';
+        '*[_type == "article" && editorialState == "live" && title match $term || $term in taxonomy.tags && $currentTime > publicationDate] | order(publicationDate desc){publicationDate, "totalPosts": count(*[_type == "article" && editorialState == "live" && title match $term || $term in taxonomy.tags && $currentTime > publicationDate]), title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}[$start...$end]';
       sanityParams = {
         term: query,
         start: index * BATCH_SIZE,
@@ -111,7 +111,7 @@
       };
     } else if (title === "magsub") {
       sanityQuery =
-        '*[_type == "article" && taxonomy.category == "magazine" && taxonomy.subCategory == $subcat && $currentTime > publicationDate] | order(publicationDate desc){publicationDate, "totalPosts": count(*[_type == "article" && taxonomy.category == "magazine" && taxonomy.subCategory == $subcat && $currentTime > publicationDate]), title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}[$start...$end]';
+        '*[_type == "article" && editorialState == "live" && taxonomy.category == "magazine" && taxonomy.subCategory == $subcat && $currentTime > publicationDate] | order(publicationDate desc){publicationDate, "totalPosts": count(*[_type == "article" && editorialState == "live" && taxonomy.category == "magazine" && taxonomy.subCategory == $subcat && $currentTime > publicationDate]), title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}[$start...$end]';
       sanityParams = {
         subcat: query,
         start: index * BATCH_SIZE,
@@ -120,7 +120,7 @@
       };
     } else if (title === "bursub") {
       sanityQuery =
-        '*[_type == "article" && taxonomy.category == "bureau" && taxonomy.subCategory == $subcat && $currentTime > publicationDate] | order(publicationDate desc){publicationDate, "totalPosts": count(*[_type == "article" && taxonomy.category == "bureau" && taxonomy.subCategory == $subcat && $currentTime > publicationDate]), title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}[$start...$end]';
+        '*[_type == "article" && editorialState == "live" && taxonomy.category == "bureau" && taxonomy.subCategory == $subcat && $currentTime > publicationDate] | order(publicationDate desc){publicationDate, "totalPosts": count(*[_type == "article" && editorialState == "live" && taxonomy.category == "bureau" && taxonomy.subCategory == $subcat && $currentTime > publicationDate]), title, "slug": slug.current, taxonomy, "preview": preview[0], "previewVideoUrl": preview[0].video.asset->url, previewColors}[$start...$end]';
       sanityParams = {
         subcat: query,
         start: index * BATCH_SIZE,
@@ -266,7 +266,8 @@
     margin: 0;
     line-height: 0;
 
-    img {
+    img,
+    video {
       width: 100%;
       height: auto;
     }
@@ -294,18 +295,35 @@
           {#if i === 0 && (title === 'Magazine' || title === 'Bureau' || title === 'Landing')}
             <SplashText section={title.toLowerCase()} />
           {/if}
+
           {#if !isEmpty(feedBanners) && feedBanners.find(b => b.positionInFeed == i)}
             <a
               href={feedBanners.find(b => b.positionInFeed == i).link}
               target="_blank"
               rel="noreferrer"
               class="feed-banner">
-              <img
-                src={urlFor(feedBanners.find(b => b.positionInFeed == i).image)
-                  .width(1400)
-                  .quality(90)
-                  .auto('format')
-                  .url()} />
+
+              {#if feedBanners.find(b => b.positionInFeed == i)[0] && feedBanners.find(b => b.positionInFeed == i)[0].video && feedBanners.find(b => b.positionInFeed == i)[0].video.asset && feedBanners.find(b => b.positionInFeed == i)[0].video.asset._ref}
+                <video
+                  src={'https://cdn.sanity.io/files/gj963qwj/production/' + feedBanners
+                      .find(b => b.positionInFeed == i)
+                      .video.asset._ref.replace('file-', '')
+                      .replace('-mp4', '.mp4')}
+                  autoplay
+                  muted
+                  loop />
+              {/if}
+
+              {#if feedBanners.find(b => b.positionInFeed == i).image}
+                <img
+                  alt="novembre.global"
+                  src={urlFor(feedBanners.find(b => b.positionInFeed == i).image)
+                    .width(1400)
+                    .quality(90)
+                    .auto('format')
+                    .url()} />
+              {/if}
+
             </a>
           {/if}
           <Preview {post} isFirst={i === 0 ? true : false} />

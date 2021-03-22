@@ -6,63 +6,67 @@
   // # # # # # # # # # # # # #
 
   // *** IMPORTS
-  import { onMount } from "svelte";
-  import { fade, slide } from "svelte/transition";
-  import { quintOut } from "svelte/easing";
-  import get from "lodash/get";
-  import isEmpty from "lodash/isEmpty";
-  import { urlFor, loadArticle, renderBlockText } from "../sanity.js";
+  import { onMount } from "svelte"
+  import { fade, slide } from "svelte/transition"
+  import { quintOut } from "svelte/easing"
+  import get from "lodash/get"
+  import isEmpty from "lodash/isEmpty"
+  import { urlFor, loadArticle, renderBlockText } from "../sanity.js"
 
   // *** COMPONENTS
-  import TaxList from "../Components/TaxList.svelte";
-  import Footer from "../Components/Footer.svelte";
-  import Preview from "../Components/Preview.svelte";
-  import MetaData from "../Components/MetaData.svelte";
+  import TaxList from "../Components/TaxList.svelte"
+  import Footer from "../Components/Footer.svelte"
+  import Preview from "../Components/Preview.svelte"
+  import MetaData from "../Components/MetaData.svelte"
 
   // *** STORES
-  import { navigationColor, scrollListActive } from "../stores.js";
+  import { navigationColor, scrollListActive } from "../stores.js"
 
   // *** MODULES
-  import Image from "../Components/Modules/Image.svelte";
-  import ImageGroup from "../Components/Modules/ImageGroup.svelte";
-  import VideoEmbed from "../Components/Modules/VideoEmbed.svelte";
-  import Audio from "../Components/Modules/Audio.svelte";
-  import Slideshow from "../Components/Modules/Slideshow.svelte";
-  import VideoLoop from "../Components/Modules/Video.svelte";
+  import Image from "../Components/Modules/Image.svelte"
+  import ImageGroup from "../Components/Modules/ImageGroup.svelte"
+  import VideoEmbed from "../Components/Modules/VideoEmbed.svelte"
+  import Audio from "../Components/Modules/Audio.svelte"
+  import Slideshow from "../Components/Modules/Slideshow.svelte"
+  import VideoLoop from "../Components/Modules/Video.svelte"
 
   // *** PROPS
-  export let slug = "";
-  export let location = {};
+  export let slug = ""
+  export let location = {}
 
   // ** CONSTANTS
   const query =
-    "*[slug.current == $slug]{'previewVideoUrl': preview[0].video.asset->url,..., related[]->{title, 'slug': slug.current, mainImage, relatedSlideshow, 'category': taxonomy.category}}[0]";
+    "*[slug.current == $slug]{..., 'previewVideoUrl': preview[0].video.asset->url, related[]->{title, 'slug': slug.current, mainImage, relatedSlideshow, 'category': taxonomy.category}}[0]"
 
   // *** VARIABLES
-  let currentSlug = slug;
-  let title = "";
-  let bannerActive = false;
+  let currentSlug = slug
+  let title = ""
+  let bannerActive = false
 
-  navigationColor.set("black");
-  scrollListActive.set(false);
+  navigationColor.set("black")
+  scrollListActive.set(false)
 
   // *** REACTIVE
   $: {
     if (slug !== currentSlug) {
-      post = loadArticle(query, { slug: slug });
-      currentSlug = slug;
+      post = loadArticle(query, { slug: slug })
+      currentSlug = slug
     }
   }
 
-  let post = loadArticle(query, { slug: slug });
+  let post = loadArticle(query, { slug: slug })
+
+  post.then(p => {
+    console.log("post", p)
+  })
 
   // *** ON MOUNT
   onMount(async () => {
-    window.scrollTo(0, 0);
+    window.scrollTo(0, 0)
     setTimeout(() => {
-      bannerActive = true;
-    }, 3000);
-  });
+      bannerActive = true
+    }, 3000)
+  })
 </script>
 
 <style lang="scss">
@@ -70,7 +74,8 @@
 
   .article {
     background: $white;
-    overflow-x: hidden;
+    width: 100%;
+    overflow: hidden;
 
     &.top-padded {
       padding-top: 100px;
@@ -114,6 +119,7 @@
       @include screen-size("small") {
         font-size: $mobile_xlarge;
         margin-bottom: $large-vertical-margin;
+        overflow: hidden;
       }
 
       transition: opacity $transition;
@@ -184,7 +190,6 @@
 </style>
 
 {#await post then post}
-
   <MetaData {post} />
 
   {#if post.banner && bannerActive}
@@ -195,6 +200,7 @@
       rel="noreferrer"
       class="sidebar-banner">
       <img
+        alt="novembre.global"
         src={urlFor(post.banner.image)
           .width(500)
           .quality(90)
@@ -204,7 +210,6 @@
   {/if}
 
   <article class="article">
-
     <!-- HEADER MEDIA -->
     <div class="article__header">
       <Preview {post} isHeader={true} />
@@ -224,6 +229,11 @@
       {@html post.title}
     </h1>
 
+    <!-- AD TAG -->
+    {#if post.adTag}
+      {@html post.adTag}
+    {/if}
+
     <!-- MAIN CONTENT -->
     <div class="content">
       {#each post.content as c}
@@ -233,7 +243,8 @@
         {#if c._type == 'singleImage'}
           <Image
             imageObject={c.image}
-            inlineDisplay={true}
+            linkUrl={c.linkUrl}
+            inlineDisplay={c.noBottomMargin ? false : true}
             maxHeight={get(c, 'maxHeight', false)}
             backgroundColor={get(c, 'backgroundColor', false)}
             caption={get(c, 'caption', false)}
@@ -243,7 +254,8 @@
         {#if c._type == 'imageGroup'}
           <ImageGroup
             imageArray={c.images}
-            inlineDisplay={true}
+            linkUrl={c.linkUrl}
+            inlineDisplay={c.noBottomMargin ? false : true}
             maxHeight={get(c, 'maxHeight', false)}
             backgroundColor={get(c, 'backgroundColor', false)}
             alignment={get(c, 'alignment', '')}
@@ -255,7 +267,7 @@
             url={'https://cdn.sanity.io/files/gj963qwj/production/' + c.video.asset._ref
                 .replace('file-', '')
                 .replace('-mp4', '.mp4')}
-            inlineDisplay={true}
+            inlineDisplay={c.noBottomMargin ? false : true}
             posterImage={get(c, 'preview.posterImage', '')}
             autoplay={get(c, 'autoplay', false)}
             maxHeight={get(c, 'maxHeight', false)}
@@ -294,9 +306,7 @@
     {:else}
       <div class="bottom-space" />
     {/if}
-
   </article>
 
   <Footer active={true} />
-
 {/await}
