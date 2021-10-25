@@ -6,38 +6,128 @@
   // # # # # # # # # # # # # #
 
   // *** IMPORTS
-  import { Router, links } from "svelte-routing";
-  import isEmpty from "lodash/isEmpty";
+  import { Router, links } from "svelte-routing"
+  import isEmpty from "lodash/isEmpty"
 
   // *** COMPONENTS
-  import Logo from "./Logo.svelte";
-  import SearchBox from "./SearchBox.svelte";
-  import { urlFor } from "../sanity.js";
+  import Logo from "./Logo.svelte"
+  import SearchBox from "./SearchBox.svelte"
+  import { urlFor } from "../sanity.js"
 
   // *** STORES
-  import { menuBanners, navigationColor, menuActiveGlobal } from "../stores.js";
+  import { menuBanners, navigationColor, menuActiveGlobal } from "../stores.js"
 
   // *** VARIABLES
-  let menuActive = false;
-  let searchActive = false;
+  let menuActive = false
+  let searchActive = false
 
   const menuItems = [
     { title: "FEED", target: "/" },
+    { title: "ABOUT", target: "/about" },
     { title: "BUREAU", target: "/bureau" },
     { title: "MAGAZINE", target: "/magazine" },
-    { title: "ABOUT", target: "/about" },
-    { title: "CONTACT", target: "/contact" }
+    { title: "DIGEST", target: "/digest" },
+    { title: "CONTACT", target: "/contact" },
     // { title: "STOCKISTS", target: "/stockists" }
-  ];
+  ]
 
   // *** REACTIVE
-  $: menuActiveGlobal.set(menuActive);
+  $: menuActiveGlobal.set(menuActive)
   $: {
     menuActive
       ? document.querySelector("body").classList.add("no-scroll")
-      : document.querySelector("body").classList.remove("no-scroll");
+      : document.querySelector("body").classList.remove("no-scroll")
   }
 </script>
+
+<nav
+  class="navigation"
+  class:navigation--black={menuActive}
+  class:navigation--expanded={menuActive}
+  use:links
+>
+  <Router>
+    <div class="navigation__bar">
+      <div class="navigation__logo" on:click={() => (menuActive = !menuActive)}>
+        <Logo black={menuActive} />
+      </div>
+      <div
+        class="navigation__toggle"
+        on:click={() => (menuActive = !menuActive)}
+      >
+        {menuActive ? "CLOSE" : "MENU"}
+      </div>
+    </div>
+
+    <!-- {#if menuActive}
+      <div class="bg-bar" />
+    {/if} -->
+
+    <menu class="navigation__menu" on:click={() => (menuActive = !menuActive)}>
+      {#if menuActive}
+        {#each menuItems as item, menuIndex}
+          <menuitem class="navigation__menu-item">
+            <a href={item.target} class="navigation__link">
+              <div class="navigation__link--normal">
+                {@html item.title}
+              </div>
+              <div class="navigation__link--hover">
+                {@html item.title}
+              </div>
+            </a>
+          </menuitem>
+        {/each}
+
+        <menuitem class="navigation__menu-item">
+          <SearchBox
+            on:closeMenu={e => {
+              menuActive = false
+            }}
+            on:searchActive={e => {
+              searchActive = true
+            }}
+            {menuActive}
+          />
+        </menuitem>
+      {/if}
+
+      {#await $menuBanners then menuBanners}
+        {#if !isEmpty(menuBanners)}
+          <a
+            href={menuBanners[0].link}
+            target="_blank"
+            class:hidden={searchActive}
+            rel="noreferrer"
+            class="banner"
+          >
+            {#if menuBanners[0].video && menuBanners[0].video.asset && menuBanners[0].video.asset._ref}
+              <video
+                playsinline="playsinline"
+                src={"https://cdn.sanity.io/files/gj963qwj/production/" +
+                  menuBanners[0].video.asset._ref
+                    .replace("file-", "")
+                    .replace("-mp4", ".mp4")}
+                autoplay
+                muted
+                loop
+              />
+            {/if}
+            {#if menuBanners[0].image}
+              <img
+                alt="novembre.global"
+                src={urlFor(menuBanners[0].image)
+                  .width(700)
+                  .quality(90)
+                  .auto("format")
+                  .url()}
+              />
+            {/if}
+          </a>
+        {/if}
+      {/await}
+    </menu>
+  </Router>
+</nav>
 
 <style lang="scss">
   @import "../variables.scss";
@@ -256,91 +346,3 @@
     }
   }
 </style>
-
-<nav
-  class="navigation"
-  class:navigation--black={menuActive}
-  class:navigation--expanded={menuActive}
-  use:links>
-
-  <Router>
-
-    <div class="navigation__bar">
-      <div class="navigation__logo" on:click={() => (menuActive = !menuActive)}>
-        <Logo black={menuActive} />
-      </div>
-      <div
-        class="navigation__toggle"
-        on:click={() => (menuActive = !menuActive)}>
-        {menuActive ? 'CLOSE' : 'MENU'}
-      </div>
-    </div>
-
-    <!-- {#if menuActive}
-      <div class="bg-bar" />
-    {/if} -->
-
-    <menu class="navigation__menu" on:click={() => (menuActive = !menuActive)}>
-
-      {#if menuActive}
-        {#each menuItems as item, menuIndex}
-          <menuitem class="navigation__menu-item">
-            <a href={item.target} class="navigation__link">
-              <div class="navigation__link--normal">
-                {@html item.title}
-              </div>
-              <div class="navigation__link--hover">
-                {@html item.title}
-              </div>
-            </a>
-          </menuitem>
-        {/each}
-
-        <menuitem class="navigation__menu-item">
-          <SearchBox
-            on:closeMenu={e => {
-              menuActive = false;
-            }}
-            on:searchActive={e => {
-              searchActive = true;
-            }}
-            {menuActive} />
-        </menuitem>
-      {/if}
-
-      {#await $menuBanners then menuBanners}
-        {#if !isEmpty(menuBanners)}
-          <a
-            href={menuBanners[0].link}
-            target="_blank"
-            class:hidden={searchActive}
-            rel="noreferrer"
-            class="banner">
-
-            {#if menuBanners[0].video && menuBanners[0].video.asset && menuBanners[0].video.asset._ref}
-              <video
-                playsinline="playsinline"
-                src={'https://cdn.sanity.io/files/gj963qwj/production/' + menuBanners[0].video.asset._ref
-                    .replace('file-', '')
-                    .replace('-mp4', '.mp4')}
-                autoplay
-                muted
-                loop />
-            {/if}
-            {#if menuBanners[0].image}
-              <img
-                alt="novembre.global"
-                src={urlFor(menuBanners[0].image)
-                  .width(700)
-                  .quality(90)
-                  .auto('format')
-                  .url()} />
-            {/if}
-          </a>
-        {/if}
-      {/await}
-
-    </menu>
-  </Router>
-
-</nav>

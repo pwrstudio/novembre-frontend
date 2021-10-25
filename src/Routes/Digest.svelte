@@ -1,7 +1,7 @@
 <script>
   // # # # # # # # # # # # # #
   //
-  //  CONTACT
+  //  DIGEST
   //
   // # # # # # # # # # # # # #
 
@@ -15,7 +15,7 @@
 
   // COMPONENTS
   import Footer from "../Components/Footer.svelte"
-  // import NewsletterSignUp from "../Components/NewsletterSignUp.svelte";
+  import NewsletterSignUp from "../Components/NewsletterSignUp.svelte"
   import MetaData from "../Components/MetaData.svelte"
 
   // *** MODULES
@@ -40,13 +40,14 @@
   })
 </script>
 
-<MetaData post={{ title: "Contact" }} />
+<MetaData post={{ title: "digest" }} />
 
 {#await $pages then pages}
-  <article class="contact">
-    <div class="contact-section">
-      {#if has(pages, "contact.content") && Array.isArray(pages.contact.content)}
-        {#each pages.contact.content as c}
+  <article class="digest">
+    <!-- DIGEST TEXT -->
+    <div class="digest-section">
+      {#if has(pages, "digest.content") && Array.isArray(pages.digest.content)}
+        {#each pages.digest.content as c}
           {#if c._type == "block"}
             {@html renderBlockText(c)}
           {/if}
@@ -80,41 +81,9 @@
       {/if}
     </div>
 
-    <!-- <div class="contact-section mail">
+    <!-- SIGN-UP -->
+    <div class="digest-section mail">
       <NewsletterSignUp />
-    </div> -->
-
-    <div class="contact-section">
-      {#if has(pages, "socialMedia.content") && Array.isArray(pages.socialMedia.content)}
-        {#each pages.socialMedia.content as c}
-          {#if c._type == "block"}
-            {@html renderBlockText(c)}
-          {/if}
-          {#if c._type == "singleImage"}
-            <Image
-              imageObject={c.image}
-              caption={get(c, "caption", false)}
-              alignment={get(c, "alignment", "")}
-              fullwidth={get(c, "fullwidth", "")}
-            />
-          {/if}
-          {#if c._type == "imageGroup"}
-            <ImageGroup
-              imageArray={c.images}
-              caption={get(c, "caption", false)}
-            />
-          {/if}
-          {#if c._type == "video"}
-            <VideoEmbed url={c.video} caption={get(c, "caption", false)} />
-          {/if}
-          {#if c._type == "slideshow"}
-            <Slideshow imageArray={c.images} />
-          {/if}
-          {#if c._type == "audio"}
-            <Audio fileObject={c.audio} />
-          {/if}
-        {/each}
-      {/if}
     </div>
   </article>
 
@@ -124,7 +93,7 @@
 <style lang="scss">
   @import "../variables.scss";
 
-  .contact {
+  .digest {
     padding-top: 100px;
     margin-bottom: $large-vertical-margin;
     font-family: $sans-stack;
@@ -141,7 +110,7 @@
       margin-bottom: $small-vertical-margin;
     }
 
-    .contact-section {
+    .digest-section {
       margin-bottom: 1em;
       padding: $small-margin;
 

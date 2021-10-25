@@ -6,17 +6,17 @@
   // # # # # # # # # # #
 
   // *** IMPORTS
-  import { fade } from "svelte/transition";
+  import { fade } from "svelte/transition"
 
   // *** PROPS
-  export let compact = false;
+  export let compact = false
 
   // VARIABLES
-  let emailAddress = "";
-  let emailFirstName = "";
-  let emailLastName = "";
-  let emailCompany = "";
-  let success = false;
+  let emailAddress = ""
+  let emailFirstName = ""
+  let emailLastName = ""
+  let emailCompany = ""
+  let success = false
 
   // LOGIC
   const submit = () => {
@@ -28,19 +28,79 @@
       "&lastname=" +
       encodeURIComponent(emailLastName) +
       "&company=" +
-      encodeURIComponent(emailCompany);
+      encodeURIComponent(emailCompany)
 
     fetch(url)
-      .then(function(response) {
-        console.log(response);
-        success = true;
+      .then(function (response) {
+        console.log(response)
+        success = true
       })
       .catch(err => {
-        console.error(err);
-        Sentry.captureException(err);
-      });
-  };
+        console.error(err)
+        Sentry.captureException(err)
+      })
+  }
 </script>
+
+<div id="mailing-list" class="mailing-list" class:compact>
+  {#if success}
+    <span in:fade>
+      <strong>Thank you.</strong>
+      <br />
+      You will receive a sign up confirmation at the address {emailAddress}
+      shortly.
+    </span>
+  {:else}
+    <form class="newsletter-signup" class:compact>
+      {#if compact}
+        <div class="form-section">Subscribe to NOVEMBRE DIGEST now!</div>
+      {:else}
+        <div class="form-section">NOVEMBRE DIGEST</div>
+      {/if}
+
+      <!-- {#if !compact} -->
+      <div class="form-section">
+        <input
+          name="email_first_name"
+          placeholder="FIRST NAME"
+          class="mailing-list__input"
+          bind:value={emailFirstName}
+        />
+      </div>
+
+      <div class="form-section">
+        <input
+          name="email_last_name"
+          placeholder="LAST NAME"
+          class="mailing-list__input"
+          bind:value={emailLastName}
+        />
+      </div>
+
+      <div class="form-section">
+        <input
+          name="email_company"
+          placeholder="COMPANY"
+          class="mailing-list__input"
+          bind:value={emailCompany}
+        />
+      </div>
+      <!-- {/if} -->
+
+      <div class="form-section">
+        <input
+          placeholder="EMAIL ADDRESS"
+          class="mailing-list__input"
+          bind:value={emailAddress}
+        />
+      </div>
+
+      <div class="form-section submit-button">
+        <div class="submit" on:click={submit}>Sign up</div>
+      </div>
+    </form>
+  {/if}
+</div>
 
 <style lang="scss">
   @import "../variables.scss";
@@ -158,60 +218,3 @@
     font-family: $sans-stack;
   }
 </style>
-
-<div id="mailing-list" class="mailing-list" class:compact>
-  {#if success}
-    <span in:fade>
-      <strong>Thank you.</strong>
-      <br />
-      You will receive a sign up confirmation at the address {emailAddress}
-      shortly.
-    </span>
-  {:else}
-    <form class="newsletter-signup" class:compact>
-      {#if compact}
-        <div class="form-section">Subscribe to our correspondence channel</div>
-      {:else}
-        <div class="form-section">NEWSLETTER</div>
-      {/if}
-
-      <!-- {#if !compact} -->
-      <div class="form-section">
-        <input
-          name="email_first_name"
-          placeholder="FIRST NAME"
-          class="mailing-list__input"
-          bind:value={emailFirstName} />
-      </div>
-
-      <div class="form-section">
-        <input
-          name="email_last_name"
-          placeholder="LAST NAME"
-          class="mailing-list__input"
-          bind:value={emailLastName} />
-      </div>
-
-      <div class="form-section">
-        <input
-          name="email_company"
-          placeholder="COMPANY"
-          class="mailing-list__input"
-          bind:value={emailCompany} />
-      </div>
-      <!-- {/if} -->
-
-      <div class="form-section">
-        <input
-          placeholder="EMAIL ADDRESS"
-          class="mailing-list__input"
-          bind:value={emailAddress} />
-      </div>
-
-      <div class="form-section submit-button">
-        <div class="submit" on:click={submit}>Sign up</div>
-      </div>
-
-    </form>
-  {/if}
-</div>
