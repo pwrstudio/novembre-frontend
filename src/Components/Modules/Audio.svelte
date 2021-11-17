@@ -5,61 +5,110 @@
   //
   // # # # # # # # # # # # # #
 
-  import { urlFor } from "../../sanity.js";
+  import { urlFor } from "../../sanity.js"
 
   // *** PROPS
-  export let url = "";
-  export let title = "";
-  export let link = "";
-  export let size = true;
-  export let backgroundColor = false;
-  export let foregroundColor = false;
-  export let posterImage = false;
+  export let url = ""
+  export let title = ""
+  export let link = ""
+  export let size = true
+  export let backgroundColor = false
+  export let foregroundColor = false
+  export let posterImage = false
+  export let autoplay = false
+  export let hidden = false
 
   // *** VARIABLES
-  let time = 0;
-  let duration = 0;
-  let paused = true;
+  let time = 0
+  let duration = 0
+  let paused = true
 
   // *** CONSTANTS
-  const controlsTimeoutDuration = 2500;
+  const controlsTimeoutDuration = 2500
 
   // *** DOM REFERENCES
-  let audioEl = {};
+  let audioEl = {}
 
   // *** FUNCTIONS
   const handleMousemove = e => {
-    if (e.which !== 1) return; // mouse not down
-    if (!duration) return; // audio not loaded yet
-    const { left, right } = this.getBoundingClientRect();
-    time = (duration * (e.clientX - left)) / (right - left);
+    if (e.which !== 1) return // mouse not down
+    if (!duration) return // audio not loaded yet
+    const { left, right } = this.getBoundingClientRect()
+    time = (duration * (e.clientX - left)) / (right - left)
   }
 
   const handleMousedown = e => {
-
     const handleMouseup = () => {
-      if (paused) audioEl.play();
-      else audioEl.pause();
-      cancel();
+      if (paused) audioEl.play()
+      else audioEl.pause()
+      cancel()
     }
 
     const cancel = () => {
-      e.target.removeEventListener("mouseup", handleMouseup);
+      e.target.removeEventListener("mouseup", handleMouseup)
     }
 
-    e.target.addEventListener("mouseup", handleMouseup);
+    e.target.addEventListener("mouseup", handleMouseup)
 
-    setTimeout(cancel, 200);
+    setTimeout(cancel, 200)
   }
 
   const format = seconds => {
-    if (isNaN(seconds)) return "...";
-    const minutes = Math.floor(seconds / 60);
-    seconds = Math.floor(seconds % 60);
-    if (seconds < 10) seconds = "0" + seconds;
-    return `${minutes}:${seconds}`;
-  };
+    if (isNaN(seconds)) return "..."
+    const minutes = Math.floor(seconds / 60)
+    seconds = Math.floor(seconds % 60)
+    if (seconds < 10) seconds = "0" + seconds
+    return `${minutes}:${seconds}`
+  }
 </script>
+
+<div
+  on:mousemove={handleMousemove}
+  on:mousedown={handleMousedown}
+  class="audio"
+  class:hidden
+  class:audio--full={size == true || size == "fullWidth"}
+  class:audio--inline={size == "proportional"}
+  style="background-color:{backgroundColor}"
+>
+  <audio
+    class="audio-player"
+    preload="auto"
+    {autoplay}
+    loop={autoplay}
+    src={url}
+    bind:currentTime={time}
+    bind:duration
+    bind:paused
+    bind:this={audioEl}
+  />
+
+  <div class="controls">
+    {#if posterImage}
+      <img
+        src={urlFor(posterImage).width(500).quality(90).auto("format").url()}
+        class="poster-image"
+        alt={title}
+      />
+    {/if}
+
+    <div class="audio-toggle">{paused ? "PLAY" : "PAUSE"}</div>
+
+    <div class="current-time">{format(time)}</div>
+
+    <div class="total-time">{format(duration)}</div>
+
+    <div class="audio-title">
+      {#if link}
+        <a href={link} target="_blank2" rel="noreferrer">{title}</a>
+      {:else}
+        {title}
+      {/if}
+    </div>
+
+    <progress value={time / duration || 0} />
+  </div>
+</div>
 
 <style lang="scss">
   @import "../../variables.scss";
@@ -89,6 +138,13 @@
 
     &:active {
       cursor: grab;
+    }
+
+    &.hidden {
+      visibility: hidden;
+      height: 0;
+      margin-bottom: 0;
+      overflow: hidden;
     }
   }
 
@@ -170,51 +226,3 @@
     }
   }
 </style>
-
-<div
-  on:mousemove={handleMousemove}
-  on:mousedown={handleMousedown}
-  class="audio"
-  class:audio--full={size == true || size == 'fullWidth'}
-  class:audio--inline={size == 'proportional'}
-  style="background-color:{backgroundColor}">
-
-  <audio
-    class="audio-player"
-    preload="auto"
-    src={url}
-    bind:currentTime={time}
-    bind:duration
-    bind:paused
-    bind:this={audioEl} />
-
-  <div class="controls">
-
-    {#if posterImage}
-      <img
-        src={urlFor(posterImage)
-          .width(500)
-          .quality(90)
-          .auto('format')
-          .url()}
-        class="poster-image"
-        alt={title} />
-    {/if}
-
-    <div class="audio-toggle">{paused ? 'PLAY' : 'PAUSE'}</div>
-
-    <div class="current-time">{format(time)}</div>
-
-    <div class="total-time">{format(duration)}</div>
-
-    <div class="audio-title">
-      {#if link}
-        <a href={link} target="_blank2" rel="noreferrer">{title}</a>
-      {:else}{title}{/if}
-    </div>
-
-    <progress value={time / duration || 0} />
-
-  </div>
-
-</div>

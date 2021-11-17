@@ -1,93 +1,218 @@
 <script>
-    // # # # # # # # # # # # # #
-    //
-    //  SATELLITE SITE TEMPLATE
-    //
-    // # # # # # # # # # # # # #
-  
-    // *** IMPORTS
-    import { onMount, onDestroy } from "svelte"
-    import { fade } from "svelte/transition"
-    import get from "lodash/get"
-    import isEmpty from "lodash/isEmpty"
-    import { urlFor, loadSatelliteSite, renderBlockText } from "../sanity.js"
-  
-    // *** COMPONENTS
-    // import TaxList from "../Components/TaxList.svelte"
-    // import Footer from "../Components/Footer.svelte"
-    // import Preview from "../Components/Preview.svelte"
-    // import MetaData from "../Components/MetaData.svelte"
-  
-    // *** STORES
-    import { satelliteSiteActive } from "../stores.js"
-  
-    // *** MODULES
-    // import Image from "../Components/Modules/Image.svelte"
-    // import ImageGroup from "../Components/Modules/ImageGroup.svelte"
-    // import VideoEmbed from "../Components/Modules/VideoEmbed.svelte"
-    // import Audio from "../Components/Modules/Audio.svelte"
-    // import ArbitraryEmbed from "../Components/Modules/ArbitraryEmbed.svelte";
-    // import Slideshow from "../Components/Modules/Slideshow.svelte"
-    // import VideoLoop from "../Components/Modules/Video.svelte"
-  
-    // *** PROPS
-    export let slug = ""
-    export let location = {}
-  
-    // ** CONSTANTS
-    const query = "*[_type == 'satelliteSite' && slug.current == $slug]{...}[0]"
+  // # # # # # # # # # # # # #
+  //
+  //  SATELLITE SITE TEMPLATE
+  //
+  // # # # # # # # # # # # # #
 
-    satelliteSiteActive.set(true)
+  // *** IMPORTS
+  import { onMount, onDestroy } from "svelte"
+  import { fade } from "svelte/transition"
+  import get from "lodash/get"
+  import isEmpty from "lodash/isEmpty"
+  import { urlFor, loadSatelliteSite, renderBlockText } from "../sanity.js"
 
-    console.log('slug', slug)
-  
-    let siteData = loadSatelliteSite(query, { slug: slug })
-  
-    siteData.then(s => {
-      console.log("siteData", s)
-    })
-  
-    // *** ON MOUNT
-    onDestroy(async () => {
-        satelliteSiteActive.set(false)
-    })
-  </script>
-  
-  <style lang="scss">
-    @import "../variables.scss";
-  
-    .satellite {
-      background: $hotpink;
-      width: 100vw;
-      overflow: hidden;
-      height: 100vh;
-      color: white;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-family: $sans-stack;
-      text-transform: uppercase;
-      text-align: center;
-      font-size: $large;
-    }
+  // *** COMPONENTS
+  import Logo from "../Components/Logo.svelte"
 
-  </style>
-  
-  {#await siteData then siteData}
-    <!-- <MetaData {post} /> -->
-    <div class="satellite">
-        <div>
-            {#if siteData.mainImage}
-                <img
-                    alt={siteData.title}
-                    src={urlFor(siteData.mainImage)
-                        .height(600)
-                        .quality(90)
-                        .auto('format')
-                        .url()} />
-            {/if}
-            <div>{siteData.title}</div>
+  // *** STORES
+  import { satelliteSiteActive } from "../stores.js"
+
+  // *** MODULES
+  import Image from "../Components/Modules/Image.svelte"
+  import ImageGroup from "../Components/Modules/ImageGroup.svelte"
+  import ThumbnailGroup from "../Components/Modules/ThumbnailGroup.svelte"
+  import VideoEmbed from "../Components/Modules/VideoEmbed.svelte"
+  import Audio from "../Components/Modules/Audio.svelte"
+  import ArbitraryEmbed from "../Components/Modules/ArbitraryEmbed.svelte"
+  import Slideshow from "../Components/Modules/Slideshow.svelte"
+  import Flipshow from "../Components/Modules/Flipshow.svelte"
+  import VideoLoop from "../Components/Modules/Video.svelte"
+
+  // *** PROPS
+  export let slug = ""
+  export let location = {}
+
+  // ** CONSTANTS
+  const query = "*[_type == 'satelliteSite' && slug.current == $slug]{...}[0]"
+  satelliteSiteActive.set(true)
+
+  const post = loadSatelliteSite(query, { slug: slug })
+
+  post.then(s => {
+    console.log("post", s)
+  })
+
+  // *** ON MOUNT
+  onDestroy(async () => {
+    satelliteSiteActive.set(false)
+  })
+</script>
+
+{#await post then post}
+  <!-- <MetaData {post} /> -->
+  <div
+    class="satellite"
+    style={"background-color:" +
+      get(post, "background.backgroundColor.hex", "#ffffff") +
+      "; background-image: url(" +
+      urlFor(get(post, "background.backgroundImage.asset", "")) +
+      ");"}
+  >
+    <!-- HEADER -->
+    <div class="header">
+      <!-- NOVEMBRE LOGO -->
+      {#if get(post, "header.showNovembreLogo", false)}
+        <div class="novembre-logo">
+          <Logo />
         </div>
+      {/if}
+      <!-- EXTERNAL LOGO -->
+      {#if get(post, "header.externalLogo.asset", false)}
+        <div class="external-logo">
+          <img
+            src={urlFor(post.header.externalLogo.asset)
+              .quality(80)
+              .height(100)
+              .url()}
+          />
+        </div>
+      {/if}
+      <!-- TITLE -->
+      {#if get(post, "header.showTitle", false)}
+        <div class="title">{post.title}</div>
+      {/if}
     </div>
-  {/await}
-  
+
+    <!-- MAIN CONTENT -->
+    <div class="content">
+      {#each post.content as c}
+        <!-- TEXT -->
+        {#if c._type == "block"}
+          {@html renderBlockText(c)}
+        {/if}
+        <!-- SINGLE IMAGE -->
+        {#if c._type == "singleImage"}
+          <Image
+            imageObject={c.image}
+            linkUrl={c.linkUrl}
+            inlineDisplay={c.noBottomMargin ? false : true}
+            maxHeight={get(c, "maxHeight", false)}
+            backgroundColor={get(c, "backgroundColor", false)}
+            caption={get(c, "caption", false)}
+            alignment={get(c, "alignment", "")}
+            fullwidth={get(c, "fullwidth", "")}
+          />
+        {/if}
+        <!-- IMAGE GROUP -->
+        {#if c._type == "imageGroup"}
+          <ImageGroup
+            imageArray={c.images}
+            linkUrl={c.linkUrl}
+            inlineDisplay={c.noBottomMargin ? false : true}
+            maxHeight={get(c, "maxHeight", false)}
+            backgroundColor={get(c, "backgroundColor", false)}
+            alignment={get(c, "alignment", "")}
+            fullwidth={get(c, "fullwidth", "")}
+            caption={get(c, "caption", false)}
+          />
+        {/if}
+        <!-- THUMBNAIL GROUP -->
+        {#if c._type == "thumbnailGroup"}
+          <ThumbnailGroup
+            imageArray={c.images}
+            fullwidth={get(c, "fullwidth", "")}
+          />
+        {/if}
+        <!-- VIDEO LOOP -->
+        {#if c._type == "videoLoop"}
+          <VideoLoop
+            url={"https://cdn.sanity.io/files/gj963qwj/production/" +
+              c.video.asset._ref.replace("file-", "").replace("-mp4", ".mp4")}
+            inlineDisplay={c.noBottomMargin ? false : true}
+            posterImage={get(c, "preview.posterImage", "")}
+            autoplay={get(c, "autoplay", false)}
+            maxHeight={get(c, "maxHeight", false)}
+            backgroundColor={get(c, "backgroundColor", false)}
+            caption={get(c, "caption", false)}
+            alignment={get(c, "alignment", "")}
+            fullwidth={get(c, "fullwidth", "")}
+          />
+        {/if}
+        <!-- EMBEDDED VIDEO -->
+        {#if c._type == "video"}
+          <VideoEmbed
+            url={c.video}
+            backgroundColor={get(c, "backgroundColor", false)}
+            caption={get(c, "caption", false)}
+          />
+        {/if}
+        <!-- SLIDESHOW -->
+        {#if c._type == "slideshow"}
+          <Slideshow autoplay={c.autoplay} imageArray={c.images} />
+        {/if}
+        <!-- FLIPSHOW -->
+        {#if c._type == "flipshow"}
+          <Flipshow imageArray={c.images} />
+        {/if}
+        <!-- AUDIO -->
+        {#if c._type == "audio"}
+          <Audio
+            url={"https://cdn.sanity.io/files/gj963qwj/production/" +
+              c.audio.asset._ref.replace("file-", "").replace("-mp3", ".mp3")}
+            title={get(c, "title", "")}
+            link={get(c, "link", false)}
+            posterImage={get(c, "image", false)}
+            backgroundColor={get(c, "backgroundColor.hex", false)}
+            foregroundColor={get(c, "foregroundColor.hex", false)}
+            autoplay={get(c, "autoplay", false)}
+            hidden={get(c, "hidden", false)}
+          />
+        {/if}
+        <!-- ARBITRARY EMBED -->
+        {#if c._type == "arbitraryEmbed"}
+          <ArbitraryEmbed code={c.embedCode} />
+        {/if}
+      {/each}
+    </div>
+  </div>
+{/await}
+
+<style lang="scss">
+  @import "../variables.scss";
+
+  .satellite {
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: $sans-stack;
+
+    .header {
+      width: 100%;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 10;
+      text-align: left;
+      line-height: 100px;
+
+      .novembre-logo {
+        height: 100px;
+        float: left;
+        margin-right: 20px;
+      }
+
+      .external-logo {
+        height: 100px;
+        float: left;
+        margin-right: 20px;
+      }
+
+      .title {
+        float: left;
+        font-size: $large;
+      }
+    }
+  }
+</style>

@@ -14,22 +14,22 @@
   // # # # # # # # # # # # # #
 
   // *** IMPORTS
-  import MediaQuery from "svelte-media-query";
-  import { urlFor } from "../../sanity.js";
+  import MediaQuery from "svelte-media-query"
+  import { urlFor } from "../../sanity.js"
 
   // *** PROPS
-  export let imageObject = {};
-  export let caption = false;
-  export let backgroundColor = false;
-  export let alignment = "";
-  export let maxHeight = false;
-  export let fullwidth = false;
-  export let isListing = false;
-  export let inlineDisplay = false;
+  export let imageObject = {}
+  export let caption = false
+  export let backgroundColor = false
+  export let alignment = ""
+  export let maxHeight = false
+  export let fullwidth = false
+  export let isListing = false
+  export let inlineDisplay = false
 
   const customStyles =
     (maxHeight ? "height:" + maxHeight + "vh; " : "") +
-    (backgroundColor ? "background:" + backgroundColor.hex + ";" : "");
+    (backgroundColor ? "background:" + backgroundColor.hex + ";" : "")
 
   // *** VARIABLES
   const src = fullwidth
@@ -39,20 +39,38 @@
         .quality(90)
         .auto("format")
         .url()
-    : urlFor(imageObject)
-        .width(800)
-        .quality(90)
-        .auto("format")
-        .url();
+    : urlFor(imageObject).width(800).quality(90).auto("format").url()
 
   const srcPortrait = urlFor(imageObject)
     .width(800)
     .quality(90)
     .auto("format")
-    .url();
+    .url()
 
-  let loaded = false;
+  let loaded = false
 </script>
+
+<div
+  class="single-image {alignment}"
+  class:fullwidth
+  class:listing={isListing}
+  class:bottom-space={inlineDisplay}
+  style={customStyles}
+>
+  <MediaQuery query="(min-width: 800px)" let:matches>
+    <figure>
+      <img
+        class:loaded
+        src={matches ? src : srcPortrait}
+        alt={caption ? caption : "novembre.global"}
+        on:load={e => (loaded = true)}
+      />
+      {#if caption}
+        <figcaption>{caption}</figcaption>
+      {/if}
+    </figure>
+  </MediaQuery>
+</div>
 
 <style lang="scss">
   @import "../../variables.scss";
@@ -155,6 +173,8 @@
 
     @include screen-size("small") {
       height: auto;
+      padding-top: 100px;
+      padding-bottom: 40px;
     }
 
     img {
@@ -172,6 +192,10 @@
       height: $full-height;
       width: 100vw;
       display: block;
+
+      @include screen-size("small") {
+        height: auto;
+      }
     }
 
     figcaption {
@@ -187,26 +211,9 @@
   .listing {
     img {
       object-fit: cover;
+      @include screen-size("small") {
+        object-fit: contain;
+      }
     }
   }
 </style>
-
-<div
-  class="single-image {alignment}"
-  class:fullwidth
-  class:listing={isListing}
-  class:bottom-space={inlineDisplay}
-  style={customStyles}>
-  <MediaQuery query="(min-width: 800px)" let:matches>
-    <figure>
-      <img
-        class:loaded
-        src={matches ? src : srcPortrait}
-        alt={caption ? caption : 'novembre.global'}
-        on:load={e => (loaded = true)} />
-      {#if caption}
-        <figcaption>{caption}</figcaption>
-      {/if}
-    </figure>
-  </MediaQuery>
-</div>

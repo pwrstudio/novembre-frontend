@@ -1,7 +1,7 @@
 <script>
   // # # # # # # # # # # # # #
   //
-  //  SLIDESHOW
+  //  FLIPSHOW
   //
   // # # # # # # # # # # # # #
 
@@ -15,7 +15,6 @@
 
   // *** COMPONENTS
   import Ellipse from "../Ellipse.svelte"
-  import NavShow from "./navShow.svelte"
 
   // *** PROPS
   export let imageArray = []
@@ -255,27 +254,6 @@
         </svg>
       </div>
     </div>
-    {#if !isListing && !isRelated}
-      <div
-        class="nav-container"
-        on:mouseenter={() => {
-          hovered = true
-          if (autoplay == true || autoplay == 1) {
-            pauseSlideshow()
-          }
-        }}
-        on:mouseleave={() => {
-          hovered = false
-          if (autoplay == true || autoplay == 1) {
-            playSlideshow()
-          }
-        }}
-      >
-        {#if loaded && !isListing && !isRelated}
-          <NavShow {imageArray} navTarget={slideShowEl} />
-        {/if}
-      </div>
-    {/if}
   {:else if imageArray.length === 2}
     <div class="static-related double">
       {#if isRelated}
