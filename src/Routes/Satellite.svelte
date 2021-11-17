@@ -26,7 +26,7 @@
   import Audio from "../Components/Modules/Audio.svelte"
   import ArbitraryEmbed from "../Components/Modules/ArbitraryEmbed.svelte"
   import Slideshow from "../Components/Modules/Slideshow.svelte"
-  import Flipshow from "../Components/Modules/Flipshow.svelte"
+  import Flipshow from "../Components/Modules/FlipShow.svelte"
   import VideoLoop from "../Components/Modules/Video.svelte"
 
   // *** PROPS
