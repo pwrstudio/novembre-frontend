@@ -214,5 +214,10 @@
         font-size: $large;
       }
     }
+
+    .content {
+      width: 100vw;
+      overflow: hidden;
+    }
   }
 </style>
