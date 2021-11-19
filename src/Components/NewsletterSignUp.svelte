@@ -37,7 +37,6 @@
       })
       .catch(err => {
         console.error(err)
-        Sentry.captureException(err)
       })
   }
 </script>

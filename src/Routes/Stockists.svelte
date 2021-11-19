@@ -6,113 +6,135 @@
   // # # # # # # # # # # # # #
 
   // *** IMPORTS
-  import { onMount } from "svelte";
-  import { fade } from "svelte/transition";
-  import { tick } from "svelte/internal";
-  import { renderBlockText } from "../sanity.js";
+  import { onMount } from "svelte"
+  import { fade } from "svelte/transition"
+  import { tick } from "svelte/internal"
+  import { renderBlockText } from "../sanity.js"
 
-  import MetaData from "../Components/MetaData.svelte";
+  import MetaData from "../Components/MetaData.svelte"
 
-  import sample from "lodash/sample";
+  import sample from "lodash/sample"
 
   // STORES
-  import { navigationColor, pages, scrollListActive } from "../stores.js";
+  import { navigationColor, pages, scrollListActive } from "../stores.js"
 
-  scrollListActive.set(false);
+  scrollListActive.set(false)
 
   // COMPONENTS
-  import Footer from "../Components/Footer.svelte";
+  import Footer from "../Components/Footer.svelte"
 
   // PROPS
-  export let endpoint = "";
-  export let slug = "";
-  export let location = {};
+  export let endpoint = ""
+  export let slug = ""
+  export let location = {}
 
   const markerList = [
     {
       lat: "43.771577",
-      lon: "11.249287"
+      lon: "11.249287",
     },
     {
       lat: "47.377618",
-      lon: "8.516100"
+      lon: "8.516100",
     },
     {
       lat: "34.084152",
-      lon: "-118.361299"
+      lon: "-118.361299",
     },
     {
       lat: "59.331820",
-      lon: "18.068290"
+      lon: "18.068290",
     },
     {
       lat: "22.599720",
-      lon: "120.478410"
-    }
-  ];
+      lon: "120.478410",
+    },
+  ]
 
-  let counter = 0;
+  let counter = 0
 
-  let map = {};
+  let map = {}
 
-  let mapEl = {};
+  let mapEl = {}
 
   const initMap = () => {
     return new Promise((resolve, reject) => {
       mapboxgl.accessToken =
-        "pk.eyJ1IjoicHdyc3R1ZGlvIiwiYSI6ImNpbTJmMWYwazAwbXV2a201dHV4M3Q0MTEifQ.haMHeGT4HNA8zI2S0BDgGg";
+        "pk.eyJ1IjoicHdyc3R1ZGlvIiwiYSI6ImNpbTJmMWYwazAwbXV2a201dHV4M3Q0MTEifQ.haMHeGT4HNA8zI2S0BDgGg"
       map = new mapboxgl.Map({
         container: mapEl,
         style:
           "mapbox://styles/pwrstudio/ck2f16esc0jgk1cljcu5yym1r?optimize=true",
         center: [34.1, 24.1],
-        zoom: 1.3
-      });
-      resolve();
-    });
-  };
+        zoom: 1.3,
+      })
+      resolve()
+    })
+  }
   const setMarkers = () => {
     markerList.map(x => {
-      let el = document.createElement("div");
-      el.className = "marker";
-      new mapboxgl.Marker(el).setLngLat([x.lon, x.lat]).addTo(map);
-    });
-  };
+      let el = document.createElement("div")
+      el.className = "marker"
+      new mapboxgl.Marker(el).setLngLat([x.lon, x.lat]).addTo(map)
+    })
+  }
 
   // VARIABLES
-  let post = loadData();
+  let post = loadData()
 
   // LOGIC
-  navigationColor.set("black");
+  navigationColor.set("black")
 
   async function loadData() {
     try {
-      const res = await fetch(endpoint);
-      const post = await res.json();
-      return post;
+      const res = await fetch(endpoint)
+      const post = await res.json()
+      return post
     } catch (err) {
-      Sentry.captureException(err);
+      console.log(err)
     }
   }
 
   onMount(async () => {
-    window.scrollTo(0, 0);
-    await tick();
+    window.scrollTo(0, 0)
+    await tick()
     initMap().then(() => {
       // setMarkers()
-    });
-  });
+    })
+  })
 
   const flyTest = () => {
     map.flyTo({
       center: sample(markerList),
       curve: 1,
       zoom: 14,
-      speed: 1.4
-    });
-    counter += 1;
-  };
+      speed: 1.4,
+    })
+    counter += 1
+  }
 </script>
+
+<MetaData post={{ title: "Stockists" }} />
+
+<article class="stockist-page">
+  <div bind:this={mapEl} class="map" />
+
+  <!-- {#await post then post} -->
+
+  <!-- {#await $pages then pages}
+    <div class="stockists">
+      {@html renderBlockText(pages.stockistsPlaceholder.content)}
+    </div>
+  {/await} -->
+
+  {#await $pages then pages}
+    <div class="stockists-placeholder">
+      {@html renderBlockText(pages.stockistsPlaceholder.content)}
+    </div>
+  {/await}
+</article>
+
+<Footer active={true} />
 
 <style lang="scss">
   @import "../variables.scss";
@@ -187,26 +209,3 @@
     }
   }
 </style>
-
-<MetaData post={{ title: 'Stockists' }} />
-
-<article class="stockist-page">
-  <div bind:this={mapEl} class="map" />
-
-  <!-- {#await post then post} -->
-
-  <!-- {#await $pages then pages}
-    <div class="stockists">
-      {@html renderBlockText(pages.stockistsPlaceholder.content)}
-    </div>
-  {/await} -->
-
-  {#await $pages then pages}
-    <div class="stockists-placeholder">
-      {@html renderBlockText(pages.stockistsPlaceholder.content)}
-    </div>
-  {/await}
-
-</article>
-
-<Footer active={true} />

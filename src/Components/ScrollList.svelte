@@ -6,53 +6,53 @@
   // # # # # # # # # # # # # #
 
   // *** IMPORTS
-  import { onMount } from "svelte";
-  import { tick } from "svelte/internal";
-  import { scale } from "svelte/transition";
+  import { onMount } from "svelte"
+  import { tick } from "svelte/internal"
+  import { scale } from "svelte/transition"
 
-  import Flickity from "flickity";
-  import { navigate } from "svelte-routing";
+  import Flickity from "flickity"
+  import { navigate } from "svelte-routing"
 
   // *** DOM STORES
-  import { activeQuery, activeCategory } from "../stores.js";
+  import { activeQuery, activeCategory } from "../stores.js"
 
   // *** PROPS
-  export let tagArray = [];
+  export let tagArray = []
 
   // *** DOM REFERENCES
-  let scrollListEl;
+  let scrollListEl
 
-  let loaded = false;
+  let loaded = false
 
   // TODO: change speed for mobile
-  const startTicker = function() {
+  const startTicker = function () {
     // Play with this value to change the speed
-    let tickerSpeed = 0.7;
+    let tickerSpeed = 0.7
 
-    let flickity = null;
-    let isPaused = true;
+    let flickity = null
+    let isPaused = true
 
     const update = () => {
-      if (isPaused) return;
+      if (isPaused) return
       if (flickity.slides) {
-        flickity.x = (flickity.x - tickerSpeed) % flickity.slideableWidth;
-        flickity.selectedIndex = flickity.dragEndRestingSelect();
-        flickity.updateSelectedSlide();
-        flickity.settle(flickity.x);
+        flickity.x = (flickity.x - tickerSpeed) % flickity.slideableWidth
+        flickity.selectedIndex = flickity.dragEndRestingSelect()
+        flickity.updateSelectedSlide()
+        flickity.settle(flickity.x)
       }
-      window.requestAnimationFrame(update);
-    };
+      window.requestAnimationFrame(update)
+    }
 
     const pause = () => {
-      isPaused = true;
-    };
+      isPaused = true
+    }
 
     const play = () => {
       if (isPaused) {
-        isPaused = false;
-        window.requestAnimationFrame(update);
+        isPaused = false
+        window.requestAnimationFrame(update)
       }
-    };
+    }
 
     let options = {
       wrapAround: true,
@@ -61,48 +61,66 @@
       prevNextButtons: false,
       pageDots: false,
       // selectedAttraction: 0.025,
-      freeScrollFriction: 0.03
+      freeScrollFriction: 0.03,
       // friction: 0.85
-    };
+    }
 
     try {
-      flickity = new Flickity(scrollListEl, options);
+      flickity = new Flickity(scrollListEl, options)
     } catch (err) {
-      Sentry.captureException(err);
+      console.log(err)
     }
-    flickity.x = 0;
+    flickity.x = 0
 
-    scrollListEl.addEventListener("mouseenter", pause, false);
-    scrollListEl.addEventListener("focusin", pause, false);
-    scrollListEl.addEventListener("mouseleave", play, false);
-    scrollListEl.addEventListener("focusout", play, false);
+    scrollListEl.addEventListener("mouseenter", pause, false)
+    scrollListEl.addEventListener("focusin", pause, false)
+    scrollListEl.addEventListener("mouseleave", play, false)
+    scrollListEl.addEventListener("focusout", play, false)
 
     flickity.on("dragStart", () => {
-      isPaused = true;
-    });
+      isPaused = true
+    })
 
-    flickity.on("staticClick", function(
-      event,
-      pointer,
-      cellElement,
-      cellIndex
-    ) {
-      navigate("/" + $activeCategory + "/category/" + cellElement.dataset.tag);
-    });
+    flickity.on(
+      "staticClick",
+      function (event, pointer, cellElement, cellIndex) {
+        navigate("/" + $activeCategory + "/category/" + cellElement.dataset.tag)
+      }
+    )
 
-    play();
+    play()
 
     setTimeout(() => {
-      loaded = true;
-    }, 500);
-  };
+      loaded = true
+    }, 500)
+  }
 
   // *** ON MOUNT
   onMount(async () => {
-    await tick();
-    startTicker();
-  });
+    await tick()
+    startTicker()
+  })
 </script>
+
+<div class="taxonomy-scroller">
+  <div
+    class:loaded
+    class="main-carousel taxonomy-scroller__slideshow
+    taxonomy-scroller__slideshow--large"
+    bind:this={scrollListEl}
+  >
+    {#each tagArray as t}
+      <div data-tag={t.slug} class="carousel-cell taxonomy-scroller__slide">
+        <span
+          class:active={t.slug === $activeQuery}
+          class="taxonomy__item taxonomy-scroller__link"
+        >
+          {t.title}
+        </span>
+      </div>
+    {/each}
+  </div>
+</div>
 
 <style lang="scss">
   @import "../variables.scss";
@@ -180,21 +198,3 @@
     }
   }
 </style>
-
-<div class="taxonomy-scroller">
-  <div
-    class:loaded
-    class="main-carousel taxonomy-scroller__slideshow
-    taxonomy-scroller__slideshow--large"
-    bind:this={scrollListEl}>
-    {#each tagArray as t}
-      <div data-tag={t.slug} class="carousel-cell taxonomy-scroller__slide">
-        <span
-          class:active={t.slug === $activeQuery}
-          class="taxonomy__item taxonomy-scroller__link">
-          {t.title}
-        </span>
-      </div>
-    {/each}
-  </div>
-</div>

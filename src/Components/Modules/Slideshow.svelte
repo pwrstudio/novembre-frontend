@@ -69,7 +69,7 @@
     try {
       flkty = new Flickity(slideShowEl, options)
     } catch (err) {
-      Sentry.captureException(err)
+      console.log(err)
     }
     flkty.x = 0
 
@@ -85,7 +85,7 @@
           flkty.resize()
         }
       } catch (err) {
-        Sentry.captureException(err)
+        console.log(err)
       }
       loaded = true
     })
@@ -110,7 +110,7 @@
         try {
           flkty = new Flickity(slideShowEl, options)
         } catch (err) {
-          Sentry.captureException(err)
+          console.log(err)
         }
       }
     }
@@ -121,7 +121,7 @@
           flkty.resize()
         }
       } catch (err) {
-        Sentry.captureException(err)
+        console.log(err)
       }
       loaded = true
     })
