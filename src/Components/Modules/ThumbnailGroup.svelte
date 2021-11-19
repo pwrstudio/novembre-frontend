@@ -147,6 +147,7 @@
     justify-content: center;
     align-items: center;
     z-index: 1000;
+    cursor: pointer;
 
     img {
       max-width: 90%;
