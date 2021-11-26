@@ -168,7 +168,8 @@
             <VideoEmbed
               url={c.video}
               backgroundColor={get(c, "backgroundColor", false)}
-              caption={get(c, "caption", false)}
+              size={get(c, "size", false)}
+              noBottomMargin={get(c, "noBottomMargin", false)}
             />
           {/if}
           <!-- SLIDESHOW -->
