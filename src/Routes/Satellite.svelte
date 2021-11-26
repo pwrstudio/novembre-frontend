@@ -6,14 +6,14 @@
   // # # # # # # # # # # # # #
 
   // *** IMPORTS
-  import { onMount, onDestroy } from "svelte"
+  import { onDestroy } from "svelte"
   import { fade } from "svelte/transition"
   import get from "lodash/get"
-  import isEmpty from "lodash/isEmpty"
   import { urlFor, loadSatelliteSite, renderBlockText } from "../sanity.js"
 
   // *** COMPONENTS
   import Logo from "../Components/Logo.svelte"
+  import Footer from "../Components/Footer.svelte"
 
   // *** STORES
   import { satelliteSiteActive } from "../stores.js"
@@ -238,6 +238,10 @@
         font-size: $large;
         transform: translateX(-50%) translateY(-50%);
         user-select: none;
+
+        @include screen-size("small") {
+          font-size: $intro;
+        }
       }
     }
 
@@ -250,21 +254,49 @@
       text-align: left;
       line-height: 100px;
 
+      @include screen-size("small") {
+        text-align: center;
+        padding: 5px;
+      }
+
       .novembre-logo {
         height: 100px;
         float: left;
         margin-right: 20px;
+
+        @include screen-size("small") {
+          height: 50px;
+        }
       }
 
       .external-logo {
         height: 100px;
         float: left;
         margin-right: 20px;
+
+        img {
+          height: 100%;
+        }
+
+        @include screen-size("small") {
+          height: 50px;
+          float: right;
+          line-height: 0;
+          padding: 0;
+          margin-right: 0;
+        }
       }
 
       .title {
         float: left;
-        font-size: $large;
+        font-size: $intro;
+
+        @include screen-size("small") {
+          font-size: $body;
+          line-height: $body;
+          width: 100%;
+          margin-top: 5px;
+        }
       }
     }
 
