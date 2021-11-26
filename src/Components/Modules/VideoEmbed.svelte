@@ -14,9 +14,6 @@
   export let backgroundColor = false
   export let size = "medium"
   export let noBottomMargin = false
-
-  console.log("noBottomMargin", noBottomMargin)
-  console.log("size", size)
 </script>
 
 <div

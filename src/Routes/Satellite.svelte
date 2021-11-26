@@ -112,8 +112,8 @@
       <div class="content" in:fade>
         {#each post.content as c}
           <!-- TEXT -->
-          {#if c._type == "block"}
-            {@html renderBlockText(c)}
+          {#if c._type == "content"}
+            {@html renderBlockText(c.content)}
           {/if}
           <!-- SINGLE IMAGE -->
           {#if c._type == "singleImage"}
