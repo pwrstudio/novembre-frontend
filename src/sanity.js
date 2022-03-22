@@ -104,7 +104,18 @@ export const loadArticle = async (query, params) => {
 
         return postConstruction
     } catch (err) {
-        Sentry.captureException(err)
+        return Promise.reject(new Error(404));
+    }
+}
+
+export const loadSatelliteSite = async (query, params) => {
+    try {
+        const res = await client.fetch(query, params)
+        if (res === null) {
+            return Promise.reject(new Error(404));
+        }
+        return res
+    } catch (err) {
         return Promise.reject(new Error(404));
     }
 }
@@ -117,7 +128,6 @@ export const loadFeed = async (query, params) => {
         }
         return res
     } catch (err) {
-        Sentry.captureException(err)
         return Promise.reject(new Error(404));
     }
 }
@@ -131,7 +141,6 @@ export const loadPages = async query => {
 
         return res
     } catch (err) {
-        Sentry.captureException(err)
         return Promise.reject(new Error(404));
     }
 }

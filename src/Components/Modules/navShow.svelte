@@ -6,28 +6,24 @@
   // # # # # # # # # # # # # #
 
   // *** IMPORTS
-  import { onMount } from "svelte";
-  import Flickity from "flickity-as-nav-for";
-  import imagesLoaded from "imagesloaded";
-
-  import { urlFor } from "../../sanity.js";
+  import { onMount } from "svelte"
+  import Flickity from "flickity-as-nav-for"
+  import imagesLoaded from "imagesloaded"
+  import { urlFor } from "../../sanity.js"
 
   // *** COMPONENTS
-  import Ellipse from "../Ellipse.svelte";
+  import Ellipse from "../Ellipse.svelte"
 
   // *** PROPS
-  export let imageArray = [];
-  export let navTarget = {};
-
-  // *** STORES
-  import { navigationColor, menuActiveGlobal } from "../../stores.js";
+  export let imageArray = []
+  export let navTarget = {}
 
   // *** DOM REFERENCES
-  let slideShowEl = {};
+  let slideShowEl = {}
 
   // *** VARIABLES
-  let flkty = {};
-  let loaded = false;
+  let flkty = {}
+  let loaded = false
 
   // *** ON MOUNT
   onMount(async () => {
@@ -37,27 +33,48 @@
       asNavFor: navTarget,
       freeScroll: true,
       freeScrollFriction: 0.03,
-      contain: true
-    };
+      contain: true,
+    }
 
     try {
-      flkty = new Flickity(slideShowEl, options);
+      flkty = new Flickity(slideShowEl, options)
     } catch (err) {
-      Sentry.captureException(err);
+      console.log(err)
     }
 
     imagesLoaded(slideShowEl, instance => {
       try {
         if (flkty && "resize" in flkty) {
-          flkty.resize();
+          flkty.resize()
         }
       } catch (err) {
-        Sentry.captureException(err);
+        console.log(err)
       }
-      loaded = true;
-    });
-  });
+      loaded = true
+    })
+  })
 </script>
+
+<div class="container">
+  <div class="carousel slideshow" class:loaded bind:this={slideShowEl}>
+    {#each imageArray as slide}
+      <div class="carousel-cell slideshow__slide">
+        <img
+          alt="novembre.global"
+          class="slideshow__slide-image"
+          src={urlFor(slide).height(140).quality(80).auto("format").url()}
+        />
+      </div>
+    {/each}
+  </div>
+
+  {#if !loaded}
+    <div class="loading">
+      LOADING
+      <Ellipse />
+    </div>
+  {/if}
+</div>
 
 <style lang="scss">
   @import "../../variables.scss";
@@ -143,27 +160,3 @@
     }
   }
 </style>
-
-<div class="container">
-  <div class="carousel slideshow" class:loaded bind:this={slideShowEl}>
-    {#each imageArray as slide}
-      <div class="carousel-cell slideshow__slide">
-        <img
-          alt="novembre.global"
-          class="slideshow__slide-image"
-          src={urlFor(slide)
-            .height(140)
-            .quality(80)
-            .auto('format')
-            .url()} />
-      </div>
-    {/each}
-  </div>
-
-  {#if !loaded}
-    <div class="loading">
-      LOADING
-      <Ellipse />
-    </div>
-  {/if}
-</div>

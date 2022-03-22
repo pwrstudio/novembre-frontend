@@ -14,7 +14,6 @@
 
   // *** IMPORTS
   import MediaQuery from "svelte-media-query"
-  import { fade } from "svelte/transition"
   import { urlFor } from "../../sanity.js"
 
   // *** PROPS
@@ -28,8 +27,6 @@
   export let maxHeight = false
   export let inlineDisplay = false
   export let linkUrl = false
-
-  // console.log('__ imageGroup: inlineDisplay =>', inlineDisplay)
 
   const customStyles =
     (maxHeight ? "height:" + maxHeight + "vh; " : "") +
@@ -50,13 +47,8 @@
     height: 100vh;
     display: inline-flex;
     padding-bottom: 2 * $small-margin;
-    // margin-bottom: $large-vertical-margin;
     align-items: flex-start;
     border-bottom: none;
-
-    &.bottom-space {
-      margin-bottom: $large-vertical-margin;
-    }
 
     @include screen-size("small") {
       height: auto;
@@ -78,6 +70,13 @@
 
       &.loaded {
         opacity: 1;
+      }
+    }
+
+    &.bottom-space {
+      margin-bottom: $large-vertical-margin;
+      img {
+        margin-top: -$small-margin;
       }
     }
   }
@@ -128,7 +127,7 @@
     font-family: $sans-stack;
     font-size: $xsmall;
     font-weight: 300;
-    width: 100%;
+    width: 90%;
     margin-left: auto;
     margin-right: auto;
     text-align: center;
@@ -153,6 +152,10 @@
     width: 100vw;
     padding: 0;
 
+    @include screen-size("small") {
+      height: auto;
+    }
+
     img {
       height: 100%;
       width: 100%;
@@ -160,6 +163,11 @@
       max-width: unset;
       padding: 0;
       margin: 0;
+
+      @include screen-size("small") {
+        object-fit: contain;
+      }
+
     }
   }
 

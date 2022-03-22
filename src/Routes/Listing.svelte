@@ -7,7 +7,6 @@
 
   // *** IMPORTS
   import { onMount } from "svelte";
-  import { fade, slide, fly } from "svelte/transition";
   import { navigate } from "svelte-routing";
   import isEmpty from "lodash/isEmpty";
   import isArray from "lodash/isArray";
@@ -305,6 +304,7 @@
 
               {#if feedBanners.find(b => b.positionInFeed == i)[0] && feedBanners.find(b => b.positionInFeed == i)[0].video && feedBanners.find(b => b.positionInFeed == i)[0].video.asset && feedBanners.find(b => b.positionInFeed == i)[0].video.asset._ref}
                 <video
+                  playsinline="playsinline"
                   src={'https://cdn.sanity.io/files/gj963qwj/production/' + feedBanners
                       .find(b => b.positionInFeed == i)
                       .video.asset._ref.replace('file-', '')

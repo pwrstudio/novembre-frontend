@@ -7,8 +7,7 @@
 
   // *** IMPORTS
   import { onMount } from "svelte"
-  import { fade, slide } from "svelte/transition"
-  import { quintOut } from "svelte/easing"
+  import { fade } from "svelte/transition"
   import get from "lodash/get"
   import isEmpty from "lodash/isEmpty"
   import { urlFor, loadArticle, renderBlockText } from "../sanity.js"
@@ -27,6 +26,7 @@
   import ImageGroup from "../Components/Modules/ImageGroup.svelte"
   import VideoEmbed from "../Components/Modules/VideoEmbed.svelte"
   import Audio from "../Components/Modules/Audio.svelte"
+  import ArbitraryEmbed from "../Components/Modules/ArbitraryEmbed.svelte"
   import Slideshow from "../Components/Modules/Slideshow.svelte"
   import VideoLoop from "../Components/Modules/Video.svelte"
 
@@ -40,7 +40,6 @@
 
   // *** VARIABLES
   let currentSlug = slug
-  let title = ""
   let bannerActive = false
 
   navigationColor.set("black")
@@ -68,6 +67,141 @@
     }, 3000)
   })
 </script>
+
+{#await post then post}
+  <MetaData {post} />
+
+  {#if post.banner && bannerActive}
+    <a
+      href={post.banner.link}
+      in:fade
+      target="_blank"
+      rel="noreferrer"
+      class="sidebar-banner"
+    >
+      <img
+        alt="novembre.global"
+        src={urlFor(post.banner.image)
+          .width(500)
+          .quality(90)
+          .auto("format")
+          .url()}
+      />
+    </a>
+  {/if}
+
+  <article class="article">
+    <!-- HEADER MEDIA -->
+    <div class="article__header">
+      <Preview {post} isHeader={true} />
+    </div>
+
+    <!-- DATE & TAGS -->
+    <div class="article__tags">
+      <TaxList
+        taxonomy={post.taxonomy}
+        white={false}
+        isArticle={true}
+        date={post.publicationDate}
+      />
+    </div>
+
+    <!-- TITLE -->
+    <h1 class="article__title">
+      {@html post.title}
+    </h1>
+
+    <!-- AD TAG -->
+    {#if post.adTag}
+      {@html post.adTag}
+    {/if}
+
+    <!-- MAIN CONTENT -->
+    <div class="content">
+      {#each post.content as c}
+        {#if c._type == "block"}
+          {@html renderBlockText(c)}
+        {/if}
+        {#if c._type == "singleImage"}
+          <Image
+            imageObject={c.image}
+            linkUrl={c.linkUrl}
+            inlineDisplay={c.noBottomMargin ? false : true}
+            maxHeight={get(c, "maxHeight", false)}
+            backgroundColor={get(c, "backgroundColor", false)}
+            caption={get(c, "caption", false)}
+            alignment={get(c, "alignment", "")}
+            fullwidth={get(c, "fullwidth", "")}
+          />
+        {/if}
+        {#if c._type == "imageGroup"}
+          <ImageGroup
+            imageArray={c.images}
+            linkUrl={c.linkUrl}
+            inlineDisplay={c.noBottomMargin ? false : true}
+            maxHeight={get(c, "maxHeight", false)}
+            backgroundColor={get(c, "backgroundColor", false)}
+            alignment={get(c, "alignment", "")}
+            fullwidth={get(c, "fullwidth", "")}
+            caption={get(c, "caption", false)}
+          />
+        {/if}
+        {#if c._type == "videoLoop"}
+          <VideoLoop
+            url={"https://cdn.sanity.io/files/gj963qwj/production/" +
+              get(c, "video.asset._ref", "")
+                .replace("file-", "")
+                .replace("-mp4", ".mp4")}
+            inlineDisplay={c.noBottomMargin ? false : true}
+            posterImage={get(c, "preview.posterImage", "")}
+            autoplay={get(c, "autoplay", false)}
+            maxHeight={get(c, "maxHeight", false)}
+            backgroundColor={get(c, "backgroundColor", false)}
+            caption={get(c, "caption", false)}
+            alignment={get(c, "alignment", "")}
+            fullwidth={get(c, "fullwidth", "")}
+          />
+        {/if}
+        {#if c._type == "video"}
+          <VideoEmbed
+            url={c.video}
+            backgroundColor={get(c, "backgroundColor", false)}
+            caption={get(c, "caption", false)}
+          />
+        {/if}
+        {#if c._type == "slideshow"}
+          <Slideshow autoplay={c.autoplay} imageArray={c.images} />
+        {/if}
+        {#if c._type == "audio"}
+          <Audio
+            url={"https://cdn.sanity.io/files/gj963qwj/production/" +
+              get(c, "audio.asset._ref", "")
+                .replace("file-", "")
+                .replace("-mp3", ".mp3")}
+            title={get(c, "title", "")}
+            link={get(c, "link", false)}
+            posterImage={get(c, "image", false)}
+            backgroundColor={get(c, "backgroundColor.hex", false)}
+            foregroundColor={get(c, "foregroundColor.hex", false)}
+          />
+        {/if}
+        {#if c._type == "arbitraryEmbed"}
+          <ArbitraryEmbed code={c.embedCode} />
+        {/if}
+      {/each}
+    </div>
+
+    <!-- RELATED -->
+    {#if post.related && !isEmpty(post.related)}
+      <div class="related-header">RELATED ARTICLES</div>
+      <Slideshow imageArray={post.related} isRelated={true} />
+    {:else}
+      <div class="bottom-space" />
+    {/if}
+  </article>
+
+  <Footer active={true} />
+{/await}
 
 <style lang="scss">
   @import "../variables.scss";
@@ -188,125 +322,3 @@
     width: 100%;
   }
 </style>
-
-{#await post then post}
-  <MetaData {post} />
-
-  {#if post.banner && bannerActive}
-    <a
-      href={post.banner.link}
-      in:fade
-      target="_blank"
-      rel="noreferrer"
-      class="sidebar-banner">
-      <img
-        alt="novembre.global"
-        src={urlFor(post.banner.image)
-          .width(500)
-          .quality(90)
-          .auto('format')
-          .url()} />
-    </a>
-  {/if}
-
-  <article class="article">
-    <!-- HEADER MEDIA -->
-    <div class="article__header">
-      <Preview {post} isHeader={true} />
-    </div>
-
-    <!-- DATE & TAGS -->
-    <div class="article__tags">
-      <TaxList
-        taxonomy={post.taxonomy}
-        white={false}
-        isArticle={true}
-        date={post.publicationDate} />
-    </div>
-
-    <!-- TITLE -->
-    <h1 class="article__title">
-      {@html post.title}
-    </h1>
-
-    <!-- AD TAG -->
-    {#if post.adTag}
-      {@html post.adTag}
-    {/if}
-
-    <!-- MAIN CONTENT -->
-    <div class="content">
-      {#each post.content as c}
-        {#if c._type == 'block'}
-          {@html renderBlockText(c)}
-        {/if}
-        {#if c._type == 'singleImage'}
-          <Image
-            imageObject={c.image}
-            linkUrl={c.linkUrl}
-            inlineDisplay={c.noBottomMargin ? false : true}
-            maxHeight={get(c, 'maxHeight', false)}
-            backgroundColor={get(c, 'backgroundColor', false)}
-            caption={get(c, 'caption', false)}
-            alignment={get(c, 'alignment', '')}
-            fullwidth={get(c, 'fullwidth', '')} />
-        {/if}
-        {#if c._type == 'imageGroup'}
-          <ImageGroup
-            imageArray={c.images}
-            linkUrl={c.linkUrl}
-            inlineDisplay={c.noBottomMargin ? false : true}
-            maxHeight={get(c, 'maxHeight', false)}
-            backgroundColor={get(c, 'backgroundColor', false)}
-            alignment={get(c, 'alignment', '')}
-            fullwidth={get(c, 'fullwidth', '')}
-            caption={get(c, 'caption', false)} />
-        {/if}
-        {#if c._type == 'videoLoop'}
-          <VideoLoop
-            url={'https://cdn.sanity.io/files/gj963qwj/production/' + c.video.asset._ref
-                .replace('file-', '')
-                .replace('-mp4', '.mp4')}
-            inlineDisplay={c.noBottomMargin ? false : true}
-            posterImage={get(c, 'preview.posterImage', '')}
-            autoplay={get(c, 'autoplay', false)}
-            maxHeight={get(c, 'maxHeight', false)}
-            backgroundColor={get(c, 'backgroundColor', false)}
-            caption={get(c, 'caption', false)}
-            alignment={get(c, 'alignment', '')}
-            fullwidth={get(c, 'fullwidth', '')} />
-        {/if}
-        {#if c._type == 'video'}
-          <VideoEmbed
-            url={c.video}
-            backgroundColor={get(c, 'backgroundColor', false)}
-            caption={get(c, 'caption', false)} />
-        {/if}
-        {#if c._type == 'slideshow'}
-          <Slideshow autoplay={c.autoplay} imageArray={c.images} />
-        {/if}
-        {#if c._type == 'audio'}
-          <Audio
-            url={'https://cdn.sanity.io/files/gj963qwj/production/' + c.audio.asset._ref
-                .replace('file-', '')
-                .replace('-mp3', '.mp3')}
-            title={get(c, 'title', '')}
-            link={get(c, 'link', false)}
-            posterImage={get(c, 'image', false)}
-            backgroundColor={get(c, 'backgroundColor.hex', false)}
-            foregroundColor={get(c, 'foregroundColor.hex', false)} />
-        {/if}
-      {/each}
-    </div>
-
-    <!-- RELATED -->
-    {#if post.related && !isEmpty(post.related)}
-      <div class="related-header">RELATED ARTICLES</div>
-      <Slideshow imageArray={post.related} isRelated={true} />
-    {:else}
-      <div class="bottom-space" />
-    {/if}
-  </article>
-
-  <Footer active={true} />
-{/await}

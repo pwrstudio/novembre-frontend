@@ -14,108 +14,167 @@
   // # # # # # # # # # # # # #
 
   // *** IMPORTS
-  import MediaQuery from "svelte-media-query";
-  import { onMount } from "svelte";
-  import { urlFor } from "../../sanity.js";
+  import MediaQuery from "svelte-media-query"
+  import { onMount } from "svelte"
+  import { urlFor } from "../../sanity.js"
 
   // *** PROPS
-  export let url = "";
-  export let posterImage = {};
-  export let caption = false;
-  export let backgroundColor = false;
-  export let alignment = "";
-  export let maxHeight = false;
-  export let autoplay = false;
-  export let fullwidth = false;
-  export let inlineDisplay = false;
-  export let isListing = false;
-  export let loop = true;
-  export let muted = true;
-  export let controls = false;
+  export let url = ""
+  export let posterImage = {}
+  export let caption = false
+  export let backgroundColor = false
+  export let alignment = ""
+  export let maxHeight = false
+  export let autoplay = false
+  export let fullwidth = false
+  export let inlineDisplay = false
+  export let isListing = false
+  export let loop = true
+  export let muted = true
+  export let controls = false
 
   const customStyles =
     (maxHeight ? "height:" + maxHeight + "vh; " : "") +
-    (backgroundColor ? "background:" + backgroundColor.hex + ";" : "");
-
-  // *** PROPS
+    (backgroundColor ? "background:" + backgroundColor.hex + ";" : "")
 
   // *** DOM REFERENCES
-  let videoEl = {};
+  let videoEl = {}
 
   // *** CONSTANTS
-  const VIDEO_ROOT = "https://res.cloudinary.com/pwr/video/upload/";
-  const REMOTE_FOLDER = "novembre";
+  const VIDEO_ROOT = "https://res.cloudinary.com/pwr/video/upload/"
+  const REMOTE_FOLDER = "novembre"
 
   // *** VARIABLES
-  let time = 0;
-  let duration = 0;
-  let paused = true;
-  let showControls = true;
-  let showControlsTimeout;
-  let controlsTimeoutDuration = 2500;
-  let post = {};
-  let videoUrl = "";
-  let videoSrc = "";
+  let time = 0
+  let duration = 0
+  let paused = true
+  let showControls = true
+  let showControlsTimeout
+  let controlsTimeoutDuration = 2500
+  let post = {}
+  let videoUrl = ""
+  let videoSrc = ""
 
   // --- Video controls
   function handleMousemove(e) {
     // Make the controls visible, but fade out after
     // 2.5 seconds of inactivity
-    clearTimeout(showControlsTimeout);
+    clearTimeout(showControlsTimeout)
     showControlsTimeout = setTimeout(
       () => (showControls = false),
       controlsTimeoutDuration
-    );
-    showControls = true;
+    )
+    showControls = true
 
-    if (e.which !== 1) return; // mouse not down
-    if (!duration) return; // video not loaded yet
+    if (e.which !== 1) return // mouse not down
+    if (!duration) return // video not loaded yet
 
-    const { left, right } = this.getBoundingClientRect();
-    time = (duration * (e.clientX - left)) / (right - left);
+    const { left, right } = this.getBoundingClientRect()
+    time = (duration * (e.clientX - left)) / (right - left)
   }
 
   function handleMousedown(e) {
     function handleMouseup() {
       if (paused) {
-        e.target.play();
+        e.target.play()
       } else {
-        e.target.pause();
+        e.target.pause()
       }
-      cancel();
+      cancel()
     }
 
     function cancel() {
-      e.target.removeEventListener("mouseup", handleMouseup);
+      e.target.removeEventListener("mouseup", handleMouseup)
     }
 
-    e.target.addEventListener("mouseup", handleMouseup);
+    e.target.addEventListener("mouseup", handleMouseup)
 
-    setTimeout(cancel, 200);
+    setTimeout(cancel, 200)
   }
 
   function format(seconds) {
-    if (isNaN(seconds)) return "...";
+    if (isNaN(seconds)) return "..."
 
-    const minutes = Math.floor(seconds / 60);
-    seconds = Math.floor(seconds % 60);
-    if (seconds < 10) seconds = "0" + seconds;
+    const minutes = Math.floor(seconds / 60)
+    seconds = Math.floor(seconds % 60)
+    if (seconds < 10) seconds = "0" + seconds
 
-    return `${minutes}:${seconds}`;
+    return `${minutes}:${seconds}`
   }
 
   // *** ON MOUNT
   onMount(async () => {
     if (autoplay || isListing) {
-      let promise = videoEl.play();
+      let promise = videoEl.play()
       if (promise !== undefined) {
         promise.catch(err => {
-          Sentry.captureException(err);
-        });
+          console.log(err)
+        })
       }
     }
-  });
+  })
 </script>
+
+<div
+  class="video"
+  class:listing={isListing}
+  class:video--full={fullwidth || isListing}
+  style={customStyles}
+>
+  <video
+    class="video-player {alignment}"
+    preload="metadata"
+    playsinline="playsinline"
+    {loop}
+    muted={autoplay || isListing}
+    poster={posterImage
+      ? urlFor(posterImage).width(1200).quality(90).auto("format").url()
+      : ""}
+    src={url}
+    on:mousemove={handleMousemove}
+    on:mousedown={handleMousedown}
+    bind:currentTime={time}
+    bind:duration
+    bind:paused
+    bind:this={videoEl}
+  />
+  {#if !autoplay && !isListing}
+    <div class="controls" style="opacity: {duration && showControls ? 1 : 0}">
+      <!-- <progress value={time / duration || 0} /> -->
+
+      <div class="buttons">
+        {#if paused}
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="0.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="feather feather-play play"
+          >
+            <polygon points="5 3 19 12 5 21 5 3" />
+          </svg>
+        {:else}
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="0.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="feather feather-pause pause"
+          >
+            <rect x="6" y="4" width="4" height="16" />
+            <rect x="14" y="4" width="4" height="16" />
+          </svg>
+        {/if}
+      </div>
+    </div>
+  {/if}
+</div>
 
 <style lang="scss">
   @import "../../variables.scss";
@@ -236,65 +295,3 @@
     }
   }
 </style>
-
-<div
-  class="video"
-  class:listing={isListing}
-  class:video--full={fullwidth || isListing}
-  style={customStyles}>
-
-  <video
-    class="video-player {alignment}"
-    preload="metadata"
-    {loop}
-    muted={autoplay || isListing}
-    poster={posterImage ? urlFor(posterImage)
-          .width(1200)
-          .quality(90)
-          .auto('format')
-          .url() : ''}
-    src={url}
-    on:mousemove={handleMousemove}
-    on:mousedown={handleMousedown}
-    bind:currentTime={time}
-    bind:duration
-    bind:paused
-    bind:this={videoEl} />
-  {#if !autoplay && !isListing}
-    <div class="controls" style="opacity: {duration && showControls ? 1 : 0}">
-
-      <!-- <progress value={time / duration || 0} /> -->
-
-      <div class="buttons">
-        {#if paused}
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="0.5"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="feather feather-play play">
-            <polygon points="5 3 19 12 5 21 5 3" />
-          </svg>
-        {:else}
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="0.5"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="feather feather-pause pause">
-            <rect x="6" y="4" width="4" height="16" />
-            <rect x="14" y="4" width="4" height="16" />
-          </svg>
-        {/if}
-      </div>
-
-    </div>
-  {/if}
-
-</div>
