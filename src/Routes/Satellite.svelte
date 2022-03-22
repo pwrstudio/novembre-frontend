@@ -152,7 +152,9 @@
           {#if c._type == "videoLoop"}
             <VideoLoop
               url={"https://cdn.sanity.io/files/gj963qwj/production/" +
-                c.video.asset._ref.replace("file-", "").replace("-mp4", ".mp4")}
+                get(c, "video.asset._ref", "")
+                  .replace("file-", "")
+                  .replace("-mp4", ".mp4")}
               inlineDisplay={c.noBottomMargin ? false : true}
               posterImage={get(c, "preview.posterImage", "")}
               autoplay={get(c, "autoplay", false)}
@@ -184,7 +186,9 @@
           {#if c._type == "audio"}
             <Audio
               url={"https://cdn.sanity.io/files/gj963qwj/production/" +
-                c.audio.asset._ref.replace("file-", "").replace("-mp3", ".mp3")}
+                get(c, "audio.asset._ref", "")
+                  .replace("file-", "")
+                  .replace("-mp3", ".mp3")}
               title={get(c, "title", "")}
               link={get(c, "link", false)}
               posterImage={get(c, "image", false)}
