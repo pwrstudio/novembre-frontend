@@ -39,6 +39,81 @@
   let loaded = false
 </script>
 
+<MediaQuery query="(min-width: 800px)" let:matches>
+  {#if linkUrl}
+    <a
+      href={linkUrl}
+      target="_blank"
+      class="image-group {alignment}"
+      class:listing={isListing}
+      class:header={isHeader}
+      class:fullwidth
+      class:group-size-1={imageArray.length === 1}
+      class:group-size-2={imageArray.length === 2}
+      class:group-size-3={imageArray.length === 3}
+      class:group-size-4={imageArray.length === 4}
+      class:bottom-space={inlineDisplay}
+      style={matches ? customStyles : customStylesPhone}
+    >
+      {#each imageArray as image}
+        <img
+          class:loaded
+          src={fullwidth
+            ? urlFor(image)
+                .width(1800)
+                .height(1200)
+                .quality(90)
+                .auto("format")
+                .url()
+            : urlFor(image)
+                .width(1200 / imageArray.length)
+                .quality(90)
+                .auto("format")
+                .url()}
+          alt={caption ? caption : "novembre.global"}
+          on:load={e => (loaded = true)}
+        />
+      {/each}
+    </a>
+  {:else}
+    <div
+      class="image-group {alignment}"
+      class:listing={isListing}
+      class:header={isHeader}
+      class:fullwidth
+      class:group-size-1={imageArray.length === 1}
+      class:group-size-2={imageArray.length === 2}
+      class:group-size-3={imageArray.length === 3}
+      class:group-size-4={imageArray.length === 4}
+      class:bottom-space={inlineDisplay}
+      style={matches ? customStyles : customStylesPhone}
+    >
+      {#each imageArray as image}
+        <img
+          class:loaded
+          src={fullwidth
+            ? urlFor(image)
+                .width(1800)
+                .height(1200)
+                .quality(90)
+                .auto("format")
+                .url()
+            : urlFor(image)
+                .width(1200 / imageArray.length)
+                .quality(90)
+                .auto("format")
+                .url()}
+          alt={caption ? caption : "novembre.global"}
+          on:load={e => (loaded = true)}
+        />
+      {/each}
+    </div>
+  {/if}
+  {#if caption}
+    <div class="caption">{caption}</div>
+  {/if}
+</MediaQuery>
+
 <style lang="scss">
   @import "../../variables.scss";
 
@@ -52,6 +127,7 @@
 
     @include screen-size("small") {
       height: auto;
+      flex-wrap: wrap;
     }
 
     img {
@@ -107,8 +183,10 @@
       max-width: 30vw;
 
       @include screen-size("small") {
+        display: inline-block;
         max-width: unset;
         width: 45vw;
+        margin-bottom: 10px;
       }
     }
   }
@@ -117,8 +195,10 @@
     img {
       max-width: 23vw;
       @include screen-size("small") {
+        display: inline-block;
         max-width: unset;
         width: 45vw;
+        margin-bottom: 10px;
       }
     }
   }
@@ -167,7 +247,6 @@
       @include screen-size("small") {
         object-fit: contain;
       }
-
     }
   }
 
@@ -180,7 +259,7 @@
       max-height: 440px;
       @include screen-size("small") {
         height: auto;
-        width: 10000px;
+        width: 100vw;
         max-height: unset;
       }
 
@@ -206,7 +285,7 @@
       max-height: 540px;
       @include screen-size("small") {
         height: auto;
-        width: 10000px;
+        width: 100vw;
       }
 
       img {
@@ -221,70 +300,3 @@
     }
   }
 </style>
-
-<MediaQuery query="(min-width: 800px)" let:matches>
-  {#if linkUrl}
-    <a
-      href={linkUrl}
-      target="_blank"
-      class="image-group {alignment}"
-      class:listing={isListing}
-      class:header={isHeader}
-      class:fullwidth
-      class:group-size-1={imageArray.length === 1}
-      class:group-size-2={imageArray.length === 2}
-      class:group-size-3={imageArray.length === 3}
-      class:group-size-4={imageArray.length === 4}
-      class:bottom-space={inlineDisplay}
-      style={matches ? customStyles : customStylesPhone}>
-      {#each imageArray as image}
-        <img
-          class:loaded
-          src={fullwidth ? urlFor(image)
-                .width(1800)
-                .height(1200)
-                .quality(90)
-                .auto('format')
-                .url() : urlFor(image)
-                .width(1200 / imageArray.length)
-                .quality(90)
-                .auto('format')
-                .url()}
-          alt={caption ? caption : 'novembre.global'}
-          on:load={e => (loaded = true)} />
-      {/each}
-    </a>
-  {:else}
-    <div
-      class="image-group {alignment}"
-      class:listing={isListing}
-      class:header={isHeader}
-      class:fullwidth
-      class:group-size-1={imageArray.length === 1}
-      class:group-size-2={imageArray.length === 2}
-      class:group-size-3={imageArray.length === 3}
-      class:group-size-4={imageArray.length === 4}
-      class:bottom-space={inlineDisplay}
-      style={matches ? customStyles : customStylesPhone}>
-      {#each imageArray as image}
-        <img
-          class:loaded
-          src={fullwidth ? urlFor(image)
-                .width(1800)
-                .height(1200)
-                .quality(90)
-                .auto('format')
-                .url() : urlFor(image)
-                .width(1200 / imageArray.length)
-                .quality(90)
-                .auto('format')
-                .url()}
-          alt={caption ? caption : 'novembre.global'}
-          on:load={e => (loaded = true)} />
-      {/each}
-    </div>
-  {/if}
-  {#if caption}
-    <div class="caption">{caption}</div>
-  {/if}
-</MediaQuery>
