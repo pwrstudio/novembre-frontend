@@ -121,7 +121,7 @@
     width: 100%;
     height: 100vh;
     display: inline-flex;
-    padding-bottom: 2 * $small-margin;
+    // padding-bottom: 2 * $small-margin;
     align-items: flex-start;
     border-bottom: none;
 
@@ -135,7 +135,7 @@
       transition: opacity 0.25s $transition;
       object-fit: contain;
       margin-left: $small-margin;
-      margin-top: $small-margin;
+      // margin-top: $small-margin;
       height: 100%;
 
       @include screen-size("small") {
@@ -152,7 +152,7 @@
     &.bottom-space {
       margin-bottom: $large-vertical-margin;
       img {
-        margin-top: -$small-margin;
+        // margin-top: -$small-margin;
       }
     }
   }
