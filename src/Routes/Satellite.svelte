@@ -86,21 +86,42 @@
       <!-- HEADER -->
       <div class="header" in:fade>
         <!-- NOVEMBRE LOGO -->
-        {#if get(post, "header.showNovembreLogo", false)}
-          <div class="novembre-logo">
+        {#if get(post, "header.usePresentsLayout", false)}
+          <div class="novembre-logo small">
             <Logo />
+            <span class="text-container">
+              presents
+              <!-- EXTERNAL LOGO -->
+              {#if get(post, "header.externalLogo.asset", false)}
+                <img
+                  src={urlFor(post.header.externalLogo.asset)
+                    .quality(80)
+                    .height(50)
+                    .url()}
+                />
+              {:else}
+                {get(post, "header.externalName", "")}
+              {/if}
+            </span>
           </div>
-        {/if}
-        <!-- EXTERNAL LOGO -->
-        {#if get(post, "header.externalLogo.asset", false)}
-          <div class="external-logo">
-            <img
-              src={urlFor(post.header.externalLogo.asset)
-                .quality(80)
-                .height(100)
-                .url()}
-            />
-          </div>
+        {:else}
+          <!-- NOVEMBRE LOGO -->
+          {#if get(post, "header.showNovembreLogo", false)}
+            <div class="novembre-logo">
+              <Logo />
+            </div>
+          {/if}
+          <!-- EXTERNAL LOGO -->
+          {#if get(post, "header.externalLogo.asset", false)}
+            <div class="external-logo">
+              <img
+                src={urlFor(post.header.externalLogo.asset)
+                  .quality(80)
+                  .height(100)
+                  .url()}
+              />
+            </div>
+          {/if}
         {/if}
         <!-- TITLE -->
         {#if get(post, "header.showTitle", false)}
@@ -202,6 +223,11 @@
           {#if c._type == "arbitraryEmbed"}
             <ArbitraryEmbed code={c.embedCode} />
           {/if}
+          <!-- ARBITRARY EMBED -->
+          {#if c._type == "map"}
+            MAP
+            <!-- <ArbitraryEmbed code={c.embedCode} /> -->
+          {/if}
         {/each}
       </div>
     {/if}
@@ -271,6 +297,23 @@
 
         @include screen-size("small") {
           height: 50px;
+        }
+
+        &.small {
+          height: 50px;
+          display: flex;
+          line-height: 50px;
+          font-size: 28px;
+
+          .text-container {
+            padding-left: 6px;
+            word-spacing: 6px;
+            display: flex;
+
+            img {
+              padding-left: 6px;
+            }
+          }
         }
       }
 
