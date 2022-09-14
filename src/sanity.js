@@ -60,7 +60,12 @@ const serializers = {
                 ? h('blockquote', {}, props.children)
                 : h('p', { className: style }, props.children)
 
-        }
+        },
+        imageGroup: props => h('p', props.children),
+        slideshow: props => h('p', props.children),
+        video: props => h('p', props.children),
+        audio: props => h('p', props.children),
+        arbitraryEmbed: props => h('p', props.children)
     }
 }
 
