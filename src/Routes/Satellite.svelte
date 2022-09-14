@@ -85,35 +85,10 @@
     {:else}
       <!-- HEADER -->
       <div class="header" in:fade>
-        <!-- NOVEMBRE LOGO -->
-        {#if get(post, "header.usePresentsLayout", false)}
-          <div class="novembre-logo small">
-            <Logo />
-            <span class="text-container">
-              presents
-              <!-- EXTERNAL LOGO -->
-              {#if get(post, "header.externalLogo.asset", false)}
-                <img
-                  src={urlFor(post.header.externalLogo.asset)
-                    .quality(80)
-                    .height(50)
-                    .url()}
-                />
-              {:else}
-                {get(post, "header.externalName", "")}
-              {/if}
-            </span>
-          </div>
-        {:else}
-          <!-- NOVEMBRE LOGO -->
-          {#if get(post, "header.showNovembreLogo", false)}
-            <div class="novembre-logo">
-              <Logo />
-            </div>
-          {/if}
-          <!-- EXTERNAL LOGO -->
+        {#if get(post, "header.showExternalLogo", false)}
+          <!-- __ 1. Showcase external logo -->
           {#if get(post, "header.externalLogo.asset", false)}
-            <div class="external-logo">
+            <div class="novembre-logo">
               <img
                 src={urlFor(post.header.externalLogo.asset)
                   .quality(80)
@@ -122,113 +97,124 @@
               />
             </div>
           {/if}
-        {/if}
-        <!-- TITLE -->
-        {#if get(post, "header.showTitle", false)}
-          <div class="title">{post.title}</div>
+          <div class="small-credits">Presented by Novembre</div>
+          <!-- __ 2. Novembre Presents: layout option -->
+        {:else if get(post, "header.usePresentsLayout", false)}
+          <div class="novembre-logo small">
+            <span class="text-container">
+              Novembre presents: {get(post, "header.externalName", "")}
+            </span>
+          </div>
+        {:else}
+          <!-- __ 3. Default option -->
+          <div class="novembre-logo">
+            <Logo />
+          </div>
         {/if}
       </div>
 
       <!-- MAIN CONTENT -->
-      <div class="content" in:fade>
-        {#each post.content as c}
-          <!-- TEXT -->
-          {#if c._type == "content"}
-            {@html renderBlockText(c.content)}
-          {/if}
-          <!-- SINGLE IMAGE -->
-          {#if c._type == "singleImage"}
-            <Image
-              imageObject={c.image}
-              linkUrl={c.linkUrl}
-              inlineDisplay={c.noBottomMargin ? false : true}
-              maxHeight={get(c, "maxHeight", false)}
-              backgroundColor={get(c, "backgroundColor", false)}
-              caption={get(c, "caption", false)}
-              alignment={get(c, "alignment", "")}
-              fullwidth={get(c, "fullwidth", "")}
-            />
-          {/if}
-          <!-- IMAGE GROUP -->
-          {#if c._type == "imageGroup"}
-            <ImageGroup
-              imageArray={c.images}
-              linkUrl={c.linkUrl}
-              inlineDisplay={c.noBottomMargin ? false : true}
-              maxHeight={get(c, "maxHeight", false)}
-              backgroundColor={get(c, "backgroundColor", false)}
-              alignment={get(c, "alignment", "")}
-              fullwidth={get(c, "fullwidth", "")}
-              caption={get(c, "caption", false)}
-            />
-          {/if}
-          <!-- THUMBNAIL GROUP -->
-          {#if c._type == "thumbnailGroup"}
-            <ThumbnailGroup
-              imageArray={c.images}
-              fullwidth={get(c, "fullwidth", "")}
-            />
-          {/if}
-          <!-- VIDEO LOOP -->
-          {#if c._type == "videoLoop"}
-            <VideoLoop
-              url={"https://cdn.sanity.io/files/gj963qwj/production/" +
-                get(c, "video.asset._ref", "")
-                  .replace("file-", "")
-                  .replace("-mp4", ".mp4")}
-              inlineDisplay={c.noBottomMargin ? false : true}
-              posterImage={get(c, "preview.posterImage", "")}
-              autoplay={get(c, "autoplay", false)}
-              maxHeight={get(c, "maxHeight", false)}
-              backgroundColor={get(c, "backgroundColor", false)}
-              caption={get(c, "caption", false)}
-              alignment={get(c, "alignment", "")}
-              fullwidth={get(c, "fullwidth", "")}
-            />
-          {/if}
-          <!-- EMBEDDED VIDEO -->
-          {#if c._type == "video"}
-            <VideoEmbed
-              url={c.video}
-              backgroundColor={get(c, "backgroundColor", false)}
-              size={get(c, "size", false)}
-              noBottomMargin={get(c, "noBottomMargin", false)}
-            />
-          {/if}
-          <!-- SLIDESHOW -->
-          {#if c._type == "slideshow"}
-            <Slideshow autoplay={c.autoplay} imageArray={c.images} />
-          {/if}
-          <!-- FLIPSHOW -->
-          {#if c._type == "flipshow"}
-            <Flipshow imageArray={c.images} />
-          {/if}
-          <!-- AUDIO -->
-          {#if c._type == "audio"}
-            <Audio
-              url={"https://cdn.sanity.io/files/gj963qwj/production/" +
-                get(c, "audio.asset._ref", "")
-                  .replace("file-", "")
-                  .replace("-mp3", ".mp3")}
-              title={get(c, "title", "")}
-              link={get(c, "link", false)}
-              posterImage={get(c, "image", false)}
-              backgroundColor={get(c, "backgroundColor.hex", false)}
-              foregroundColor={get(c, "foregroundColor.hex", false)}
-              autoplay={get(c, "autoplay", false)}
-              hidden={get(c, "hidden", false)}
-            />
-          {/if}
-          <!-- ARBITRARY EMBED -->
-          {#if c._type == "arbitraryEmbed"}
-            <ArbitraryEmbed code={c.embedCode} />
-          {/if}
-          <!-- ARBITRARY EMBED -->
-          {#if c._type == "map"}
-            <ArbitraryEmbed isMap={true} code={c.embedCode} />
-          {/if}
-        {/each}
-      </div>
+      {#if post.content && Array.isArray(post.content) && post.content.length > 0}
+        <div class="content" in:fade>
+          {#each post.content as c}
+            <!-- TEXT -->
+            {#if c._type == "content"}
+              {@html renderBlockText(c.content)}
+            {/if}
+            <!-- SINGLE IMAGE -->
+            {#if c._type == "singleImage"}
+              <Image
+                imageObject={c.image}
+                linkUrl={c.linkUrl}
+                inlineDisplay={c.noBottomMargin ? false : true}
+                maxHeight={get(c, "maxHeight", false)}
+                backgroundColor={get(c, "backgroundColor", false)}
+                caption={get(c, "caption", false)}
+                alignment={get(c, "alignment", "")}
+                fullwidth={get(c, "fullwidth", "")}
+              />
+            {/if}
+            <!-- IMAGE GROUP -->
+            {#if c._type == "imageGroup"}
+              <ImageGroup
+                imageArray={c.images}
+                linkUrl={c.linkUrl}
+                inlineDisplay={c.noBottomMargin ? false : true}
+                maxHeight={get(c, "maxHeight", false)}
+                backgroundColor={get(c, "backgroundColor", false)}
+                alignment={get(c, "alignment", "")}
+                fullwidth={get(c, "fullwidth", "")}
+                caption={get(c, "caption", false)}
+              />
+            {/if}
+            <!-- THUMBNAIL GROUP -->
+            {#if c._type == "thumbnailGroup"}
+              <ThumbnailGroup
+                imageArray={c.images}
+                fullwidth={get(c, "fullwidth", "")}
+              />
+            {/if}
+            <!-- VIDEO LOOP -->
+            {#if c._type == "videoLoop"}
+              <VideoLoop
+                url={"https://cdn.sanity.io/files/gj963qwj/production/" +
+                  get(c, "video.asset._ref", "")
+                    .replace("file-", "")
+                    .replace("-mp4", ".mp4")}
+                inlineDisplay={c.noBottomMargin ? false : true}
+                posterImage={get(c, "preview.posterImage", "")}
+                autoplay={get(c, "autoplay", false)}
+                maxHeight={get(c, "maxHeight", false)}
+                backgroundColor={get(c, "backgroundColor", false)}
+                caption={get(c, "caption", false)}
+                alignment={get(c, "alignment", "")}
+                fullwidth={get(c, "fullwidth", "")}
+              />
+            {/if}
+            <!-- EMBEDDED VIDEO -->
+            {#if c._type == "video"}
+              <VideoEmbed
+                url={c.video}
+                backgroundColor={get(c, "backgroundColor", false)}
+                size={get(c, "size", false)}
+                noBottomMargin={get(c, "noBottomMargin", false)}
+              />
+            {/if}
+            <!-- SLIDESHOW -->
+            {#if c._type == "slideshow"}
+              <Slideshow autoplay={c.autoplay} imageArray={c.images} />
+            {/if}
+            <!-- FLIPSHOW -->
+            {#if c._type == "flipshow"}
+              <Flipshow imageArray={c.images} />
+            {/if}
+            <!-- AUDIO -->
+            {#if c._type == "audio"}
+              <Audio
+                url={"https://cdn.sanity.io/files/gj963qwj/production/" +
+                  get(c, "audio.asset._ref", "")
+                    .replace("file-", "")
+                    .replace("-mp3", ".mp3")}
+                title={get(c, "title", "")}
+                link={get(c, "link", false)}
+                posterImage={get(c, "image", false)}
+                backgroundColor={get(c, "backgroundColor.hex", false)}
+                foregroundColor={get(c, "foregroundColor.hex", false)}
+                autoplay={get(c, "autoplay", false)}
+                hidden={get(c, "hidden", false)}
+              />
+            {/if}
+            <!-- ARBITRARY EMBED -->
+            {#if c._type == "arbitraryEmbed"}
+              <ArbitraryEmbed code={c.embedCode} />
+            {/if}
+            <!-- ARBITRARY EMBED -->
+            {#if c._type == "map"}
+              <ArbitraryEmbed isMap={true} code={c.embedCode} />
+            {/if}
+          {/each}
+        </div>
+      {/if}
     {/if}
   </div>
 {/await}
@@ -287,6 +273,13 @@
       @include screen-size("small") {
         text-align: center;
         padding: 5px;
+      }
+
+      .small-credits {
+        height: 100px;
+        float: right;
+        margin-right: 20px;
+        font-size: 18px;
       }
 
       .novembre-logo {
@@ -349,6 +342,7 @@
 
     .content {
       width: 100vw;
+      min-height: 100vh;
       overflow: hidden;
     }
   }
