@@ -225,8 +225,7 @@
           {/if}
           <!-- ARBITRARY EMBED -->
           {#if c._type == "map"}
-            MAP
-            <!-- <ArbitraryEmbed code={c.embedCode} /> -->
+            <ArbitraryEmbed isMap={true} code={c.embedCode} />
           {/if}
         {/each}
       </div>
