@@ -88,16 +88,19 @@
         {#if get(post, "header.showExternalLogo", false)}
           <!-- __ 1. Showcase external logo -->
           {#if get(post, "header.externalLogo.asset", false)}
-            <div class="novembre-logo">
+            <div class="novembre-logo external">
               <img
                 src={urlFor(post.header.externalLogo.asset)
                   .quality(80)
-                  .height(100)
+                  .height(200)
                   .url()}
               />
             </div>
           {/if}
-          <div class="small-credits">Presented by Novembre</div>
+          <div class="small-credits">
+            <div class="text">Presented by</div>
+            <div class="logo"><Logo /></div>
+          </div>
           <!-- __ 2. Novembre Presents: layout option -->
         {:else if get(post, "header.usePresentsLayout", false)}
           <div class="novembre-logo small">
@@ -280,12 +283,34 @@
         float: right;
         margin-right: 20px;
         font-size: 18px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        user-select: none;
+
+        .text {
+          display: inline-block;
+          margin-right: 1px;
+          position: relative;
+          top: -2px;
+        }
+
+        .logo {
+          display: inherit;
+          height: 30px;
+        }
       }
 
       .novembre-logo {
         height: 100px;
         float: left;
         margin-right: 20px;
+
+        &.external {
+          padding-top: 0;
+          padding-left: 20px;
+          height: 200px;
+        }
 
         @include screen-size("small") {
           height: 50px;
