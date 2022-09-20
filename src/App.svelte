@@ -340,7 +340,7 @@
     }
 
     em {
-      font-family: "Adobe Caslon Pro", "Caslon", "Times new roman", Times, serif;
+      font-family: inherit;
       font-style: italic;
     }
 
@@ -353,7 +353,7 @@
   }
 
   em {
-    font-family: $serif-stack;
+    font-family: inherit;
     font-style: italic;
     padding-right: 2px;
   }
@@ -369,7 +369,7 @@
 
   blockquote {
     display: block;
-    font-family: $serif-stack;
+    font-family: inherit;
     font-size: $large;
     line-height: 1em;
     font-style: italic;
@@ -392,6 +392,8 @@
   }
 
   .content {
+    font-family: $serif-stack;
+
     a {
       color: currentColor;
       text-decoration: none;
@@ -407,7 +409,7 @@
       display: block;
       width: 800px;
       max-width: 95vw;
-      font-family: $serif-stack;
+      font-family: inherit;
       font-size: $body;
       line-height: 1.2em;
       margin-left: auto;
@@ -451,7 +453,8 @@
       }
 
       &.introduction {
-        font-family: $serif-stack;
+        // font-family: $serif-stack;
+        font-family: inherit;
         font-style: italic;
         font-size: $intro;
 

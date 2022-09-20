@@ -233,7 +233,7 @@
     }
 
     em {
-      font-family: $serif-stack;
+      font-family: inherit;
       font-style: italic;
     }
 

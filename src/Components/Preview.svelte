@@ -6,38 +6,117 @@
   // # # # # # # # # # # # # #
 
   // *** IMPORTS
-  import { Router, links } from "svelte-routing";
-  import MediaQuery from "svelte-media-query";
-  import has from "lodash/has";
-  import get from "lodash/get";
-  import kebabCase from "lodash/kebabCase";
+  import { Router, links } from "svelte-routing"
+  import MediaQuery from "svelte-media-query"
+  import has from "lodash/has"
+  import get from "lodash/get"
+  import kebabCase from "lodash/kebabCase"
 
   // *** COMPONENTS
-  import TaxList from "./TaxList.svelte";
+  import TaxList from "./TaxList.svelte"
 
   // *** MODULES
-  import VideoLoop from "./Modules/Video.svelte";
-  import Image from "./Modules/Image.svelte";
-  import ImageGroup from "./Modules/ImageGroup.svelte";
-  import Slideshow from "./Modules/Slideshow.svelte";
+  import VideoLoop from "./Modules/Video.svelte"
+  import Image from "./Modules/Image.svelte"
+  import ImageGroup from "./Modules/ImageGroup.svelte"
+  import Slideshow from "./Modules/Slideshow.svelte"
 
   // *** PROPS
-  export let post = {};
-  export let isHeader = false;
-  export let isFirst = false;
+  export let post = {}
+  export let isHeader = false
+  export let isFirst = false
 
   // *** VARIABLES
-  let active = true;
-  let loaded = true;
+  let active = true
+  let loaded = true
 
   const backgroundColor = has(post, "previewColors.backgroundColor")
     ? "background-color:" + post.previewColors.backgroundColor.hex + ";"
-    : "";
+    : ""
   const customTextColor = has(post, "previewColors.customTextColor")
     ? "color:" + post.previewColors.customTextColor.hex + ";"
-    : "";
-  const elementStyles = backgroundColor + " " + customTextColor;
+    : ""
+  const elementStyles = backgroundColor + " " + customTextColor
 </script>
+
+<Router>
+  <div
+    class="preview {kebabCase(get(post, 'preview._type', ''))}"
+    class:loaded
+    class:first={isFirst}
+    class:white={get(post, "previewColors.textColor", "black") == "white"}
+    class:header={isHeader}
+    style={elementStyles}
+    use:links
+  >
+    <!-- TAGS -->
+    {#if !isHeader}
+      <div
+        class="preview__tags"
+        class:bottom-tags={get(post, "preview._type", "") == "imageGroup"}
+      >
+        <TaxList
+          taxonomy={post.taxonomy}
+          date={post.publicationDate}
+          white={get(post, "previewColors.textColor", "black") === "white"}
+        />
+      </div>
+    {/if}
+
+    {#if get(post, "preview._type", "") === "singleImage"}
+      <a href="/{post.taxonomy.category}/{post.slug}">
+        <Image
+          fullwidth={true}
+          isListing={true}
+          imageObject={post.preview.image}
+        />
+      </a>
+    {/if}
+
+    {#if get(post, "preview._type", "") === "imageGroup"}
+      <a href="/{post.taxonomy.category}/{post.slug}">
+        <ImageGroup
+          isListing={true}
+          {isHeader}
+          imageArray={post.preview.images}
+        />
+      </a>
+    {/if}
+
+    {#if get(post, "preview._type", "") === "slideshow"}
+      <a href="/{post.taxonomy.category}/{post.slug}">
+        <Slideshow
+          autoplay={post.preview.autoplay}
+          isListing={true}
+          imageArray={post.preview.images}
+        />
+      </a>
+    {/if}
+
+    {#if get(post, "preview._type", "") === "videoLoop"}
+      <a href="/{post.taxonomy.category}/{post.slug}">
+        <VideoLoop
+          isListing={true}
+          fullwidth={true}
+          url={post.previewVideoUrl}
+          posterImage={get(post, "preview.posterImage", post.mainImage)}
+        />
+      </a>
+    {/if}
+
+    {#if !isHeader}
+      <a href="/{post.taxonomy.category}/{post.slug}">
+        <div
+          class="preview__title preview__title--free"
+          class:preview__title--free={get(post, "preview._type", "") ==
+            "imageGroup"}
+        >
+          {@html post.title}
+        </div>
+      </a>
+    {/if}
+  </div>
+</Router>
 
 <style lang="scss">
   @import "../variables.scss";
@@ -115,13 +194,13 @@
         margin: 0;
 
         em {
-          font-family: $serif-stack;
+          font-family: inherit;
           font-style: italic;
         }
       }
 
       em {
-        font-family: $serif-stack;
+        font-family: inherit;
         font-style: italic;
       }
     }
@@ -138,7 +217,7 @@
       }
 
       em {
-        font-family: $serif-stack;
+        font-family: inherit;
         font-style: italic;
       }
 
@@ -177,77 +256,3 @@
     color: $white;
   }
 </style>
-
-<Router>
-
-  <div
-    class="preview {kebabCase(get(post, 'preview._type', ''))}"
-    class:loaded
-    class:first={isFirst}
-    class:white={get(post, 'previewColors.textColor', 'black') == 'white'}
-    class:header={isHeader}
-    style={elementStyles}
-    use:links>
-
-    <!-- TAGS -->
-    {#if !isHeader}
-      <div
-        class="preview__tags"
-        class:bottom-tags={get(post, 'preview._type', '') == 'imageGroup'}>
-        <TaxList
-          taxonomy={post.taxonomy}
-          date={post.publicationDate}
-          white={get(post, 'previewColors.textColor', 'black') === 'white'} />
-      </div>
-    {/if}
-
-    {#if get(post, 'preview._type', '') === 'singleImage'}
-      <a href="/{post.taxonomy.category}/{post.slug}">
-        <Image
-          fullwidth={true}
-          isListing={true}
-          imageObject={post.preview.image} />
-      </a>
-    {/if}
-
-    {#if get(post, 'preview._type', '') === 'imageGroup'}
-      <a href="/{post.taxonomy.category}/{post.slug}">
-        <ImageGroup
-          isListing={true}
-          {isHeader}
-          imageArray={post.preview.images} />
-      </a>
-    {/if}
-
-    {#if get(post, 'preview._type', '') === 'slideshow'}
-      <a href="/{post.taxonomy.category}/{post.slug}">
-        <Slideshow
-          autoplay={post.preview.autoplay}
-          isListing={true}
-          imageArray={post.preview.images} />
-      </a>
-    {/if}
-
-    {#if get(post, 'preview._type', '') === 'videoLoop'}
-      <a href="/{post.taxonomy.category}/{post.slug}">
-        <VideoLoop
-          isListing={true}
-          fullwidth={true}
-          url={post.previewVideoUrl}
-          posterImage={get(post, 'preview.posterImage', post.mainImage)} />
-      </a>
-    {/if}
-
-    {#if !isHeader}
-      <a href="/{post.taxonomy.category}/{post.slug}">
-        <div
-          class="preview__title preview__title--free"
-          class:preview__title--free={get(post, 'preview._type', '') == 'imageGroup'}>
-          {@html post.title}
-        </div>
-      </a>
-    {/if}
-
-  </div>
-
-</Router>

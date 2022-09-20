@@ -225,6 +225,18 @@
 <style lang="scss">
   @import "../variables.scss";
 
+  @font-face {
+    font-family: "knif";
+    src: url("/fonts/aa_knif-mono_italic-webfont.woff2") format("woff");
+    font-style: italic;
+  }
+
+  @font-face {
+    font-family: "knif";
+    src: url("/fonts/aa_knif-mono-webfont.woff2") format("woff");
+    font-style: normal;
+  }
+
   .satellite {
     color: white;
     display: flex;
@@ -369,6 +381,7 @@
       width: 100vw;
       min-height: 100vh;
       overflow: hidden;
+      font-family: "knif" !important;
     }
   }
 </style>
