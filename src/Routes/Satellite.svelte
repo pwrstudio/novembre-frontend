@@ -91,8 +91,8 @@
             <div class="novembre-logo external">
               <img
                 src={urlFor(post.header.externalLogo.asset)
-                  .quality(80)
-                  .height(200)
+                  .quality(100)
+                  .height(260)
                   .url()}
               />
             </div>
