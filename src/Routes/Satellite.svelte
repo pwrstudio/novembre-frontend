@@ -97,10 +97,17 @@
               />
             </div>
           {/if}
-          <div class="small-credits">
-            <div class="text">Presented by</div>
-            <div class="logo"><Logo /></div>
-          </div>
+          {#if get(post, "header.presentedByNovembre", false)}
+            <div class="small-credits presented-by">
+              <div class="text">Presented by</div>
+              <div class="logo"><Logo /></div>
+            </div>
+          {:else if get(post, "header.novembreMediaPartner", false)}
+            <div class="small-credits media-partner">
+              <div class="logo"><Logo /></div>
+              <div class="text">media partner</div>
+            </div>
+          {/if}
           <!-- __ 2. Novembre Presents: layout option -->
         {:else if get(post, "header.usePresentsLayout", false)}
           <div class="novembre-logo small">
@@ -300,11 +307,24 @@
         align-items: center;
         user-select: none;
 
+        @include screen-size("small") {
+          height: 60px;
+          margin-right: 5px;
+        }
+
         .text {
           display: inline-block;
           margin-right: 1px;
           position: relative;
           top: -2px;
+        }
+
+        &.media-partner {
+          .text {
+            margin-right: 0;
+            margin-left: 2px;
+            top: -1px;
+          }
         }
 
         .logo {
@@ -322,6 +342,15 @@
           padding-top: 0;
           padding-left: 20px;
           height: 200px;
+
+          @include screen-size("small") {
+            height: 80px;
+            padding-left: 10px;
+
+            img {
+              max-height: 100%;
+            }
+          }
         }
 
         @include screen-size("small") {

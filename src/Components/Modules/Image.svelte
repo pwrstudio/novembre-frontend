@@ -101,6 +101,7 @@
     @include screen-size("small") {
       height: auto;
       width: 100%;
+      max-height: 100%;
     }
 
     &.loaded {
