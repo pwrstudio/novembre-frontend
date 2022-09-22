@@ -98,15 +98,21 @@
             </div>
           {/if}
           {#if get(post, "header.presentedByNovembre", false)}
-            <div class="small-credits presented-by">
+            <a
+              href="https://novembre.global"
+              class="small-credits presented-by"
+            >
               <div class="text">Presented by</div>
               <div class="logo"><Logo /></div>
-            </div>
+            </a>
           {:else if get(post, "header.novembreMediaPartner", false)}
-            <div class="small-credits media-partner">
+            <a
+              href="https://novembre.global"
+              class="small-credits media-partner"
+            >
               <div class="logo"><Logo /></div>
               <div class="text">media partner</div>
-            </div>
+            </a>
           {/if}
           <!-- __ 2. Novembre Presents: layout option -->
         {:else if get(post, "header.usePresentsLayout", false)}
@@ -294,7 +300,7 @@
 
       @include screen-size("small") {
         text-align: center;
-        padding: 5px;
+        padding: 0;
       }
 
       .small-credits {
@@ -308,8 +314,9 @@
         user-select: none;
 
         @include screen-size("small") {
-          height: 60px;
+          height: 40px;
           margin-right: 5px;
+          font-size: 14px;
         }
 
         .text {
@@ -330,6 +337,9 @@
         .logo {
           display: inherit;
           height: 30px;
+          @include screen-size("small") {
+            height: 20px;
+          }
         }
       }
 
@@ -346,6 +356,7 @@
           @include screen-size("small") {
             height: 80px;
             padding-left: 10px;
+            padding-top: 5px;
 
             img {
               max-height: 100%;
