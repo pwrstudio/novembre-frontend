@@ -304,8 +304,8 @@
       }
 
       .small-credits {
-        height: 100px;
         float: right;
+        height: 100px;
         margin-right: 20px;
         font-size: 18px;
         display: flex;
@@ -317,6 +317,11 @@
           height: 40px;
           margin-right: 5px;
           font-size: 14px;
+          padding-left: 10px;
+          padding-right: 10px;
+          position: fixed;
+          bottom: 10px;
+          right: 10px;
         }
 
         .text {
