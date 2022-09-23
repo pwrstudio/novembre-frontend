@@ -314,14 +314,16 @@
         user-select: none;
 
         @include screen-size("small") {
-          height: 40px;
+          height: 30px;
           margin-right: 5px;
           font-size: 14px;
-          padding-left: 10px;
-          padding-right: 10px;
-          position: fixed;
-          bottom: 10px;
-          right: 10px;
+          word-break: keep-all;
+          white-space: nowrap;
+          // padding-left: 10px;
+          // padding-right: 10px;
+          // position: fixed;
+          // bottom: 10px;
+          // right: 10px;
         }
 
         .text {
