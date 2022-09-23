@@ -314,6 +314,7 @@
         user-select: none;
 
         @include screen-size("small") {
+          display: none;
           height: 30px;
           margin-right: 5px;
           font-size: 14px;
