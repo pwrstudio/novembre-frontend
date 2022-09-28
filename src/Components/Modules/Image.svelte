@@ -26,6 +26,7 @@
   export let fullwidth = false
   export let isListing = false
   export let inlineDisplay = false
+  export let linkUrl = false
 
   const customStyles =
     (maxHeight ? "max-height:" + maxHeight + "vh; " : "") +
@@ -50,27 +51,53 @@
   let loaded = false
 </script>
 
-<div
-  class="single-image {alignment}"
-  class:fullwidth
-  class:listing={isListing}
-  class:bottom-space={inlineDisplay}
-  style={customStyles}
->
-  <MediaQuery query="(min-width: 800px)" let:matches>
-    <figure>
-      <img
-        class:loaded
-        src={matches ? src : srcPortrait}
-        alt={caption ? caption : "novembre.global"}
-        on:load={e => (loaded = true)}
-      />
-      {#if caption}
-        <figcaption>{caption}</figcaption>
-      {/if}
-    </figure>
-  </MediaQuery>
-</div>
+{#if linkUrl}
+  <a
+    href={linkUrl}
+    target="_blank"
+    class="single-image {alignment}"
+    class:fullwidth
+    class:listing={isListing}
+    class:bottom-space={inlineDisplay}
+    style={customStyles}
+  >
+    <MediaQuery query="(min-width: 800px)" let:matches>
+      <figure>
+        <img
+          class:loaded
+          src={matches ? src : srcPortrait}
+          alt={caption ? caption : "novembre.global"}
+          on:load={e => (loaded = true)}
+        />
+        {#if caption}
+          <figcaption>{caption}</figcaption>
+        {/if}
+      </figure>
+    </MediaQuery>
+  </a>
+{:else}
+  <div
+    class="single-image {alignment}"
+    class:fullwidth
+    class:listing={isListing}
+    class:bottom-space={inlineDisplay}
+    style={customStyles}
+  >
+    <MediaQuery query="(min-width: 800px)" let:matches>
+      <figure>
+        <img
+          class:loaded
+          src={matches ? src : srcPortrait}
+          alt={caption ? caption : "novembre.global"}
+          on:load={e => (loaded = true)}
+        />
+        {#if caption}
+          <figcaption>{caption}</figcaption>
+        {/if}
+      </figure>
+    </MediaQuery>
+  </div>
+{/if}
 
 <style lang="scss">
   @import "../../variables.scss";
@@ -78,6 +105,8 @@
   .single-image {
     height: 100vh;
     width: 100%;
+    display: block;
+    border-bottom: unset;
 
     @include screen-size("small") {
       height: auto;
