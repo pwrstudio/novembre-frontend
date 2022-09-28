@@ -28,7 +28,7 @@
   export let inlineDisplay = false
 
   const customStyles =
-    (maxHeight ? "height:" + maxHeight + "vh; " : "") +
+    (maxHeight ? "max-height:" + maxHeight + "vh; " : "") +
     (backgroundColor ? "background:" + backgroundColor.hex + ";" : "")
 
   // *** VARIABLES
