@@ -32,6 +32,8 @@
     (maxHeight ? "max-height:" + maxHeight + "vh; " : "") +
     (backgroundColor ? "background:" + backgroundColor.hex + ";" : "")
 
+  const figureCustomStyles = maxHeight ? "max-height:" + maxHeight + "vh; " : ""
+
   // *** VARIABLES
   const src = fullwidth
     ? urlFor(imageObject)
@@ -62,9 +64,10 @@
     style={customStyles}
   >
     <MediaQuery query="(min-width: 800px)" let:matches>
-      <figure>
+      <figure style={figureCustomStyles}>
         <img
           class:loaded
+          style={figureCustomStyles}
           src={matches ? src : srcPortrait}
           alt={caption ? caption : "novembre.global"}
           on:load={e => (loaded = true)}
@@ -84,9 +87,10 @@
     style={customStyles}
   >
     <MediaQuery query="(min-width: 800px)" let:matches>
-      <figure>
+      <figure style={figureCustomStyles}>
         <img
           class:loaded
+          style={figureCustomStyles}
           src={matches ? src : srcPortrait}
           alt={caption ? caption : "novembre.global"}
           on:load={e => (loaded = true)}
@@ -139,7 +143,7 @@
   }
 
   figure {
-    display: inline-block;
+    display: block;
     height: 100%;
     margin: 0;
   }
@@ -170,6 +174,7 @@
     figure {
       margin-left: $small-margin;
       margin-right: auto;
+      display: block;
 
       @include screen-size("small") {
         margin-left: auto;
@@ -188,6 +193,7 @@
     figure {
       margin-left: auto;
       margin-right: $small-margin;
+      display: block;
 
       @include screen-size("small") {
         margin-left: auto;

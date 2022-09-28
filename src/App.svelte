@@ -380,7 +380,8 @@
     margin-bottom: 1.2rem;
 
     @include screen-size("small") {
-      font-size: $mobile_large;
+      // font-size: $mobile_large;
+      font-size: 32px;
       margin-left: $small-margin;
       margin-right: $small-margin;
     }
