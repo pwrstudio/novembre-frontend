@@ -165,6 +165,7 @@
         {#if c._type == "video"}
           <VideoEmbed
             url={c.video}
+            size={get(c, "size", false)}
             backgroundColor={get(c, "backgroundColor", false)}
             caption={get(c, "caption", false)}
           />
