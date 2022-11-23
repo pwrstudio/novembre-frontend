@@ -6,59 +6,87 @@
   // # # # # # # # # # # # # #
 
   // *** IMPORTS
-  import { onMount } from "svelte";
-  import { navigate } from "svelte-routing";
-  import MediaQuery from "svelte-media-query";
-  import { createEventDispatcher } from "svelte";
+  import { onMount } from "svelte"
+  import { navigate } from "svelte-routing"
+  import MediaQuery from "svelte-media-query"
+  import { createEventDispatcher } from "svelte"
 
-  const dispatch = createEventDispatcher();
+  const dispatch = createEventDispatcher()
 
   // *** VARIABLES
-  let searchActive = false;
-  let searchQuery = "";
-  let searchField = {};
-  let submitWidth = 0;
-  let inputWidth = 0;
+  let searchActive = false
+  let searchQuery = ""
+  let searchField = {}
+  let submitWidth = 0
+  let inputWidth = 0
 
   // *** PROPS
-  export let menuActive = false;
+  export let menuActive = false
 
   // *** DOM REFERENCES
-  let openEl = {};
+  let openEl = {}
 
   const showSearchBox = e => {
-    e.preventDefault();
-    e.stopPropagation();
-    searchActive = true;
-    searchField.focus();
-  };
+    e.preventDefault()
+    e.stopPropagation()
+    searchActive = true
+    searchField.focus()
+  }
 
   $: {
     if (!menuActive) {
-      searchActive = false;
-      searchQuery = "";
+      searchActive = false
+      searchQuery = ""
     }
   }
 
   function resizeInput() {
-    submitWidth = openEl.offsetWidth;
-    inputWidth = window.innerWidth - submitWidth - 60; // Subtract margins
+    submitWidth = openEl.offsetWidth
+    inputWidth = window.innerWidth - submitWidth - 60 // Subtract margins
   }
 
   const submitSearch = () => {
     if (searchQuery.length > 0) {
-      navigate("/search/" + searchQuery);
-      dispatch("closeMenu", {});
+      navigate("/search/" + searchQuery)
+      dispatch("closeMenu", {})
     } else {
-      searchActive = false;
+      searchActive = false
     }
-    window.onresize = resizeInput;
-  };
+    window.onresize = resizeInput
+  }
 
   onMount(async () => {
-    resizeInput();
-  });
+    resizeInput()
+  })
 </script>
+
+<div class="search" class:search--active={searchActive}>
+  {#if !searchActive}
+    <span class="search__open" on:click={showSearchBox} bind:this={openEl}>
+      SEARCH
+    </span>
+  {/if}
+  <MediaQuery query="(min-width: 800px)" let:matches>
+    <input
+      ref="search"
+      type="text"
+      class="search__input"
+      style={matches ? "width:" + inputWidth + "px" : ""}
+      class:search__input--active={searchActive}
+      bind:value={searchQuery}
+      bind:this={searchField}
+      on:click={e => {
+        e.preventDefault()
+        e.stopPropagation()
+      }}
+      on:keypress={e => (e.keyCode === 13 ? submitSearch() : false)}
+    />
+  </MediaQuery>
+
+  {#if searchActive}
+    <span class="search__submit" on:click={submitSearch}>SEARCH</span>
+  {/if}
+</div>
 
 <style lang="scss">
   @import "../variables.scss";
@@ -92,6 +120,7 @@
       transition: border 1s $transition;
       margin-right: 0;
       top: -5px;
+      font-family: $sans-stack;
 
       @include screen-size("small") {
         width: 90vw;
@@ -171,30 +200,3 @@
     }
   }
 </style>
-
-<div class="search" class:search--active={searchActive}>
-  {#if !searchActive}
-    <span class="search__open" on:click={showSearchBox} bind:this={openEl}>
-      SEARCH
-    </span>
-  {/if}
-  <MediaQuery query="(min-width: 800px)" let:matches>
-    <input
-      ref="search"
-      type="text"
-      class="search__input"
-      style={matches ? 'width:' + inputWidth + 'px' : ''}
-      class:search__input--active={searchActive}
-      bind:value={searchQuery}
-      bind:this={searchField}
-      on:click={e => {
-        e.preventDefault();
-        e.stopPropagation();
-      }}
-      on:keypress={e => (e.keyCode === 13 ? submitSearch() : false)} />
-  </MediaQuery>
-
-  {#if searchActive}
-    <span class="search__submit" on:click={submitSearch}>SEARCH</span>
-  {/if}
-</div>
