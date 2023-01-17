@@ -208,9 +208,9 @@
     padding: 0;
 
     @include screen-size("small") {
-      height: auto;
-      padding-top: 100px;
-      padding-bottom: 40px;
+      height: 100%;
+      // padding-top: 100px;
+      // padding-bottom: 40px;
     }
 
     img {
@@ -230,7 +230,7 @@
       display: block;
 
       @include screen-size("small") {
-        height: auto;
+        height: 100%;
       }
     }
 

@@ -235,6 +235,7 @@
         padding-bottom: 40px;
       }
     }
+
     &.text {
       &.first {
         padding-top: 155px;
