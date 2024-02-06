@@ -62,7 +62,7 @@
     clearTimeout(showControlsTimeout)
     showControlsTimeout = setTimeout(
       () => (showControls = false),
-      controlsTimeoutDuration
+      controlsTimeoutDuration,
     )
     showControls = true
 
@@ -128,7 +128,7 @@
     {loop}
     muted={autoplay || isListing}
     poster={posterImage
-      ? urlFor(posterImage).width(1200).quality(90).auto("format").url()
+      ? urlFor(posterImage).width(1200).quality(100).auto("format").url()
       : ""}
     src={url}
     on:mousemove={handleMousemove}

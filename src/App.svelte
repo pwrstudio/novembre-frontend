@@ -44,15 +44,19 @@
 
   pages.set(loadPages('*[_id == "global-config"][0]'))
   menuBanners.set(
-    loadPages('*[_type == "banner" && editorialState == "live" && placeInMenu]')
+    loadPages(
+      '*[_type == "banner" && editorialState == "live" && placeInMenu]',
+    ),
   )
   feedBanners.set(
-    loadPages('*[_type == "banner" && editorialState == "live" && placeInFeed]')
+    loadPages(
+      '*[_type == "banner" && editorialState == "live" && placeInFeed]',
+    ),
   )
   overlayBanners.set(
     loadPages(
-      '*[_type == "banner" && editorialState == "live" && placeAsOverlay]'
-    )
+      '*[_type == "banner" && editorialState == "live" && placeAsOverlay]',
+    ),
   )
 
   const listingRouteParams = {
@@ -192,7 +196,7 @@
                 alt="novembre.global"
                 src={urlFor(overlayBanners[0].image)
                   .width(1000)
-                  .quality(90)
+                  .quality(100)
                   .auto("format")
                   .url()}
               />

@@ -117,7 +117,7 @@
                 alt="novembre.global"
                 src={urlFor(menuBanners[0].image)
                   .width(700)
-                  .quality(90)
+                  .quality(100)
                   .auto("format")
                   .url()}
               />

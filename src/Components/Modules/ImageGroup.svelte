@@ -62,12 +62,12 @@
             ? urlFor(image)
                 .width(1800)
                 .height(1200)
-                .quality(90)
+                .quality(100)
                 .auto("format")
                 .url()
             : urlFor(image)
                 .width(1200 / imageArray.length)
-                .quality(90)
+                .quality(100)
                 .auto("format")
                 .url()}
           alt={caption ? caption : "novembre.global"}
@@ -95,12 +95,12 @@
             ? urlFor(image)
                 .width(1800)
                 .height(1200)
-                .quality(90)
+                .quality(100)
                 .auto("format")
                 .url()
             : urlFor(image)
                 .width(1200 / imageArray.length)
-                .quality(90)
+                .quality(100)
                 .auto("format")
                 .url()}
           alt={caption ? caption : "novembre.global"}

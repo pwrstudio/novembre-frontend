@@ -32,7 +32,7 @@
   {#each imageArray as image}
     <img
       class:loaded
-      src={urlFor(image).width(300).quality(90).auto("format").url()}
+      src={urlFor(image).width(300).quality(100).auto("format").url()}
       on:load={e => (loaded = true)}
       on:click={e => {
         activeImage = image
@@ -50,7 +50,7 @@
     }}
   >
     <img
-      src={urlFor(activeImage).width(1200).quality(90).auto("format").url()}
+      src={urlFor(activeImage).width(1200).quality(100).auto("format").url()}
     />
   </div>
 {/if}

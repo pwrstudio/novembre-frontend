@@ -39,14 +39,14 @@
     ? urlFor(imageObject)
         .width(1600)
         .height(1100)
-        .quality(90)
+        .quality(100)
         .auto("format")
         .url()
-    : urlFor(imageObject).width(800).quality(90).auto("format").url()
+    : urlFor(imageObject).width(800).quality(100).auto("format").url()
 
   const srcPortrait = urlFor(imageObject)
     .width(800)
-    .quality(90)
+    .quality(100)
     .auto("format")
     .url()
 

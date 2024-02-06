@@ -83,7 +83,7 @@
         alt="novembre.global"
         src={urlFor(post.banner.image)
           .width(500)
-          .quality(90)
+          .quality(100)
           .auto("format")
           .url()}
       />

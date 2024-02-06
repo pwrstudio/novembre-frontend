@@ -170,7 +170,7 @@
                 <img
                   class="slideshow__slide-image slideshow__slide-image--related"
                   src={urlFor(
-                    get(slide, "relatedSlideshow.image", slide.mainImage)
+                    get(slide, "relatedSlideshow.image", slide.mainImage),
                   )
                     .height(600)
                     .quality(80)
@@ -183,7 +183,7 @@
                   style="color: {get(
                     slide,
                     'relatedSlideshow.textColor.hex',
-                    'white'
+                    'white',
                   )};"
                 >
                   {@html slide.title}
@@ -285,8 +285,8 @@
               get(
                 imageArray[0],
                 "relatedSlideshow.image",
-                imageArray[0].mainImage
-              )
+                imageArray[0].mainImage,
+              ),
             )
               .height(600)
               .quality(80)
@@ -299,7 +299,7 @@
             style="color: {get(
               imageArray[0],
               'relatedSlideshow.textColor.hex',
-              'white'
+              'white',
             )};"
           >
             {@html imageArray[0].title}
@@ -311,8 +311,8 @@
               get(
                 imageArray[1],
                 "relatedSlideshow.image",
-                imageArray[1].mainImage
-              )
+                imageArray[1].mainImage,
+              ),
             )
               .height(600)
               .quality(80)
@@ -325,7 +325,7 @@
             style="color: {get(
               imageArray[1],
               'relatedSlideshow.textColor.hex',
-              'white'
+              'white',
             )};"
           >
             {@html imageArray[1].title}
@@ -335,7 +335,7 @@
         <img
           src={urlFor(imageArray[0].mainImage)
             .height(600)
-            .quality(90)
+            .quality(100)
             .auto("format")
             .url()}
           alt={imageArray[0].title}
@@ -343,7 +343,7 @@
         <img
           src={urlFor(imageArray[1].mainImage)
             .height(600)
-            .quality(90)
+            .quality(100)
             .auto("format")
             .url()}
           alt={imageArray[1].title}
@@ -359,11 +359,11 @@
               get(
                 imageArray[0],
                 "relatedSlideshow.image",
-                imageArray[0].mainImage
-              )
+                imageArray[0].mainImage,
+              ),
             )
               .width(1200)
-              .quality(90)
+              .quality(100)
               .auto("format")
               .url()}
             alt={imageArray[0].title}
@@ -373,7 +373,7 @@
             style="color: {get(
               imageArray[0],
               'relatedSlideshow.textColor.hex',
-              'white'
+              'white',
             )};"
           >
             {@html imageArray[0].title}
@@ -383,7 +383,7 @@
         <img
           src={urlFor(imageArray[0].mainImage)
             .width(1200)
-            .quality(90)
+            .quality(100)
             .auto("format")
             .url()}
           alt={imageArray[0].title}
@@ -598,7 +598,9 @@
     margin-top: -50px;
     z-index: 99;
     cursor: pointer;
-    transition: transform 0.3s $transition, opacity 0.5s $transition;
+    transition:
+      transform 0.3s $transition,
+      opacity 0.5s $transition;
 
     @include screen-size("small") {
       display: none;

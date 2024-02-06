@@ -46,7 +46,7 @@
           <SwiperSlide>
             <img
               class="slideshow__slide-image"
-              src={urlFor(slide).width(1200).quality(90).auto("format").url()}
+              src={urlFor(slide).width(1200).quality(100).auto("format").url()}
             />
           </SwiperSlide>
         {/each}
@@ -162,7 +162,9 @@
     margin-top: -50px;
     z-index: 99;
     cursor: pointer;
-    transition: transform 0.3s $transition, opacity 0.5s $transition;
+    transition:
+      transform 0.3s $transition,
+      opacity 0.5s $transition;
 
     @include screen-size("small") {
       display: none;

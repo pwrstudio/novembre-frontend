@@ -86,7 +86,7 @@
   <div class="controls">
     {#if posterImage}
       <img
-        src={urlFor(posterImage).width(500).quality(90).auto("format").url()}
+        src={urlFor(posterImage).width(500).quality(100).auto("format").url()}
         class="poster-image"
         alt={title}
       />

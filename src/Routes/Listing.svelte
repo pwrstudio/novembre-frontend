@@ -54,7 +54,7 @@
   const logSitemap = posts => {
     posts.forEach(p => {
       console.log(
-        "https://novembre.global/" + p.taxonomy.category + "/" + p.slug
+        "https://novembre.global/" + p.taxonomy.category + "/" + p.slug,
       )
     })
   }
@@ -187,13 +187,13 @@
         }
       })
     },
-    { threshold: 0.5 }
+    { threshold: 0.5 },
   )
 
   const repositionSentinel = () => {
     if (postsContainerEl && sentinel) {
       let fourthElementFromEnd = postsContainerEl.querySelector(
-        ".preview:nth-last-child(4)"
+        ".preview:nth-last-child(4)",
       )
       if (fourthElementFromEnd)
         postsContainerEl.insertBefore(sentinel, fourthElementFromEnd)
@@ -251,10 +251,10 @@
                 <img
                   alt="novembre.global"
                   src={urlFor(
-                    feedBanners.find(b => b.positionInFeed == i).image
+                    feedBanners.find(b => b.positionInFeed == i).image,
                   )
                     .width(1400)
-                    .quality(90)
+                    .quality(100)
                     .auto("format")
                     .url()}
                 />
